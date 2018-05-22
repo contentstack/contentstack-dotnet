@@ -73,6 +73,7 @@ These were example of some of the basic queries of the SDK. For advanced queries
 
 ## API Reference
 Go through our .NET SDK API Reference guide to know about the methods that can be used to query your content in Contentstack.
+
 [Read .NET API Reference Guide](www.contentstack.com)
 
 ## Example
