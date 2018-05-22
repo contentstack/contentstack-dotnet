@@ -23,8 +23,8 @@ dotnet add package contentstack.csharp
 To use the module in your application, you need to first Add Namespace to your class
 
 ``` cs
-using Contentstack.core; // ContentstackClient using Contentstack.Core.Models;
-// Stack, Query, Entry, Asset, ContentType
+using Contentstack.core; // ContentstackClient 
+using Contentstack.Core.Models; // Stack, Query, Entry, Asset, ContentType
 ```
 
 ## Initialize SDK
@@ -47,7 +47,7 @@ To retrieve a single entry from a content type, use the code snippet given below
 Entry entry = stack.ContentType("blog").Entry("blta464e9fbd048668c");
 entry.Fetch().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-        Console.WriteLine("entry:” + t.Result);  
+        Console.WriteLine("entry:" + t.Result);  
     } 
 });
 ```
