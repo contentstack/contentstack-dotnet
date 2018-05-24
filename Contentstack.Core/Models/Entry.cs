@@ -1327,26 +1327,6 @@ namespace Contentstack.Core.Models
             //    }
             //}
 
-            String queryParam = String.Join("&",mainJson.Select(kvp =>{
-                var value = "";
-                if(kvp.Value is string[]) {
-                    string[] vals = (string[])kvp.Value;
-                    //Array<string> val = (Array<string>)kvp.Value;
-                    value = String.Join("&", vals.Select(item => {
-                        return String.Format("{0}={1}", kvp.Key, item);
-                    }));
-                    return value;           
-                } else if (kvp.Value is Dictionary<string, object>)
-                    value = JsonConvert.SerializeObject(kvp.Value);
-                else 
-                    value = (string)kvp.Value;
-                
-                return String.Format("{0}={1}", kvp.Key, value);
-
-            }));
-
-            Url = Url + "?" + queryParam;
-
             //mainJson.Add("query", UrlQueries);
 
             //mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
