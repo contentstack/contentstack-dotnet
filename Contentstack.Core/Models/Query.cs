@@ -1670,60 +1670,6 @@ namespace Contentstack.Core.Models
                 mainJson.Add(kvp.Key, kvp.Value);
             }
 
-            //foreach (var value in mainJson)
-            //{
-            //    if (value.Value is Dictionary<string, object>)
-            //    {
-            //        Url = Url + "&" + value.Key + "=" + JsonConvert.SerializeObject(value.Value);
-            //    }
-            //    else
-            //    {
-            //        Url = Url + "&" + value.Key + "=" + value.Value;
-            //    }
-            //}
-
-            //Url = string.Format("{0}?{1}", Url, string.Join("&",
-            //        mainJson.Select(kvp =>
-            //                        string.Format("{0}={1}", kvp.Key, kvp.Value))));
-
-            //Url = Url;
-
-            String queryParam = String.Join("&", mainJson.Select(kvp => {
-                var value = "";
-                if (kvp.Value is string[])
-                {
-                    string[] vals = (string[])kvp.Value;
-                    //Array<string> val = (Array<string>)kvp.Value;
-                    value = String.Join("&", vals.Select(item =>
-                    {
-                        return String.Format("{0}={1}", kvp.Key, item);
-                    }));
-                    return value;
-                }
-                else if (kvp.Value is Dictionary<string, object>)
-                    value = JsonConvert.SerializeObject(kvp.Value);
-                else 
-                    return String.Format("{0}={1}", kvp.Key, kvp.Value);
-
-                return String.Format("{0}={1}", kvp.Key, value);
-
-           })); 
-
-            Url = Url + "?" + queryParam;
-
-
-
-
-
-            //For POST call
-
-
-            //if (QueryValueJson != null && QueryValueJson.Count > 0){
-            //    mainJson.Add("query", QueryValueJson);
-            //}
-                
-
-            //mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
 
             try {
                 String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
