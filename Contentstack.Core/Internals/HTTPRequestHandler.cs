@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Text;
@@ -12,7 +13,29 @@ namespace Contentstack.Core.Internals
     internal class HTTPRequestHandler
     {
         public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null) {
-            var uri = new Uri(Url);
+
+            String queryParam = String.Join("&", BodyJson.Select(kvp => {
+                var value = "";
+                if (kvp.Value is string[])
+                {
+                    string[] vals = (string[])kvp.Value;
+                    value = String.Join("&", vals.Select(item =>
+                    {
+                        return String.Format("{0}={1}", kvp.Key, item);
+                    }));
+                    return value;
+                }
+                else if (kvp.Value is Dictionary<string, object>)
+                    value = JsonConvert.SerializeObject(kvp.Value);
+                else
+                    return String.Format("{0}={1}", kvp.Key, kvp.Value);
+
+                return String.Format("{0}={1}", kvp.Key, value);
+
+            }));
+
+            var uri = new Uri(Url+"?"+queryParam);
+
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
