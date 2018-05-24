@@ -321,16 +321,22 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                bool IsTrue = false;
-                foreach (var data in result.Result)
-                {
-                    //IsTrue = Convert.ToInt32(data.Object["price"]) == 786 && Convert.ToString(data.Object["title"]).Equals("laptop", StringComparison.InvariantCultureIgnoreCase);
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                        IsTrue = Convert.ToString(data.Object["title"]) == "source1" && Convert.ToBoolean(data.Object["boolean"]) == true && data.Object.ContainsKey("publish_details");
-                    if (!IsTrue)
-                        break;
+
+                if(result.Result.Count() == 1){
+                    bool IsTrue = false;
+                    foreach (var data in result.Result)
+                    {
+                        //IsTrue = Convert.ToInt32(data.Object["price"]) == 786 && Convert.ToString(data.Object["title"]).Equals("laptop", StringComparison.InvariantCultureIgnoreCase);
+                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
+                            IsTrue = Convert.ToString(data.Object["title"]) == "source1" && Convert.ToBoolean(data.Object["boolean"]) == true && data.Object.ContainsKey("publish_details");
+                        if (!IsTrue)
+                            break;
+                    }
+                    Assert.True(IsTrue);
+                } else {
+                    Assert.False(true, "Doesn't match the expected count.");
                 }
-                Assert.True(IsTrue);
+
             }
         }
 
@@ -348,7 +354,7 @@ namespace Contentstack.Core.Tests
 
             Query query2 = contentTypeObj.Query();
             //query2.Where("price", 89);
-            query1.Where("boolean", false);
+            query2.Where("boolean", false);
 
             List<Query> array = new List<Query>();
             array.Add(query1);
@@ -363,19 +369,22 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                //Assert.True(result.Result.Count() > 0);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                bool IsTrue = false;
-                foreach (var data in result.Result)
-                {
-                    //IsTrue = Convert.ToInt32(data.Object["price"]) == 786 || Convert.ToInt32(data.Object["price"]).Equals(89);
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                        IsTrue = (Convert.ToInt32(data.Object["number"]) > 10 || Convert.ToBoolean(data.Object["boolean"]) == false) && data.Object.ContainsKey("publish_details");
-                    if (!IsTrue)
-                        break;
+                if(result.Result.Count()==2) {
+                    bool IsTrue = false;
+                    foreach (var data in result.Result)
+                    {
+                        //IsTrue = Convert.ToInt32(data.Object["price"]) == 786 || Convert.ToInt32(data.Object["price"]).Equals(89);
+                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
+                            IsTrue = (Convert.ToInt32(data.Object["number"]) > 10 || Convert.ToBoolean(data.Object["boolean"]) == false) && data.Object.ContainsKey("publish_details");
+                        if (!IsTrue)
+                            break;
 
+                    }
+                    Assert.True(IsTrue);
+                } else {
+                    Assert.False(true, "Doesn't match the expected count.");
                 }
-                Assert.True(IsTrue);
+
             }
         }
 
@@ -1033,7 +1042,7 @@ namespace Contentstack.Core.Tests
         public async Task Ascending()
         {
             Query query = Stack.ContentType(source).Query();
-            query.NotEqualTo("number", "");
+            //query.NotEqualTo("number", "");
             query.Ascending("number");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)

@@ -296,9 +296,9 @@ namespace Contentstack.Core.Models
 
                 if (QueryValueJson != null && !QueryValueJson.ContainsKey("locale"))
                 {
-                    QueryValueJson.Add("locale", localeCode);
+                    UrlQueries.Add("locale", localeCode);
                 } else {
-                    QueryValueJson["locale"] = localeCode;
+                    UrlQueries["locale"] = localeCode;
                 }
 
             }
@@ -504,13 +504,13 @@ namespace Contentstack.Core.Models
 
                     for (int i = 0; i < count; i++) {
                         andValueJson.Add(queryObjects[i].QueryValueJson);
-                        if(queryObjects[i].QueryValueJson.ContainsKey("locale")){
-                            queryObjects[i].QueryValueJson.Remove("locale");
-                        }
+                        //if(queryObjects[i].QueryValueJson.ContainsKey("locale")){
+                        //    queryObjects[i].QueryValueJson.Remove("locale");
+                        //}
                     }
                     if (QueryValueJson.ContainsKey(StackConstants.And)) {
                         QueryValueJson.Remove(StackConstants.And);
-                        QueryValueJson.Add("$and", andValueJson);
+                        QueryValueJson.Add(StackConstants.And, andValueJson);
                     } else {
                         QueryValueJson.Add(StackConstants.And, andValueJson);
                     }
@@ -571,9 +571,9 @@ namespace Contentstack.Core.Models
                     {
                         var l = queryObjects[i].QueryValueJson;
                         orValueJson.Add(queryObjects[i].QueryValueJson);
-                        if (queryObjects[i].QueryValueJson.ContainsKey("locale")) {
-                            queryObjects[i].QueryValueJson.Remove("locale");
-                        }
+                        //if (queryObjects[i].QueryValueJson.ContainsKey("locale")) {
+                        //    queryObjects[i].QueryValueJson.Remove("locale");
+                        //}
                     }
 
                     if (QueryValueJson.ContainsKey(StackConstants.Or)) {
@@ -1021,7 +1021,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Add a constraint that requires a particular reference key details.
         /// </summary>
-        /// <param name="key">The key to be constrained.</param>
+        /// <param name="filed_uid">The key to be constrained.</param>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
@@ -1036,12 +1036,12 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Query IncludeReference(String key)
+        public Query IncludeReference(String filed_uid)
         {
 
-            if (key != null && key.Length > 0)
+            if (filed_uid != null && filed_uid.Length > 0)
             {
-                UrlQueries.Add("include", new object[] { key });
+                UrlQueries.Add("include[]", filed_uid);
             }
             return this;
         }
@@ -1050,7 +1050,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Add a constraint that requires a particular reference key details.
         /// </summary>
-        /// <param name="keys">array keys that to be constrained.</param>
+        /// <param name="filed_uids">array keys that to be constrained.</param>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
@@ -1059,17 +1059,17 @@ namespace Contentstack.Core.Models
         ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_name&quot;).Query();
         ///     
-        ///     csQuery.IncludeReference(new String[]{&quot;for_bug&quot;});
+        ///     csQuery.IncludeReference(new String[]{&quot;for_bug&quot;, &quot;assignee&quot;});
         ///     csQuery.Find().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
-        public Query IncludeReferenceEquals(String[] keys)
+        public Query IncludeReference(String[] filed_uids)
         {
-            if (keys != null && keys.Length > 0)
+            if (filed_uids != null && filed_uids.Length > 0)
             {
-                UrlQueries.Add("include", keys);
+                UrlQueries.Add("include[]", filed_uids);
             }
             return this;
         }
@@ -1262,17 +1262,9 @@ namespace Contentstack.Core.Models
         /// </example>
         public Query Only(String[] fieldUid) {
             try {
-                List<string> objectUidForOnly = new List<string>();
-                Dictionary<string, object> onlyValueJson = new Dictionary<string, object>();
                 if (fieldUid != null && fieldUid.Length > 0)
                 {
-
-                    int count = fieldUid.Length;
-                    for (int i = 0; i < count; i++) {
-                        objectUidForOnly.Add(fieldUid[i]);
-                    }
-                    onlyValueJson.Add("BASE", objectUidForOnly);
-                    UrlQueries.Add("only", onlyValueJson);
+                    UrlQueries.Add("only[BASE][]", fieldUid);
                 }
             } catch (Exception e) {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
@@ -1284,7 +1276,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Specifies list of field uids that would be excluded from the response.
         /// </summary>
-        /// <param name="fieldUid">field uid  which get excluded from the response.</param>
+        /// <param name="fieldUids">field uid  which get excluded from the response.</param>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
@@ -1299,18 +1291,12 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Query Except(String[] fieldUid) {
+        public Query Except(String[] fieldUids) {
             try {
                 List<string> objectUidForExcept = new List<string>();
                 Dictionary<string, object> exceptValueJson = new Dictionary<string, object>();
-                if (fieldUid != null && fieldUid.Length > 0) {
-
-                    int count = fieldUid.Length;
-                    for (int i = 0; i < count; i++) {
-                        objectUidForExcept.Add(fieldUid[i]);
-                    }
-                    exceptValueJson.Add("BASE", objectUidForExcept);
-                    UrlQueries.Add("except", exceptValueJson);
+                if (fieldUids != null && fieldUids.Length > 0) {
+                    UrlQueries.Add("except[BASE][]", fieldUids);
                 }
             } catch (Exception e) {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
@@ -1337,12 +1323,9 @@ namespace Contentstack.Core.Models
         /// </example>
         public Query IncludeSchema()
         {
-            try
-            {
+            try {
                 UrlQueries.Add("include_schema", true);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
             }
             return this;
@@ -1570,18 +1553,10 @@ namespace Contentstack.Core.Models
         /// </example>
         public Query WhereTags(string[] tags)
         {
-            List<string> lstTags = new List<string>();
-            Dictionary<string, object> onlyValueJson = new Dictionary<string, object>();
             if (tags != null && tags.Length > 0)
             {
 
-                int count = tags.Length;
-                for (int i = 0; i < count; i++)
-                {
-                    lstTags.Add(tags[i]);
-                }
-
-                UrlQueries.Add("tags", lstTags);
+                UrlQueries.Add("tags", tags);
             }
 
             return this;
@@ -1688,19 +1663,67 @@ namespace Contentstack.Core.Models
                 }
             }
 
-            //if (QueryValueJson != null && QueryValueJson.Count > 0)
-                //UrlQueries.Add("query", QueryValueJson);
+            if (QueryValueJson != null && QueryValueJson.Count > 0)
+                mainJson.Add("query", QueryValueJson);
 
             foreach (var kvp in UrlQueries) {
                 mainJson.Add(kvp.Key, kvp.Value);
             }
 
-            if (QueryValueJson != null && QueryValueJson.Count > 0){
-                mainJson.Add("query", QueryValueJson);
-            }
+            //foreach (var value in mainJson)
+            //{
+            //    if (value.Value is Dictionary<string, object>)
+            //    {
+            //        Url = Url + "&" + value.Key + "=" + JsonConvert.SerializeObject(value.Value);
+            //    }
+            //    else
+            //    {
+            //        Url = Url + "&" + value.Key + "=" + value.Value;
+            //    }
+            //}
+
+            //Url = string.Format("{0}?{1}", Url, string.Join("&",
+            //        mainJson.Select(kvp =>
+            //                        string.Format("{0}={1}", kvp.Key, kvp.Value))));
+
+            //Url = Url;
+
+            String queryParam = String.Join("&", mainJson.Select(kvp => {
+                var value = "";
+                if (kvp.Value is string[])
+                {
+                    string[] vals = (string[])kvp.Value;
+                    //Array<string> val = (Array<string>)kvp.Value;
+                    value = String.Join("&", vals.Select(item =>
+                    {
+                        return String.Format("{0}={1}", kvp.Key, item);
+                    }));
+                    return value;
+                }
+                else if (kvp.Value is Dictionary<string, object>)
+                    value = JsonConvert.SerializeObject(kvp.Value);
+                else 
+                    return String.Format("{0}={1}", kvp.Key, kvp.Value);
+
+                return String.Format("{0}={1}", kvp.Key, value);
+
+           })); 
+
+            Url = Url + "?" + queryParam;
+
+
+
+
+
+            //For POST call
+
+
+            //if (QueryValueJson != null && QueryValueJson.Count > 0){
+            //    mainJson.Add("query", QueryValueJson);
+            //}
                 
 
-            mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
+            //mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
 
             try {
                 String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);

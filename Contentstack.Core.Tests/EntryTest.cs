@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Configuration;
+using System.Text.RegularExpressions;
             
 namespace Contentstack.Core.Tests
 {
@@ -53,6 +54,41 @@ namespace Contentstack.Core.Tests
 
                 }
                 Assert.True(IsTrue);
+            }
+        }
+
+        [Fact]
+        public async Task IncludeReferenceArray()
+        {
+            ContentType contenttype = Stack.ContentType(source);
+            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+            sourceEntry.IncludeReference(new string[] {referenceFieldUID,"other_reference"});
+            var result = await sourceEntry.Fetch();
+            if (result == null)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else
+            {
+
+                bool IsTrue = false;
+                object[] firstReference = (object[])result.Object[referenceFieldUID];
+                object[] secondReference = (object[])result.Object["other_reference"];
+
+                List<object[]> references = new List<object[]>();
+                references.Add(firstReference);
+                references.Add(secondReference);
+
+                foreach(object[] referene in references) {
+                    List<object> lstReference = referene.ToList();
+                    if (lstReference.Count > 0)
+                    {
+                        IsTrue = lstReference.All(a => a is Dictionary<string, object>);
+
+                    }
+                    Assert.True(IsTrue);
+                }
+
             }
         }
 
@@ -183,6 +219,28 @@ namespace Contentstack.Core.Tests
             else
             {
                 Assert.True(Tags is object[] && Tags.Length > 0);
+            }
+        }
+
+        [Fact]
+        public async Task GetHTMLText()
+        {
+            Stack newStack = StackConfig.GetStack();
+            ContentType contenttype = newStack.ContentType(source);
+            Entry sourceEntry = contenttype.Entry("blt2f0dd6a81f7f40e7");
+            var result = await sourceEntry.Fetch();
+            var HtmlText = result.GetHTMLText("markdown");
+            if (string.IsNullOrEmpty(HtmlText) && HtmlText.Length == 0) {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            } else {
+                var tagList = new List<string>();
+                string pattern = @"(?<=</?)([^ >/]+)";
+                var matches = Regex.Matches(HtmlText, pattern);
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    tagList.Add(matches[i].ToString());
+                }
+                Assert.True(!string.IsNullOrEmpty(HtmlText) && HtmlText.Length > 0 && tagList.Count > 0);
             }
         }
     }

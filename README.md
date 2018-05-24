@@ -23,7 +23,7 @@ dotnet add package contentstack.csharp
 To use the module in your application, you need to first Add Namespace to your class
 
 ``` cs
-using Contentstack.core; // ContentstackClient 
+using Contentstack.Core; // ContentstackClient 
 using Contentstack.Core.Models; // Stack, Query, Entry, Asset, ContentType
 ```
 
@@ -79,7 +79,7 @@ Go through our .NET SDK API Reference guide to know about the methods that can b
 ## Example
 To help you get started, we have created a sample application that is powered by Contentstack .NET SDK. Click on the link below to read the tutorial of the app.
 
-[.NET News Console App](https://stag-www.contentstack.com/docs/example-apps/build-a-news-app-using-contentstack-dot-net-sdk)
+[.NET News Console App](https://www.contentstack.com/docs/example-apps/build-a-news-app-using-contentstack-dot-net-sdk)
 
 
 ### Helpful Links
