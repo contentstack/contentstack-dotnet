@@ -1015,18 +1015,16 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                List<string> objectUidForExcept = new List<string>();
-                Dictionary<string, object> exceptValueJson = new Dictionary<string, object>();
                 if (fieldUid != null && fieldUid.Length > 0)
                 {
 
                     int count = fieldUid.Length;
-                    for (int i = 0; i < count; i++)
-                    {
-                        objectUidForExcept.Add(fieldUid[i]);
-                    }
-                    exceptValueJson.Add("BASE", objectUidForExcept);
-                    UrlQueries.Add("except", exceptValueJson);
+                    //for (int i = 0; i < count; i++) {
+                    //    UrlQueries.Add("except[BASE][]", fieldUid[i]);
+                    //}
+                    UrlQueries.Add("except[BASE][]", fieldUid);
+                    //exceptValueJson.Add("BASE", objectUidForExcept);
+
                 }
             }
             catch (Exception e)
@@ -1060,12 +1058,10 @@ namespace Contentstack.Core.Models
             {
                 if (referenceField != null && referenceField.Length > 0)
                 {
-                    UrlQueries.Add("include", new object[] { referenceField });
+                    UrlQueries.Add("include[]", referenceField);
                 }
                 return this;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1095,7 +1091,7 @@ namespace Contentstack.Core.Models
             {
                 if (referenceFields != null && referenceFields.Length > 0)
                 {
-                    UrlQueries.Add("include", referenceFields);
+                    UrlQueries.Add("include[]", referenceFields);
                 }
                 return this;
             }
@@ -1254,14 +1250,7 @@ namespace Contentstack.Core.Models
                 Dictionary<string, object> onlyValueJson = new Dictionary<string, object>();
                 if (fieldUid != null && fieldUid.Length > 0)
                 {
-
-                    int count = fieldUid.Length;
-                    for (int i = 0; i < count; i++)
-                    {
-                        objectUidForOnly.Add(fieldUid[i]);
-                    }
-                    onlyValueJson.Add("BASE", objectUidForOnly);
-                    UrlQueries.Add("only", onlyValueJson);
+                    UrlQueries.Add("only[BASE][]", fieldUid);
                 }
             }
             catch (Exception e)
@@ -1324,7 +1313,9 @@ namespace Contentstack.Core.Models
             foreach (var kvp in UrlQueries) {
                 mainJson.Add(kvp.Key, kvp.Value);
             }
-            //foreach (var value in UrlQueries)
+
+
+            //foreach (var value in mainJson)
             //{
             //    if (value.Value is Dictionary<string, object>)
             //    {
@@ -1336,9 +1327,29 @@ namespace Contentstack.Core.Models
             //    }
             //}
 
+            String queryParam = String.Join("&",mainJson.Select(kvp =>{
+                var value = "";
+                if(kvp.Value is string[]) {
+                    string[] vals = (string[])kvp.Value;
+                    //Array<string> val = (Array<string>)kvp.Value;
+                    value = String.Join("&", vals.Select(item => {
+                        return String.Format("{0}={1}", kvp.Key, item);
+                    }));
+                    return value;           
+                } else if (kvp.Value is Dictionary<string, object>)
+                    value = JsonConvert.SerializeObject(kvp.Value);
+                else 
+                    value = (string)kvp.Value;
+                
+                return String.Format("{0}={1}", kvp.Key, value);
+
+            }));
+
+            Url = Url + "?" + queryParam;
+
             //mainJson.Add("query", UrlQueries);
 
-            mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
+            //mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
 
             try
             {
@@ -1372,6 +1383,7 @@ namespace Contentstack.Core.Models
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
                         //Entry resultObject = new Entry();
                         ParseObject((Dictionary<string, object>)stackOutput.Object);
+                        //await GetOutputAsync(stackOutput);
                         //Console.WriteLine(stackOutput);
                         break;
 
@@ -1459,6 +1471,20 @@ namespace Contentstack.Core.Models
 
         #endregion
 
+
+        private Task<Entry> GetOutputAsync(StackOutput output)
+        {
+            try {
+                return Task<Entry>.Run(() =>
+                {
+                    ParseObject((Dictionary<string, object>)output.Object);
+                    return this;
+                });
+            } catch (Exception ex) {
+                throw new ContentstackError(ex);
+            }
+        }
+
         #region Private Functions
         private string FetchFromCache(string CacheFileName)
         {
@@ -1526,7 +1552,8 @@ namespace Contentstack.Core.Models
 
         internal Entry ParseObject(Dictionary<string, object> jsonObj, string url = null)
         {
-            _ObjectAttributes = jsonObj;
+            Dictionary<string, object> hello = jsonObj;
+            this._ObjectAttributes = jsonObj;
             if (jsonObj != null && jsonObj.ContainsKey("uid"))
             {
                 this.EntryUid = string.IsNullOrEmpty(jsonObj["uid"].ToString()) ? null : jsonObj["uid"].ToString();

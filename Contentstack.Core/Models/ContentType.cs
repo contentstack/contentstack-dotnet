@@ -118,8 +118,8 @@ namespace Contentstack.Core.Models
             Entry entry = new Entry(ContentTypeName);
             entry._FormHeaders = GetHeader(_Headers);
             entry.SetContentTypeInstance(this);
+            Console.Write("entry UID: ", entryUid);
             entry.SetUid(entryUid);
-
             return entry;
         }
 
