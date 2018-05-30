@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contentstack.Core.Internals
+namespace Contentstack.Core.Configuration
 {
     internal class Config
     {

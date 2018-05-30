@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Cache;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,7 +49,6 @@ namespace Contentstack.Core.Internals
                     }
                 }
             }
-            Console.WriteLine(".." + request.ToString());
 
             var serializedresult = JsonConvert.SerializeObject(BodyJson);
             byte[] requestBody = Encoding.UTF8.GetBytes(serializedresult);

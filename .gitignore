@@ -16,4 +16,5 @@ Backup/
 packages/
 .DS_Store
 *.config
-
+*.nupkg
+*.nuspec
