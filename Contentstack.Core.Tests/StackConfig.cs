@@ -8,8 +8,8 @@ namespace Contentstack.Core.Tests
 
     public class StackConfig
     {
-        Configuration currentConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        Configuration assemblyConfiguration
+        System.Configuration.Configuration currentConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        System.Configuration.Configuration assemblyConfiguration
         {
             get
             {
@@ -18,7 +18,7 @@ namespace Contentstack.Core.Tests
         }
 
 
-        public static Stack GetStack()
+        public static ContentstackClient GetStack()
         {
             StackConfig config = new StackConfig();
             if (config.assemblyConfiguration.HasFile && string.Compare(config.assemblyConfiguration.FilePath, config.currentConfiguration.FilePath, true) != 0)
@@ -31,7 +31,16 @@ namespace Contentstack.Core.Tests
             string accessToken = ConfigurationManager.AppSettings["access_token"];
             string environment = ConfigurationManager.AppSettings["environment"];
 
-            return ContentstackClient.Stack(apiKey, accessToken, environment);
+            Configuration.ContentstackOptions contentstackOptions = new Configuration.ContentstackOptions
+            {
+                ApiKey = apiKey,
+                AccessToken = accessToken,
+                Environment = environment
+            };
+
+            ContentstackClient contentstackClient = new ContentstackClient(apiKey, accessToken, environment);
+
+            return contentstackClient;
 
         }
     }

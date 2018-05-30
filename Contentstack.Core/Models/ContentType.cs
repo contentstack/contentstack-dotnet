@@ -9,7 +9,7 @@ namespace Contentstack.Core.Models
     public class ContentType
     {
         #region Public Properties
-        internal Stack StackInstance { get; set; }
+        internal ContentstackClient StackInstance { get; set; }
         internal string Uid { get; set; }
         /// <summary>
         /// Content type uid
@@ -45,7 +45,7 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Internal Functions
-        internal void SetStackInstance(Stack stack)
+        internal void SetStackInstance(ContentstackClient stack)
         {
             this.StackInstance = stack;
             this._StackHeaders = stack._LocalHeaders;
