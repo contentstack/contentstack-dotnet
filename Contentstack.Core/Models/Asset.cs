@@ -18,7 +18,7 @@ namespace Contentstack.Core.Models
         private byte[] _Bytes = default(byte[]);
         internal object _Result;
         #endregion
-        public Stack Stack
+        public ContentstackClient Stack
         {
             get;
             set;
@@ -146,7 +146,7 @@ namespace Contentstack.Core.Models
         public int Count { get; set; }
         public int TotalCount { get; set; }
         #region Internal Constructors
-        internal Asset(Stack stack)
+        internal Asset(ContentstackClient stack)
         {
             this.Stack = stack;
         }

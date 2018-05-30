@@ -25,6 +25,7 @@ To use the module in your application, you need to first Add Namespace to your c
 ``` cs
 using Contentstack.Core; // ContentstackClient 
 using Contentstack.Core.Models; // Stack, Query, Entry, Asset, ContentType
+using Contentstack.Core.Configuration; // ContentstackOptions
 ```
 
 ## Initialize SDK
@@ -33,7 +34,19 @@ You will need to specify the API key, Access token, and Environment Name of your
 
 ``` cs
 // Initialize the Contentstack 
-Stack Stack stack = ContentstackClient.Stack("api_key", "access_token", "enviroment_name");
+Stack Stack stack = ContentstackClient("api_key", "access_token", "enviroment_name");
+```
+or:
+
+``` cs
+//
+var options = new ContentstackOptions()
+{
+    ApiKey = "<api_key>",
+    AccessToken = "<access_token>"
+    Environment = "<environment>"
+}
+var client = new ContentstackClient(options);
 ```
 
 Once you have initialized the SDK, you can start getting content in your app.
@@ -44,7 +57,7 @@ Once you have initialized the SDK, you can start getting content in your app.
 
 To retrieve a single entry from a content type, use the code snippet given below:
 ``` cs
-Entry entry = stack.ContentType("blog").Entry("blta464e9fbd048668c");
+Entry entry = client.ContentType("blog").Entry("blta464e9fbd048668c");
 entry.Fetch().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
         Console.WriteLine("entry:" + t.Result);  
@@ -58,14 +71,15 @@ To retrieve multiple entries of a particular content type, use the code snippet 
 
 ``` cs
 
-Query query = stack.ContentType("blog").Query(); 
+Query query = client.ContentType("blog").Query(); 
 query.Where("title", "welcome"); 
 query.IncludeSchema(); 
 query.IncludeCount(); 
 query.ToJSON(); 
 query.Find().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-         Entry[] result = t.Result.Result; Console.WriteLine("result" + result); 
+         Entry[] result = t.Result.Result; 
+         Console.WriteLine("result" + result); 
     } 
 });
 ```

@@ -1,18 +1,19 @@
 using System;
 using Xunit;
+using Contentstack.Core;
+using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Configuration;
 
 namespace Contentstack.Core.Tests
 {
 
     public class QueryTest
     {
+        ContentstackClient client = StackConfig.GetStack();
 
-        Stack Stack = StackConfig.GetStack();
         private String numbersContentType = "numbers_content_type";
         String source = "source";
 
@@ -20,7 +21,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task FetchAll()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
             {
@@ -50,7 +51,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GreaterThanForNumber()
         {
-            Query query = Stack.ContentType(numbersContentType).Query();
+            Query query = client.ContentType(numbersContentType).Query();
             query.GreaterThan("num_field", 11);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -83,7 +84,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GreaterThanForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.GreaterThan("date", "2018-05-04");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -119,7 +120,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GreaterThanOrEqualToForNumber()
         {
-            Query query = Stack.ContentType(numbersContentType).Query();
+            Query query = client.ContentType(numbersContentType).Query();
             query.GreaterThanOrEqualTo("num_field", 11);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -148,7 +149,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GreaterThanOrEqualToForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.GreaterThanOrEqualTo("date", "2018-05-04");
             var result = await query.Find();
             if (result.Result != null && result.Result.Count() == 3)
@@ -177,7 +178,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task LessThanForNumber()
         {
-            Query query = Stack.ContentType(numbersContentType).Query();
+            Query query = client.ContentType(numbersContentType).Query();
             query.LessThan("num_field", 11);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -207,7 +208,7 @@ namespace Contentstack.Core.Tests
         public async Task LessThanForDate()
         {
 
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.LessThan("date", "2018-05-04");
             var result = await query.Find();
             if (result.Result != null && result.Result.Count() == 2)
@@ -237,7 +238,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task LessThanOrEqualToForNumber()
         {
-            Query query = Stack.ContentType(numbersContentType).Query();
+            Query query = client.ContentType(numbersContentType).Query();
             query.LessThanOrEqualTo("num_field", 11);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -265,7 +266,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task LessThanOrEqualToForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.LessThanOrEqualTo("date", "2018-05-04");
             var result = await query.Find();
             if (result.Result != null && result.Result.Count() == 3)
@@ -294,7 +295,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task And()
         {
-            ContentType contentTypeObj = Stack.ContentType(source);
+            ContentType contentTypeObj = client.ContentType(source);
             Query query = contentTypeObj.Query();
 
 
@@ -345,7 +346,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Or()
         {
-            ContentType contentTypeObj = Stack.ContentType(source);
+            ContentType contentTypeObj = client.ContentType(source);
             Query query = contentTypeObj.Query();
 
             Query query1 = contentTypeObj.Query();
@@ -394,7 +395,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task WhereForText()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Where("title", "source1");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -433,7 +434,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task WhereForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Where("date", "2018-05-04");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -470,7 +471,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task WhereForNumber()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Where("number", 12);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -508,7 +509,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task WhereForBoolen()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Where("boolean", true);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -547,7 +548,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotEqualToForBoolean()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotEqualTo("boolean", true);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -585,7 +586,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotEqualToForText()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotEqualTo("title", "source");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -622,7 +623,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotEqualToForNumber()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotEqualTo("number", 12);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -659,7 +660,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotEqualToForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotEqualTo("date", "2018-05-04");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -693,7 +694,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task ContainedInForText()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.ContainedIn("title", new object[] { "source1", "source2" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -728,7 +729,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task ContainedInForNumber()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.ContainedIn("number", new object[] { 12, 3 });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -763,7 +764,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task ContainedInForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.ContainedIn("date", new object[] { "2018-05-04" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -798,7 +799,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task ContainedInForGroup()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.ContainedIn("group.name", new object[] { "First", "third" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -843,7 +844,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task ContainedInForModularBlock()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.ContainedIn("modular_blocks.test1.single_line", new object[] { "Rohit", "Rahul" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -893,7 +894,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotContainedInForText()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotContainedIn("title", new object[] { "source1", "source2" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -920,7 +921,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotContainedInForNumber()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotContainedIn("number", new object[] { 12, 3 });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -955,7 +956,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotContainedInForDate()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotContainedIn("date", new object[] { "2018-05-04" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -990,7 +991,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Exists()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Exists("number");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1015,7 +1016,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task NotExists()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.NotExists("name");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1041,7 +1042,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Ascending()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             //query.NotEqualTo("number", "");
             query.Ascending("number");
             var result = await query.Find();
@@ -1076,7 +1077,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Descending()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Exists("number");
             query.Descending("number");
             var result = await query.Find();
@@ -1108,7 +1109,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Skip()
         {
-            Query skipQuery = Stack.ContentType(source).Query();
+            Query skipQuery = client.ContentType(source).Query();
             skipQuery.Skip(2);
             skipQuery.IncludeCount();
             var skipResult = await skipQuery.Find();
@@ -1129,7 +1130,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Limit()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Limit(3);
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1150,7 +1151,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task IncludeReference()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Query query = contenttype.Query();
             query.IncludeReference("reference");
             var result = await query.Find();
@@ -1191,7 +1192,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task IncludeCount()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.IncludeCount();
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1208,7 +1209,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Only()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Only(new string[] { "title", "number" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1235,7 +1236,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Except()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Except(new string[] { "title", "number" });
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1263,7 +1264,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task FindOne()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             //query.Limit(2);
             var result = await query.FindOne();
             if (result == null && result.Result.Count() == 0)
@@ -1286,7 +1287,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Regex()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Regex("title", "^source");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1315,7 +1316,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task RegexWithModifiers()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             query.Regex("title", "^s", "i");
             var result = await query.Find();
             if (result == null && result.Result.Count() == 0)
@@ -1344,7 +1345,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task WhereTags()
         {
-            Query query = Stack.ContentType(source).Query();
+            Query query = client.ContentType(source).Query();
             String[] tags = { "tag1", "tag2" };
             query.WhereTags(tags);
             var result = await query.Find();

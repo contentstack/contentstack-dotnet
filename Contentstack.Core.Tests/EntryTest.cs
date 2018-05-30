@@ -1,21 +1,20 @@
 ﻿using System;
-using Contentstack.Core;
 using Xunit;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
-using Contentstack.Core.Internals;
+using Contentstack.Core.Configuration;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using System.Configuration;
 using System.Text.RegularExpressions;
             
 namespace Contentstack.Core.Tests
 {
+   
     public class EntryTest
     {
+        ContentstackClient client = StackConfig.GetStack();
 
-        Stack Stack = StackConfig.GetStack();
+
         String numbersContentType = "numbers_content_type";
         String source = "source";
         String singelEntryFetchUID = "blt1f94e478501bba46";
@@ -23,7 +22,7 @@ namespace Contentstack.Core.Tests
 
         [Fact]
         public async Task FetchByUid() {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             var result = await sourceEntry.Fetch();
 
@@ -31,13 +30,12 @@ namespace Contentstack.Core.Tests
                 Assert.False(true, "Entry.Fetch is not match with expected result.");
             } else {
                 Assert.True(result.Object.Count > 0 && result.EntryUid == sourceEntry.EntryUid && result.Object.ContainsKey("publish_details") && result.Object["publish_details"] != null);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
         }
 
         [Fact]
         public async Task IncludeReference() {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.IncludeReference(referenceFieldUID);
             var result = await sourceEntry.Fetch();
@@ -60,7 +58,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task IncludeReferenceArray()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.IncludeReference(new string[] {referenceFieldUID,"other_reference"});
             var result = await sourceEntry.Fetch();
@@ -94,7 +92,7 @@ namespace Contentstack.Core.Tests
 
         [Fact]
         public async Task Only() {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.Only(new string[] { "title", "number" });
             var result = await sourceEntry.Fetch();
@@ -113,7 +111,7 @@ namespace Contentstack.Core.Tests
 
         [Fact]
         public async Task Except() {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.Except(new string[] { "title", "number" });
             var result = await sourceEntry.Fetch();
@@ -136,7 +134,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetCreateAt()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             var result = await sourceEntry.Fetch();
             var updated_at = result.GetCreateAt();
@@ -155,7 +153,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetUpdateAt()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             var result = await sourceEntry.Fetch();
             var updated_at = result.GetUpdateAt();
@@ -173,7 +171,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetCreatedBy()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             var result = await sourceEntry.Fetch();
             var created_by = result.GetCreatedBy();
@@ -191,7 +189,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetUpdatedBy()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             var result = await sourceEntry.Fetch();
             var created_by = result.GetUpdatedBy();
@@ -208,7 +206,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetTags()
         {
-            ContentType contenttype = Stack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             var result = await sourceEntry.Fetch();
             var Tags = result.GetTags();
@@ -225,8 +223,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetHTMLText()
         {
-            Stack newStack = StackConfig.GetStack();
-            ContentType contenttype = newStack.ContentType(source);
+            ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry("blt2f0dd6a81f7f40e7");
             var result = await sourceEntry.Fetch();
             var HtmlText = result.GetHTMLText("markdown");
