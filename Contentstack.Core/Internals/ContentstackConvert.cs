@@ -215,35 +215,35 @@ namespace Contentstack.Core.Internals
             }
         }
 
-        public static String GetMD5FromString(String value)
-        {
-            String output;
-            output = value.ToString().Trim();
-            if (value.Length > 0)
-            {
-                try
-                {
-                    // Create MD5 Hash
-                    MD5 md5 = new MD5CryptoServiceProvider();
-                    byte[] result = md5.ComputeHash(GenerateStreamFromString(output));
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < result.Length; i++)
-                    {
-                        sb.Append(result[i].ToString("x2"));
-                    }
-                    return sb.ToString();
-                }
-                catch (Exception e)
-                {
-                    //showLog("appUtils", "------------getMD5FromString catch-|" + e.toString());
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
+        //public static String GetMD5FromString(String value)
+        //{
+        //    String output;
+        //    output = value.ToString().Trim();
+        //    if (value.Length > 0)
+        //    {
+        //        try
+        //        {
+        //            // Create MD5 Hash
+        //            MD5 md5 = new MD5CryptoServiceProvider();
+        //            byte[] result = md5.ComputeHash(GenerateStreamFromString(output));
+        //            StringBuilder sb = new StringBuilder();
+        //            for (int i = 0; i < result.Length; i++)
+        //            {
+        //                sb.Append(result[i].ToString("x2"));
+        //            }
+        //            return sb.ToString();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            //showLog("appUtils", "------------getMD5FromString catch-|" + e.toString());
+        //            return null;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
         public static Stream GenerateStreamFromString(string s)
         {
             MemoryStream stream = new MemoryStream();
@@ -254,59 +254,59 @@ namespace Contentstack.Core.Internals
             return stream;
         }
 
-        public static string GetJsonFromCacheFile(string file)
-        {
-            try
-            {
-            string readContents;
-            using (StreamReader streamReader = new StreamReader(file, Encoding.UTF8))
-            {
-                readContents = streamReader.ReadToEnd();
-            }
-            return readContents;
-            }
-            catch (Exception e)
-            {
-                //showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
-                return null;
-            }
-        }
-        public static bool IsNetworkAvailable()
-        {
-            // only recognizes changes related to Internet adapters
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                // however, this will include all adapters
-                NetworkInterface[] interfaces =
-                    NetworkInterface.GetAllNetworkInterfaces();
+        //public static string GetJsonFromCacheFile(string file)
+        //{
+        //    try
+        //    {
+        //    string readContents;
+        //    using (StreamReader streamReader = new StreamReader(file, Encoding.UTF8))
+        //    {
+        //        readContents = streamReader.ReadToEnd();
+        //    }
+        //    return readContents;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        //showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
+        //        return null;
+        //    }
+        //}
+        //public static bool IsNetworkAvailable()
+        //{
+        //    // only recognizes changes related to Internet adapters
+        //    if (NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        // however, this will include all adapters
+        //        NetworkInterface[] interfaces =
+        //            NetworkInterface.GetAllNetworkInterfaces();
                 
-                foreach (NetworkInterface face in interfaces)
-                {
-                    // filter so we see only Internet adapters
-                    if (face.OperationalStatus == OperationalStatus.Up)
-                    {
-                        if ((face.NetworkInterfaceType != NetworkInterfaceType.Tunnel) &&
-                            (face.NetworkInterfaceType != NetworkInterfaceType.Loopback))
-                        {
-                            IPv4InterfaceStatistics statistics =
-                                face.GetIPv4Statistics();
+        //        foreach (NetworkInterface face in interfaces)
+        //        {
+        //            // filter so we see only Internet adapters
+        //            if (face.OperationalStatus == OperationalStatus.Up)
+        //            {
+        //                if ((face.NetworkInterfaceType != NetworkInterfaceType.Tunnel) &&
+        //                    (face.NetworkInterfaceType != NetworkInterfaceType.Loopback))
+        //                {
+        //                    IPv4InterfaceStatistics statistics =
+        //                        face.GetIPv4Statistics();
 
-                            // all testing seems to prove that once an interface
-                            // comes online it has already accrued statistics for
-                            // both received and sent...
+        //                    // all testing seems to prove that once an interface
+        //                    // comes online it has already accrued statistics for
+        //                    // both received and sent...
 
-                            if ((statistics.BytesReceived > 0) &&
-                                (statistics.BytesSent > 0))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
+        //                    if ((statistics.BytesReceived > 0) &&
+        //                        (statistics.BytesSent > 0))
+        //                    {
+        //                        return true;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
         
         public static bool GetResponseTimeFromCacheFile(string filePath, long responseTime, long DefaultCacheTime)
         {

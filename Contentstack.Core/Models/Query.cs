@@ -1674,10 +1674,10 @@ namespace Contentstack.Core.Models
 
 
             try {
-                String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
-                String md5Value = ContentstackConvert.GetMD5FromString(mainStringForMD5.Trim());
+                //String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
+                //String md5Value = ContentstackConvert.GetMD5FromString(mainStringForMD5.Trim());
 
-                string CacheFilePath = Path.Combine(ContentstackConstants.Instance.CacheFolderName, md5Value);
+                //string CacheFilePath = Path.Combine(ContentstackConstants.Instance.CacheFolderName, md5Value);
                 CachePolicy cachePolicy = CachePolicy.NetworkOnly;
 
                 if (_IsCachePolicySet) {
@@ -1685,90 +1685,90 @@ namespace Contentstack.Core.Models
                 }
 
                 switch (cachePolicy) {
-                    case CachePolicy.IgnoreCache:
+                    //case CachePolicy.IgnoreCache:
 
-                        HTTPRequestHandler contentstackRequestHandler = new HTTPRequestHandler();
-                        var result = await contentstackRequestHandler.ProcessRequest(Url, headers, mainJson);
-                        //if (IsValidJson(result))
-                        //{
-                        StackOutput contentstackOutput = new StackOutput(ContentstackConvert.ToString(result, "{}"));
-                        await GetOutputAsync(contentstackOutput);
-                        //Console.WriteLine(contentstackOutput);
-                        break;
+                        //HTTPRequestHandler contentstackRequestHandler = new HTTPRequestHandler();
+                        //var result = await contentstackRequestHandler.ProcessRequest(Url, headers, mainJson);
+                        ////if (IsValidJson(result))
+                        ////{
+                        //StackOutput contentstackOutput = new StackOutput(ContentstackConvert.ToString(result, "{}"));
+                        //await GetOutputAsync(contentstackOutput);
+                        ////Console.WriteLine(contentstackOutput);
+                        //break;
                     //}
 
                     case CachePolicy.NetworkOnly:
                         HTTPRequestHandler requestHandler = new HTTPRequestHandler();
-                        var output = await requestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        var output = await requestHandler.ProcessRequest(Url, headers, mainJson);
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(output, "{}"));
                         await GetOutputAsync(stackOutput);
                         //Console.WriteLine(stackOutput);
                         break;
 
-                    case CachePolicy.CacheOnly:
-                        var outputResult = FetchFromCache(CacheFilePath);
-                        StackOutput stackOutputResult = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
-                        await GetOutputAsync(stackOutputResult);
-                        break;
+                    //case CachePolicy.CacheOnly:
+                    //    var outputResult = FetchFromCache(CacheFilePath);
+                    //    StackOutput stackOutputResult = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
+                    //    await GetOutputAsync(stackOutputResult);
+                    //    break;
 
-                    case CachePolicy.CacheElseNetwork:
-                        if (File.Exists(CacheFilePath))
-                        {
-                            var cacheResult = FetchFromCache(CacheFilePath);
-                            StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
-                            Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
-                            if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFilePath, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
-                            {
-                                HTTPRequestHandler cacherequestHandler = new HTTPRequestHandler();
-                                var CacheOutputResult = await cacherequestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                                StackOutput CacheStackOutput = new StackOutput(ContentstackConvert.ToString(CacheOutputResult, "{}"));
-                                //Entry resultObject = new Entry();
-                                await GetOutputAsync(CacheStackOutput);
-                            }
-                            else
-                            {
-                                await GetOutputAsync(stackOutputCacheResult);
-                            }
-                        }
-                        else
-                        {
-                            HTTPRequestHandler request_handler = new HTTPRequestHandler();
-                            var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                            StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
-                            await GetOutputAsync(stack_output);
-                            //Console.WriteLine(stack_output);
-                        }
-                        break;
-                    case CachePolicy.NetworkElseCache:
-                        if (ContentstackConvert.IsNetworkAvailable())
-                        {
-                            HTTPRequestHandler request_handler = new HTTPRequestHandler();
-                            var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                            StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
-                            await GetOutputAsync(stack_output);
-                            //Console.WriteLine(stack_output);
-                        }
-                        else
-                        {
-                            var outputresult = FetchFromCache(CacheFilePath);
-                            StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
-                            await GetOutputAsync(stackoutputResult);
-                        }
-                        break;
+                    //case CachePolicy.CacheElseNetwork:
+                    //    if (File.Exists(CacheFilePath))
+                    //    {
+                    //        var cacheResult = FetchFromCache(CacheFilePath);
+                    //        StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
+                    //        Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
+                    //        if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFilePath, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
+                    //        {
+                    //            HTTPRequestHandler cacherequestHandler = new HTTPRequestHandler();
+                    //            var CacheOutputResult = await cacherequestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                    //            StackOutput CacheStackOutput = new StackOutput(ContentstackConvert.ToString(CacheOutputResult, "{}"));
+                    //            //Entry resultObject = new Entry();
+                    //            await GetOutputAsync(CacheStackOutput);
+                    //        }
+                    //        else
+                    //        {
+                    //            await GetOutputAsync(stackOutputCacheResult);
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        HTTPRequestHandler request_handler = new HTTPRequestHandler();
+                    //        var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                    //        StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
+                    //        await GetOutputAsync(stack_output);
+                    //        //Console.WriteLine(stack_output);
+                    //    }
+                    //    break;
+                    //case CachePolicy.NetworkElseCache:
+                    //    if (ContentstackConvert.IsNetworkAvailable())
+                    //    {
+                    //        HTTPRequestHandler request_handler = new HTTPRequestHandler();
+                    //        var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                    //        StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
+                    //        await GetOutputAsync(stack_output);
+                    //        //Console.WriteLine(stack_output);
+                    //    }
+                    //    else
+                    //    {
+                    //        var outputresult = FetchFromCache(CacheFilePath);
+                    //        StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
+                    //        await GetOutputAsync(stackoutputResult);
+                    //    }
+                    //    break;
 
-                    case CachePolicy.CacheThenNetwork:
-                        if (File.Exists(CacheFilePath))
-                        {
-                            var outputresult = FetchFromCache(CacheFilePath);
-                            StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
-                            await GetOutputAsync(stackoutputResult);
-                        }
-                        HTTPRequestHandler request = new HTTPRequestHandler();
-                        var _result = await request.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                        StackOutput _output = new StackOutput(ContentstackConvert.ToString(_result, "{}"));
-                        await GetOutputAsync(_output);
-                        //Console.WriteLine(_output);
-                        break;
+                    //case CachePolicy.CacheThenNetwork:
+                        //if (File.Exists(CacheFilePath))
+                        //{
+                        //    var outputresult = FetchFromCache(CacheFilePath);
+                        //    StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
+                        //    await GetOutputAsync(stackoutputResult);
+                        //}
+                        //HTTPRequestHandler request = new HTTPRequestHandler();
+                        //var _result = await request.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        //StackOutput _output = new StackOutput(ContentstackConvert.ToString(_result, "{}"));
+                        //await GetOutputAsync(_output);
+                        ////Console.WriteLine(_output);
+                        //break;
 
                     default:
                         break;
@@ -1821,32 +1821,32 @@ namespace Contentstack.Core.Models
                 return _FormHeaders;
             }
         }
-        private string FetchFromCache(string CacheFileName)
-        {
-            if (File.Exists(CacheFileName))
-            {
-                var cacheResult = ContentstackConvert.GetJsonFromCacheFile(CacheFileName);
-                //var deserializeHson = JsonConvert.DeserializeObject(cacheResult);
+        //private string FetchFromCache(string CacheFileName)
+        //{
+        //    if (File.Exists(CacheFileName))
+        //    {
+        //        var cacheResult = ContentstackConvert.GetJsonFromCacheFile(CacheFileName);
+        //        //var deserializeHson = JsonConvert.DeserializeObject(cacheResult);
 
-                StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
-                Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
-                if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFileName, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
-                {
-                    throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
-                }
-                else
-                {
-                    // await GetOutputAsync(stackOutputCacheResult);
-                    return cacheResult;
-                }
+        //        StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
+        //        Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
+        //        if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFileName, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
+        //        {
+        //            throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
+        //        }
+        //        else
+        //        {
+        //            // await GetOutputAsync(stackOutputCacheResult);
+        //            return cacheResult;
+        //        }
 
 
-            }
-            else
-            {
-                throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
+        //    }
+        //}
         
         private Task<Query> GetOutputAsync(StackOutput output)
         {

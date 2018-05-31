@@ -8,32 +8,32 @@
         /// <summary>
         /// This is to handle exception response, which are not identified while programming.
         /// </summary>
-        None,
+        //None,
 
-        /// <summary>
-        /// To fetch data from cache if data not available in cache then it will send a network call and response will be saved in cache.
-        /// </summary>
-        CacheElseNetwork,
+        ///// <summary>
+        ///// To fetch data from cache if data not available in cache then it will send a network call and response will be saved in cache.
+        ///// </summary>
+        //CacheElseNetwork,
 
-        /// <summary>
-        /// To fetch data from cache.
-        /// </summary>
-        CacheOnly,
+        ///// <summary>
+        ///// To fetch data from cache.
+        ///// </summary>
+        //CacheOnly,
 
-        /// <summary>
-        /// To fetch data from cache and send a network call and response will be saved in cache.
-        /// </summary>
-        CacheThenNetwork,
+        ///// <summary>
+        ///// To fetch data from cache and send a network call and response will be saved in cache.
+        ///// </summary>
+        //CacheThenNetwork,
 
-        /// <summary>
-        /// To fetch data from network call and response will not be saved cache.
-        /// </summary>
-        IgnoreCache,
+        ///// <summary>
+        ///// To fetch data from network call and response will not be saved cache.
+        ///// </summary>
+        //IgnoreCache,
 
-        /// <summary>
-        /// To fetch data from network and response will be saved in cache ; if network not available then it will fetch data from cache.
-        /// </summary>
-        NetworkElseCache,
+        ///// <summary>
+        ///// To fetch data from network and response will be saved in cache ; if network not available then it will fetch data from cache.
+        ///// </summary>
+        //NetworkElseCache,
 
         /// <summary>
         /// To fetch data from network and response will be saved in cache.

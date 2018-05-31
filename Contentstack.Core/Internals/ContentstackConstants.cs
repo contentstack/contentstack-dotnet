@@ -24,22 +24,22 @@ namespace Contentstack.Core.Internals
         public string EntryUid { get; set; }
 
 
-        public string CacheFolderName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this._CacheFolderName))
-                {
-                    this._CacheFolderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "ContentstackCache");
-                }
+        //public string CacheFolderName
+        //{
+        //    get
+        //    {
+        //        if (string.IsNullOrEmpty(this._CacheFolderName))
+        //        {
+        //            this._CacheFolderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "ContentstackCache");
+        //        }
 
-                return this._CacheFolderName;
-            }
-            set
-            {
-                this._CacheFolderName = value;
-            }
-        }
+        //        return this._CacheFolderName;
+        //    }
+        //    set
+        //    {
+        //        this._CacheFolderName = value;
+        //    }
+        //}
 
         public string Content_Types
         {
