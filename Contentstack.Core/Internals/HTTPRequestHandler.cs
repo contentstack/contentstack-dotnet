@@ -38,7 +38,7 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.UserAgent = "DOTNET 1.0.0";
+            request.Headers["user-agent"]="DOTNET 1.0.0";
 
             if (Headers != default(IDictionary<string, string>)) {
                 foreach (var header in Headers) {
@@ -74,14 +74,11 @@ namespace Contentstack.Core.Internals
                 throw we;
             } finally {
                 if (reader != null) {
-                    reader.Close();
                     reader.Dispose();
                 }
                 if (response != null)
                 {
-
-                    response.Close();
-                    response.Dispose();
+                     response.Dispose();
                 }
             }
 
