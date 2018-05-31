@@ -1335,10 +1335,10 @@ namespace Contentstack.Core.Models
             try
             {
                 //String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
-                String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
-                String md5Value = ContentstackConvert.GetMD5FromString(mainStringForMD5.Trim());
+                //String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
+                //String md5Value = ContentstackConvert.GetMD5FromString(mainStringForMD5.Trim());
 
-                string CacheFilePath = Path.Combine(ContentstackConstants.Instance.CacheFolderName, md5Value);
+                //string CacheFilePath = Path.Combine(ContentstackConstants.Instance.CacheFolderName, md5Value);
                 CachePolicy cachePolicy = CachePolicy.NetworkOnly;
 
                 if (_IsCachePolicySet)
@@ -1347,20 +1347,19 @@ namespace Contentstack.Core.Models
                 }
                 switch (cachePolicy)
                 {
-                    case CachePolicy.IgnoreCache:
+                    //case CachePolicy.IgnoreCache:
 
-                        HTTPRequestHandler contentstackRequestHandler = new HTTPRequestHandler();
-                        var result = await contentstackRequestHandler.ProcessRequest(Url, headers, mainJson);
-                        StackOutput contentstackOutput = new StackOutput(ContentstackConvert.ToString(result, "{}"));
-                        //Entry resultObject = new Entry();
-                        ParseObject((Dictionary<string, object>)contentstackOutput.Object);
-                        //Console.WriteLine(contentstackOutput);
-                        break;
-                    //}
+                        //HTTPRequestHandler contentstackRequestHandler = new HTTPRequestHandler();
+                        //var result = await contentstackRequestHandler.ProcessRequest(Url, headers, mainJson);
+                        //StackOutput contentstackOutput = new StackOutput(ContentstackConvert.ToString(result, "{}"));
+                        ////Entry resultObject = new Entry();
+                        //ParseObject((Dictionary<string, object>)contentstackOutput.Object);
+                        ////Console.WriteLine(contentstackOutput);
+                        //break;
 
                     case CachePolicy.NetworkOnly:
                         HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
-                        var outputResult = await RequestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        var outputResult = await RequestHandler.ProcessRequest(Url, headers, mainJson);
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
                         //Entry resultObject = new Entry();
                         ParseObject((Dictionary<string, object>)stackOutput.Object);
@@ -1368,70 +1367,70 @@ namespace Contentstack.Core.Models
                         //Console.WriteLine(stackOutput);
                         break;
 
-                    case CachePolicy.CacheOnly:
-                        var output_Result = FetchFromCache(CacheFilePath);
-                        StackOutput stackOutputResult = new StackOutput(ContentstackConvert.ToString(output_Result, "{}"));
-                        ParseObject((Dictionary<string, object>)stackOutputResult.Object);
-                        break;
+                    //case CachePolicy.CacheOnly:
+                        //var output_Result = FetchFromCache(CacheFilePath);
+                        //StackOutput stackOutputResult = new StackOutput(ContentstackConvert.ToString(output_Result, "{}"));
+                        //ParseObject((Dictionary<string, object>)stackOutputResult.Object);
+                        //break;
 
-                    case CachePolicy.CacheElseNetwork:
-                        if (File.Exists(CacheFilePath))
-                        {
-                            var cacheResult = FetchFromCache(CacheFilePath);
-                            StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
-                            Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
-                            if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFilePath, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
-                            {
-                                HTTPRequestHandler requestHandler = new HTTPRequestHandler();
-                                var CacheOutputResult = await requestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                                StackOutput CacheStackOutput = new StackOutput(ContentstackConvert.ToString(CacheOutputResult, "{}"));
-                                //Entry resultObject = new Entry();
-                                ParseObject((Dictionary<string, object>)CacheStackOutput.Object);
-                            }
-                            else
-                            {
-                                ParseObject((Dictionary<string, object>)stackOutputCacheResult.Object);
-                            }
-                        }
-                        else
-                        {
-                            HTTPRequestHandler request_handler = new HTTPRequestHandler();
-                            var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                            StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
-                            ParseObject((Dictionary<string, object>)stack_output.Object);
-                            //Console.WriteLine(stack_output);
-                        }
-                        break;
-                    case CachePolicy.NetworkElseCache:
-                        if (ContentstackConvert.IsNetworkAvailable())
-                        {
-                            HTTPRequestHandler request_handler = new HTTPRequestHandler();
-                            var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                            StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
-                            ParseObject((Dictionary<string, object>)stack_output.Object);
-                            //Console.WriteLine(stack_output);
-                        }
-                        else
-                        {
-                            var outputresult = FetchFromCache(CacheFilePath);
-                            StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
-                            ParseObject((Dictionary<string, object>)stackoutputResult.Object);
-                        }
-                        break;
+                    //case CachePolicy.CacheElseNetwork:
+                        //if (File.Exists(CacheFilePath))
+                        //{
+                        //    var cacheResult = FetchFromCache(CacheFilePath);
+                        //    StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
+                        //    Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
+                        //    if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFilePath, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
+                        //    {
+                        //        HTTPRequestHandler requestHandler = new HTTPRequestHandler();
+                        //        var CacheOutputResult = await requestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        //        StackOutput CacheStackOutput = new StackOutput(ContentstackConvert.ToString(CacheOutputResult, "{}"));
+                        //        //Entry resultObject = new Entry();
+                        //        ParseObject((Dictionary<string, object>)CacheStackOutput.Object);
+                        //    }
+                        //    else
+                        //    {
+                        //        ParseObject((Dictionary<string, object>)stackOutputCacheResult.Object);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    HTTPRequestHandler request_handler = new HTTPRequestHandler();
+                        //    var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        //    StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
+                        //    ParseObject((Dictionary<string, object>)stack_output.Object);
+                        //    //Console.WriteLine(stack_output);
+                        //}
+                        //break;
+                    //case CachePolicy.NetworkElseCache:
+                        //if (ContentstackConvert.IsNetworkAvailable())
+                        //{
+                        //    HTTPRequestHandler request_handler = new HTTPRequestHandler();
+                        //    var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        //    StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
+                        //    ParseObject((Dictionary<string, object>)stack_output.Object);
+                        //    //Console.WriteLine(stack_output);
+                        //}
+                        //else
+                        //{
+                        //    var outputresult = FetchFromCache(CacheFilePath);
+                        //    StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
+                        //    ParseObject((Dictionary<string, object>)stackoutputResult.Object);
+                        //}
+                        //break;
 
-                    case CachePolicy.CacheThenNetwork:
-                        if (File.Exists(CacheFilePath))
-                        {
-                            var outputresult = FetchFromCache(CacheFilePath);
-                            StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
-                            ParseObject((Dictionary<string, object>)stackoutputResult.Object);
-                        }
-                        HTTPRequestHandler request = new HTTPRequestHandler();
-                        var _result = await request.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                        StackOutput _output = new StackOutput(ContentstackConvert.ToString(_result, "{}"));
-                        ParseObject((Dictionary<string, object>)_output.Object);
-                        //Console.WriteLine(_output);
-                        break;
+                    //case CachePolicy.CacheThenNetwork:
+                        //if (File.Exists(CacheFilePath))
+                        //{
+                        //    var outputresult = FetchFromCache(CacheFilePath);
+                        //    StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
+                        //    ParseObject((Dictionary<string, object>)stackoutputResult.Object);
+                        //}
+                        //HTTPRequestHandler request = new HTTPRequestHandler();
+                        //var _result = await request.ProcessRequest(Url, headers, mainJson, CacheFilePath);
+                        //StackOutput _output = new StackOutput(ContentstackConvert.ToString(_result, "{}"));
+                        //ParseObject((Dictionary<string, object>)_output.Object);
+                        ////Console.WriteLine(_output);
+                        //break;
 
                     default:
                         break;
@@ -1467,30 +1466,30 @@ namespace Contentstack.Core.Models
         }
 
         #region Private Functions
-        private string FetchFromCache(string CacheFileName)
-        {
-            if (File.Exists(CacheFileName))
-            {
-                var cacheResult = ContentstackConvert.GetJsonFromCacheFile(CacheFileName);
-                //var deserializeHson = JsonConvert.DeserializeObject(cacheResult);
-                StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
-                Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
-                if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFileName, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
-                {
-                    throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
-                }
-                else
-                {
-                    // await GetOutputAsync(stackOutputCacheResult);
-                    return cacheResult;
-                }
+        //private string FetchFromCache(string CacheFileName)
+        //{
+        //    if (File.Exists(CacheFileName))
+        //    {
+        //        var cacheResult = ContentstackConvert.GetJsonFromCacheFile(CacheFileName);
+        //        //var deserializeHson = JsonConvert.DeserializeObject(cacheResult);
+        //        StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
+        //        Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
+        //        if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFileName, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
+        //        {
+        //            throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
+        //        }
+        //        else
+        //        {
+        //            // await GetOutputAsync(stackOutputCacheResult);
+        //            return cacheResult;
+        //        }
 
-            }
-            else
-            {
-                throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        throw new Exception(StackConstants.ErrorMessage_EntryNotFoundInCache);
+        //    }
+        //}
 
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
         {
