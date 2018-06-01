@@ -62,7 +62,7 @@ namespace Contentstack.Core.Models
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         ///     contentType.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
         /// </code>
@@ -86,7 +86,7 @@ namespace Contentstack.Core.Models
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         ///     contentType.RemoveHeader(&quot;custom_header_key&quot;);
         /// </code>
@@ -108,7 +108,7 @@ namespace Contentstack.Core.Models
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         ///     Entry entry = contentType.Entry(&quot;bltf4fbbc94e8c851db&quot;);
         /// </code>
@@ -132,7 +132,7 @@ namespace Contentstack.Core.Models
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         ///     Query csQuery = contentType.Query();
         /// </code>

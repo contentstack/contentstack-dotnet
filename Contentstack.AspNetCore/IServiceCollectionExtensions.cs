@@ -25,7 +25,6 @@ namespace Contentstack.AspNetCore
         {
             services.AddOptions();
             services.Configure<ContentstackOptions>(configuration.GetSection("ContentstackOptions"));
-            services.TryAddSingleton<HttpClient>();
             services.TryAddTransient<ContentstackClient>();
             return services;
         }
@@ -40,7 +39,6 @@ namespace Contentstack.AspNetCore
         {
             services.AddOptions();
             services.Configure<ContentstackOptions>(configuration.GetSection("ContentstackOptions"));
-            services.TryAddSingleton<HttpClient>();
             services.TryAddTransient<ContentstackClient>();
             return services;
         }

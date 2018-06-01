@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
 using Microsoft.Extensions.Options;
@@ -26,7 +25,7 @@ namespace Contentstack.Core
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
         /// </summary>
-        /// <param name="options"> used to get stack details <see cref="ContentstackOptions"/> to create client.</param>
+        /// <param name="options"> used to get stack details via class <see cref="ContentstackOptions"/> to create client.</param>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
@@ -37,8 +36,8 @@ namespace Contentstack.Core
         ///        AccessToken = &quot;<access_token>&quot;
         ///        Environment = &quot;<environment>&quot;
         ///      }
-        ///     ContentstackClient client = ContentstackClient(options);
-        ///     ContentType contentType = client.ContentType(&quot;contentType_name&quot;);
+        ///     ContentstackClient stack = ContentstackClient(options);
+        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
         public ContentstackClient(IOptions<ContentstackOptions> options)
@@ -64,15 +63,15 @@ namespace Contentstack.Core
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
         /// </summary>
-        /// <param name="ApiKey">API Key of your stack on Contentstack.</param>
-        /// <param name="AccessToken">Accesstoken of your stack on Contentstack.</param>
-        /// <param name="Environment">Environment name</param>
+        /// <param name="apiKey">API Key of your stack on Contentstack.</param>
+        /// <param name="accessToken">Accesstoken of your stack on Contentstack.</param>
+        /// <param name="environment">Environment name</param>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient client = ContentstackClient(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     ContentType contentType = client.ContentType(&quot;contentType_name&quot;);
+        ///     ContentstackClient stack = ContentstackClient(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
         ///  </param>
@@ -126,7 +125,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
@@ -146,7 +145,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Asset asset  = asset.Asset();
         /// </code>
         /// </example>
@@ -164,7 +163,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary  = asset.AssetLibrary();
         /// </code>
         /// </example>
@@ -182,7 +181,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     String url = stack.GetVersion();
         /// </code>
         /// </example>
@@ -199,7 +198,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     String url = stack.GetApplicationKey();
         /// </code>
         /// </example>
@@ -216,7 +215,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     String accessToken = stack.GetAccessToken();
         /// </code>
         /// </example>
@@ -233,7 +232,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     String environment = stack.GetEnvironment();
         /// </code>
         /// </example>
@@ -275,7 +274,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     stack.RemoveHeader(&quot;custom_header_key&quot;);
         /// </code>
         /// </example>
@@ -295,7 +294,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     stack.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
         /// </code>
         /// </example>
