@@ -18,3 +18,4 @@ packages/
 *.config
 *.nupkg
 *.nuspec
+docfx_project/*
