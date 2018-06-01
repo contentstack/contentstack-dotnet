@@ -34,7 +34,7 @@ You will need to specify the API key, Access token, and Environment Name of your
 
 ``` cs
 // Initialize the Contentstack 
-Stack Stack stack = ContentstackClient("api_key", "access_token", "enviroment_name");
+ContentstackClient stack = new ContentstackClient("api_key", "access_token", "enviroment_name");
 ```
 or:
 
@@ -46,7 +46,7 @@ var options = new ContentstackOptions()
     AccessToken = "<access_token>"
     Environment = "<environment>"
 }
-var client = new ContentstackClient(options);
+ContentstackClient stack = new ContentstackClient(options);
 ```
 
 Once you have initialized the SDK, you can start getting content in your app.
