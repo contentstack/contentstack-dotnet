@@ -36,7 +36,7 @@ namespace Contentstack.Core
         ///        AccessToken = &quot;<access_token>&quot;
         ///        Environment = &quot;<environment>&quot;
         ///      }
-        ///     ContentstackClient stack = ContentstackClient(options);
+        ///     ContentstackClient stack = new ContentstackClient(options);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
@@ -70,7 +70,7 @@ namespace Contentstack.Core
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = ContentstackClient(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentstackClient stack = new ContentstackClient(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
