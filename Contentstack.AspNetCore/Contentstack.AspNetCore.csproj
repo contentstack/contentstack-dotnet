@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <ReleaseVersion>0.0.1</ReleaseVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Contentstack.Core">
+      <HintPath>..\Contentstack.Core\bin\Debug\Contentstack.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+    <PackageReference Include="contentstack.csharp" Version="1.0.5-alpha" />
+  </ItemGroup>
+</Project>
