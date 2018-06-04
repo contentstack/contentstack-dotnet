@@ -88,7 +88,7 @@ These were example of some of the basic queries of the SDK. For advanced queries
 ## API Reference
 Go through our .NET SDK API Reference guide to know about the methods that can be used to query your content in Contentstack.
 
-[Read .NET API Reference Guide](www.contentstack.com)
+[Read .NET API Reference Guide](https://www.contentstack.com/docs/platforms/dot-net/api-reference/api/index.html)
 
 ## Example
 To help you get started, we have created a sample application that is powered by Contentstack .NET SDK. Click on the link below to read the tutorial of the app.
