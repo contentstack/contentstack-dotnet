@@ -298,6 +298,7 @@ namespace Contentstack.Core.Models
 
                 if (QueryValueJson != null && !QueryValueJson.ContainsKey("locale"))
                 {
+                    UrlQueries.Remove("locale");
                     UrlQueries.Add("locale", localeCode);
                 } else {
                     UrlQueries["locale"] = localeCode;
@@ -1702,7 +1703,6 @@ namespace Contentstack.Core.Models
                         var output = await requestHandler.ProcessRequest(Url, headers, mainJson);
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(output, "{}"));
                         await GetOutputAsync(stackOutput);
-                        //Console.WriteLine(stackOutput);
                         break;
 
                     //case CachePolicy.CacheOnly:
@@ -1893,4 +1893,14 @@ namespace Contentstack.Core.Models
 
 
     }
+
+    class QueryModel {
+        public string uid { get; set; }
+    }
+    class QueryModel2
+    {
+        public QueryModel[] entries;
+    }
 }
+
+

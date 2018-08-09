@@ -301,11 +301,14 @@ namespace Contentstack.Core.Models
 
             return contentstackError;
         }
+
         internal void SetContentTypeInstance(ContentType contentTypeInstance)
         {
             this.ContentTypeInstance = contentTypeInstance;
         }
         #endregion
+
+
 
         #region Public Functions
         /// <summary>
@@ -535,6 +538,54 @@ namespace Contentstack.Core.Models
             return Metadata;
         }
 
+        /// <summary>
+        /// Set Language instance
+        /// </summary>
+        /// <param name="language">Language value</param>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     csQuery.SetLanguage(Language.ENGLISH_UNITED_STATES);
+        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///         //var result = entryResult.Result.GetMetadata();
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry SetLanguage(Language language)
+        {
+
+            try
+            {
+                Language languageName = language;
+                int localeValue = (int)languageName;
+                LanguageCode[] languageCodeValues = Enum.GetValues(typeof(LanguageCode)).Cast<LanguageCode>().ToArray();
+                string localeCode = languageCodeValues[localeValue].ToString();
+                localeCode = localeCode.Replace("_", "-");
+
+                if (ObjectValueJson != null && !ObjectValueJson.ContainsKey("locale"))
+                {
+                    UrlQueries.Remove("locale");
+                    UrlQueries.Add("locale", localeCode);
+                }
+                else
+                {
+                    UrlQueries["locale"] = localeCode;
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+
+
+            return this;
+        }
 
         private Language GetLanguage()
         {
@@ -1361,10 +1412,7 @@ namespace Contentstack.Core.Models
                         HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
                         var outputResult = await RequestHandler.ProcessRequest(Url, headers, mainJson);
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
-                        //Entry resultObject = new Entry();
                         ParseObject((Dictionary<string, object>)stackOutput.Object);
-                        //await GetOutputAsync(stackOutput);
-                        //Console.WriteLine(stackOutput);
                         break;
 
                     //case CachePolicy.CacheOnly:
