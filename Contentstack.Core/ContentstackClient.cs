@@ -49,7 +49,7 @@ namespace Contentstack.Core
             this.SetHeader("access_token", _options.AccessToken);
             Config cnfig = new Config();
             cnfig.Environment = _options.Environment;
-            this.SetConfig(config);
+            this.SetConfig(cnfig);
 
         }
 
