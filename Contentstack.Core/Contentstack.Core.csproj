@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <ReleaseVersion>0.0.1</ReleaseVersion>
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
