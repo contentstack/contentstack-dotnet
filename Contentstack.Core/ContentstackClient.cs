@@ -33,8 +33,8 @@ namespace Contentstack.Core
         ///     var options = new ContentstackOptions()
         ///     {
         ///        ApiKey = &quot;api_key&quot;,
-        ///        AccessToken = &quot;<access_token>&quot;
-        ///        Environment = &quot;<environment>&quot;
+        ///        AccessToken = &quot;access_token&quot;
+        ///        Environment = &quot;environment&quot;
         ///      }
         ///     ContentstackClient stack = new ContentstackClient(options);
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
@@ -47,9 +47,9 @@ namespace Contentstack.Core
             this._LocalHeaders = new Dictionary<string, object>();
             this.SetHeader("api_key", _options.ApiKey);
             this.SetHeader("access_token", _options.AccessToken);
-            Config config = new Config();
-            config.Environment = _options.Environment;
-            this.SetConfig(config);
+            Config cnfig = new Config();
+            cnfig.Environment = _options.Environment;
+            this.SetConfig(cnfig);
 
         }
 
@@ -74,7 +74,6 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        ///  </param>
         public ContentstackClient(string apiKey, string accessToken, string environment) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
         {
@@ -107,9 +106,9 @@ namespace Contentstack.Core
         #endregion
 
         #region Internal Functions
-        internal void SetConfig(Config config)
+        internal void SetConfig(Config cnfig)
         {
-            this.config = config;
+            this.config = cnfig;
 
         }
         #endregion
