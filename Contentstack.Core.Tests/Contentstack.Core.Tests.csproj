@@ -28,6 +28,11 @@
   <ItemGroup>
     <None Remove="stack.config" />
     <None Remove="Stack.config" />
+    <None Remove="TestResults\.DS_Store" />
+    <None Remove="TestResults\2018-09-29_19_56_27.trx" />
+    <None Remove="TestResults\Prod_2018-09-30_13_16_23.trx" />
+    <None Remove="TestResults\_Uttams-MacBook-Pro_2018-09-29_00_07_58.trx" />
+    <None Remove="TestResults\_Uttams-MacBook-Pro_2018-09-29_19_54_44.trx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ContentStack.Core\Contentstack.Core.csproj" />

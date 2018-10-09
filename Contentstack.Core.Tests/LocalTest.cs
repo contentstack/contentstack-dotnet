@@ -5,6 +5,10 @@ using Contentstack.Core.Models;
 using Contentstack.Core.Configuration;
 using Xunit;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using static System.Net.Mime.MediaTypeNames;
+using System.IO;
 
 namespace Contentstack.Core.Tests
 {
@@ -31,5 +35,37 @@ namespace Contentstack.Core.Tests
             Console.WriteLine(entry.ToString());
             Assert.True(true, "result is greater than 11");
         }
+
+        // [Fact]
+        // public async Task uploadfile()
+        // {
+        //     string url = "https://api.contentstack.io/v3/assets?relative_urls=true";
+        //     string filename = "myFile.jpg";
+        //     string result = "";
+        //     using (var formContent = new MultipartFormDataContent())
+        //     {
+        //         Stream fileStream = System.IO.File.OpenRead(@"../../../../../../Desktop/qr.png");
+                
+        //         StreamContent imagePart = new StreamContent(fileStream);
+        //         imagePart.Headers.Add("Content-Type", "image/jpeg");
+
+        //         formContent.Add(imagePart, "asset[upload]", filename);
+        //         using (var client = new HttpClient())
+        //         {
+        //             client.DefaultRequestHeaders.Add("api_key", "bltd2f9d1005d56c0db");
+        //             client.DefaultRequestHeaders.Add("authtoken", "blt5e001e170f1ca131");
+        //             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+        //             try
+        //             {
+        //                 var message = await client.PostAsync(url, formContent);
+        //                 result = await message.Content.ReadAsStringAsync();
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 throw ex;
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
