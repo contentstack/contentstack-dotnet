@@ -12,6 +12,7 @@
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
     <None Remove="TestResults\Prod_2018-09-30_13_16_23.trx" />
     <None Remove="TestResults\_Uttams-MacBook-Pro_2018-09-29_00_07_58.trx" />
     <None Remove="TestResults\_Uttams-MacBook-Pro_2018-09-29_19_54_44.trx" />
+    <None Remove="appSetting.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ContentStack.Core\Contentstack.Core.csproj" />
