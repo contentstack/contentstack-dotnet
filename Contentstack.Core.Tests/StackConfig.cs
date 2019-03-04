@@ -2,6 +2,7 @@
 using Contentstack.Core;
 using Contentstack.Core.Models;
 using System.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Contentstack.Core.Tests
 {
@@ -30,16 +31,16 @@ namespace Contentstack.Core.Tests
             string apiKey = ConfigurationManager.AppSettings["api_key"];
             string accessToken = ConfigurationManager.AppSettings["access_token"];
             string environment = ConfigurationManager.AppSettings["environment"];
-
+            string host = ConfigurationManager.AppSettings["host"];
             Configuration.ContentstackOptions contentstackOptions = new Configuration.ContentstackOptions
             {
                 ApiKey = apiKey,
                 AccessToken = accessToken,
-                Environment = environment
+                Environment = environment,
+                Host = host
             };
 
-            ContentstackClient contentstackClient = new ContentstackClient(apiKey, accessToken, environment);
-
+            ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));
             return contentstackClient;
 
         }
