@@ -49,6 +49,14 @@ namespace Contentstack.Core
             this.SetHeader("access_token", _options.AccessToken);
             Config cnfig = new Config();
             cnfig.Environment = _options.Environment;
+            if (_options.Host != null)
+            {
+                cnfig.Host = _options.Host;
+            }
+            if (_options.Version != null)
+            {
+                cnfig.Version = _options.Version;
+            }
             this.SetConfig(cnfig);
 
         }
@@ -74,13 +82,16 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        public ContentstackClient(string apiKey, string accessToken, string environment) :
+        public ContentstackClient(string apiKey, string accessToken, string environment, string host = null, string version = null) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
-        {
-            ApiKey = apiKey,
-            AccessToken = accessToken,
-            Environment = environment
-        }))
+            {
+                ApiKey = apiKey,
+                AccessToken = accessToken,
+                Environment = environment,
+                Host = host,
+                Version = version
+            }
+        ))
         {
 
         }
