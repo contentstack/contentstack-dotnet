@@ -1,5 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Contentstack.Core.Configuration;
+using Contentstack.Core.Internals;
+using System.Threading.Tasks;
+using System.Net;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Contentstack.Core.Models
 {
@@ -11,6 +19,8 @@ namespace Contentstack.Core.Models
         #region Public Properties
         internal ContentstackClient StackInstance { get; set; }
         internal string Uid { get; set; }
+        private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
+
         /// <summary>
         /// Content type uid
         /// </summary>
@@ -25,6 +35,15 @@ namespace Contentstack.Core.Models
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
+
+        private string _Url
+        {
+            get
+            {
+                Config config = this.StackInstance.config;
+                return String.Format("{0}/content_types/{1}", config.BaseUrl,this.ContentTypeName);
+             }
+        }
         #endregion
 
         #region Internal Constructors
@@ -45,6 +64,62 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Internal Functions
+
+        internal static ContentstackError GetContentstackError(Exception ex)
+        {
+            Int32 errorCode = 0;
+            string errorMessage = string.Empty;
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            ContentstackError contentstackError = new ContentstackError(ex);
+            Dictionary<string, object> errors = null;
+            //ContentstackError.OtherErrors errors = null;
+
+            try
+            {
+                System.Net.WebException webEx = (System.Net.WebException)ex;
+
+                using (var exResp = webEx.Response)
+                using (var stream = exResp.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    errorMessage = reader.ReadToEnd();
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    //errorCode = ContentstackConvert.ToInt32(data.Property("error_code").Value);
+                    //errorMessage = ContentstackConvert.ToString(data.Property("error_message").Value);
+
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
+
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
+
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
+
+                    var response = exResp as HttpWebResponse;
+                    if (response != null)
+                        statusCode = response.StatusCode;
+                }
+            }
+            catch
+            {
+                errorMessage = ex.Message;
+            }
+
+            contentstackError = new ContentstackError()
+            {
+                ErrorCode = errorCode,
+                ErrorMessage = errorMessage,
+                StatusCode = statusCode,
+                Errors = errors
+            };
+
+            return contentstackError;
+        }
+
         internal void SetStackInstance(ContentstackClient stack)
         {
             this.StackInstance = stack;
@@ -53,6 +128,57 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Public Functions
+
+        public async Task<JObject>Fetch()
+        {
+            Dictionary<String, Object> headers = GetHeader(_Headers);
+            Dictionary<String, object> headerAll = new Dictionary<string, object>();
+            Dictionary<string, object> mainJson = new Dictionary<string, object>();
+
+            //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
+
+            if (headers != null && headers.Count() > 0)
+            {
+                foreach (var header in headers)
+                {
+                    headerAll.Add(header.Key, (String)header.Value);
+                }
+
+                if (headers.ContainsKey("environment"))
+                {
+                    UrlQueries.Add("environment", headers["environment"]);
+                    //Url = Url + "?environment=" + headers["environment"];
+                }
+                else if (headers.ContainsKey("environment_uid"))
+                {
+                    UrlQueries.Add("environment_uid", headers["environment_uid"]);
+                    //Url = Url + "?environment_uid=" + headers["environment_uid"];
+                }
+                else
+                {
+
+                    mainJson.Add("environment", this.StackInstance.config.Environment);
+                }
+            }
+
+            foreach (var kvp in UrlQueries)
+            {
+                mainJson.Add(kvp.Key, kvp.Value);
+            }
+            try
+            {
+                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), ContentstackConvert.JsonSerializerSettings);
+                JObject contentTypes = (Newtonsoft.Json.Linq.JObject)data["content_type"];
+                return contentTypes;
+            }
+            catch (Exception ex)
+            {
+                throw GetContentstackError(ex);
+            }
+        }
+
         /// <summary>
         /// To set headers for Built.io Contentstack rest calls.
         /// </summary>
