@@ -621,7 +621,7 @@ namespace Contentstack.Core.Models
                     }
                     return result;
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             }
@@ -711,7 +711,7 @@ namespace Contentstack.Core.Models
                 else
                     return null;
             }
-            catch (Exception e)
+            catch
             {
                 //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
             }
@@ -742,7 +742,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["created_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
             }
@@ -823,7 +823,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["updated_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch
             {
                 //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
             }
@@ -904,7 +904,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["deleted_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch 
             {
                 // CSAppUtils.showLog(TAG, "-----------------getDeleteAt|" + e);
             }
@@ -1028,7 +1028,7 @@ namespace Contentstack.Core.Models
 
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1062,7 +1062,7 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("include[]", referenceField);
                 }
                 return this;
-            } catch (Exception e) {
+            } catch  {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1096,7 +1096,7 @@ namespace Contentstack.Core.Models
                 }
                 return this;
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1254,7 +1254,7 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }

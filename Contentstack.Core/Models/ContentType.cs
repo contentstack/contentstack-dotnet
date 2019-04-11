@@ -54,7 +54,7 @@ namespace Contentstack.Core.Models
 
         #region Public Functions
         /// <summary>
-        /// To set headers for Built.io Contentstack rest calls.
+        /// To set headers for Contentstack rest calls.
         /// </summary>
         /// <param name="key">header name.</param>
         /// <param name="value">header value against given header name.</param>
