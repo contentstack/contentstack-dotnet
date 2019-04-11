@@ -48,7 +48,7 @@
       "_appTitle": "Contentstack - .NET SDK Documentation",
       "_appLogoPath": "images/logo.svg",
       "_appFaviconPath": "images/favicon.ico",
-      "_appFooter": "Copyright © 2012-2019 Contentstack. All Rights Reserved",
+      "_appFooter": "Copyright © 2012-2019 <a href='https://www.contentstack.com/'>Contentstack</a>. All Rights Reserved",
       "_enableSearch": "true"
     },
     "dest": "_site",
