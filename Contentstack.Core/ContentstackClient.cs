@@ -4,11 +4,17 @@ using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
 using Microsoft.Extensions.Options;
 using Contentstack.Core.Models;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Net;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace Contentstack.Core
 {
     /// <summary>
-    /// To fetch stack level information of your application from Built.io Contentstack server.
+    /// To fetch stack level information of your application from Contentstack server.
     /// </summary>
     public class ContentstackClient
     {
@@ -21,6 +27,16 @@ namespace Contentstack.Core
         }
         private ContentstackOptions _options;
 
+
+        internal string _SyncUrl
+        {
+            get
+            {
+                Config config = this.config;
+                return String.Format("{0}/stacks/sync",
+                                     config.BaseUrl);
+            }
+        }
 
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
@@ -108,6 +124,60 @@ namespace Contentstack.Core
         #endregion
 
         #region Internal Constructor
+        internal static ContentstackError GetContentstackError(Exception ex)
+        {
+            Int32 errorCode = 0;
+            string errorMessage = string.Empty;
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            ContentstackError contentstackError = new ContentstackError(ex);
+            Dictionary<string, object> errors = null;
+            //ContentstackError.OtherErrors errors = null;
+
+            try
+            {
+                System.Net.WebException webEx = (System.Net.WebException)ex;
+
+                using (var exResp = webEx.Response)
+                using (var stream = exResp.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    errorMessage = reader.ReadToEnd();
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    //errorCode = ContentstackConvert.ToInt32(data.Property("error_code").Value);
+                    //errorMessage = ContentstackConvert.ToString(data.Property("error_message").Value);
+
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
+
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
+
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
+
+                    var response = exResp as HttpWebResponse;
+                    if (response != null)
+                        statusCode = response.StatusCode;
+                }
+            }
+            catch
+            {
+                errorMessage = ex.Message;
+            }
+
+            contentstackError = new ContentstackError()
+            {
+                ErrorCode = errorCode,
+                ErrorMessage = errorMessage,
+                StatusCode = statusCode,
+                Errors = errors
+            };
+
+            return contentstackError;
+        }
         internal ContentstackClient(String stackApiKey)
         {
             this.StackApiKey = stackApiKey;
@@ -296,7 +366,7 @@ namespace Contentstack.Core
         }
 
         /// <summary>
-        /// To set headers for Built.io Contentstack rest calls.
+        /// To set headers for Contentstack rest calls.
         /// </summary>
         /// <param name="key">header name.</param>
         /// <param name="value">header value against given header name.</param>
@@ -318,47 +388,186 @@ namespace Contentstack.Core
             }
 
         }
+        /// <summary>
+        /// Syncs the recursive.
+        /// </summary>
+        /// <returns>The recursive.</returns>
+        /// <param name="SyncType">Sync type.</param>
+        /// <param name="ContentTypeUid">Content type uid.</param>
+        /// <param name="StartFrom">Start from Date.</param>
+        ///  <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     stack.SyncRecursive(&quot;SyncType&quot;);
+        /// </code>
+        /// </example>
+        /// 
+        public async Task<SyncStack> SyncRecursive(SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        {
+            SyncStack syncStack = await Sync(SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
+            syncStack = await SyncPageinationRecursive(syncStack);
+            return syncStack;
+        }
 
-        ///// <summary>
-        ///// set environment.
-        ///// </summary>
-        ///// <param name="environment">environment uid/name</param>
-        ///// <param name="isEnvironmentUid"> true - If environment uid is present
-        /////                                 false - If environment uid is not present</param>
-        ///// <example>
-        ///// <code>
-        /////     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        /////     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        /////     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        /////     stack.SetEnvironment(&quot;stag&quot;, false);
-        ///// </code>
-        ///// </example>
-        //public void SetEnvironment(string environment, bool isEnvironmentUid)
-        //{
-        //    if (!string.IsNullOrEmpty(environment))
-        //    {
-        //        if (isEnvironmentUid)
-        //        {
-        //            RemoveHeader("environment");
-        //            SetHeader("environment_uid", environment);
-        //        }
-        //        else
-        //        {
-        //            RemoveHeader("environment_uid");
-        //            SetHeader("environment", environment);
-        //        }
-        //    }
-        //}
+        /// <summary>
+        /// Syncs the recursive with language.
+        /// </summary>
+        /// <returns>The recursive with language.</returns>
+        /// <param name="SyncType">Sync type.</param>
+        /// <param name="ContentTypeUid">Content type uid.</param>
+        /// <param name="StartFrom">Start from Date.</param>
+        /// <param name="Lang">Lang.</param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     stack.SyncRecursiveLanguage(&quot;SyncType&quot;, &quot;Language&quot;);
+        /// </code>
+        /// </example>
+        /// 
+        public async Task<SyncStack> SyncRecursiveLanguage(Language Lang, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        {
+            SyncStack syncStack = await SyncLanguage(Lang: Lang, SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
+            syncStack = await SyncPageinationRecursive(syncStack);
+            return syncStack;
+        }
 
+        /// <summary>
+        /// Syncs the pagination token.
+        /// </summary>
+        /// <returns>The pagination token.</returns>
+        /// <param name="paginationToken">Pagination token.</param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     stack.SyncPaginationTokenn(&quot;blt123343&quot;);
+        /// </code>
+        /// </example>
+
+        public async Task<SyncStack> SyncPaginationToken(string paginationToken)
+        {
+            return await GetResultAsync(PaginationToken: paginationToken);
+        }
+
+        /// <summary>
+        /// Syncs the token.
+        /// </summary>
+        /// <returns>The token.</returns>
+        /// <param name="SyncToken">Sync token.</param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     stack.SyncToken(&quot;blt123343&quot;);
+        /// </code>
+        /// </example>
+        public async Task<SyncStack> SyncToken(string SyncToken)
+        {
+            return await GetResultAsync(SyncToken: SyncToken);
+        }
         #endregion
 
         #region Private Functions
+
+        private async Task<SyncStack> SyncPageinationRecursive(SyncStack syncStack)
+        {
+            while (syncStack.pagination_token != null)
+            {
+                SyncStack newSyncStack = await SyncPaginationToken(syncStack.pagination_token);
+                syncStack.items = syncStack.items.Concat(newSyncStack.items);
+                syncStack.pagination_token = newSyncStack.pagination_token;
+                syncStack.skip = newSyncStack.skip;
+                syncStack.total_count = newSyncStack.total_count;
+                syncStack.sync_token = newSyncStack.sync_token;
+            }
+            return syncStack;
+        }
+
+        private async Task<SyncStack> Sync(SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        {
+            return await GetResultAsync(Init: "true", ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
+        }
+
+
+        private async Task<SyncStack> SyncLanguage(Language Lang, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        {
+            return await GetResultAsync(Init: "true", ContentTypeUid: ContentTypeUid, StartFrom: StartFrom, Lang: GetLocaleCode(Lang));
+        }
+
+        //GetLanguage code 
+        private string GetLocaleCode(Language language)
+        {
+            string localeCode = null;
+            try
+            {
+                int localeValue = (int)language;
+                LanguageCode[] languageCodeValues = Enum.GetValues(typeof(LanguageCode)).Cast<LanguageCode>().ToArray();
+                localeCode = languageCodeValues[localeValue].ToString();
+                localeCode = localeCode.Replace("_", "-");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return localeCode;
+        }
+
         private Dictionary<string, object> GetHeader()
         {
 
             Dictionary<string, object> mainHeader = _LocalHeaders;
 
             return mainHeader;
+        }
+
+
+        private async Task<SyncStack> GetResultAsync(string Init = "false", string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Lang = null)
+        {
+            //mainJson = null;
+            Dictionary<string, object> mainJson = new Dictionary<string, object>();
+            if (Init != "false")
+            {
+                mainJson.Add("init", "true");
+                mainJson.Add("environment", config.Environment);
+            }
+            if (StartFrom != null)
+            {
+                DateTime startFrom = StartFrom ?? DateTime.MinValue;
+                mainJson.Add("start_from", startFrom.ToString("yyyy-MM-dd"));
+            }
+            if (SyncToken != null)
+            {
+                mainJson.Add("sync_token", SyncToken);
+            }
+            if (PaginationToken != null)
+            {
+                mainJson.Add("pagination_token", PaginationToken);
+            }
+            if (ContentTypeUid != null)
+            {
+                mainJson.Add("content_type_uid", ContentTypeUid);
+            }
+            if (Lang != null)
+            {
+                mainJson.Add("locale", Lang);
+            }
+            try
+            {
+                HTTPRequestHandler requestHandler = new HTTPRequestHandler();
+                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson);
+                SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
+                return stackSyncOutput;
+            }
+            catch (Exception ex)
+            {
+                throw GetContentstackError(ex);
+            }           
         }
         #endregion
 

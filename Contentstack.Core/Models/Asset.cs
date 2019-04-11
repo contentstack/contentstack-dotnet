@@ -15,8 +15,6 @@ namespace Contentstack.Core.Models
         private Dictionary<string, string> _Headers = new Dictionary<string, string>();
         private string _jsonString = String.Empty;
         private string _Url = string.Empty;
-        private byte[] _Bytes = default(byte[]);
-        internal object _Result;
         #endregion
         public ContentstackClient Stack
         {
@@ -159,7 +157,7 @@ namespace Contentstack.Core.Models
         #endregion
 
         /// <summary>
-        /// To set headers for Built.io Backend rest calls.
+        /// To set headers for Backend rest calls.
         /// </summary>
         /// <param name="key">header name.</param>
         /// <param name="value">header value against given header name.</param>
@@ -228,7 +226,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["created_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch
             {
                 //CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
             }
@@ -249,7 +247,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["updated_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
             }
@@ -270,7 +268,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["deleted_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch
             {
                 // CSAppUtils.showLog(TAG, "-----------------getDeleteAt|" + e);
             }
