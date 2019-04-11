@@ -211,12 +211,11 @@ namespace Contentstack.Core
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
-        ///     var result = await contenttype.Fetch();
+        ///     ContentType contentType = stack.GetContentTypes();
         /// </code>
         /// </example>
         /// <returns>The List of content types schema.</returns>
-        public async Task<IList> getContentTypes()
+        public async Task<IList> GetContentTypes()
         {
             Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
