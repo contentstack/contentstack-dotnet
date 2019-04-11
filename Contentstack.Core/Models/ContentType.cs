@@ -128,7 +128,16 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Public Functions
-
+        /// <summary>
+        /// This method fetchs information of a specific content type.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     var result = await client.getContentTypes();
+        /// </code>
+        /// </example>
+        /// <returns>The Content-Type Schema Object.</returns>
         public async Task<JObject>Fetch()
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);

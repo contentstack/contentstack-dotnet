@@ -205,6 +205,17 @@ namespace Contentstack.Core
         #endregion
 
         #region Public Functions
+        /// <summary>
+        /// This method fetchs information of a all content types.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
+        ///     var result = await contenttype.Fetch();
+        /// </code>
+        /// </example>
+        /// <returns>The List of content types schema.</returns>
         public async Task<IList> getContentTypes()
         {
             Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
