@@ -1,15 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
 using Microsoft.Extensions.Options;
 using Contentstack.Core.Models;
+<<<<<<< HEAD
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using System.IO;
+=======
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
+using System.IO;
+using System.Collections;
+>>>>>>> ffb258f91214d1dbdd26af50f3fe80e74ca0082f
 
 namespace Contentstack.Core
 {
@@ -26,18 +36,31 @@ namespace Contentstack.Core
             set;
         }
         private ContentstackOptions _options;
+<<<<<<< HEAD
 
 
         internal string _SyncUrl
+=======
+        private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
+        private Dictionary<string, object> _Headers = new Dictionary<string, object>();
+        private string _Url
+>>>>>>> ffb258f91214d1dbdd26af50f3fe80e74ca0082f
         {
             get
             {
                 Config config = this.config;
+<<<<<<< HEAD
                 return String.Format("{0}/stacks/sync",
                                      config.BaseUrl);
             }
         }
 
+=======
+                return String.Format("{0}/content_types/", config.BaseUrl);
+            }
+        }
+        private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
+>>>>>>> ffb258f91214d1dbdd26af50f3fe80e74ca0082f
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
         /// </summary>
@@ -75,6 +98,62 @@ namespace Contentstack.Core
             }
             this.SetConfig(cnfig);
 
+        }
+
+
+        internal static ContentstackError GetContentstackError(Exception ex)
+        {
+            Int32 errorCode = 0;
+            string errorMessage = string.Empty;
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            ContentstackError contentstackError = new ContentstackError(ex);
+            Dictionary<string, object> errors = null;
+            //ContentstackError.OtherErrors errors = null;
+
+            try
+            {
+                System.Net.WebException webEx = (System.Net.WebException)ex;
+
+                using (var exResp = webEx.Response)
+                using (var stream = exResp.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    errorMessage = reader.ReadToEnd();
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    //errorCode = ContentstackConvert.ToInt32(data.Property("error_code").Value);
+                    //errorMessage = ContentstackConvert.ToString(data.Property("error_message").Value);
+
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
+
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
+
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
+
+                    var response = exResp as HttpWebResponse;
+                    if (response != null)
+                        statusCode = response.StatusCode;
+                }
+            }
+            catch
+            {
+                errorMessage = ex.Message;
+            }
+
+            contentstackError = new ContentstackError()
+            {
+                ErrorCode = errorCode,
+                ErrorMessage = errorMessage,
+                StatusCode = statusCode,
+                Errors = errors
+            };
+
+            return contentstackError;
         }
 
         public ContentstackClient(ContentstackOptions options) :
@@ -195,6 +274,55 @@ namespace Contentstack.Core
         #endregion
 
         #region Public Functions
+        public async Task<IList> getContentTypes()
+        {
+            Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
+            Dictionary<String, object> headerAll = new Dictionary<string, object>();
+            Dictionary<string, object> mainJson = new Dictionary<string, object>();
+
+            //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
+
+            if (headers != null && headers.Count() > 0)
+            {
+                foreach (var header in headers)
+                {
+                    headerAll.Add(header.Key, (String)header.Value);
+                }
+
+                if (headers.ContainsKey("environment"))
+                {
+                    UrlQueries.Add("environment", headers["environment"]);
+                    //Url = Url + "?environment=" + headers["environment"];
+                }
+                else if (headers.ContainsKey("environment_uid"))
+                {
+                    UrlQueries.Add("environment_uid", headers["environment_uid"]);
+                    //Url = Url + "?environment_uid=" + headers["environment_uid"];
+                }
+                else
+                {
+
+                    mainJson.Add("environment", this.config.Environment);
+                }
+            }
+
+            foreach (var kvp in UrlQueries)
+            {
+                mainJson.Add(kvp.Key, kvp.Value);
+            }
+            try
+            {
+                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), ContentstackConvert.JsonSerializerSettings);
+                IList contentTypes = (IList)data["content_types"];
+                return contentTypes;
+            }
+            catch (Exception ex)
+            {
+                throw GetContentstackError(ex);
+            }
+        }
 
         /// <summary>
         /// Represents a ContentType. Creates ContenntType Instance.
@@ -475,6 +603,7 @@ namespace Contentstack.Core
 
         #region Private Functions
 
+<<<<<<< HEAD
         private async Task<SyncStack> SyncPageinationRecursive(SyncStack syncStack)
         {
             while (syncStack.pagination_token != null)
@@ -516,6 +645,45 @@ namespace Contentstack.Core
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
             }
             return localeCode;
+=======
+        private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
+        {
+            Dictionary<string, object> mainHeader = _StackHeaders;
+            Dictionary<string, object> classHeaders = new Dictionary<string, object>();
+
+            if (localHeader != null && localHeader.Count > 0)
+            {
+                if (mainHeader != null && mainHeader.Count > 0)
+                {
+                    foreach (var entry in localHeader)
+                    {
+                        String key = entry.Key;
+                        classHeaders.Add(key, entry.Value);
+                    }
+
+                    foreach (var entry in mainHeader)
+                    {
+                        String key = entry.Key;
+                        if (!classHeaders.ContainsKey(key))
+                        {
+                            classHeaders.Add(key, entry.Value);
+                        }
+                    }
+
+                    return classHeaders;
+
+                }
+                else
+                {
+                    return localHeader;
+                }
+
+            }
+            else
+            {
+                return _StackHeaders;
+            }
+>>>>>>> ffb258f91214d1dbdd26af50f3fe80e74ca0082f
         }
 
         private Dictionary<string, object> GetHeader()
