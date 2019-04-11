@@ -133,8 +133,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     var result = await client.getContentTypes();
+        /// ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        /// ContentType contenttype = stack.ContentType("contentType_name");
+        /// var result = await contenttype.Fetch();        
         /// </code>
         /// </example>
         /// <returns>The Content-Type Schema Object.</returns>
