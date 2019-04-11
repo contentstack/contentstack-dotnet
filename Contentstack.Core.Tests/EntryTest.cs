@@ -15,7 +15,6 @@ namespace Contentstack.Core.Tests
         ContentstackClient client = StackConfig.GetStack();
 
 
-        String numbersContentType = "numbers_content_type";
         String source = "source";
         String singelEntryFetchUID = "blt1f94e478501bba46";
         String referenceFieldUID = "reference";
