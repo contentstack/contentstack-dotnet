@@ -9,7 +9,7 @@ namespace Contentstack.Core.Models
         
         #region Private Variables
 
-        private CachePolicy _CachePolicy;
+        //private CachePolicy _CachePolicy;
         private Dictionary<string, string> _PostParams;
 
         #endregion

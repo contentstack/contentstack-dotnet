@@ -44,7 +44,7 @@ namespace Contentstack.Core.Internals
                 foreach (var header in Headers) {
                     try {
                         request.Headers[header.Key] = header.Value.ToString();
-                    } catch (Exception e) {
+                    } catch {
                         
                     }
                 }

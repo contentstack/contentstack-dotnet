@@ -1247,7 +1247,7 @@ namespace Contentstack.Core.Models
                 {
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
-            } catch (Exception e) {
+            } catch {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1279,7 +1279,7 @@ namespace Contentstack.Core.Models
                 if (fieldUids != null && fieldUids.Length > 0) {
                     UrlQueries.Add("except[BASE][]", fieldUids);
                 }
-            } catch (Exception e) {
+            } catch  {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
             return this;
@@ -1868,16 +1868,6 @@ namespace Contentstack.Core.Models
             }
         }
         #endregion
-
-
-    }
-
-    class QueryModel {
-        public string uid { get; set; }
-    }
-    class QueryModel2
-    {
-        public QueryModel[] entries;
     }
 }
 

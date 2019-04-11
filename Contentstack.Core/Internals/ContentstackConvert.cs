@@ -326,7 +326,7 @@ namespace Contentstack.Core.Internals
                 }
 
             }
-            catch (Exception e)
+            catch 
             {
                 //showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
                 return false;
