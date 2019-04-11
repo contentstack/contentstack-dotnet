@@ -35,37 +35,6 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
-        public async Task GetContentTypes()
-        {
-            var result = await client.getContentTypes();
-
-            if (result == null)
-            {
-                Assert.False(true, "client.getContentTypes is not match with expected result.");
-            }
-            else
-            {
-                Assert.True(true);
-
-            }
-        }
-
-        [Fact]
-        public async Task FetchContenTypeSchema()
-        {
-            ContentType contenttype = client.ContentType(source);
-            var result = await contenttype.Fetch();
-            if (result == null)
-            {
-                Assert.False(true, "contenttype.FetchSchema() is not match with expected result.");
-            }
-            else
-            {
-                Assert.True(true);
-            }
-        }
-
-        [Fact]
         public async Task IncludeReference() {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
