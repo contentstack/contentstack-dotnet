@@ -34,7 +34,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task GetContentTypes()
         {
-            var result = await client.getContentTypes();
+            var result = await client.GetContentTypes();
 
             if (result == null)
             {
