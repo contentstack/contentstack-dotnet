@@ -5,10 +5,17 @@
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
-    <PackageVersion>1.0.6</PackageVersion>
+    <PackageVersion>1.1.0</PackageVersion>
     <Owners>Contentstack</Owners>
-    <PackageReleaseNotes>Localization support for Query and Entry is added.</PackageReleaseNotes>
-    <ReleaseVersion>0.0.1</ReleaseVersion>
+    <PackageReleaseNotes>Fetching Content-Type schema
+Stack Sync implemented </PackageReleaseNotes>
+    <ReleaseVersion>1.1.0</ReleaseVersion>
+    <Copyright>Copyright © 2012-2019 Contentstack. All Rights Reserved
+</Copyright>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
+    <PackageTags>v1.1.0</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -40,6 +47,7 @@
     <None Remove="contentstack.csharp.1.0.3-alpha.nupkg" />
     <None Remove="contentstack.csharp.1.0.4-alpha.nupkg" />
     <None Remove="contentstack.csharp.1.0.5-alpha.nupkg" />
+    <None Remove="contentstack.csharp.1.0.6.nupkg" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
