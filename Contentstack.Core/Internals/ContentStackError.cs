@@ -16,7 +16,7 @@ namespace Contentstack.Core.Internals
 
         #region Public Variables
         /// <summary>
-        /// This is http response status code of REST request to built.io.
+        /// This is http response status code of REST request to Contentstack.
         /// </summary>
         public HttpStatusCode StatusCode;
 

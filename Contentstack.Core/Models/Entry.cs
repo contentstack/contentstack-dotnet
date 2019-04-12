@@ -23,8 +23,20 @@ namespace Contentstack.Core.Models
         private ContentType ContentTypeInstance { get; set; }
         private CachePolicy _CachePolicy;
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
-        private string _Url;
         private bool _IsCachePolicySet;
+        private string _Url
+        {
+            get
+            {
+
+                Config config = this.ContentTypeInstance.StackInstance.config;
+
+                if (!String.IsNullOrEmpty(this.EntryUid))
+                    return String.Format("{0}/content_types/{1}/entries/{2}", config.BaseUrl, this.ContentTypeInstance.ContentTypeName, this.EntryUid);
+                else
+                    return String.Format("{0}/content_types/{1}/entries", config.BaseUrl, this.ContentTypeInstance.ContentTypeName);
+            }
+        }
         #endregion
 
         #region Internal Variables
@@ -70,48 +82,6 @@ namespace Contentstack.Core.Models
         /// </code>
         /// </example>
         public string EntryUid { get; set; }
-
-        /// <summary>
-        /// Rest Url for an Entry on contentstack.io
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.Url;
-        ///     });
-        /// </code>
-        /// </example>
-        public string Url
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this._Url))
-                {
-                    Config config = this.ContentTypeInstance.StackInstance.config;
-
-                    if (!String.IsNullOrEmpty(this.EntryUid))
-                        return String.Format("{0}/content_types/{1}/entries/{2}", config.BaseUrl, this.ContentTypeInstance.ContentTypeName, this.EntryUid);
-                    else
-                        return String.Format("{0}/content_types/{1}/entries", config.BaseUrl, this.ContentTypeInstance.ContentTypeName);
-                }
-                else
-                {
-                    if (!String.IsNullOrEmpty(this.EntryUid) && !this._Url.Contains(this.EntryUid))
-                        this._Url += "/" + this.EntryUid;
-
-                    return this._Url;
-                }
-            }
-            set
-            {
-                this._Url = value;
-            }
-        }
 
         /// <summary>
         /// Set array of Tags
@@ -389,27 +359,6 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// Returns Rest Url for an Entry on contentstack.io
-        /// </summary>
-        /// <returns>url in string</returns>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetURL();
-        ///     });
-        /// </code>
-        /// </example>
-        public string GetURL()
-        {
-            return Url;
-        }
-
-        /// <summary>
         /// Get title 
         /// </summary>
         /// <returns>title</returns>
@@ -672,7 +621,7 @@ namespace Contentstack.Core.Models
                     }
                     return result;
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             }
@@ -762,7 +711,7 @@ namespace Contentstack.Core.Models
                 else
                     return null;
             }
-            catch (Exception e)
+            catch
             {
                 //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
             }
@@ -793,7 +742,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["created_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
             }
@@ -874,7 +823,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["updated_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch
             {
                 //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
             }
@@ -955,7 +904,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["deleted_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch (Exception e)
+            catch 
             {
                 // CSAppUtils.showLog(TAG, "-----------------getDeleteAt|" + e);
             }
@@ -1079,7 +1028,7 @@ namespace Contentstack.Core.Models
 
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1113,7 +1062,7 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("include[]", referenceField);
                 }
                 return this;
-            } catch (Exception e) {
+            } catch  {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1147,7 +1096,7 @@ namespace Contentstack.Core.Models
                 }
                 return this;
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1305,7 +1254,7 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1366,23 +1315,6 @@ namespace Contentstack.Core.Models
                 mainJson.Add(kvp.Key, kvp.Value);
             }
 
-
-            //foreach (var value in mainJson)
-            //{
-            //    if (value.Value is Dictionary<string, object>)
-            //    {
-            //        Url = Url + "&" + value.Key + "=" + JsonConvert.SerializeObject(value.Value);
-            //    } 
-            //    else
-            //    {
-            //        Url = Url + "&" + value.Key + "=" + value.Value;
-            //    }
-            //}
-
-            //mainJson.Add("query", UrlQueries);
-
-            //mainJson.Add("_method", HttpMethods.Get.ToString().ToUpper());
-
             try
             {
                 //String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
@@ -1410,7 +1342,7 @@ namespace Contentstack.Core.Models
 
                     case CachePolicy.NetworkOnly:
                         HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
-                        var outputResult = await RequestHandler.ProcessRequest(Url, headers, mainJson);
+                        var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
                         ParseObject((Dictionary<string, object>)stackOutput.Object);
                         break;
@@ -1484,11 +1416,6 @@ namespace Contentstack.Core.Models
                         break;
                 }
 
-                //HTTPRequestHandler contentstackRequestHandler = new HTTPRequestHandler();
-                //var result = await contentstackRequestHandler.ProcessRequest(Url, headers, mainJson);
-                //StackOutput contentstackOutput = new StackOutput(ContentstackConvert.ToString(result, "{}"));
-                ////Entry resultObject = new Entry();
-                //ParseObject((Dictionary<string, object>)contentstackOutput.Object);
                 return this;
             }
             catch (Exception ex)
@@ -1590,16 +1517,6 @@ namespace Contentstack.Core.Models
             if (jsonObj != null && jsonObj.ContainsKey("title"))
             {
                 this.Title = string.IsNullOrEmpty(jsonObj["title"].ToString()) ? " " : jsonObj["title"].ToString();
-            }
-
-            //if (jsonObj != null && jsonObj.ContainsKey("url"))
-            //{
-            //    this.Url = string.IsNullOrEmpty(jsonObj["url"].ToString()) ? " " : jsonObj["url"].ToString();
-            //}
-
-            if (url != null)
-            {
-                this.Url = url + "/" + this.EntryUid;
             }
 
             if (jsonObj != null && jsonObj.ContainsKey("_metadata"))
