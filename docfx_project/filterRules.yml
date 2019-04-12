@@ -1,0 +1,24 @@
+apiRules:
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Tests
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Internals\.ResponseType
+    type: Class
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Internals\.OrderBy
+    type: Class
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Internals\.NetworkStatus
+    type: Class
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Internals\.HttpMethods
+    type: Class
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Internals\.ContentstackError
+    type: Class
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Configuration
+    type: Class
+- exclude:
+    uidRegex: ^Contentstack\.Core\.Models\.AssetLibrary
+    type: Class

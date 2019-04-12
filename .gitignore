@@ -18,4 +18,3 @@ packages/
 *.config
 *.nupkg
 *.nuspec
-Contentstack.core/docfx_project/*
