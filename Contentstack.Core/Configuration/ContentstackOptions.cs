@@ -21,5 +21,14 @@ namespace Contentstack.Core.Configuration
         /// </summary>
         public string Environment { get; set; }
 
+        /// <summary>
+        /// The Host used to set host url for the ContentStack API.
+        /// </summary>
+        public string Host { get; set; }
+
+        /// <summary>
+        /// The Version number for the ContentStack API.
+        /// </summary>
+        public string Version { get; set; }
     }
 }

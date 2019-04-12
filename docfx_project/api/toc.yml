@@ -1,0 +1,31 @@
+### YamlMime:TableOfContent
+- uid: Contentstack.AspNetCore
+  name: Contentstack.AspNetCore
+  items:
+  - uid: Contentstack.AspNetCore.IServiceCollectionExtensions
+    name: IServiceCollectionExtensions
+- uid: Contentstack.Core
+  name: Contentstack.Core
+  items:
+  - uid: Contentstack.Core.ContentstackClient
+    name: ContentstackClient
+- uid: Contentstack.Core.Internals
+  name: Contentstack.Core.Internals
+  items:
+  - uid: Contentstack.Core.Internals.CachePolicy
+    name: CachePolicy
+  - uid: Contentstack.Core.Internals.Language
+    name: Language
+- uid: Contentstack.Core.Models
+  name: Contentstack.Core.Models
+  items:
+  - uid: Contentstack.Core.Models.ContentType
+    name: ContentType
+  - uid: Contentstack.Core.Models.Entry
+    name: Entry
+  - uid: Contentstack.Core.Models.Query
+    name: Query
+  - uid: Contentstack.Core.Models.SyncStack
+    name: SyncStack
+  - uid: Contentstack.Core.Models.SyncType
+    name: SyncType

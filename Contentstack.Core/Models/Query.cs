@@ -19,61 +19,39 @@ namespace Contentstack.Core.Models
     {
         #region Private Variables
 
-
         internal Dictionary<string, object> _FormHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private Dictionary<string, object> QueryValueJson = new Dictionary<string, object>();
         private string _ResultJson = string.Empty;
-        private string _Url;
         private Entry[] _Result;
         private List<Dictionary<string, object>> _Schema;
         private CachePolicy _CachePolicy;
         private int _TotalCount;
         private ContentType ContentTypeInstance { get; set; }
         private bool _IsCachePolicySet;
+
+        private string _Url
+        {
+            get
+            {
+
+                Config config = this.ContentTypeInstance.StackInstance.config;
+                String contentTypeName = this.ContentTypeInstance.ContentTypeName;
+                //String queryParam = String.Join("&",
+                //UrlQueries.Select(kvp =>{
+                //    return String.Format("{0}={1}", kvp.Key, kvp.Value);
+
+                //}));
+                return String.Format("{0}/content_types/{1}/entries",
+                                     config.BaseUrl,
+                                     contentTypeName);
+
+            }
+        }
         #endregion
 
         #region Public Properties
-        /// <summary>
-        /// Rest Url for a entry on contentstack.io.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_name&quot;).Query();
-        ///     csQuery.Find().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///         var result = queryResult.Result.Url;
-        ///     });
-        /// </code>
-        /// </example>
-        public string Url {
-            get {
-                if (string.IsNullOrEmpty(this._Url)) {
-                    Config config = this.ContentTypeInstance.StackInstance.config;
-                    String contentTypeName = this.ContentTypeInstance.ContentTypeName;
-                    //String queryParam = String.Join("&",
-                        //UrlQueries.Select(kvp =>{
-                        //    return String.Format("{0}={1}", kvp.Key, kvp.Value);
-                           
-                        //}));
-                    return String.Format("{0}/content_types/{1}/entries", 
-                                         config.BaseUrl, 
-                                         contentTypeName);
-                } else {
-
-                    return this._Url;
-                }
-            }
-            set
-            {
-                this._Url = value;
-            }
-        }
-
         /// <summary>
         /// Content type uid.
         /// </summary>
@@ -1269,7 +1247,7 @@ namespace Contentstack.Core.Models
                 {
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
-            } catch (Exception e) {
+            } catch {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1301,7 +1279,7 @@ namespace Contentstack.Core.Models
                 if (fieldUids != null && fieldUids.Length > 0) {
                     UrlQueries.Add("except[BASE][]", fieldUids);
                 }
-            } catch (Exception e) {
+            } catch  {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
             return this;
@@ -1700,7 +1678,7 @@ namespace Contentstack.Core.Models
 
                     case CachePolicy.NetworkOnly:
                         HTTPRequestHandler requestHandler = new HTTPRequestHandler();
-                        var output = await requestHandler.ProcessRequest(Url, headers, mainJson);
+                        var output = await requestHandler.ProcessRequest(_Url, headers, mainJson);
                         StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(output, "{}"));
                         await GetOutputAsync(stackOutput);
                         break;
@@ -1865,7 +1843,7 @@ namespace Contentstack.Core.Models
                         foreach (var item in result)
                         {
                             Entry entry = new Entry();
-                            lstEntryObject.Add(entry.ParseObject((Dictionary<string, object>)item,this.Url));
+                            lstEntryObject.Add(entry.ParseObject((Dictionary<string, object>)item,this._Url));
                         }
                         this._Result = lstEntryObject.ToArray();
                     }
@@ -1890,16 +1868,6 @@ namespace Contentstack.Core.Models
             }
         }
         #endregion
-
-
-    }
-
-    class QueryModel {
-        public string uid { get; set; }
-    }
-    class QueryModel2
-    {
-        public QueryModel[] entries;
     }
 }
 

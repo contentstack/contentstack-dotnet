@@ -6,7 +6,8 @@ using Contentstack.Core.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-            
+using System.Collections;
+
 namespace Contentstack.Core.Tests
 {
    
@@ -15,7 +16,6 @@ namespace Contentstack.Core.Tests
         ContentstackClient client = StackConfig.GetStack();
 
 
-        String numbersContentType = "numbers_content_type";
         String source = "source";
         String singelEntryFetchUID = "blt1f94e478501bba46";
         String referenceFieldUID = "reference";

@@ -6,8 +6,6 @@ namespace Contentstack.Core.Internals
     internal class ContentstackConstants
     {
         #region Private Variable
-        private string _Entries = "entries";
-        private string _CacheFolderName;
         private string _ContentTypes = "content_types";
       
         #endregion
