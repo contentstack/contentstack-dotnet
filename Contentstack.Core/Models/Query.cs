@@ -239,7 +239,7 @@ namespace Contentstack.Core.Models
         internal void SetContentTypeInstance(ContentType contentTypeInstance)
         {
             this.ContentTypeInstance = contentTypeInstance;
-            SetLanguage(Language.ENGLISH_UNITED_STATES);
+            SetLocale("en_us");
         }
 
         #endregion
@@ -263,6 +263,7 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
+        [ObsoleteAttribute("This method has been deprecated. Use SetLocale instead.", true)]
         public Query SetLanguage(Language language)
         {
 
@@ -289,6 +290,37 @@ namespace Contentstack.Core.Models
             }
 
 
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the locale.
+        /// </summary>
+        /// <returns>The locale.</returns>
+        /// <param name="Locale">Locale.</param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     csQuery.SetLocale("en-us");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query SetLocale(String Locale)
+        {
+            if (QueryValueJson != null && !QueryValueJson.ContainsKey("locale"))
+            {
+                UrlQueries.Remove("locale");
+                UrlQueries.Add("locale", Locale);
+            }
+            else
+            {
+                UrlQueries["locale"] = Locale;
+            }
             return this;
         }
 

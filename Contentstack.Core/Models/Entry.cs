@@ -512,23 +512,6 @@ namespace Contentstack.Core.Models
             return this;
         }
 
-        private Language GetLanguage()
-        {
-            if (Metadata != null && Metadata.Count > 0)
-            {
-                String localeCode = (String)Metadata["locale"];
-                localeCode = localeCode.Replace("-", "_");
-                LanguageCode codeValue = (LanguageCode)Enum.Parse(typeof(LanguageCode), localeCode);
-                int localeValue = (int)codeValue;
-                Language[] language = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray();
-
-                return language[localeValue];
-            }
-
-            return new Language();
-        }
-
-
         /// <summary>
         /// Get html text for markdown data type
         /// </summary>
