@@ -5,13 +5,33 @@
 - ContentstackClient
   - added method 'GetContentTypes'
   - added method 'SyncRecursive' 
-  - added method 'SyncRecursiveLanguage'
   - added method 'SyncPaginationToken'
   - added method 'SyncToken'
 
+- Query
+  - added method 'SetLocale'
+  
+- Entry
+   - added method 'SetLocale'
+
 - CotentType
- - added method 'Fetch' 
+   - added method 'Fetch'
  
+ ##### Update API
+ - Query
+  - update method 'Fetch'
+  - update method 'FindOne'
+  
+- Entry
+  - update method 'Find'
+ 
+##### Deprecated API
+- Query
+  - deprecated method 'SetLanguage'
+  
+- Entry
+  - deprecated method 'SetLanguage'
+
  ### Version: 1.0.6
  #### Date: Apr-12-2019
 
