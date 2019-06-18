@@ -25,6 +25,7 @@ namespace Contentstack.Core.Tests
         public async Task FetchAll()
         {
             Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
             var result = await query.Find<SourceModel>();
             if (result == null && result.entries.Count() == 0)
             {
