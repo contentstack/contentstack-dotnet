@@ -31,10 +31,10 @@ namespace Contentstack.Core.Models
 
                 Config config = this.ContentTypeInstance.StackInstance.config;
 
-                if (!String.IsNullOrEmpty(this.EntryUid))
-                    return String.Format("{0}/content_types/{1}/entries/{2}", config.BaseUrl, this.ContentTypeInstance.ContentTypeName, this.EntryUid);
+                if (!String.IsNullOrEmpty(this.Uid))
+                    return String.Format("{0}/content_types/{1}/entries/{2}", config.BaseUrl, this.ContentTypeInstance.ContentTypeId, this.Uid);
                 else
-                    return String.Format("{0}/content_types/{1}/entries", config.BaseUrl, this.ContentTypeInstance.ContentTypeName);
+                    return String.Format("{0}/content_types/{1}/entries", config.BaseUrl, this.ContentTypeInstance.ContentTypeId);
             }
         }
         #endregion
@@ -57,8 +57,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Title;
         ///     });
@@ -74,14 +74,14 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
-        ///         //var result = entryResult.Result.EntryUid;
+        ///         //var result = entryResult.Result.Uid;
         ///     });
         /// </code>
         /// </example>
-        public string EntryUid { get; set; }
+        public string Uid { get; set; }
 
         /// <summary>
         /// Set array of Tags
@@ -91,33 +91,14 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Tags;
         ///     });
         /// </code>
         /// </example>
         public object[] Tags { get; set; }
-
-
-        /// <summary>
-        /// owner information if the object has owner.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.Owner;
-        ///     });
-        /// </code>
-        /// </example>
-        private Dictionary<string, object> Owner { get; set; }
-
 
         /// <summary>
         /// Set key/value attributes of Metadata.
@@ -127,52 +108,14 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Metadata;
         ///     });
         /// </code>
         /// </example>
         public Dictionary<string, object> Metadata { get; set; }
-
-
-        /// <summary>
-        /// Owner Email if the entry has owner.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.OwnerEmailId;
-        ///     });
-        /// </code>
-        /// </example>
-        private string OwnerEmailId { get; set; }
-
-
-
-        /// <summary>
-        /// Owner uid if the entry has owner.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.OwnerUid;
-        ///     });
-        /// </code>
-        /// </example>
-        private string OwnerUid { get; set; }
-
 
         /// <summary>
         /// Set key/value attributes of an current entry instance.
@@ -182,8 +125,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Object;
         ///     });
@@ -290,8 +233,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetTags();
         ///     });
@@ -331,7 +274,7 @@ namespace Contentstack.Core.Models
         /// <param name="uid">Uid of an Entry</param>
         public void SetUid(String uid)
         {
-            this.EntryUid = uid;
+            this.Uid = uid;
         }
 
         /// <summary>
@@ -344,9 +287,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.SetCachePolicy(CachePolicy.NetworkElseCache);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -367,8 +310,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetTitle();
         ///     });
@@ -388,8 +331,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetContentType();
         ///     });
@@ -397,7 +340,7 @@ namespace Contentstack.Core.Models
         /// </example>
         public String GetContentType()
         {
-            return this.ContentTypeInstance.ContentTypeName;
+            return this.ContentTypeInstance.ContentTypeId;
         }
 
         /// <summary>
@@ -409,8 +352,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetUid();
         ///     });
@@ -418,7 +361,7 @@ namespace Contentstack.Core.Models
         /// </example>
         public String GetUid()
         {
-            return EntryUid;
+            return Uid;
         }
 
         /// <summary>
@@ -431,7 +374,7 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
         /// </code>
         /// </example>
@@ -455,7 +398,7 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.RemoveHeader(&quot;custom_key&quot;);
         /// </code>
         /// </example>
@@ -475,8 +418,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
@@ -491,20 +434,21 @@ namespace Contentstack.Core.Models
         /// Set Language instance
         /// </summary>
         /// <param name="language">Language value</param>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     csQuery.SetLanguage(Language.ENGLISH_UNITED_STATES);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.SetLanguage(Language.ENGLISH_UNITED_STATES);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
         /// </code>
         /// </example>
+        [ObsoleteAttribute("This method has been deprecated. Use SetLocale instead.", true)]
         public Entry SetLanguage(Language language)
         {
 
@@ -536,6 +480,38 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+        /// <summary>
+        /// Sets the locale.
+        /// </summary>
+        /// <returns>The locale.</returns>
+        /// <param name="Locale">Locale.</param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.SetLocale("en-us");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///         //var result = entryResult.Result.GetMetadata();
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry SetLocale(String Locale)
+        {
+            if (ObjectValueJson != null && !ObjectValueJson.ContainsKey("locale"))
+            {
+                UrlQueries.Remove("locale");
+                UrlQueries.Add("locale", Locale);
+            }
+            else
+            {
+                UrlQueries["locale"] = Locale;
+            }
+            return this;
+        }
+
         private Language GetLanguage()
         {
             if (Metadata != null && Metadata.Count > 0)
@@ -563,8 +539,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetHTMLText(&quot;markdownKey&quot;)
         ///     });
@@ -597,8 +573,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMultipleHTMLText(&quot;markdownKey&quot;)
         ///     });
@@ -628,29 +604,6 @@ namespace Contentstack.Core.Models
             return result;
         }
 
-
-        /// <summary>
-        /// Returns owner information if the object has owner.
-        /// </summary>
-        /// <returns>Get key/value pairs for owner details.</returns>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetOwner();
-        ///     });
-        /// </code>
-        /// </example>
-        private Dictionary<string, Object> GetOwner()
-        {
-            return Owner;
-        }
-
-
         /// <summary>
         /// Get key/value pairs in json of current instance.
         /// </summary>
@@ -660,8 +613,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.ToJson();
         ///     });
@@ -692,8 +645,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Get(&quot;key&quot;);
         ///     });
@@ -727,8 +680,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetCreateAt();
         ///     });
@@ -758,8 +711,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetCreatedBy();
         ///     });
@@ -808,8 +761,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetUpdateAt();
         ///     });
@@ -839,8 +792,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetUpdatedBy();
         ///     });
@@ -889,8 +842,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetDeleteAt();
         ///     });
@@ -919,8 +872,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetDeletedBy();
         ///     });
@@ -942,8 +895,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetAsset(&quot;field_uid&quot;);
         ///     });
@@ -968,8 +921,8 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetAssets(&quot;field_uid&quot;);
         ///     });
@@ -1005,9 +958,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.Except(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1046,9 +999,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.IncludeReference(&quot;name&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1079,9 +1032,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.IncludeReference(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1115,9 +1068,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.IncludeOnlyReference(new String[]{&quot;name&quot;, &quot;description&quot;}, &quot;referenceUid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1153,9 +1106,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.IncludeSchema();
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1198,9 +1151,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.IncludeExceptReference(new String[]{&quot;name&quot;, &quot;description&quot;},&quot;referenceUid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1236,9 +1189,9 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
         ///     entry.Only(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1262,8 +1215,6 @@ namespace Contentstack.Core.Models
             return this;
         }
 
-
-
         /// <summary>
         /// Fetches the latest version of the entries from Contentstack.io content stack
         /// </summary>
@@ -1273,13 +1224,13 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_name&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch().ContinueWith((entryResult) =&gt; {
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
-        public async Task<Entry> Fetch()
+        public async Task<T> Fetch<T>()
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -1317,106 +1268,23 @@ namespace Contentstack.Core.Models
 
             try
             {
-                //String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
-                //String mainStringForMD5 = Url + JsonConvert.SerializeObject(mainJson) + JsonConvert.SerializeObject(headers);
-                //String md5Value = ContentstackConvert.GetMD5FromString(mainStringForMD5.Trim());
 
-                //string CacheFilePath = Path.Combine(ContentstackConstants.Instance.CacheFolderName, md5Value);
                 CachePolicy cachePolicy = CachePolicy.NetworkOnly;
 
                 if (_IsCachePolicySet)
                 {
                     cachePolicy = _CachePolicy;
                 }
-                switch (cachePolicy)
-                {
-                    //case CachePolicy.IgnoreCache:
 
-                        //HTTPRequestHandler contentstackRequestHandler = new HTTPRequestHandler();
-                        //var result = await contentstackRequestHandler.ProcessRequest(Url, headers, mainJson);
-                        //StackOutput contentstackOutput = new StackOutput(ContentstackConvert.ToString(result, "{}"));
-                        ////Entry resultObject = new Entry();
-                        //ParseObject((Dictionary<string, object>)contentstackOutput.Object);
-                        ////Console.WriteLine(contentstackOutput);
-                        //break;
-
-                    case CachePolicy.NetworkOnly:
-                        HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
-                        var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
-                        StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
-                        ParseObject((Dictionary<string, object>)stackOutput.Object);
-                        break;
-
-                    //case CachePolicy.CacheOnly:
-                        //var output_Result = FetchFromCache(CacheFilePath);
-                        //StackOutput stackOutputResult = new StackOutput(ContentstackConvert.ToString(output_Result, "{}"));
-                        //ParseObject((Dictionary<string, object>)stackOutputResult.Object);
-                        //break;
-
-                    //case CachePolicy.CacheElseNetwork:
-                        //if (File.Exists(CacheFilePath))
-                        //{
-                        //    var cacheResult = FetchFromCache(CacheFilePath);
-                        //    StackOutput stackOutputCacheResult = new StackOutput(ContentstackConvert.ToString(cacheResult, "{}"));
-                        //    Dictionary<string, object> getOutPutdictionary = (Dictionary<string, object>)stackOutputCacheResult.Output;
-                        //    if (ContentstackConvert.GetResponseTimeFromCacheFile(CacheFilePath, (long)getOutPutdictionary["timestamp"], TimeSpan.TicksPerHour * 24))
-                        //    {
-                        //        HTTPRequestHandler requestHandler = new HTTPRequestHandler();
-                        //        var CacheOutputResult = await requestHandler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                        //        StackOutput CacheStackOutput = new StackOutput(ContentstackConvert.ToString(CacheOutputResult, "{}"));
-                        //        //Entry resultObject = new Entry();
-                        //        ParseObject((Dictionary<string, object>)CacheStackOutput.Object);
-                        //    }
-                        //    else
-                        //    {
-                        //        ParseObject((Dictionary<string, object>)stackOutputCacheResult.Object);
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    HTTPRequestHandler request_handler = new HTTPRequestHandler();
-                        //    var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                        //    StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
-                        //    ParseObject((Dictionary<string, object>)stack_output.Object);
-                        //    //Console.WriteLine(stack_output);
-                        //}
-                        //break;
-                    //case CachePolicy.NetworkElseCache:
-                        //if (ContentstackConvert.IsNetworkAvailable())
-                        //{
-                        //    HTTPRequestHandler request_handler = new HTTPRequestHandler();
-                        //    var output_result = await request_handler.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                        //    StackOutput stack_output = new StackOutput(ContentstackConvert.ToString(output_result, "{}"));
-                        //    ParseObject((Dictionary<string, object>)stack_output.Object);
-                        //    //Console.WriteLine(stack_output);
-                        //}
-                        //else
-                        //{
-                        //    var outputresult = FetchFromCache(CacheFilePath);
-                        //    StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
-                        //    ParseObject((Dictionary<string, object>)stackoutputResult.Object);
-                        //}
-                        //break;
-
-                    //case CachePolicy.CacheThenNetwork:
-                        //if (File.Exists(CacheFilePath))
-                        //{
-                        //    var outputresult = FetchFromCache(CacheFilePath);
-                        //    StackOutput stackoutputResult = new StackOutput(ContentstackConvert.ToString(outputresult, "{}"));
-                        //    ParseObject((Dictionary<string, object>)stackoutputResult.Object);
-                        //}
-                        //HTTPRequestHandler request = new HTTPRequestHandler();
-                        //var _result = await request.ProcessRequest(Url, headers, mainJson, CacheFilePath);
-                        //StackOutput _output = new StackOutput(ContentstackConvert.ToString(_result, "{}"));
-                        //ParseObject((Dictionary<string, object>)_output.Object);
-                        ////Console.WriteLine(_output);
-                        //break;
-
-                    default:
-                        break;
-                }
-
-                return this;
+                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
+                //ParseObject((Dictionary<string, object>)stackOutput.Object);
+                JObject obj = JObject.Parse(stackOutput.Json);
+                JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
+                JsonSerializer Serializer = JsonSerializer.Create(SerializerSettings);
+                //Serializer.DateFormatString = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+                return obj.SelectToken("$.entry").ToObject<T>(Serializer);
             }
             catch (Exception ex)
             {
@@ -1511,7 +1379,7 @@ namespace Contentstack.Core.Models
             this._ObjectAttributes = jsonObj;
             if (jsonObj != null && jsonObj.ContainsKey("uid"))
             {
-                this.EntryUid = string.IsNullOrEmpty(jsonObj["uid"].ToString()) ? null : jsonObj["uid"].ToString();
+                this.Uid = string.IsNullOrEmpty(jsonObj["uid"].ToString()) ? null : jsonObj["uid"].ToString();
             }
 
             if (jsonObj != null && jsonObj.ContainsKey("title"))
@@ -1529,33 +1397,11 @@ namespace Contentstack.Core.Models
                 {
                     if (key.Equals("uid"))
                     {
-                        this.EntryUid = _metadataJSON[key].ToString();
+                        this.Uid = _metadataJSON[key].ToString();
                     }
                     Metadata.Add(key, _metadataJSON[key]);
                 }
             }
-            /*
-                        if (jsonObj != null && jsonObj.ContainsKey("_owner") && (jsonObj["_owner"] != null) && (!jsonObj["_owner"].ToString().Equals("null")))
-                        {
-                            Dictionary<string, object> ownerObject = (Dictionary<string, object>)jsonObj["_owner"];
-                            if (ownerObject.ContainsKey("email") && ownerObject["email"] != null)
-                            {
-                                this.OwnerEmailId = ownerObject["email"].ToString();
-                            }
-
-                            if (ownerObject.ContainsKey("uid") && ownerObject["uid"] != null)
-                            {
-                                this.OwnerUid = ownerObject["uid"].ToString();
-                            }
-
-                            List<string> iterator = ownerObject.Keys.ToList();
-
-                            foreach (var key in iterator)
-                            {
-                                Owner.Add(key, ownerObject[key]);
-                            }
-                        }
-                        */
             if (jsonObj != null && jsonObj.ContainsKey("tags"))
             {
                 var array = jsonObj["tags"];
