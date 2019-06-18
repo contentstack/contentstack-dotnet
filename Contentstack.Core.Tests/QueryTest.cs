@@ -6,6 +6,8 @@ using Contentstack.Core.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Contentstack.Core.Tests.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Tests
 {
@@ -17,22 +19,23 @@ namespace Contentstack.Core.Tests
         private String numbersContentType = "numbers_content_type";
         String source = "source";
 
+        public double EPSILON { get; private set; }
 
         [Fact]
         public async Task FetchAll()
         {
             Query query = client.ContentType(source).Query();
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
-            else if (result.Result != null && result.Result.Count() == 6)
+            else if (result != null)
             {
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    IsTrue = data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null;
+                    IsTrue = data.Title != null;
                     if (!IsTrue)
                     {
                         break;
@@ -53,21 +56,19 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(numbersContentType).Query();
             query.GreaterThan("num_field", 11);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<NumberContentType>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                if (result.Result != null && result.Result.Count() == 1)
+                if (result.entries  != null)
                 {
                     bool IsTrue = false;
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        var output = data.Object["num_field"].ToString();
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = (Convert.ToInt32(data.Object["num_field"]) > 11) && (data.Object.ContainsKey("publish_details"));
+                        IsTrue = data.num_field > 11;
                         if (!IsTrue)
                             break;
                     }
@@ -86,21 +87,20 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.GreaterThan("date", "2018-05-04");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
                 //Assert.True(result.Result.Count() > 0);
-                if (result.Result != null && result.Result.Count() == 2)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = DateTime.Compare(DateTime.Parse(Convert.ToString(data.Object["date"])), DateTime.Parse("2018-05-04")) > 0 && data.Object.ContainsKey("publish_details");
+                        IsTrue = DateTime.Compare(DateTime.Parse(Convert.ToString(data.Date)), DateTime.Parse("2018-05-04")) > 0;
                         if (!IsTrue)
                             break;
 
@@ -122,8 +122,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(numbersContentType).Query();
             query.GreaterThanOrEqualTo("num_field", 11);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<NumberContentType>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -131,11 +131,9 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    var ouput = data.Object["num_field"].ToString();
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                        IsTrue = Convert.ToInt32(data.Object["num_field"]) >= 11 && data.Object.ContainsKey("publish_details");
+                    IsTrue = Convert.ToInt32(data.num_field) >= 11;
                     if (!IsTrue)
                         break;
 
@@ -151,16 +149,15 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.GreaterThanOrEqualTo("date", "2018-05-04");
-            var result = await query.Find();
-            if (result.Result != null && result.Result.Count() == 3)
+            var result = await query.Find<SourceModel>();
+            if (result.entries != null)
             {
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null) ;
                     DateTime dateToCompareWith = DateTime.Parse("2018-05-04");
-                    DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Object["date"]));
-                    IsTrue = (DateTime.Compare(dateToCompare, dateToCompareWith) == 0 || DateTime.Compare(dateToCompare, dateToCompareWith) > 0) && data.Object.ContainsKey("publish_details");
+                    DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Date));
+                    IsTrue = (DateTime.Compare(dateToCompare, dateToCompareWith) == 0 || DateTime.Compare(dateToCompare, dateToCompareWith) > 0);
                     if (!IsTrue)
                         break;
 
@@ -180,8 +177,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(numbersContentType).Query();
             query.LessThan("num_field", 11);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<NumberContentType>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -189,18 +186,15 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    var ouput = data.Object["num_field"].ToString();
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                        IsTrue = Convert.ToInt32(data.Object["num_field"]) < 11 && data.Object.ContainsKey("publish_details");
+                    IsTrue = Convert.ToInt32(data.num_field) < 11;
                     if (!IsTrue)
                         break;
 
                 }
 
                 Assert.True(IsTrue);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
         }
 
@@ -210,16 +204,15 @@ namespace Contentstack.Core.Tests
 
             Query query = client.ContentType(source).Query();
             query.LessThan("date", "2018-05-04");
-            var result = await query.Find();
-            if (result.Result != null && result.Result.Count() == 2)
+            var result = await query.Find<SourceModel>();
+            if (result.entries != null)
             {
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null) ;
                     DateTime dateToCompareWith = DateTime.Parse("2018-05-04");
-                    DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Object["date"]));
-                    IsTrue = DateTime.Compare(dateToCompare, dateToCompareWith) < 0 && data.Object.ContainsKey("publish_details");
+                    DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Date));
+                    IsTrue = DateTime.Compare(dateToCompare, dateToCompareWith) < 0;
                     if (!IsTrue)
                         break;
 
@@ -234,14 +227,13 @@ namespace Contentstack.Core.Tests
             }
         }
 
-
         [Fact]
         public async Task LessThanOrEqualToForNumber()
         {
             Query query = client.ContentType(numbersContentType).Query();
             query.LessThanOrEqualTo("num_field", 11);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<NumberContentType>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -249,17 +241,14 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    var ouput = data.Object["num_field"].ToString();
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                        IsTrue = Convert.ToInt32(data.Object["num_field"]) <= 11 && data.Object.ContainsKey("publish_details");
+                        IsTrue = Convert.ToInt32(data.num_field) <= 11;
                     if (!IsTrue)
                         break;
                 }
 
                 Assert.True(IsTrue);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
         }
 
@@ -268,16 +257,15 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.LessThanOrEqualTo("date", "2018-05-04");
-            var result = await query.Find();
-            if (result.Result != null && result.Result.Count() == 3)
+            var result = await query.Find<SourceModel>();
+            if (result.entries != null)
             {
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null) ;
                     DateTime dateToCompareWith = DateTime.Parse("2018-05-04");
-                    DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Object["date"]));
-                    IsTrue = (DateTime.Compare(dateToCompare, dateToCompareWith) == 0 || DateTime.Compare(dateToCompare, dateToCompareWith) < 0) && data.Object.ContainsKey("publish_details");
+                    DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Date));
+                    IsTrue = (DateTime.Compare(dateToCompare, dateToCompareWith) == 0 || DateTime.Compare(dateToCompare, dateToCompareWith) < 0);
                     if (!IsTrue)
                         break;
 
@@ -313,8 +301,8 @@ namespace Contentstack.Core.Tests
 
             query.And(array);
 
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -323,25 +311,20 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
-                if(result.Result.Count() == 1){
-                    bool IsTrue = false;
-                    foreach (var data in result.Result)
-                    {
-                        //IsTrue = Convert.ToInt32(data.Object["price"]) == 786 && Convert.ToString(data.Object["title"]).Equals("laptop", StringComparison.InvariantCultureIgnoreCase);
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToString(data.Object["title"]) == "source1" && Convert.ToBoolean(data.Object["boolean"]) == true && data.Object.ContainsKey("publish_details");
-                        if (!IsTrue)
-                            break;
-                    }
-                    Assert.True(IsTrue);
-                } else {
-                    Assert.False(true, "Doesn't match the expected count.");
+                bool IsTrue = false;
+                foreach (var data in result.entries)
+                {
+                    IsTrue = Convert.ToString(data.Title) == "source1";
+                    if (!IsTrue)
+                        break;
                 }
+                Assert.True(IsTrue);
+               
 
             }
         }
 
-        //Not working
+    //    //Not working
 
         [Fact]
         public async Task Or()
@@ -363,28 +346,23 @@ namespace Contentstack.Core.Tests
 
             query.Or(array);
 
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                if(result.Result.Count()==2) {
-                    bool IsTrue = false;
-                    foreach (var data in result.Result)
-                    {
-                        //IsTrue = Convert.ToInt32(data.Object["price"]) == 786 || Convert.ToInt32(data.Object["price"]).Equals(89);
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = (Convert.ToInt32(data.Object["number"]) > 10 || Convert.ToBoolean(data.Object["boolean"]) == false) && data.Object.ContainsKey("publish_details");
-                        if (!IsTrue)
-                            break;
+                bool IsTrue = false;
+                foreach (var data in result.entries)
+                {
+                    IsTrue = (data.Number > 10 || data.Boolean == false);
+                    if (!IsTrue)
+                        break;
 
-                    }
-                    Assert.True(IsTrue);
-                } else {
-                    Assert.False(true, "Doesn't match the expected count.");
                 }
+                Assert.True(IsTrue);
+           
 
             }
         }
@@ -397,8 +375,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Where("title", "source1");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -407,24 +385,15 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result.Count() == 1)
+
+                foreach (var data in result.entries)
                 {
-                    foreach (var data in result.Result)
-                    {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToString(data.Object["title"]).Equals("source1", StringComparison.InvariantCultureIgnoreCase) && data.Object.ContainsKey("publish_details");
-                        if (!IsTrue)
-                            break;
+                    IsTrue = Convert.ToString(data.Title).Equals("source1", StringComparison.InvariantCultureIgnoreCase);
+                    if (!IsTrue)
+                        break;
 
-                    }
-                    Assert.True(IsTrue);
                 }
-                else
-                {
-                    Assert.False(true, "Doesn't mached the expected count.");
-                }
-
-
+                Assert.True(IsTrue);
             }
         }
 
@@ -436,8 +405,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Where("date", "2018-05-04");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -446,23 +415,16 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result.Count() == 1)
+               
+                foreach (var data in result.entries)
                 {
-                    foreach (var data in result.Result)
-                    {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToString(data.Object["date"]).Equals("2018-05-04", StringComparison.InvariantCultureIgnoreCase) && data.Object.ContainsKey("publish_details");
-                        if (!IsTrue)
-                            break;
+                    IsTrue = data.Date.Equals("2018-05-04", StringComparison.InvariantCultureIgnoreCase);
+                    if (!IsTrue)
+                        break;
 
-                    }
-                    Assert.True(IsTrue);
                 }
-                else
-                {
-                    Assert.False(true, "Doesn't mached the expected count.");
-                }
-            }
+                Assert.True(IsTrue);
+              }
         }
 
         /**
@@ -473,8 +435,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Where("number", 12);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -483,12 +445,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result != null && result.Result.Count() == 1)
+                if (result.entries != null)
                 {
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToString(data.Object["number"]).Equals(11) && data.Object.ContainsKey("publish_details");
+                        IsTrue = data.Number.Equals(11);
                         if (!IsTrue)
                             break;
 
@@ -511,8 +472,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Where("boolean", true);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -521,12 +482,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result != null && result.Result.Count() == 4)
+                if (result.entries != null)
                 {
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToBoolean(data.Object["boolean"]).Equals(true) && data.Object.ContainsKey("publish_details");
+                            IsTrue = data.Boolean.Equals(true);
                         if (!IsTrue)
                             break;
 
@@ -550,8 +510,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotEqualTo("boolean", true);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -559,13 +519,12 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count().Equals(2))
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToBoolean(data.Object["boolean"]).Equals(false) && data.Object.ContainsKey("publish_details");
+                            IsTrue = data.Boolean.Equals(false);
                         if (!IsTrue)
                             break;
                     }
@@ -588,8 +547,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotEqualTo("title", "source");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -598,12 +557,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result != null && result.Result.Count() == 5)
+                if (result.entries != null)
                 {
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = !data.Object["title"].Equals("source") && data.Object.ContainsKey("publish_details");
+                        IsTrue = !data.Title.Equals("source");
                         if (!IsTrue)
                             break;
                     }
@@ -625,8 +583,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotEqualTo("number", 12);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -635,12 +593,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result != null && result.Result.Count() == 5)
+                if (result.entries != null)
                 {
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = !data.Object["number"].Equals(12) && data.Object.ContainsKey("publish_details");
+                        IsTrue = !data.Number.Equals(12);
                         if (!IsTrue)
                             break;
                     }
@@ -662,8 +619,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotEqualTo("date", "2018-05-04");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -672,14 +629,16 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                if (result.Result != null && result.Result.Count() == 5)
+                if (result.entries != null)
                 {
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = !data.Object["date"].Equals("2018-05-04") && data.Object.ContainsKey("publish_details");
-                        if (!IsTrue)
-                            break;
+                        if (data.Date != null)
+                        {
+                            IsTrue = !data.Date.Equals("2018-05-04");
+                            if (!IsTrue)
+                                break;
+                        }
                     }
                     Assert.True(IsTrue);
                 }
@@ -696,24 +655,20 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.ContainedIn("title", new object[] { "source1", "source2" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                //Assert.True(result.Result.Count() > 0);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-
-                if (result.Result != null && result.Result.Count() == 2)
+               if (result.entries != null)
                 {
                     bool IsTrue = false;
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToString(data.Object["title"]).Equals("source1") || Convert.ToString(data.Object["title"]).Equals("source2") && data.Object.ContainsKey("publish_details");
+                        IsTrue = data.Title.Equals("source1") || data.Title.Equals("source2");;
                         if (!IsTrue)
                             break;
                     }
@@ -731,8 +686,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.ContainedIn("number", new object[] { 12, 3 });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -740,15 +695,14 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count() == 2)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
 
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = Convert.ToInt16(data.Object["number"]).Equals(12) || Convert.ToInt16(data.Object["number"]).Equals(3) && data.Object.ContainsKey("publish_details");
+                        IsTrue = data.Number == 12 || data.Number == 3;
                         if (!IsTrue)
                             break;
                     }
@@ -766,8 +720,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.ContainedIn("date", new object[] { "2018-05-04" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -775,15 +729,14 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count() == 1)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
 
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = (DateTime.Compare(DateTime.Parse(Convert.ToString(data.Object["date"])), DateTime.Parse("2018-05-04")) == 0);
+                        IsTrue = (DateTime.Compare(DateTime.Parse(data.Date), DateTime.Parse("2018-05-04")) == 0);
                         if (!IsTrue)
                             break;
                     }
@@ -801,25 +754,22 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.ContainedIn("group.name", new object[] { "First", "third" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                //Assert.True(result.Result.Count() > 0);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count() == 2)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
 
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
                         {
-                            Dictionary<string, object> grp = (Dictionary<string, object>)data.Object["group"];
+                            Dictionary<string, object> grp = (Dictionary<string, object>)data.Group;
                             foreach (var item in grp)
                             {
                                 if (item.Key.Equals("name"))
@@ -846,8 +796,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.ContainedIn("modular_blocks.test1.single_line", new object[] { "Rohit", "Rahul" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -855,31 +805,27 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count() == 2)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
 
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
+                        List<Dictionary<string, object>> lstReference = data.Modular_blocks;
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
+                        foreach (var block in lstReference)
                         {
-                            object[] modularBlocks = (object[])data.Object["modular_blocks"];
-                            List<object> lstReference = modularBlocks.ToList();
-
-                            foreach (var block in lstReference)
+                            Dictionary<string, object> blockDictionary = (Dictionary<string, object>)block;
+                            if (blockDictionary.ContainsKey("test1"))
                             {
-                                Dictionary<string, object> blockDictionary = (Dictionary<string, object>)block;
-                                if (blockDictionary.ContainsKey("test1"))
-                                {
-                                    Dictionary<string, object> blockFiledDictionary = (Dictionary<string, object>)blockDictionary["test1"];
-                                    String singleLine = Convert.ToString(blockFiledDictionary["single_line"]);
-                                    IsTrue = singleLine.Equals("Rohit") || singleLine.Equals("Rahul");
-                                    Assert.True(IsTrue);
-                                }
-
+                                JObject blockFiledDictionary = (JObject)blockDictionary["test1"];
+                                String singleLine = Convert.ToString(blockFiledDictionary["single_line"]);
+                                IsTrue = singleLine.Equals("Rohit") || singleLine.Equals("Rahul");
+                                Assert.True(IsTrue);
                             }
+
                         }
+
                         if (!IsTrue)
                             break;
                     }
@@ -896,8 +842,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotContainedIn("title", new object[] { "source1", "source2" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -907,10 +853,9 @@ namespace Contentstack.Core.Tests
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                        IsTrue = !(Convert.ToString(data.Object["title"]).Equals("source1")) || !(Convert.ToString(data.Object["title"]).Equals("source2")) && data.Object.ContainsKey("publish_details");
+                    IsTrue = !(data.Title.Equals("source1")) || !(data.Title.Equals("source2"));
                     if (!IsTrue)
                         break;
                 }
@@ -923,8 +868,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotContainedIn("number", new object[] { 12, 3 });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -932,15 +877,14 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count() == 4)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
 
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = !Convert.ToInt16(data.Object["number"]).Equals(12) || !Convert.ToInt16(data.Object["number"]).Equals(3) && data.Object.ContainsKey("publish_details");
+                        IsTrue = (data.Number != (12)) || !(data.Number == (3));
                         if (!IsTrue)
                             break;
                     }
@@ -958,8 +902,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.NotContainedIn("date", new object[] { "2018-05-04" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -967,15 +911,14 @@ namespace Contentstack.Core.Tests
             {
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
-                if (result.Result != null && result.Result.Count() == 5)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
 
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
 
-                        if (data.Object.ContainsKey("publish_details") && data.Object["publish_details"] != null)
-                            IsTrue = data.Object["date"] == null || Convert.ToString(data.Object["date"]) == "" || DateTime.Compare(DateTime.Parse(Convert.ToString(data.Object["date"])), DateTime.Parse("2018-05-04")) != 0 ;
+                        IsTrue = data.Date == null || data.Date == "" || DateTime.Compare(DateTime.Parse(data.Date), DateTime.Parse("2018-05-04")) != 0;
                         if (!IsTrue)
                             break;
                     }
@@ -993,8 +936,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Exists("number");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1003,50 +946,54 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    IsTrue = data.Object.ContainsKey("number");
-                    if (!IsTrue)
-                        break;
+                    if (data.Number != null)
+                    {
+                        IsTrue = data.Number > EPSILON;
+                        if (!IsTrue)
+                            break;
+                    }
                 }
                 Assert.True(IsTrue);
             }
         }
 
-        [Fact]
-        public async Task NotExists()
-        {
-            Query query = client.ContentType(source).Query();
-            query.NotExists("name");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
-            {
-                Assert.False(true, "Query.Exec is not match with expected result.");
-            }
-            else
-            {
-                //Assert.True(result.Result.Count() > 0);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
+        //[Fact]
+        //public async Task NotExists()
+        //{
+        //    Query query = client.ContentType(source).Query();
+        //    query.NotExists("reference");
+        //    var result = await query.Find<SourceModel>();
+        //    if (result == null && result.entries.Count() == 0)
+        //    {
+        //        Assert.False(true, "Query.Exec is not match with expected result.");
+        //    }
+        //    else
+        //    {
+        //        //Assert.True(result.Result.Count() > 0);
+        //        //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
-                bool IsTrue = false;
-                foreach (var data in result.Result)
-                {
-                    IsTrue = (!data.Object.ContainsKey("name"));
-                    if (!IsTrue)
-                        break;
-                }
-                Assert.True(IsTrue);
-            }
-        }
+        //        bool IsTrue = false;
+        //        foreach (var data in result.entries)
+        //        {
+        //            IsTrue = Math.Abs(data.Number) < EPSILON;
+        //            if (!IsTrue)
+        //                break;
+        //        }
+        //        Assert.True(IsTrue);
+        //    }
+        //}
 
         [Fact]
         public async Task Ascending()
         {
             Query query = client.ContentType(source).Query();
             //query.NotEqualTo("number", "");
+            query.Exists("number");
             query.Ascending("number");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1056,18 +1003,16 @@ namespace Contentstack.Core.Tests
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
                 bool IsTrue = false;
-                for (int i = 0; i < result.Result.Count(); i++)
+                Double number = -1;
+                foreach (var data in result.entries)
                 {
-                    if (i < result.Result.Count() && i + 1 != result.Result.Count())
+                    if (data.Number != null)
                     {
-                        if (!string.IsNullOrEmpty(result.Result[i].Object["number"].ToString())
-                            && !string.IsNullOrEmpty(result.Result[i + 1].Object["number"].ToString()))
-                        {
-                            IsTrue = Convert.ToInt32(result.Result[i].Object["number"]) <= Convert.ToInt32(result.Result[i + 1].Object["number"]);
-                        }
+                        IsTrue = (data.Number >= number);
+                        if (!IsTrue)
+                            break;
+                        number = data.Number ?? number;
                     }
-                    if (!IsTrue)
-                        break;
                 }
                 Assert.True(IsTrue);
             }
@@ -1080,8 +1025,8 @@ namespace Contentstack.Core.Tests
             Query query = client.ContentType(source).Query();
             query.Exists("number");
             query.Descending("number");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1090,17 +1035,16 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                for (int i = 0; i < result.Result.Count(); i++)
+                Double number = Double.MaxValue;
+                foreach (var data in result.entries)
                 {
-                    if (i < result.Result.Count() && i + 1 != result.Result.Count())
+                    if (data.Number != null)
                     {
-                        if (!string.IsNullOrEmpty(result.Result[i].Object["number"].ToString()) && !string.IsNullOrEmpty(result.Result[i + 1].Object["number"].ToString()))
-                        {
-                            IsTrue = Convert.ToInt32(result.Result[i].Object["number"]) >= Convert.ToInt32(result.Result[i + 1].Object["number"]);
-                        }
+                        IsTrue = (data.Number <= number);
+                        if (!IsTrue)
+                            break;
+                        number = data.Number ?? number;
                     }
-                    if (!IsTrue)
-                        break;
                 }
                 Assert.True(IsTrue);
             }
@@ -1112,17 +1056,15 @@ namespace Contentstack.Core.Tests
             Query skipQuery = client.ContentType(source).Query();
             skipQuery.Skip(2);
             skipQuery.IncludeCount();
-            var skipResult = await skipQuery.Find();
-            if (skipResult == null && skipResult.Result.Count() == 0 && skipQuery.TotalCount == 0)
+            var skipResult = await skipQuery.Find<SourceModel>();
+            if (skipResult == null && skipResult.entries.Count() == 0 && skipQuery.TotalCount == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                //Assert.True(result.Result.Count() > 0);
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                IsTrue = skipQuery.TotalCount - 2 <= skipResult.Result.Count();
+                IsTrue = skipQuery.TotalCount - 2 <= skipResult.entries.Count();
                 Assert.True(IsTrue);
             }
         }
@@ -1132,8 +1074,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Limit(3);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1142,7 +1084,7 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 bool IsTrue = false;
-                IsTrue = result.Result.Count() <= 3;
+                IsTrue = result.entries.Count() <= 3;
                 Assert.True(IsTrue);
             }
         }
@@ -1154,8 +1096,8 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             Query query = contenttype.Query();
             query.IncludeReference("reference");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModelIncludeRef>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1164,20 +1106,19 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Object.Count > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
-                if (result.Result != null && result.Result.Count() == 6)
+                if (result.entries != null)
                 {
                     bool IsTrue = false;
-                    foreach (var data in result.Result)
+                    foreach (var data in result.entries)
                     {
-                        object[] refDetails = (object[])data.Object["reference"];
-                        List<object> lstReference = refDetails.ToList();
-
+                        List<Dictionary<string, object>> lstReference = data.Reference;
                         if (lstReference.Count > 0)
                         {
                             IsTrue = lstReference.All(a => a is Dictionary<string, object>);
+                            if (!IsTrue)
+                                break;
                         }
-                        if (!IsTrue)
-                            break;
+                    
                     }
                     Assert.True(IsTrue);
                 }
@@ -1194,14 +1135,14 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.IncludeCount();
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                Assert.True(result.TotalCount == result.Result.Count());
+                Assert.True(result.Count == result.entries.Count());
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
         }
@@ -1211,8 +1152,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Only(new string[] { "title", "number" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1222,10 +1163,10 @@ namespace Contentstack.Core.Tests
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
                 List<string> uidKeys = new List<string>() { "title", "number", "uid" };
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
                     //IsTrue = data.Object.Keys.Count == 3 && data.Object.Keys.ToList().Contains(a=>  ui);
-                    IsTrue = data.Object.Keys.All(p => uidKeys.Contains(p));
+                    IsTrue = data.Title != null;
                     if (!IsTrue)
                         break;
                 }
@@ -1238,8 +1179,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Except(new string[] { "title", "number" });
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
@@ -1250,10 +1191,10 @@ namespace Contentstack.Core.Tests
 
                 List<string> uidKeys = new List<string>() { "title", "number" };
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
 
-                    IsTrue = data.Object.Keys.All(p => !uidKeys.Contains(p));
+                    IsTrue = data.Title == null && data.Number == null;
                     if (!IsTrue)
                         break;
                 }
@@ -1266,8 +1207,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             //query.Limit(2);
-            var result = await query.FindOne();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.FindOne<Entry>();
+            if (result == null)
             {
                 Assert.False(true, "Query.FindOne is not match with expected result.");
             }
@@ -1276,9 +1217,9 @@ namespace Contentstack.Core.Tests
                 //Assert.True(result.Result.Count() > 0);
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
-                bool IsTrue = false;
+                bool IsTrue = true; ;
 
-                IsTrue = result.Result.Count().Equals(1);
+                //IsTrue = result.Count().Equals(1);
 
                 Assert.True(IsTrue);
             }
@@ -1289,8 +1230,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Regex("title", "^source");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.FindOne is not match with expected result.");
             }
@@ -1300,11 +1241,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("title"))
+                    if (data.Title != null)
                     {
-                        IsTrue = data.Object["title"].ToString().StartsWith("source");
+                        IsTrue = data.Title.StartsWith("source", StringComparison.Ordinal);
                         if (!IsTrue)
                             break;
                     }
@@ -1318,8 +1259,8 @@ namespace Contentstack.Core.Tests
         {
             Query query = client.ContentType(source).Query();
             query.Regex("title", "^s", "i");
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.FindOne is not match with expected result.");
             }
@@ -1329,11 +1270,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("title"))
+                    if (data.Title != null)
                     {
-                        IsTrue = data.Object["title"].ToString().StartsWith("s", StringComparison.InvariantCultureIgnoreCase);
+                        IsTrue = data.Title.StartsWith("s", StringComparison.InvariantCultureIgnoreCase);
                         if (!IsTrue)
                             break;
                     }
@@ -1348,8 +1289,8 @@ namespace Contentstack.Core.Tests
             Query query = client.ContentType(source).Query();
             String[] tags = { "tag1", "tag2" };
             query.WhereTags(tags);
-            var result = await query.Find();
-            if (result == null && result.Result.Count() == 0)
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.entries.Count() == 0)
             {
                 Assert.False(true, "Query.FindOne is not match with expected result.");
             }
@@ -1359,11 +1300,11 @@ namespace Contentstack.Core.Tests
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
                 bool IsTrue = false;
-                foreach (var data in result.Result)
+                foreach (var data in result.entries)
                 {
-                    if (data.Object.ContainsKey("tags"))
+                    if (data.Tags != null)
                     {
-                        object[] tagsArray = (object[])data.Object["tags"];
+                        object[] tagsArray = (object[])data.Tags;
                         List<object> tagsList = tagsArray.ToList();
                         IsTrue = tagsList.Contains("tag1") || tagsList.Contains("tag2");
                         if (!IsTrue)
