@@ -1,5 +1,5 @@
 ### Version: 1.1.0
-#### Date: Apr-12-2019
+#### Date: Jun-19-2019
 
 ##### New Features:
 - ContentstackClient
@@ -38,6 +38,6 @@
 Localization support for Query and Entry is added.
  
 ### Version: 1.0.0 
-#### Date: Apr-12-2019
+#### Date: Apr-12-2018
 
 - Introduce ContentStack SDK for DOTNET.
