@@ -221,6 +221,35 @@ namespace Contentstack.Core.Internals
                     }
                 }
 
+                if (output.ContainsKey("asset"))
+                {
+                    if (output["asset"].GetType() == typeof(string))
+                    {
+                        this._Object = output["asset"];
+                    }
+                    else
+                    {
+                        this._Object = output["asset"];
+                        //var tmp = this._Objects as object[];
+                        //if (tmp != null)
+                        //    this._Object = tmp.FirstOrDefault();
+                    }
+                }
+                if (output.ContainsKey("assets"))
+                {
+                    if (output["assets"].GetType() == typeof(string))
+                    {
+                        this._Objects = output["assets"];
+                    }
+                    else
+                    {
+                        this._Objects = output["assets"];
+                        //var tmp = this._Objects as object[];
+                        //if (tmp != null)
+                        //    this._Object = tmp.FirstOrDefault();
+                    }
+                }
+
                 if (output.ContainsKey("response"))
                 {
                     if (output["response"].GetType() == typeof(string))
@@ -269,6 +298,7 @@ namespace Contentstack.Core.Internals
                                 //    this._Object = tmp.FirstOrDefault();
                             }
                         }
+
                         //if (tmp != null)
                         //    this._Object = tmp.FirstOrDefault();
                     }

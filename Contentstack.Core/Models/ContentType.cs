@@ -24,7 +24,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Content type uid
         /// </summary>
-        public string ContentTypeName
+        public string ContentTypeId
         {
             get;
             set;
@@ -41,7 +41,7 @@ namespace Contentstack.Core.Models
             get
             {
                 Config config = this.StackInstance.config;
-                return String.Format("{0}/content_types/{1}", config.BaseUrl,this.ContentTypeName);
+                return String.Format("{0}/content_types/{1}", config.BaseUrl,this.ContentTypeId);
              }
         }
         #endregion
@@ -55,10 +55,10 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="contentTypeName"></param>
-        internal ContentType(String contentTypeName)
+        /// <param name="contentTypeId"></param>
+        internal ContentType(String contentTypeId)
         {
-            this.ContentTypeName = contentTypeName;
+            this.ContentTypeId = contentTypeId;
             this._Headers = new Dictionary<string, object>();
         }
         #endregion
@@ -129,7 +129,7 @@ namespace Contentstack.Core.Models
 
         #region Public Functions
         /// <summary>
-        /// This method fetchs information of a specific content type.
+        /// This method returns the complete information, of a specific content type.
         /// </summary>
         /// <example>
         /// <code>
@@ -251,10 +251,9 @@ namespace Contentstack.Core.Models
         /// </example>
         public Entry Entry(String entryUid)
         {
-            Entry entry = new Entry(ContentTypeName);
+            Entry entry = new Entry(ContentTypeId);
             entry._FormHeaders = GetHeader(_Headers);
             entry.SetContentTypeInstance(this);
-            Console.Write("entry UID: ", entryUid);
             entry.SetUid(entryUid);
             return entry;
         }
@@ -275,7 +274,7 @@ namespace Contentstack.Core.Models
         /// </example>
         public Query Query()
         {
-            Query query = new Query(ContentTypeName);
+            Query query = new Query(ContentTypeId);
             query._FormHeaders = GetHeader(_Headers);
             query.SetContentTypeInstance(this);
 
@@ -285,7 +284,7 @@ namespace Contentstack.Core.Models
 
         protected Entry Entry()
         {
-            Entry entry = new Entry(ContentTypeName);
+            Entry entry = new Entry(ContentTypeId);
             entry._FormHeaders = GetHeader(_Headers);
             entry.SetContentTypeInstance(this);
 

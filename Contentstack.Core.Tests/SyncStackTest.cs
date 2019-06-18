@@ -2,6 +2,7 @@
 using Xunit;
 using Contentstack.Core.Configuration;
 using System.Threading.Tasks;
+using Contentstack.Core.Models;
 
 namespace Contentstack.Core.Tests
 {
@@ -9,11 +10,19 @@ namespace Contentstack.Core.Tests
     {
         ContentstackClient client = StackConfig.GetSyncStack();
 
+        //STAG 
+        //String PaginationToken = "blt222be844e75a1fca332e39";
+        //String SyncToken = "blt529b16590d4646bfce31ce";
+
+
+        //PROD
+        String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
+        String SyncToken = "blt08854bd48e43a740951809";
         [Fact]
         public async Task SyncInit()
         {
 
-            var result = await client.SyncRecursive();
+            SyncStack result = await client.SyncRecursive();
 
             if (result == null)
             {
@@ -29,7 +38,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncSyncType()
         {
 
-            var result = await client.SyncRecursive(SyncType: Models.SyncType.asset_published);
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.asset_published);
 
             if (result == null)
             {
@@ -44,7 +53,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncContentType()
         {
 
-            var result = await client.SyncRecursive(ContentTypeUid: "session");
+            SyncStack result = await client.SyncRecursive(ContentTypeUid: "session");
 
             if (result == null)
             {
@@ -59,7 +68,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncStartFrom()
         {
 
-            var result = await client.SyncRecursive(StartFrom:DateTime.Now);
+            SyncStack result = await client.SyncRecursive(StartFrom:DateTime.Now);
 
             if (result == null)
             {
@@ -74,7 +83,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithContentType()
         {
 
-            var result = await client.SyncRecursive(SyncType: Models.SyncType.entry_published, ContentTypeUid: "session");
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, ContentTypeUid: "session");
 
             if (result == null)
             {
@@ -89,7 +98,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithStartFrom()
         {
 
-            var result = await client.SyncRecursive(SyncType: Models.SyncType.entry_published, StartFrom:DateTime.Now);
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, StartFrom:DateTime.Now);
 
             if (result == null)
             {
@@ -105,7 +114,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncPaginationToken()
         {
 
-            var result = await client.SyncPaginationToken("blt99c1e34e65f6cc0fd1d82b");
+            SyncStack result = await client.SyncPaginationToken(PaginationToken);
 
             if (result == null)
             {
@@ -118,10 +127,10 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
-        public async Task SyncToken()
+        public async Task SyncToketest()
         {
 
-            var result = await client.SyncToken("blt08854bd48e43a740951809");
+            SyncStack result = await client.SyncToken(SyncToken);
 
             if (result == null)
             {
