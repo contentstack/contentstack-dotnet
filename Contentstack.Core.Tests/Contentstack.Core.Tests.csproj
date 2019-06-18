@@ -39,4 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ContentStack.Core\Contentstack.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>
