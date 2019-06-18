@@ -18,7 +18,7 @@
    - added method 'Fetch'
  
  ##### Update API
- - Query
+- Query
   - update method 'Fetch'
   - update method 'FindOne'
   
