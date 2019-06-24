@@ -24,13 +24,19 @@ namespace Contentstack.Core.Tests
         public async Task FetchByUid() {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            SourceModel result = await sourceEntry.Fetch<SourceModel>();
 
-            if (result == null) {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
-            } else {
-                Assert.True(result.Uid == sourceEntry.Uid);
-            }
+            await sourceEntry.Fetch<Entry>().ContinueWith((t) =>
+             {
+                 Entry result = t.Result;
+                 if (result == null)
+                 {
+                     Assert.False(true, "Entry.Fetch is not match with expected result.");
+                 }
+                 else
+                 {
+                     Assert.True(result.Uid == sourceEntry.Uid);
+                 }
+             });
         }
 
         [Fact]
@@ -44,10 +50,10 @@ namespace Contentstack.Core.Tests
             } else {
 
                 bool IsTrue = false;
-                List<Dictionary<string, object>> lstReference = result.Reference;
+                List<Entry> lstReference = result.Reference;
 
                 if (lstReference.Count > 0) {
-                    IsTrue = lstReference.All(a => a is Dictionary<string, object>);
+                    IsTrue = lstReference.All(a => a is Entry);
                 }
                 Assert.True(IsTrue);
             }

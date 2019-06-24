@@ -179,7 +179,7 @@ namespace Contentstack.Core.Models
             {
                 HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
-                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), ContentstackConvert.JsonSerializerSettings);
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.StackInstance.SerializerSettings);
                 JObject contentTypes = (Newtonsoft.Json.Linq.JObject)data["content_type"];
                 return contentTypes;
             }
