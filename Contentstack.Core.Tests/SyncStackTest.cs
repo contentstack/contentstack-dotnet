@@ -3,6 +3,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using System.Threading.Tasks;
 using Contentstack.Core.Models;
+using Contentstack.Core.Internals;
 
 namespace Contentstack.Core.Tests
 {
