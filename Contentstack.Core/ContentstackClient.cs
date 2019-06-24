@@ -19,6 +19,11 @@ namespace Contentstack.Core
     /// </summary>
     public class ContentstackClient
     {
+        /// <summary>
+        /// Gets or sets the settings that should be used for deserialization.
+        /// </summary>
+        public JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings();
+
         #region Internal Variables
 
         internal string StackApiKey
@@ -28,7 +33,7 @@ namespace Contentstack.Core
         }
         private ContentstackOptions _options;
 
-
+        internal JsonSerializer Serializer => JsonSerializer.Create(SerializerSettings);
         internal string _SyncUrl
          {
             get
@@ -84,6 +89,13 @@ namespace Contentstack.Core
                 cnfig.Version = _options.Version;
             }
             this.SetConfig(cnfig);
+
+            this.SerializerSettings.DateParseHandling = DateParseHandling.None;
+            this.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            this.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            this.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            SerializerSettings.Converters.Add(new AssetJsonConverter());
+            SerializerSettings.Converters.Add(new EntryJsonConverter());
 
         }
 
@@ -275,7 +287,7 @@ namespace Contentstack.Core
             {
                 HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
-                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), ContentstackConvert.JsonSerializerSettings);
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
                 return contentTypes;
             }
