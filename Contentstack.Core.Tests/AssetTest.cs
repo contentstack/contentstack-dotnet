@@ -18,15 +18,25 @@ namespace Contentstack.Core.Tests
         public async Task FetchAssetByUid()
         {
             Asset asset = client.Asset("blt649cfadb08b577db");
-            await asset.Fetch();
-            Assert.True(asset.FileName.Length > 0);
+            await asset.Fetch().ContinueWith((t) =>
+            {
+                Asset result = t.Result;
+                if (result == null)
+                {
+                    Assert.False(true, "Entry.Fetch is not match with expected result.");
+                }
+                else
+                {
+                    Assert.True(asset.FileName.Length > 0);
+                }
+            });
        }
 
         [Fact]
         public async Task FetchAssets()
         {
             AssetLibrary assetLibrary = client.AssetLibrary();
-            Asset[] assets = await assetLibrary.FetchAll();
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             Assert.True(assets.Count() > 0);
             foreach (Asset asset in assets)
             {
@@ -39,7 +49,7 @@ namespace Contentstack.Core.Tests
         {
             AssetLibrary assetLibrary = client.AssetLibrary();
             assetLibrary.SortWithKeyAndOrderBy("created_at", Internals.OrderBy.OrderByAscending);
-            Asset[] assets = await assetLibrary.FetchAll();
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             Assert.True(assets.Count() > 0);
             DateTime dateTime = new DateTime();
             foreach (Asset asset in assets)
@@ -61,7 +71,7 @@ namespace Contentstack.Core.Tests
         {
             AssetLibrary assetLibrary = client.AssetLibrary();
             assetLibrary.IncludeRelativeUrls();
-            Asset[] assets = await assetLibrary.FetchAll();
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             Assert.True(assets.Count() > 0);
             foreach (Asset asset in assets)
             {
