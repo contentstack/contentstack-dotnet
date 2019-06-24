@@ -58,7 +58,7 @@ Once you have initialized the SDK, you can start getting content in your app.
 To retrieve a single entry from a content type, use the code snippet given below:
 ``` cs
 Entry entry = client.ContentType("blog").Entry("blta464e9fbd048668c");
-entry.Fetch().ContinueWith((t) => { 
+entry.Fetch<Product>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
         Console.WriteLine("entry:" + t.Result);  
     } 
@@ -76,10 +76,10 @@ query.Where("title", "welcome");
 query.IncludeSchema(); 
 query.IncludeCount(); 
 query.ToJSON(); 
-query.Find().ContinueWith((t) => { 
+query.Find<Product>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-         Entry[] result = t.Result.Result; 
-         Console.WriteLine("result" + result); 
+         ContentstackCollection<Product> result = t.Result; 
+         Console.WriteLine("result" + result.items); 
     } 
 });
 ```
