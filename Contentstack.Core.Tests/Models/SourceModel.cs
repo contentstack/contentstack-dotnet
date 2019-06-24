@@ -16,6 +16,7 @@ namespace Contentstack.Core.Tests.Models
         public double? Number;
         public Boolean Boolean;
         public string Date;
+        public Asset file;
         public List<string> Reference;
         public List<string> Other_reference;
         public Dictionary<string, object> Group;

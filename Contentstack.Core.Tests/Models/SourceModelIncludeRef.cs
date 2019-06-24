@@ -11,9 +11,10 @@ namespace Contentstack.Core.Tests.Models
         public string Url;
         public string Markdown;
         public double? Number;
+        public Asset file;
         public Boolean Boolean;
         public string Date;
-        public List<Dictionary<string, object>> Reference;
+        public List<Entry> Reference;
         public List<string> Other_reference;
         public Dictionary<string, object> Group;
         public List<Dictionary<string, object>> Modular_blocks;

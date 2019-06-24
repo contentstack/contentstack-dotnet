@@ -164,14 +164,14 @@ namespace Contentstack.Core.Models
         /// </example>
         public void RemoveHeader(string key)
         {
-            if (this._Headers.ContainsKey(key))
-                this._Headers.Remove(key);
-
+            if (this._Headers.ContainsKey(key)) { 
+             this._Headers.Remove(key);
+            }
         }
 
-        public async Task<Asset[]> FetchAll()
+        public async Task<ContentstackCollection<Asset>> FetchAll()
         {
-            Dictionary<String, Object> headers = GetHeader(_Headers);
+            Dictionary<string, object> headers = GetHeader(_Headers);
 
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
@@ -209,8 +209,11 @@ namespace Contentstack.Core.Models
             {
                 HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
-                StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(outputResult, "{}"));
-                return await GetOutputAsync(stackOutput);
+                JObject json = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                var assets = json.SelectToken("$.assets").ToObject<IEnumerable<Asset>>(this.Stack.Serializer);
+                var collection = json.ToObject<ContentstackCollection<Asset>>(this.Stack.Serializer);
+                collection.Items = assets;
+                return collection;
             }
             catch (Exception ex)
             {
@@ -220,32 +223,6 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Private Functions
-        private Task<Asset[]> GetOutputAsync(StackOutput output)
-        {
-            try
-            {
-                return Task<Asset[]>.Run(() =>
-                {
-                    List<Asset> lstEntryObject = new List<Asset>();
-                    object[] result = (object[])output.Objects;
-                    object[] schema = (object[])output.Schema;
-                    List<Dictionary<string, object>> lstSchema = new List<Dictionary<string, object>>();
-                    if (result != null && result.Count() > 0)
-                    {
-                        foreach (var item in result)
-                        {
-                            Asset asset = Stack.Asset();
-                            lstEntryObject.Add(asset.ParseObject((Dictionary<string, object>)item));
-                        }
-                    }
-                    return lstEntryObject.ToArray();
-                });
-            }
-            catch (Exception ex)
-            {
-                throw new ContentstackError(ex);
-            }
-        }
 
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
         {

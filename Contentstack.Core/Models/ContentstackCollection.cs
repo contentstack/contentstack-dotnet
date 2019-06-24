@@ -15,16 +15,16 @@ namespace Contentstack.Core.Models
 
         public int Count { get; set; }
 
-        public IEnumerable<T> entries { get; set; }
+        public IEnumerable<T> Items { get; set; }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return entries.GetEnumerator();
+            return Items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return entries.GetEnumerator();
+            return Items.GetEnumerator();
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Contentstack.Core.Internals
     /// Helper enum for pass language.
     /// Differentiated using languages and countries.
     /// </summary>
+    [Obsolete("This enum has been deprecated.")]
     public enum Language
     {
 

@@ -23,13 +23,9 @@ namespace Contentstack.Core.Models
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private Dictionary<string, object> QueryValueJson = new Dictionary<string, object>();
-        private string _ResultJson = string.Empty;
-        private Entry[] _Result;
-        private List<Dictionary<string, object>> _Schema;
-        private CachePolicy _CachePolicy;
-        private int _TotalCount;
+        private string _ResultJson = string.Empty; private CachePolicy _CachePolicy;
+
         private ContentType ContentTypeInstance { get; set; }
-        private bool _IsCachePolicySet;
 
         private string _Url
         {
@@ -37,15 +33,10 @@ namespace Contentstack.Core.Models
             {
 
                 Config config = this.ContentTypeInstance.StackInstance.config;
-                String contentTypeId = this.ContentTypeInstance.ContentTypeId;
-                //String queryParam = String.Join("&",
-                //UrlQueries.Select(kvp =>{
-                //    return String.Format("{0}={1}", kvp.Key, kvp.Value);
-
-                //}));
+              
                 return String.Format("{0}/content_types/{1}/entries",
                                      config.BaseUrl,
-                                     contentTypeId);
+                                     this.ContentTypeId);
 
             }
         }
@@ -61,113 +52,14 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///         var result = queryResult.Result.ContentTypeId;
         ///     });
         /// </code>
         /// </example>
-        public string ContentTypeId
-        {
-            get;
-            set;
-        }
+        public string ContentTypeId { get; set; }
 
-        /// <summary>
-        /// It gives json string of result.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///         var result = queryResult.Result.ResultJson;
-        ///     });
-        /// </code>
-        /// </example>
-        public string ResultJson
-        {
-            get
-            {
-                return this._ResultJson;
-            }
-            set
-            {
-                this._ResultJson = value;
-            }
-        }
-
-        /// <summary>
-        /// It gives the collection of retrived Entries.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///         var result = queryResult.Result.Result;
-        ///     });
-        /// </code>
-        /// </example>
-        public Entry[] Result
-        {
-            get
-            {
-                return this._Result;
-            }
-        }
-
-        /// <summary>
-        /// It gives total count of entries in a contentstack.io content type
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///         var result = queryResult.Result.TotalCount;
-        ///     });
-        /// </code>
-        /// </example>
-        public int TotalCount
-        {
-            get
-            {
-                return this._TotalCount;
-            }
-        }
-
-        /// <summary>
-        /// Contains schema structure of current query result if IncludeSchema is set on Query instance.
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///         var result = queryResult.Result.Schema;
-        ///     });
-        /// </code>
-        /// </example>
-        public List<Dictionary<string, object>> Schema
-        {
-            get
-            {
-                return this._Schema;
-            }
-        }
         #endregion
 
         #region Internal Constructors
@@ -258,7 +150,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     csQuery.SetLanguage(Language.ENGLISH_UNITED_STATES);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -279,7 +171,9 @@ namespace Contentstack.Core.Models
                 {
                     UrlQueries.Remove("locale");
                     UrlQueries.Add("locale", localeCode);
-                } else {
+                }
+                else
+                {
                     UrlQueries["locale"] = localeCode;
                 }
 
@@ -305,7 +199,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     csQuery.SetLocale("en-us");
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -380,7 +274,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     csQuery.Where(&quot;uid&quot;, &quot;bltf4fbsample851db&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -419,7 +313,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     csQuery.AddQuery(&quot;query_param_key&quot;, &quot;query_param_value&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -436,7 +330,7 @@ namespace Contentstack.Core.Models
                 {
                     throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
                 }
-                          }
+            }
             catch (Exception e)
             {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
@@ -456,7 +350,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     csQuery.RemoveQuery(&quot;Query_Key&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -501,7 +395,7 @@ namespace Contentstack.Core.Models
         ///     queryList.Add(query2);
         ///     
         ///     csQuery.And(queryList);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -515,16 +409,20 @@ namespace Contentstack.Core.Models
                     List<Dictionary<string, object>> andValueJson = new List<Dictionary<string, object>>();
                     int count = queryObjects.Count;
 
-                    for (int i = 0; i < count; i++) {
+                    for (int i = 0; i < count; i++)
+                    {
                         andValueJson.Add(queryObjects[i].QueryValueJson);
                         //if(queryObjects[i].QueryValueJson.ContainsKey("locale")){
                         //    queryObjects[i].QueryValueJson.Remove("locale");
                         //}
                     }
-                    if (QueryValueJson.ContainsKey(StackConstants.And)) {
+                    if (QueryValueJson.ContainsKey(StackConstants.And))
+                    {
                         QueryValueJson.Remove(StackConstants.And);
                         QueryValueJson.Add(StackConstants.And, andValueJson);
-                    } else {
+                    }
+                    else
+                    {
                         QueryValueJson.Add(StackConstants.And, andValueJson);
                     }
 
@@ -566,7 +464,7 @@ namespace Contentstack.Core.Models
         ///     queryList.Add(query2);
         ///     
         ///     csQuery.Or(queryList);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -589,10 +487,13 @@ namespace Contentstack.Core.Models
                         //}
                     }
 
-                    if (QueryValueJson.ContainsKey(StackConstants.Or)) {
+                    if (QueryValueJson.ContainsKey(StackConstants.Or))
+                    {
                         QueryValueJson.Remove(StackConstants.Or);
                         QueryValueJson.Add(StackConstants.Or, orValueJson);
-                    } else {
+                    }
+                    else
+                    {
                         QueryValueJson.Add(StackConstants.Or, orValueJson);
                     }
 
@@ -624,7 +525,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.LessThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -670,7 +571,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.LessThanOrEqualTo(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -716,7 +617,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.GreaterThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -762,7 +663,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.GreaterThanOrEqualTo(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -808,7 +709,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.NotEqualTo(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -857,7 +758,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.ContainedIn(&quot;severity&quot;, new Object[]{&quot;Show Stopper&quot;, &quot;Critical&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -908,7 +809,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.NotContainedIn(&quot;severity&quot;, new Object[]{&quot;Show Stopper&quot;, &quot;Critical&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -958,7 +859,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Exists(&quot;severity&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1001,7 +902,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.NotExists(&quot;severity&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1044,7 +945,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.IncludeReference(&quot;for_bug&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1073,7 +974,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.IncludeReference(new String[]{&quot;for_bug&quot;, &quot;assignee&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1101,25 +1002,33 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Tags(new String[]{&quot;tag1&quot;, &quot;tag2&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
-        private Query Tags(String[] tags) {
-            try {
-                if (tags != null) {
+        private Query Tags(String[] tags)
+        {
+            try
+            {
+                if (tags != null)
+                {
 
                     String tagsvalue = null;
                     int count = tags.Length;
-                    for (int i = 0; i < count; i++) {
+                    for (int i = 0; i < count; i++)
+                    {
                         tagsvalue = tagsvalue + "," + tags[i];
                     }
                     QueryValueJson.Add("tags", tagsvalue);
-                } else {
+                }
+                else
+                {
                     throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
             }
             return this;
@@ -1138,20 +1047,26 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Ascending(&quot;name&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
         public Query Ascending(String key)
         {
-            if (key != null) {
-                try {
+            if (key != null)
+            {
+                try
+                {
                     UrlQueries.Add("asc", key);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
                 }
-            } else {
+            }
+            else
+            {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
             }
             return this;
@@ -1170,7 +1085,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Descending(&quot;name&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1207,7 +1122,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Count();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1237,7 +1152,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.IncludeCount();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1268,18 +1183,22 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Only(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
-        public Query Only(String[] fieldUid) {
-            try {
+        public Query Only(String[] fieldUid)
+        {
+            try
+            {
                 if (fieldUid != null && fieldUid.Length > 0)
                 {
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
-            } catch {
+            }
+            catch
+            {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1299,19 +1218,24 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Except(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
-        public Query Except(String[] fieldUids) {
-            try {
+        public Query Except(String[] fieldUids)
+        {
+            try
+            {
                 List<string> objectUidForExcept = new List<string>();
                 Dictionary<string, object> exceptValueJson = new Dictionary<string, object>();
-                if (fieldUids != null && fieldUids.Length > 0) {
+                if (fieldUids != null && fieldUids.Length > 0)
+                {
                     UrlQueries.Add("except[BASE][]", fieldUids);
                 }
-            } catch  {
+            }
+            catch
+            {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
             return this;
@@ -1329,22 +1253,25 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.IncludeSchema();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
         public Query IncludeSchema()
         {
-            try {
+            try
+            {
                 UrlQueries.Add("include_schema", true);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
             }
             return this;
         }
 
-        
+
         /// <summary>
         /// Include object owner&#39;s profile in the objects data.
         /// </summary>
@@ -1357,7 +1284,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.IncludeOwner();
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1374,9 +1301,9 @@ namespace Contentstack.Core.Models
             }
             return this;
         }
-        
 
-       
+
+
         private Query IncludeDraft()
         {
             try
@@ -1403,7 +1330,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Skip(2);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1434,7 +1361,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Limit(2);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1466,7 +1393,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Regex(&quot;name&quot;, &quot;^browser&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1513,7 +1440,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.Regex(&quot;name&quot;, &quot;^browser&quot;, &quot;i&quot;);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1559,7 +1486,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.WhereTags(new String[]{&quot;tag1&quot;, &quot;tag2&quot;});
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1590,7 +1517,7 @@ namespace Contentstack.Core.Models
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
         ///     csQuery.SetCachePolicy(CachePolicy.CacheElseNetwork);
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1598,7 +1525,6 @@ namespace Contentstack.Core.Models
         public Query SetCachePolicy(CachePolicy cachePolicy)
         {
             this._CachePolicy = cachePolicy;
-            this._IsCachePolicySet = true;
             return this;
         }
 
@@ -1613,14 +1539,14 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
-        ///     csQuery.Find<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
         public async Task<ContentstackCollection<T>> Find<T>()
         {
-            return await Exec<ContentstackCollection<T>>();
+            return await Exec<T>();
 
         }
 
@@ -1635,7 +1561,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
         ///     
-        ///     csQuery.FindOne<Product>().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.FindOne&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1650,55 +1576,60 @@ namespace Contentstack.Core.Models
             {
                 UrlQueries.Add("limit", 1);
             }
-            return await Exec<ContentstackCollection<T>>();
+            return await Exec<T>();
         }
 
         #endregion
-        private async Task<T> Exec<T>() 
+        private async Task<ContentstackCollection<T>> Exec<T>()
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
 
             //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
-            if (headers != null && headers.Count() > 0) {
-                foreach (var header in headers) {
+            if (headers != null && headers.Count() > 0)
+            {
+                foreach (var header in headers)
+                {
                     headerAll.Add(header.Key, (String)header.Value);
                 }
 
-                if (headers.ContainsKey("environment")) {
+                if (headers.ContainsKey("environment"))
+                {
                     UrlQueries.Add("environment", headers["environment"]);
-                } else if (headers.ContainsKey("environment_uid")) {
+                }
+                else if (headers.ContainsKey("environment_uid"))
+                {
                     UrlQueries.Add("environment_uid", headers["environment_uid"]);
-                } else {
-                    mainJson.Add("environment",this.ContentTypeInstance.StackInstance.config.Environment);
+                }
+                else
+                {
+                    mainJson.Add("environment", this.ContentTypeInstance.StackInstance.config.Environment);
                 }
             }
 
             if (QueryValueJson != null && QueryValueJson.Count > 0)
                 mainJson.Add("query", QueryValueJson);
 
-            foreach (var kvp in UrlQueries) {
+            foreach (var kvp in UrlQueries)
+            {
                 mainJson.Add(kvp.Key, kvp.Value);
             }
 
-
-            try {
-               
+            try
+            {
                 HTTPRequestHandler requestHandler = new HTTPRequestHandler();
-                var output = await requestHandler.ProcessRequest(_Url, headers, mainJson);
-                StackOutput stackOutput = new StackOutput(ContentstackConvert.ToString(output, "{}"));
-                JObject obj = JObject.Parse(stackOutput.Json);
-                JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
-                JsonSerializer Serializer = JsonSerializer.Create(SerializerSettings);
-                return obj.ToObject<T>(Serializer);
-                      
+                var outputResult = await requestHandler.ProcessRequest(_Url, headers, mainJson);
+                JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                var entries = obj.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+                var collection = obj.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+                collection.Items = entries;
+                return collection;
             }
             catch (Exception ex)
             {
                 throw GetContentstackError(ex);
             }
-
         }
 
         #region Private Functions
@@ -1740,7 +1671,7 @@ namespace Contentstack.Core.Models
                 return _FormHeaders;
             }
         }
-       
+
         #endregion
     }
 }
