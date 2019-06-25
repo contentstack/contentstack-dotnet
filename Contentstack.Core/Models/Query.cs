@@ -1197,9 +1197,9 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
+                Console.WriteLine("IOException source: {0}", e.Source);
             }
 
             return this;
@@ -1234,9 +1234,9 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("except[BASE][]", fieldUids);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
+                Console.WriteLine("IOException source: {0}", e.Source);
             }
             return this;
         }
@@ -1263,52 +1263,6 @@ namespace Contentstack.Core.Models
             try
             {
                 UrlQueries.Add("include_schema", true);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
-            }
-            return this;
-        }
-
-
-        /// <summary>
-        /// Include object owner&#39;s profile in the objects data.
-        /// </summary>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     
-        ///     csQuery.IncludeOwner();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///     });
-        /// </code>
-        /// </example>
-        private Query IncludeOwner()
-        {
-            try
-            {
-                UrlQueries.Add("include_owner", true);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
-            }
-            return this;
-        }
-
-
-
-        private Query IncludeDraft()
-        {
-            try
-            {
-                UrlQueries.Add("include_draft", true);
             }
             catch (Exception e)
             {
@@ -1582,8 +1536,8 @@ namespace Contentstack.Core.Models
         #endregion
         private async Task<ContentstackCollection<T>> Exec<T>()
         {
-            Dictionary<String, Object> headers = GetHeader(_Headers);
-            Dictionary<String, object> headerAll = new Dictionary<string, object>();
+            Dictionary<string, Object> headers = GetHeader(_Headers);
+            Dictionary<string, object> headerAll = new Dictionary<string, object>();
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
 
             //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
@@ -1591,7 +1545,7 @@ namespace Contentstack.Core.Models
             {
                 foreach (var header in headers)
                 {
-                    headerAll.Add(header.Key, (String)header.Value);
+                    headerAll.Add(header.Key, (string)header.Value);
                 }
 
                 if (headers.ContainsKey("environment"))

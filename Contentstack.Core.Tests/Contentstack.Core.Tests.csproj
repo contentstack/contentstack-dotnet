@@ -25,6 +25,7 @@
     <Compile Remove="EmptyClass.cs" />
     <Compile Remove="appSetings.cs" />
     <Compile Remove="TestResults\LocaleTest.cs" />
+    <Compile Remove="LocalTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="stack.config" />
