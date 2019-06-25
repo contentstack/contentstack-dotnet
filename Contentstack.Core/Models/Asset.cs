@@ -66,6 +66,9 @@ namespace Contentstack.Core.Models
             }
         }
 
+        /// <summary>
+        /// An absolute URL to this file.
+        /// </summary>
         public string Url
         {
             get
@@ -82,14 +85,28 @@ namespace Contentstack.Core.Models
             }
         }
 
+        /// <summary>
+        /// This is Entry Uid of an entry.
+        /// </summary>
         public string Uid { get; set; }
+
+        /// <summary>
+        /// The size of the file in bytes.
+        /// </summary>
         [JsonProperty(PropertyName = "file_size")]
         public string FileSize { get; set; }
+
+        /// <summary>
+        /// The original name of the file.
+        /// </summary>
         public string FileName { get; set; }
+
         public string Description { get; set; }
+
+        /// <summary>
+        /// Set array of Tags
+        /// </summary>
         public Object[] Tags { get; set; }
-        public int Count { get; set; }
-        public int TotalCount { get; set; }
 
         #region Internal Constructors
         internal Asset(ContentstackClient stack, string uid)

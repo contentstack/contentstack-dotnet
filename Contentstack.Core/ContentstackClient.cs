@@ -243,7 +243,7 @@ namespace Contentstack.Core
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     ContentType contentType = stack.GetContentTypes();
+        ///     var result = await stack.GetContentTypes();
         /// </code>
         /// </example>
         /// <returns>The List of content types schema.</returns>
