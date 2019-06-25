@@ -27,7 +27,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.True(asset.FileName.Length > 0);
+                    Assert.True(result.FileName.Length > 0);
                 }
             });
        }
