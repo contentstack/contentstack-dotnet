@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
-    <ReleaseVersion>1.1.0</ReleaseVersion>
+    <ReleaseVersion>2.0</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,9 +36,11 @@
     <None Remove="TestResults\_Uttams-MacBook-Pro_2018-09-29_00_07_58.trx" />
     <None Remove="TestResults\_Uttams-MacBook-Pro_2018-09-29_19_54_44.trx" />
     <None Remove="appSetting.xml" />
+    <None Remove="appsetting.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ContentStack.Core\Contentstack.Core.csproj" />
+    <ProjectReference Include="..\Contentstack.AspNetCore\Contentstack.AspNetCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
