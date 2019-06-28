@@ -1,5 +1,5 @@
-### Version: 1.2.0
-#### Date: Apr-12-2019
+﻿### Version: 2.0
+#### Date: Jun-28-2019
 
 ##### New Features:
 - Query
