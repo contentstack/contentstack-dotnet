@@ -38,7 +38,7 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["user-agent"]="DOTNET 1.1.0";
+            request.Headers["x-user-agent"]="DOTNET 1.1.0";
 
             if (Headers != default(IDictionary<string, string>)) {
                 foreach (var header in Headers) {
