@@ -75,7 +75,7 @@ query.IncludeCount();
 query.ToJSON(); 
 query.Find<Blog>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-         ContentstackCollection<Product> result = t.Result; 
+         ContentstackCollection<Blog> result = t.Result; 
          Console.WriteLine("result" + result.items); 
     } 
 });
