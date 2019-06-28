@@ -8,31 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace Contentstack.Core.Internals
 {
-    internal class ContentstackConvert
+    internal static class ContentstackConvert
     {
         #region Private Variables
-        private static JsonSerializerSettings _JsonSerializerSettings = default(JsonSerializerSettings);
-        #endregion
-
-        #region Public Functions
-        public static JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                if (ContentstackConvert._JsonSerializerSettings == default(JsonSerializerSettings))
-                {
-                    ContentstackConvert._JsonSerializerSettings = new JsonSerializerSettings()
-                    {
-                        DateParseHandling = DateParseHandling.None,
-                        DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                        DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                        NullValueHandling = NullValueHandling.Ignore
-                    };
-                }
-
-                return ContentstackConvert._JsonSerializerSettings;
-            }
-        }
         public static Int32 ToInt32(object input)
         {
             Int32 output = 0;
@@ -41,7 +19,13 @@ namespace Contentstack.Core.Internals
             {
                 output = Convert.ToInt32(input);
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return output;
         }
@@ -54,7 +38,13 @@ namespace Contentstack.Core.Internals
             {
                 output = Convert.ToBoolean(input);
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return output;
         }
@@ -67,7 +57,13 @@ namespace Contentstack.Core.Internals
             {
                 output = Convert.ToString(input);
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return output;
         }
@@ -80,7 +76,13 @@ namespace Contentstack.Core.Internals
             {
                 output = Convert.ToDouble(input);
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (e.Source != null) 
+                { 
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return output;
         }
@@ -93,7 +95,13 @@ namespace Contentstack.Core.Internals
             {
                 output = Convert.ToDecimal(input);
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return output;
         }
@@ -106,34 +114,34 @@ namespace Contentstack.Core.Internals
             {
                 output = DateTime.Parse(ContentstackConvert.ToString(input));
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return output;
         }
 
         public static string ToISODate(object input)
         {
-            DateTime dt = DateTime.Now;
-            string output = string.Empty;
-
-            try
-            {
-                dt = (DateTime)input;
-            }
-            catch
-            {
-            }
-
             DateTime now = DateTime.Now;
             try
             {
                 now = (DateTime)input;
             }
-            catch
+            catch (Exception e)
             {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
             }
             return now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'sszzz");
         }
+
         public static object GetValue(string value)
         {
             object obj = value;
@@ -173,13 +181,18 @@ namespace Contentstack.Core.Internals
                 {
                     obj = value.ToString();
                 }
-                else if (value.GetType() == typeof(string))
+                else if (value is string)
                 {
                     obj = value.ToString();
                 }
             }
-            catch
-            { }
+            catch (Exception e)
+            {
+                if (e.Source != null)
+                {
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                }
+            }
 
             return obj;
         }
@@ -215,35 +228,6 @@ namespace Contentstack.Core.Internals
             }
         }
 
-        //public static String GetMD5FromString(String value)
-        //{
-        //    String output;
-        //    output = value.ToString().Trim();
-        //    if (value.Length > 0)
-        //    {
-        //        try
-        //        {
-        //            // Create MD5 Hash
-        //            MD5 md5 = new MD5CryptoServiceProvider();
-        //            byte[] result = md5.ComputeHash(GenerateStreamFromString(output));
-        //            StringBuilder sb = new StringBuilder();
-        //            for (int i = 0; i < result.Length; i++)
-        //            {
-        //                sb.Append(result[i].ToString("x2"));
-        //            }
-        //            return sb.ToString();
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            //showLog("appUtils", "------------getMD5FromString catch-|" + e.toString());
-        //            return null;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
         public static Stream GenerateStreamFromString(string s)
         {
             MemoryStream stream = new MemoryStream();
@@ -254,85 +238,6 @@ namespace Contentstack.Core.Internals
             return stream;
         }
 
-        //public static string GetJsonFromCacheFile(string file)
-        //{
-        //    try
-        //    {
-        //    string readContents;
-        //    using (StreamReader streamReader = new StreamReader(file, Encoding.UTF8))
-        //    {
-        //        readContents = streamReader.ReadToEnd();
-        //    }
-        //    return readContents;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        //showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
-        //        return null;
-        //    }
-        //}
-        //public static bool IsNetworkAvailable()
-        //{
-        //    // only recognizes changes related to Internet adapters
-        //    if (NetworkInterface.GetIsNetworkAvailable())
-        //    {
-        //        // however, this will include all adapters
-        //        NetworkInterface[] interfaces =
-        //            NetworkInterface.GetAllNetworkInterfaces();
-                
-        //        foreach (NetworkInterface face in interfaces)
-        //        {
-        //            // filter so we see only Internet adapters
-        //            if (face.OperationalStatus == OperationalStatus.Up)
-        //            {
-        //                if ((face.NetworkInterfaceType != NetworkInterfaceType.Tunnel) &&
-        //                    (face.NetworkInterfaceType != NetworkInterfaceType.Loopback))
-        //                {
-        //                    IPv4InterfaceStatistics statistics =
-        //                        face.GetIPv4Statistics();
-
-        //                    // all testing seems to prove that once an interface
-        //                    // comes online it has already accrued statistics for
-        //                    // both received and sent...
-
-        //                    if ((statistics.BytesReceived > 0) &&
-        //                        (statistics.BytesSent > 0))
-        //                    {
-        //                        return true;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return false;
-        //}
-        
-        public static bool GetResponseTimeFromCacheFile(string filePath, long responseTime, long DefaultCacheTime)
-        {
-            try
-            {
-               long dateDiff = (DateTime.UtcNow.Ticks - responseTime);
-                long dateDiffInMin = dateDiff / (60 * 1000);
-
-
-                if (dateDiffInMin > (DefaultCacheTime / 60000))
-                {
-                    return true;// need to send call.
-                }
-                else
-                {
-                    return false;// no need to send call.
-                }
-
-            }
-            catch 
-            {
-                //showLog("appUtils", "------------getJsonFromFilec catch-|" + e.toString());
-                return false;
-            }
-        }
-        
         #endregion
 
     }

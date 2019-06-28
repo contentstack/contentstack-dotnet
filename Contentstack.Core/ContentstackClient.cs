@@ -19,6 +19,11 @@ namespace Contentstack.Core
     /// </summary>
     public class ContentstackClient
     {
+        /// <summary>
+        /// Gets or sets the settings that should be used for deserialization.
+        /// </summary>
+        public JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings();
+
         #region Internal Variables
 
         internal string StackApiKey
@@ -28,7 +33,7 @@ namespace Contentstack.Core
         }
         private ContentstackOptions _options;
 
-
+        internal JsonSerializer Serializer => JsonSerializer.Create(SerializerSettings);
         internal string _SyncUrl
          {
             get
@@ -84,6 +89,13 @@ namespace Contentstack.Core
                 cnfig.Version = _options.Version;
             }
             this.SetConfig(cnfig);
+
+            this.SerializerSettings.DateParseHandling = DateParseHandling.None;
+            this.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            this.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            this.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            SerializerSettings.Converters.Add(new AssetJsonConverter());
+            SerializerSettings.Converters.Add(new EntryJsonConverter());
 
         }
 
@@ -202,16 +214,36 @@ namespace Contentstack.Core
             this.config = cnfig;
 
         }
+
+
+        /// <summary>
+        /// Represents a Asset. Creates Asset Instance.
+        /// </summary>
+        /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Asset asset  = stack.Asset();
+        /// </code>
+        /// </example>
+        internal Asset Asset()
+        {
+            Asset asset = new Asset(this);
+            return asset;
+        }
+
         #endregion
 
         #region Public Functions
         /// <summary>
-        /// This method fetchs information of a all content types.
+        /// This method returns comprehensive information of all the content types of a particular stack in your account.
         /// </summary>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     ContentType contentType = stack.GetContentTypes();
+        ///     var result = await stack.GetContentTypes();
         /// </code>
         /// </example>
         /// <returns>The List of content types schema.</returns>
@@ -255,7 +287,7 @@ namespace Contentstack.Core
             {
                 HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
-                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), ContentstackConvert.JsonSerializerSettings);
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
                 return contentTypes;
             }
@@ -295,12 +327,12 @@ namespace Contentstack.Core
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Asset asset  = asset.Asset();
+        ///     Asset asset  = stack.Asset(&quot;blt5d49hsdfj2633b&quot;);
         /// </code>
         /// </example>
-        internal Asset Asset()
+        public Asset Asset(String Uid)
         {
-            Asset asset = new Asset(this);
+            Asset asset = new Asset(this, Uid);
             return asset;
         }
 
@@ -313,12 +345,12 @@ namespace Contentstack.Core
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     AssetLibrary assetLibrary  = asset.AssetLibrary();
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         /// </code>
         /// </example>
-        internal AssetLibrary AssetLibrary()
+        public AssetLibrary AssetLibrary()
         {
-            AssetLibrary asset = new AssetLibrary();
+            AssetLibrary asset = new AssetLibrary(this);
             return asset;
         }
 
@@ -457,49 +489,26 @@ namespace Contentstack.Core
             }
 
         }
+       
         /// <summary>
-        /// Syncs the recursive.
+        /// Syncs the recursive language.
         /// </summary>
-        /// <returns>The recursive.</returns>
+        /// <returns>The recursive language.</returns>
+        /// <param name="Locale">Locale.</param>
         /// <param name="SyncType">Sync type.</param>
         /// <param name="ContentTypeUid">Content type uid.</param>
-        /// <param name="StartFrom">Start from Date.</param>
-        ///  <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     stack.SyncRecursive(&quot;SyncType&quot;);
-        /// </code>
-        /// </example>
-        /// 
-        public async Task<SyncStack> SyncRecursive(SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
-        {
-            SyncStack syncStack = await Sync(SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
-            syncStack = await SyncPageinationRecursive(syncStack);
-            return syncStack;
-        }
-
-        /// <summary>
-        /// Syncs the recursive with language.
-        /// </summary>
-        /// <returns>The recursive with language.</returns>
-        /// <param name="SyncType">Sync type.</param>
-        /// <param name="ContentTypeUid">Content type uid.</param>
-        /// <param name="StartFrom">Start from Date.</param>
-        /// <param name="Lang">Lang.</param>
+        /// <param name="StartFrom">Start from.</param>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     stack.SyncRecursiveLanguage(&quot;SyncType&quot;, &quot;Language&quot;);
+        ///     stack.SyncRecursiveLanguage(&quot;SyncType&quot;, &quot;Locale&quot;);
         /// </code>
         /// </example>
-        /// 
-        public async Task<SyncStack> SyncRecursiveLanguage(Language Lang, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        public async Task<SyncStack> SyncRecursive(String Locale = null, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
-            SyncStack syncStack = await SyncLanguage(Lang: Lang, SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
+            SyncStack syncStack = await SyncLanguage(Locale: Locale, SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
             syncStack = await SyncPageinationRecursive(syncStack);
             return syncStack;
         }
@@ -565,27 +574,9 @@ namespace Contentstack.Core
         }
 
 
-        private async Task<SyncStack> SyncLanguage(Language Lang, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        private async Task<SyncStack> SyncLanguage(String Locale, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
-            return await GetResultAsync(Init: "true", ContentTypeUid: ContentTypeUid, StartFrom: StartFrom, Lang: GetLocaleCode(Lang));
-        }
-
-        //GetLanguage code 
-        private string GetLocaleCode(Language language)
-        {
-            string localeCode = null;
-            try
-            {
-                int localeValue = (int)language;
-                LanguageCode[] languageCodeValues = Enum.GetValues(typeof(LanguageCode)).Cast<LanguageCode>().ToArray();
-                localeCode = languageCodeValues[localeValue].ToString();
-                localeCode = localeCode.Replace("_", "-");
-            }
-            catch (Exception e)
-            {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
-            }
-            return localeCode;
+            return await GetResultAsync(Init: "true", ContentTypeUid: ContentTypeUid, StartFrom: StartFrom, Locale: Locale);
         }
 
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
@@ -636,7 +627,7 @@ namespace Contentstack.Core
         }
 
 
-        private async Task<SyncStack> GetResultAsync(string Init = "false", string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Lang = null)
+        private async Task<SyncStack> GetResultAsync(string Init = "false", string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Locale = null)
         {
             //mainJson = null;
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
@@ -662,9 +653,9 @@ namespace Contentstack.Core
             {
                 mainJson.Add("content_type_uid", ContentTypeUid);
             }
-            if (Lang != null)
+            if (Locale != null)
             {
-                mainJson.Add("locale", Lang);
+                mainJson.Add("locale", Locale);
             }
             try
             {

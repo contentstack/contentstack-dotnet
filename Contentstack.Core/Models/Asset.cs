@@ -1,22 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Models
 {
     /// <summary>
-    /// 
+    /// Assets refer to all the media files (images, videos, PDFs, audio files, and so on) uploaded in your Contentstack repository for future use
     /// </summary>
-    internal class Asset
+    public class Asset
     {
         #region Internal & Private Properties
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
-        private Dictionary<string, string> _Headers = new Dictionary<string, string>();
-        private string _jsonString = String.Empty;
-        private string _Url = string.Empty;
+        private readonly Dictionary<string, object> _Headers = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
+
+        private string _Url
+        {
+            get
+            {
+                Config config = this.StackInstance.config;
+                return String.Format("{0}/assets/{1}", config.BaseUrl, this.Uid);
+            }
+        }
         #endregion
-        public ContentstackClient Stack
+        public ContentstackClient StackInstance
         {
             get;
             set;
@@ -41,12 +56,20 @@ namespace Contentstack.Core.Models
                 {
                     this._ObjectAttributes[key] = value;
                 }
-                catch
-                { }
+                catch (Exception e)
+                {
+                    if (e.Source != null) 
+                    { 
+                        Console.WriteLine("IOException source: {0}", e.Source);
+                    }
+                }
             }
         }
 
-        public string UploadUrl
+        /// <summary>
+        /// An absolute URL to this file.
+        /// </summary>
+        public string Url
         {
             get
             {
@@ -56,104 +79,53 @@ namespace Contentstack.Core.Models
                     url = ContentstackConvert.ToString(this["url"]);
                 }
                 return url;
-            }
-            set
+            }set
             {
-                this._Url = value;
+                this["url"] = value;
             }
         }
 
-        public string UploadUid
-        {
-            get
-            {
-                string uid = string.Empty;
+        /// <summary>
+        /// This is Entry Uid of an entry.
+        /// </summary>
+        public string Uid { get; set; }
 
-                if (this._ObjectAttributes.ContainsKey("uid"))
-                {
-                    uid = ContentstackConvert.ToString(this["uid"]);
-                }
+        /// <summary>
+        /// The size of the file in bytes.
+        /// </summary>
+        [JsonProperty(PropertyName = "file_size")]
+        public string FileSize { get; set; }
 
-                return uid;
-            }
-            set
-            {
-                this["uid"] = value;
-            }
-        }
-        public string ContentType
-        {
-            get
-            {
-                string contentType = string.Empty;
+        /// <summary>
+        /// The original name of the file.
+        /// </summary>
+        public string FileName { get; set; }
 
-                if (this._ObjectAttributes.ContainsKey("content_type"))
-                {
-                    contentType = ContentstackConvert.ToString(this["content_type"]);
-                }
+        public string Description { get; set; }
 
-                return contentType;
-            }
-            set
-            {
-                this["content_type"] = value;
-            }
-        }
-        public string FileSize
-        {
-            get
-            {
-                string fileSize = string.Empty;
+        /// <summary>
+        /// Set array of Tags
+        /// </summary>
+        public Object[] Tags { get; set; }
 
-                if (this._ObjectAttributes.ContainsKey("file_size"))
-                {
-                    fileSize = ContentstackConvert.ToString(this["file_size"]);
-                }
-
-                return fileSize;
-            }
-            set
-            {
-                this["file_size"] = value;
-            }
-        }
-
-        public string FileName
-        {
-            get
-            {
-                string fileName = string.Empty;
-
-                if (this._ObjectAttributes.ContainsKey("filename"))
-                {
-                    fileName = ContentstackConvert.ToString(this["filename"]);
-                }
-
-                return fileName;
-            }
-            set
-            {
-                this["filename"] = value;
-            }
-        }
-
-        public List<string> Tags
-        {
-            get; set;
-        }
-        public int Count { get; set; }
-        public int TotalCount { get; set; }
         #region Internal Constructors
+        internal Asset(ContentstackClient stack, string uid)
+        {
+            this.StackInstance = stack;
+            this.Uid = uid;
+            this._StackHeaders = stack._LocalHeaders;
+        }
+
         internal Asset(ContentstackClient stack)
         {
-            this.Stack = stack;
+            this.StackInstance = stack;
+            this._StackHeaders = stack._LocalHeaders;
         }
 
-        //internal Asset(Stack stack, string uid)
-        //{
-        //    this.Stack = stack;
-        //    this["uid"] = uid;
-        //}
+        internal Asset()
+        {
+
+        }
         #endregion
 
         /// <summary>
@@ -179,43 +151,9 @@ namespace Contentstack.Core.Models
 
         }
 
-        internal Asset ParseObject(Dictionary<string, object> jsonObj)
+        internal void ParseObject(JObject jsonObj)
         {
-            this._ObjectAttributes = (Dictionary<string, object>)jsonObj["upload"];
-
-            this.UploadUid = _ObjectAttributes["uid"].ToString();
-            this.ContentType = _ObjectAttributes["content_type"].ToString();
-            this.FileSize = _ObjectAttributes["file_size"].ToString();
-            this.FileName = _ObjectAttributes["filename"].ToString();
-            this.UploadUrl = _ObjectAttributes["url"].ToString();
-
-            if (_ObjectAttributes["tags"] is Array)
-            {
-                if ((_ObjectAttributes.ContainsKey("tags")) && (_ObjectAttributes["tags"] != null) && (!(_ObjectAttributes.ContainsKey("tags").Equals(string.Empty))))
-                {
-                    List<string> tagsArray = (List<string>)_ObjectAttributes["tags"];
-                    if (tagsArray.Count() > 0)
-                    {
-                        int count = tagsArray.Count();
-                        Tags = new List<string>();
-                        for (int i = 0; i < count; i++)
-                        {
-                            //Tags[i] = (String)tagsArray[i];
-                            Tags.Add((String)tagsArray[i]);
-                        }
-                    }
-                }
-            }
-
-            if (_ObjectAttributes.ContainsKey("count"))
-            {
-                Count = (int)_ObjectAttributes["count"];
-            }
-            if (_ObjectAttributes.ContainsKey("objects"))
-            {
-                TotalCount = (int)_ObjectAttributes["objects"];
-            }
-            return this;
+            this._ObjectAttributes = jsonObj.ToObject<Dictionary<string, object>>();
         }
 
         public DateTime GetCreateAt()
@@ -226,9 +164,10 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["created_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch
+            catch (Exception e)
             {
-                //CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
+                if (e.Source != null)
+                    Console.WriteLine("IOException source: {0}", e.Source);
             }
             return DateTime.MinValue;
         }
@@ -247,9 +186,10 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["updated_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch 
+            catch (Exception e)
             {
-                //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
+                if (e.Source != null)
+                    Console.WriteLine("IOException source: {0}", e.Source);
             }
             return DateTime.MinValue;
         }
@@ -268,9 +208,10 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["deleted_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch
+            catch (Exception e)
             {
-                // CSAppUtils.showLog(TAG, "-----------------getDeleteAt|" + e);
+                if (e.Source != null)
+                    Console.WriteLine("IOException source: {0}", e.Source);
             }
             return DateTime.MinValue;
         }
@@ -281,23 +222,153 @@ namespace Contentstack.Core.Models
             return _ObjectAttributes["deleted_by"].ToString();
         }
 
-        public Asset SetTags(String[] tags)
+        public async Task<Asset> Fetch()
         {
-            if (Tags == null)
+            Dictionary<String, Object> headers = GetHeader(_Headers);
+
+            Dictionary<String, object> headerAll = new Dictionary<string, object>();
+            Dictionary<string, object> mainJson = new Dictionary<string, object>();
+
+            //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
+
+            if (headers != null && headers.Count() > 0)
             {
-                Tags = new List<string>();
-            }
-            if (tags != null)
-            {
-                foreach (String tag in tags)
+                foreach (KeyValuePair<string, object> header in headers)
                 {
-                    Tags.Add(tag);
+                    headerAll.Add(header.Key, (String)header.Value);
+                }
+
+                if (headers.ContainsKey("environment"))
+                {
+                    UrlQueries.Add("environment", headers["environment"]);
+                }
+                else if (headers.ContainsKey("environment_uid"))
+                {
+                    UrlQueries.Add("environment_uid", headers["environment_uid"]);
+                }
+                else
+                {
+                    mainJson.Add("environment", this.StackInstance.config.Environment);
                 }
             }
-            return this;
+
+            foreach (var kvp in UrlQueries)
+            {
+                mainJson.Add(kvp.Key, kvp.Value);
+            }
+            try
+            {
+                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                return obj.SelectToken("$.asset").ToObject<Asset>(this.StackInstance.Serializer);
+            }
+            catch (Exception ex)
+            {
+                throw GetContentstackError(ex);
+            }
         }
 
+      
+        #region Private Functions
 
+        private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
+        {
+            Dictionary<string, object> mainHeader = _StackHeaders;
+            Dictionary<string, object> classHeaders = new Dictionary<string, object>();
+
+            if (localHeader != null && localHeader.Count > 0)
+            {
+                if (mainHeader != null && mainHeader.Count > 0)
+                {
+                    foreach (KeyValuePair<string, object> entry in localHeader)
+                    {
+                        String key = entry.Key;
+                        classHeaders.Add(key, entry.Value);
+                    }
+
+                    foreach (KeyValuePair<string, object> entry in mainHeader)
+                    {
+                        String key = entry.Key;
+                        if (!classHeaders.ContainsKey(key))
+                        {
+                            classHeaders.Add(key, entry.Value);
+                        }
+                    }
+
+                    return classHeaders;
+
+                }
+                else
+                {
+                    return localHeader;
+                }
+
+            }
+            else
+            {
+                return _StackHeaders;
+            }
+        }
+        internal static ContentstackError GetContentstackError(Exception ex)
+        {
+            Int32 errorCode = 0;
+            string errorMessage = string.Empty;
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            Dictionary<string, object> errors = null;
+            //ContentstackError.OtherErrors errors = null;
+
+            try
+            {
+                System.Net.WebException webEx = (System.Net.WebException)ex;
+
+                using (var exResp = webEx.Response)
+                using (var stream = exResp.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    errorMessage = reader.ReadToEnd();
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    //errorCode = ContentstackConvert.ToInt32(data.Property("error_code").Value);
+                    //errorMessage = ContentstackConvert.ToString(data.Property("error_message").Value);
+
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
+
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
+
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
+
+                    var response = exResp as HttpWebResponse;
+                    if (response != null)
+                    {
+                        statusCode = response.StatusCode;
+                    }
+                }
+            }
+            catch
+            {
+                if (errorMessage != null)
+                {
+                    errorMessage = ex.Message;
+                }
+            }
+
+            ContentstackError contentstackError = new ContentstackError()
+            {
+                ErrorCode = errorCode,
+                ErrorMessage = errorMessage,
+                StatusCode = statusCode,
+                Errors = errors
+            };
+
+            return contentstackError;
+        }
+        #endregion
     }
 }
 

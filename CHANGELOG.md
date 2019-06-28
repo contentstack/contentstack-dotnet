@@ -1,3 +1,28 @@
+﻿### Version: 2.0
+#### Date: Jun-28-2019
+
+##### New Features:
+- Query
+  - added method 'SetLocale'
+  
+- Entry
+   - added method 'SetLocale'
+
+ ##### Update API
+- Query
+  - update method 'Fetch'
+  - update method 'FindOne'
+  
+- Entry
+  - update method 'Find'
+ 
+##### Deprecated API
+- Query
+  - deprecated method 'SetLanguage'
+  
+- Entry
+  - deprecated method 'SetLanguage'
+
 ### Version: 1.1.0
 #### Date: Apr-12-2019
 
@@ -5,19 +30,18 @@
 - ContentstackClient
   - added method 'GetContentTypes'
   - added method 'SyncRecursive' 
-  - added method 'SyncRecursiveLanguage'
   - added method 'SyncPaginationToken'
   - added method 'SyncToken'
 
 - CotentType
- - added method 'Fetch' 
- 
+   - added method 'Fetch'
+
  ### Version: 1.0.6
- #### Date: Apr-12-2019
+ #### Date: Aug-10-2018
 
 Localization support for Query and Entry is added.
  
 ### Version: 1.0.0 
-#### Date: Apr-12-2019
+#### Date: Jun-1-2018 
 
 - Introduce ContentStack SDK for DOTNET.

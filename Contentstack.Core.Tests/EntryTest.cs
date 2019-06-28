@@ -2,15 +2,13 @@
 using Xunit;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
-using Contentstack.Core.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Collections;
-
+using Contentstack.Core.Tests.Models;
 namespace Contentstack.Core.Tests
 {
-   
+
     public class EntryTest
     {
         ContentstackClient client = StackConfig.GetStack();
@@ -24,13 +22,19 @@ namespace Contentstack.Core.Tests
         public async Task FetchByUid() {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            var result = await sourceEntry.Fetch();
 
-            if (result == null) {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
-            } else {
-                Assert.True(result.Object.Count > 0 && result.EntryUid == sourceEntry.EntryUid && result.Object.ContainsKey("publish_details") && result.Object["publish_details"] != null);
-            }
+            await sourceEntry.Fetch<Entry>().ContinueWith((t) =>
+             {
+                 Entry result = t.Result;
+                 if (result == null)
+                 {
+                     Assert.False(true, "Entry.Fetch is not match with expected result.");
+                 }
+                 else
+                 {
+                     Assert.True(result.Uid == sourceEntry.Uid);
+                 }
+             });
         }
 
         [Fact]
@@ -38,18 +42,16 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.IncludeReference(referenceFieldUID);
-            var result = await sourceEntry.Fetch();
+            var result = await sourceEntry.Fetch<SourceModelIncludeRef>();
             if (result == null) {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             } else {
 
                 bool IsTrue = false;
-                object[] refDetails = (object[])result.Object[referenceFieldUID];
+                List<Entry> lstReference = result.Reference;
 
-                List<object> lstReference = refDetails.ToList();
                 if (lstReference.Count > 0) {
-                    IsTrue = lstReference.All(a => a is Dictionary<string, object>);
-
+                    IsTrue = lstReference.All(a => a is Entry);
                 }
                 Assert.True(IsTrue);
             }
@@ -61,32 +63,20 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.IncludeReference(new string[] {referenceFieldUID,"other_reference"});
-            var result = await sourceEntry.Fetch();
+            var result = await sourceEntry.Fetch<SourceModelIncludeRefAndOther>();
             if (result == null)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-
                 bool IsTrue = false;
-                object[] firstReference = (object[])result.Object[referenceFieldUID];
-                object[] secondReference = (object[])result.Object["other_reference"];
-
-                List<object[]> references = new List<object[]>();
-                references.Add(firstReference);
-                references.Add(secondReference);
-
-                foreach(object[] referene in references) {
-                    List<object> lstReference = referene.ToList();
-                    if (lstReference.Count > 0)
-                    {
-                        IsTrue = lstReference.All(a => a is Dictionary<string, object>);
-
-                    }
-                    Assert.True(IsTrue);
-                }
-
+                List<Dictionary<string, object>>  firstReference = result.Reference;
+                List<Dictionary<string, object>>  secondReference = result.Other_reference;
+                IsTrue = firstReference.All(a => a is Dictionary<string, object>);
+                Assert.True(IsTrue);
+                IsTrue = secondReference.All(a => a is Dictionary<string, object>);
+                Assert.True(IsTrue);
             }
         }
 
@@ -95,7 +85,7 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.Only(new string[] { "title", "number" });
-            var result = await sourceEntry.Fetch();
+            SourceModel result = await sourceEntry.Fetch<SourceModel>();
             if (result == null) {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             } else {
@@ -103,8 +93,7 @@ namespace Contentstack.Core.Tests
                 List<string> uidKeys = new List<string>() { "title", "number", "uid" };
                 bool IsTrue = false;
                 //IsTrue = data.Object.Keys.Count == 3 && data.Object.Keys.ToList().Contains(a=>  ui);
-                IsTrue = result.Object.Keys.All(p => uidKeys.Contains(p));
-
+                IsTrue = result.Uid != null && result.Title != null && result.Number == 4 ? true : false;
                 Assert.True(IsTrue);
             }
         }
@@ -114,7 +103,7 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
             sourceEntry.Except(new string[] { "title", "number" });
-            var result = await sourceEntry.Fetch();
+            var result = await sourceEntry.Fetch<SourceModel>();
             if (result == null)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
@@ -124,9 +113,7 @@ namespace Contentstack.Core.Tests
 
                 List<string> uidKeys = new List<string>() { "title", "number" };
                 bool IsTrue = false;
-
-                IsTrue = result.Object.Keys.All(p => !uidKeys.Contains(p));
-
+                IsTrue = result.Title == null && result.Number != 4.0 ? true : false;
                 Assert.True(IsTrue);
             }
         }
@@ -136,16 +123,15 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            var result = await sourceEntry.Fetch();
-            var updated_at = result.GetCreateAt();
+            var result = await sourceEntry.Fetch<SourceModel>();
+            var Created_at = result.Created_at;
             if (result == null)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                Assert.True(result.Object["created_at"] is string);
-                Assert.True(updated_at != default(DateTime));
+                Assert.True(Created_at != default(DateTime));
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
         }
@@ -155,15 +141,14 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            var result = await sourceEntry.Fetch();
-            var updated_at = result.GetUpdateAt();
+            var result = await sourceEntry.Fetch<SourceModel>();
+            var updated_at = result.updated_at;
             if (result == null)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                Assert.True(result.Object["updated_at"] is string);
                 Assert.True(updated_at != default(DateTime));
             }
         }
@@ -173,8 +158,8 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            var result = await sourceEntry.Fetch();
-            var created_by = result.GetCreatedBy();
+            var result = await sourceEntry.Fetch<SourceModel>();
+            var created_by = result.created_by;
             if (created_by == null && created_by.Length == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
@@ -191,15 +176,15 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            var result = await sourceEntry.Fetch();
-            var created_by = result.GetUpdatedBy();
-            if (created_by == null && created_by.Length == 0)
+            var result = await sourceEntry.Fetch<SourceModel>();
+            var Updated_by = result.Updated_by;
+            if (Updated_by == null && Updated_by.Length == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             }
             else
             {
-                Assert.True(created_by.Length > 0);
+                Assert.True(Updated_by.Length > 0);
             }
         }
 
@@ -208,8 +193,8 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
-            var result = await sourceEntry.Fetch();
-            var Tags = result.GetTags();
+            var result = await sourceEntry.Fetch<SourceModel>();
+            var Tags = result.Tags;
             if (Tags == null && Tags.Length == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");
@@ -225,8 +210,10 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
             Entry sourceEntry = contenttype.Entry("blt2f0dd6a81f7f40e7");
-            var result = await sourceEntry.Fetch();
-            var HtmlText = result.GetHTMLText("markdown");
+            var result = await sourceEntry.Fetch<SourceModel>();
+
+
+            var HtmlText = result.GetHTMLText();
             if (string.IsNullOrEmpty(HtmlText) && HtmlText.Length == 0) {
                 Assert.False(true, "Query.Exec is not match with expected result.");
             } else {

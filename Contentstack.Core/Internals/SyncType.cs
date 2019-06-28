@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Contentstack.Core.Models
+namespace Contentstack.Core.Internals
 {
     /// <summary>
     /// The different types of items you can request a sync for.

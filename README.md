@@ -1,4 +1,4 @@
-[![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
+﻿[![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
 # Contentstack dotnet
 
 .NET SDK for Contentstack's Content Delivery API
@@ -24,7 +24,7 @@ To use the module in your application, you need to first Add Namespace to your c
 
 ``` cs
 using Contentstack.Core; // ContentstackClient 
-using Contentstack.Core.Models; // Stack, Query, Entry, Asset, ContentType
+using Contentstack.Core.Models; // Stack, Query, Entry, Asset, ContentType, ContentstackCollection
 using Contentstack.Core.Configuration; // ContentstackOptions
 ```
 
@@ -33,13 +33,11 @@ using Contentstack.Core.Configuration; // ContentstackOptions
 You will need to specify the API key, Access token, and Environment Name of your stack to initialize the SDK:
 
 ``` cs
-// Initialize the Contentstack 
 ContentstackClient stack = new ContentstackClient("api_key", "access_token", "enviroment_name");
 ```
 or:
 
 ``` cs
-//
 var options = new ContentstackOptions()
 {
     ApiKey = "<api_key>",
@@ -58,7 +56,7 @@ Once you have initialized the SDK, you can start getting content in your app.
 To retrieve a single entry from a content type, use the code snippet given below:
 ``` cs
 Entry entry = client.ContentType("blog").Entry("blta464e9fbd048668c");
-entry.Fetch().ContinueWith((t) => { 
+entry.Fetch<Blog>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
         Console.WriteLine("entry:" + t.Result);  
     } 
@@ -70,16 +68,15 @@ entry.Fetch().ContinueWith((t) => {
 To retrieve multiple entries of a particular content type, use the code snippet given below:
 
 ``` cs
-
 Query query = client.ContentType("blog").Query(); 
 query.Where("title", "welcome"); 
 query.IncludeSchema(); 
 query.IncludeCount(); 
 query.ToJSON(); 
-query.Find().ContinueWith((t) => { 
+query.Find<Blog>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-         Entry[] result = t.Result.Result; 
-         Console.WriteLine("result" + result); 
+         ContentstackCollection<Blog> result = t.Result; 
+         Console.WriteLine("result" + result.items); 
     } 
 });
 ```
