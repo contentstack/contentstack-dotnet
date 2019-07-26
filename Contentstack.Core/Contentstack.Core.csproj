@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
@@ -8,11 +8,13 @@
     <PackageVersion>2.0</PackageVersion>
     <Owners>Contentstack</Owners>
     <PackageReleaseNotes>Query Find method, Entry Fetch method returns ContentstackCollection of Model.</PackageReleaseNotes>
-    <ReleaseVersion>2.0</ReleaseVersion>
+    <ReleaseVersion>2.1.0</ReleaseVersion>
     <Copyright>Copyright © 2012-2019 Contentstack. All Rights Reserved
 </Copyright>
     <PackOnBuild>true</PackOnBuild>
-    <PackageTags>v2.0</PackageTags>
+    <PackageTags>v2.1.0</PackageTags>
+    <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/contentstack/contentstack-dotnet/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
