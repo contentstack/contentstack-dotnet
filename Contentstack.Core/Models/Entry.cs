@@ -1072,7 +1072,7 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        ///  This method also includes the contenttype uid for the reference entries returned in the response.
+        ///  This method also includes the content type UIDs of the referenced entries returned in the response.
         /// </summary>
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
