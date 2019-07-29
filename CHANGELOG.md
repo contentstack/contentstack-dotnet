@@ -7,7 +7,7 @@
 - Entry
   - added method 'includeReferenceContentTypeUid'
   
-### Version: 2.0
+### Version: 
 #### Date: Jun-28-2019
 
 ##### New Features:
