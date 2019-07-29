@@ -12,13 +12,13 @@ namespace Contentstack.Core.Tests
         ContentstackClient client = StackConfig.GetSyncStack();
 
         //STAG 
-        //String PaginationToken = "blt222be844e75a1fca332e39";
-        //String SyncToken = "blt529b16590d4646bfce31ce";
+        String PaginationToken = "blt222be844e75a1fca332e39";
+        String SyncToken = "blt37f6aa8e41cbb327c6c6d3";
 
 
-        //PROD
-        String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
-        String SyncToken = "blt08854bd48e43a740951809";
+        // //PROD
+        // String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
+        // String SyncToken = "blt08854bd48e43a740951809";
         [Fact]
         public async Task SyncInit()
         {
@@ -111,36 +111,36 @@ namespace Contentstack.Core.Tests
             }
         }
 
-        [Fact]
-        public async Task SyncPaginationToken()
-        {
+        // [Fact]
+        // public async Task SyncPaginationToken()
+        // {
 
-            SyncStack result = await client.SyncPaginationToken(PaginationToken);
+        //     SyncStack result = await client.SyncPaginationToken(PaginationToken);
 
-            if (result == null)
-            {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
-            }
-            else
-            {
-                Assert.True(true);
-            }
-        }
+        //     if (result == null)
+        //     {
+        //         Assert.False(true, "Entry.Fetch is not match with expected result.");
+        //     }
+        //     else
+        //     {
+        //         Assert.True(true);
+        //     }
+        // }
 
-        [Fact]
-        public async Task SyncToketest()
-        {
+        // [Fact]
+        // public async Task SyncToketest()
+        // {
 
-            SyncStack result = await client.SyncToken(SyncToken);
+        //     SyncStack result = await client.SyncToken(SyncToken);
 
-            if (result == null)
-            {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
-            }
-            else
-            {
-                Assert.True(true);
-            }
-        }
+        //     if (result == null)
+        //     {
+        //         Assert.False(true, "Entry.Fetch is not match with expected result.");
+        //     }
+        //     else
+        //     {
+        //         Assert.True(true);
+        //     }
+        // }
     }
 }
