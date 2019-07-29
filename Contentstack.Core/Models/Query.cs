@@ -933,6 +933,36 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        ///  This method also includes the content type UIDs of the referenced entries returned in the response.
+        /// </summary>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///      ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.IncludeReferenceContentTypeUID();
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query IncludeReferenceContentTypeUID()
+        {
+            try
+            {
+                UrlQueries.Add("include_reference_content_type_uid", true);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Add a constraint that requires a particular reference key details.
         /// </summary>
         /// <param name="filed_uid">The key to be constrained.</param>
