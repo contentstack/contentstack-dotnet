@@ -1,4 +1,13 @@
-﻿### Version: 2.0
+### Version: 2.1.0
+#### Date: Jul-29-2019
+
+##### New Features:
+- Query
+  - added method 'includeReferenceContentTypeUid'
+- Entry
+  - added method 'includeReferenceContentTypeUid'
+  
+### Version: 2.0
 #### Date: Jun-28-2019
 
 ##### New Features:
