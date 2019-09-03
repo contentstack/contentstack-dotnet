@@ -61,7 +61,7 @@ namespace Contentstack.Core.Tests
                 ApiKey = apiKey,
                 AccessToken = accessToken,
                 Environment = environment,
-                Host = host
+                Host = host,
             };
 
             ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));

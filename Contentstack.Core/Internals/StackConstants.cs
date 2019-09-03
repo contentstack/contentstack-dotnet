@@ -12,6 +12,8 @@ namespace Contentstack.Core.Internals
         public const string NotEqualTo = "$ne";
         public const string ContainedIn = "$in";
         public const string NotContainedIn = "$nin";
+        public const string InQuery = "$in_query";
+        public const string NotInQuery = "$nin_query";
         public const string Exists = "$exists";
         public const string Ascending = "\"asc\":\"";
         public const string Descending = "\"desc\":\"";
