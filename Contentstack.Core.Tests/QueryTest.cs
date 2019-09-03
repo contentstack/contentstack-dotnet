@@ -325,7 +325,6 @@ namespace Contentstack.Core.Tests
             }
         }
 
-    //    //Not working
 
         [Fact]
         public async Task Or()
@@ -1316,7 +1315,71 @@ namespace Contentstack.Core.Tests
             }
         }
 
+        [Fact]
+        public async Task ReferenceIn()
+        {
+            ContentType contentTypeObj = client.ContentType(source);
+            Query query = contentTypeObj.Query();
+            query.IncludeReference("reference");
+            Query referencequery = contentTypeObj.Query();
+            referencequery.Where("title", "ref-1 test3");
 
+            query.ReferenceIn("reference", referencequery);
+
+            var result = await query.Find<SourceModelIncludeRef>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else
+            {
+                bool IsTrue = false;
+                foreach (var data in result.Items)
+                {
+                    foreach (var entry in data.Reference)
+                    {
+                        IsTrue = (entry.Title == "ref-1 test3");
+                        if (!IsTrue)
+                            break;
+                    }
+
+                }
+                Assert.True(IsTrue);
+            }
+        }
+
+        [Fact]
+        public async Task ReferenceNotIn()
+        {
+            ContentType contentTypeObj = client.ContentType(source);
+            Query query = contentTypeObj.Query();
+            query.IncludeReference("reference");
+            Query referencequery = contentTypeObj.Query();
+            referencequery.Where("title", "ref-1 test3");
+
+            query.ReferenceNotIn("reference", referencequery);
+
+            var result = await query.Find<SourceModelIncludeRef>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else
+            {
+                bool IsTrue = false;
+                foreach (var data in result.Items)
+                {
+                    foreach (var entry in data.Reference)
+                    {
+                        IsTrue = (entry.Title != "ref-1 test3");
+                        if (!IsTrue)
+                            break;
+                    }
+
+                }
+                Assert.True(IsTrue);
+            }
+        }
     }
 }
 

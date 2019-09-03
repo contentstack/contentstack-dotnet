@@ -88,6 +88,7 @@ namespace Contentstack.Core
             {
                 cnfig.Version = _options.Version;
             }
+            cnfig.Region = _options.Region;
             this.SetConfig(cnfig);
 
             this.SerializerSettings.DateParseHandling = DateParseHandling.None;
@@ -120,13 +121,14 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        public ContentstackClient(string apiKey, string accessToken, string environment, string host = null, string version = null) :
+        public ContentstackClient(string apiKey, string accessToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
             {
                 ApiKey = apiKey,
                 AccessToken = accessToken,
                 Environment = environment,
                 Host = host,
+                Region = region,
                 Version = version
             }
         ))
