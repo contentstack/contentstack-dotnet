@@ -6,7 +6,7 @@
     <PackageId>contentstack.aspnetcore</PackageId>
     <Authors>Contentstack</Authors>
     <Owners>Contentstack</Owners>
-    <ReleaseVersion>2.1.0</ReleaseVersion>
+    <ReleaseVersion>2.1.1</ReleaseVersion>
     <PackageVersion>1.0.0</PackageVersion>
     <Description>Main release</Description>
     <Copyright>Copyright (c) 2012-2019 Contentstack (http://app.contentstack.com). All Rights Reserved
