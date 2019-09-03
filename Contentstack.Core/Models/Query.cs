@@ -300,6 +300,52 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+        public Query ReferenceIn(String key, Query query)
+        {
+            try
+            {
+                if (key != null && query != null)
+                {
+                    Dictionary<string, object> queryDictionary = new Dictionary<string, object>();
+                    queryDictionary.Add(StackConstants.InQuery, query.QueryValueJson);
+                    QueryValueJson.Add(key, queryDictionary);
+                }
+                else
+                {
+                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+
+            return this;
+        }
+
+        public Query ReferenceNotIn(String key, Query query)
+        {
+            try
+            {
+                if (key != null && query != null)
+                {
+                    Dictionary<string, object> queryDictionary = new Dictionary<string, object>();
+                    queryDictionary.Add(StackConstants.NotInQuery, query.QueryValueJson);
+                    QueryValueJson.Add(key, queryDictionary);
+                }
+                else
+                {
+                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+
+            return this;
+        }
+
         /// <summary>
         /// Add a custom query against specified key.
         /// </summary>
