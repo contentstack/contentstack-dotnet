@@ -11,9 +11,9 @@ namespace Contentstack.Core.Internals
         /// </summary>
         US,
         /// <summary>
-        /// To specify EU region.
+        /// To specify EUROPE region.
         /// </summary>
-        EU
+        EUROPE
     }
 
 
