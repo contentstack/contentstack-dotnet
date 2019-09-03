@@ -11,14 +11,19 @@ namespace Contentstack.Core.Tests
     {
         ContentstackClient client = StackConfig.GetSyncStack();
 
+
+        //EU
+        //String PaginationToken = "***REMOVED***";
+        //String SyncToken = "***REMOVED***";
+
         //STAG 
-        String PaginationToken = "***REMOVED***";
-        String SyncToken = "***REMOVED***";
+        //String PaginationToken = "***REMOVED***";
+        //String SyncToken = "***REMOVED***";
 
 
         // //PROD
-        // String PaginationToken = "***REMOVED***";
-        // String SyncToken = "***REMOVED***";
+        String PaginationToken = "***REMOVED***";
+        String SyncToken = "***REMOVED***";
         [Fact]
         public async Task SyncInit()
         {

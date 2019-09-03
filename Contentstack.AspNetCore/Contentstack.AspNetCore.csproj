@@ -6,13 +6,13 @@
     <PackageId>contentstack.aspnetcore</PackageId>
     <Authors>Contentstack</Authors>
     <Owners>Contentstack</Owners>
-    <ReleaseVersion>2.1.0</ReleaseVersion>
     <PackageVersion>1.0.0</PackageVersion>
     <Description>Main release</Description>
     <Copyright>Copyright (c) 2012-2019 Contentstack (http://app.contentstack.com). All Rights Reserved
 </Copyright>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageTags>v1.0.0</PackageTags>
+    <ReleaseVersion>2.0</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
-    <PackageReference Include="contentstack.csharp" Version="1.1.0" />
     <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+    <PackageReference Include="contentstack.csharp" Version="1.1.0" />
   </ItemGroup>
 </Project>
