@@ -12,12 +12,14 @@ namespace Contentstack.Core.Tests
 {
     public class AssetTest
     {
+        string uid = "blt14d101ddeddaeefb";
+        //string uid = "blt649cfadb08b577db";
         ContentstackClient client = StackConfig.GetStack();
 
         [Fact]
         public async Task FetchAssetByUid()
         {
-            Asset asset = client.Asset("blt649cfadb08b577db");
+            Asset asset = client.Asset(uid);
             await asset.Fetch().ContinueWith((t) =>
             {
                 Asset result = t.Result;
@@ -56,7 +58,7 @@ namespace Contentstack.Core.Tests
             {
                 if (dateTime != null)
                 {
-                    if (dateTime.CompareTo(asset.GetCreateAt()) != -1)
+                    if (dateTime.CompareTo(asset.GetCreateAt()) != -1 && dateTime.CompareTo(asset.GetCreateAt()) != 0)
                     {
                         Assert.False(true);
                     }

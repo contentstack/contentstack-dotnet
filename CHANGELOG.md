@@ -1,3 +1,13 @@
+### Version: 2.1.1
+#### Date: Sept-03-2019
+
+##### New Features:
+- Config
+  - added property attribute 'region'
+- Query
+  - added method 'ReferenceIn'
+  - added method 'ReferenceNotIn'
+
 ### Version: 2.1.0
 #### Date: Jul-29-2019
 
