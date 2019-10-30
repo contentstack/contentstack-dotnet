@@ -1,3 +1,12 @@
+### Version: 2.2.0
+#### Date: Sept-03-2019
+
+##### Update API:
+- Stack
+  - update function 'GetContentType:'
+- ContentType
+  - update function 'Fetch:'
+  
 ### Version: 2.1.1
 #### Date: Sept-03-2019
 
