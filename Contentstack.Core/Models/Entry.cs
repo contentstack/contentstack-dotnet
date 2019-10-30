@@ -1121,6 +1121,7 @@ namespace Contentstack.Core.Models
             try
             {
                 UrlQueries.Add("include_schema", true);
+                UrlQueries.Add("include_global_field_schema", true);
             }
             catch (Exception e)
             {
