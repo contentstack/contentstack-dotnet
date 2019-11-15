@@ -33,7 +33,7 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
-        public async Task FetchContenTypeSchemaIncludeSnippet()
+        public async Task FetchContenTypeSchemaIncludeGlobalFields()
         {
             ContentType contenttype = client.ContentType(source);
             var param = new Dictionary<string, object>();
@@ -66,7 +66,7 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
-        public async Task GetContentTypesIncludeSnippet()
+        public async Task GetContentTypesIncludeGlobalFields()
         {
             var param = new Dictionary<string, object>();
             param.Add("include_global_field_schema", true);
