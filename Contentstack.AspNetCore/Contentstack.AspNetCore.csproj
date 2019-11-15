@@ -13,6 +13,7 @@
 </Copyright>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageTags>v1.0.0</PackageTags>
+    <ReleaseVersion>2.2.0</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
-    <PackageReference Include="contentstack.csharp" Version="1.1.0" />
     <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+    <PackageReference Include="contentstack.csharp" Version="1.1.0" />
   </ItemGroup>
 </Project>
