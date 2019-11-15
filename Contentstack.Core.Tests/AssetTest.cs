@@ -12,8 +12,8 @@ namespace Contentstack.Core.Tests
 {
     public class AssetTest
     {
-        string uid = "blt14d101ddeddaeefb";
-        //string uid = "blt649cfadb08b577db";
+        string uid = "blt9b96cb4720147bc1";
+        // string uid = "blt649cfadb08b577db";
         ContentstackClient client = StackConfig.GetStack();
 
         [Fact]
