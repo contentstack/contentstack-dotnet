@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
@@ -245,11 +245,14 @@ namespace Contentstack.Core
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     var result = await stack.GetContentTypes();
+        ///     var param = new Dictionary&lt;string, object&gt;();
+        ///     param.Add("include_global_field_schema",true);
+        ///     var result = await stack.GetContentTypes(param);
         /// </code>
         /// </example>
+        /// <param name="param">is dictionary of additional parameter</param>
         /// <returns>The List of content types schema.</returns>
-        public async Task<IList> GetContentTypes()
+        public async Task<IList> GetContentTypes(Dictionary<string, object> param = null)
         {
             Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
