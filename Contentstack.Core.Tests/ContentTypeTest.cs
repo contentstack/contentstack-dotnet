@@ -20,7 +20,25 @@ namespace Contentstack.Core.Tests
         public async Task FetchContenTypeSchema()
         {
             ContentType contenttype = client.ContentType(source);
+
             var result = await contenttype.Fetch();
+            if (result == null)
+            {
+                Assert.False(true, "contenttype.FetchSchema() is not match with expected result.");
+            }
+            else
+            {
+                Assert.True(true);
+            }
+        }
+
+        [Fact]
+        public async Task FetchContenTypeSchemaIncludeGlobalFields()
+        {
+            ContentType contenttype = client.ContentType(source);
+            var param = new Dictionary<string, object>();
+            param.Add("include_global_field_schema", true);
+            var result = await contenttype.Fetch(param);
             if (result == null)
             {
                 Assert.False(true, "contenttype.FetchSchema() is not match with expected result.");
@@ -35,6 +53,25 @@ namespace Contentstack.Core.Tests
         public async Task GetContentTypes()
         {
             var result = await client.GetContentTypes();
+
+            if (result == null)
+            {
+                Assert.False(true, "client.getContentTypes is not match with expected result.");
+            }
+            else
+            {
+                Assert.True(true);
+
+            }
+        }
+
+        [Fact]
+        public async Task GetContentTypesIncludeGlobalFields()
+        {
+            var param = new Dictionary<string, object>();
+            param.Add("include_global_field_schema", true);
+
+            var result = await client.GetContentTypes(param);
 
             if (result == null)
             {

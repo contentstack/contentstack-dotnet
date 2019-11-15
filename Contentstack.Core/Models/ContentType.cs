@@ -135,11 +135,14 @@ namespace Contentstack.Core.Models
         /// <code>
         /// ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         /// ContentType contenttype = stack.ContentType("contentType_name");
-        /// var result = await contenttype.Fetch();        
+        /// var param = new Dictionary&lt;string, object&gt;();
+        /// param.Add("include_global_field_schema",true);
+        /// var result = await contenttype.Fetch(param);        
         /// </code>
         /// </example>
+        /// <param name="param">is dictionary of additional parameter</param>
         /// <returns>The Content-Type Schema Object.</returns>
-        public async Task<JObject>Fetch()
+        public async Task<JObject>Fetch(Dictionary<string, object> param = null)
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -174,6 +177,12 @@ namespace Contentstack.Core.Models
             foreach (var kvp in UrlQueries)
             {
                 mainJson.Add(kvp.Key, kvp.Value);
+            }
+            if (param != null && param.Count() > 0) { 
+                foreach (var kvp in param)
+                {
+                    mainJson.Add(kvp.Key, kvp.Value);
+                }
             }
             try
             {
