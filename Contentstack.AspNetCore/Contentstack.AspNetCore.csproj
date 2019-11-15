@@ -12,7 +12,7 @@
 </Copyright>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageTags>v1.0.0</PackageTags>
-    <ReleaseVersion>2.1.2</ReleaseVersion>
+    <ReleaseVersion>2.2.0</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
