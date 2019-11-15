@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
