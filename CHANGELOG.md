@@ -1,3 +1,22 @@
+### Version: 2.2.0
+#### Date: Nov-15-2019
+
+##### Update API:
+- Stack
+  - update function 'GetContentType:'
+- ContentType
+  - update function 'Fetch:'
+  
+### Version: 2.1.1
+#### Date: Sept-03-2019
+
+##### New Features:
+- Config
+  - added property attribute 'region'
+- Query
+  - added method 'ReferenceIn'
+  - added method 'ReferenceNotIn'
+
 ### Version: 2.1.0
 #### Date: Jul-29-2019
 
@@ -7,7 +26,7 @@
 - Entry
   - added method 'includeReferenceContentTypeUid'
   
-### Version: 2.0
+### Version: 
 #### Date: Jun-28-2019
 
 ##### New Features:

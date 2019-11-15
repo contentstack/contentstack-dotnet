@@ -11,14 +11,19 @@ namespace Contentstack.Core.Tests
     {
         ContentstackClient client = StackConfig.GetSyncStack();
 
+
+        //EU
+        //String PaginationToken = "blt222be844e75a1fca332e39";
+        //String SyncToken = "blt01ea4a23a76c1062adfec9";
+
         //STAG 
-        String PaginationToken = "blt222be844e75a1fca332e39";
-        String SyncToken = "blt37f6aa8e41cbb327c6c6d3";
+        //String PaginationToken = "blt222be844e75a1fca332e39";
+        //String SyncToken = "blt37f6aa8e41cbb327c6c6d3";
 
 
         // //PROD
-        // String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
-        // String SyncToken = "blt08854bd48e43a740951809";
+        String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
+        String SyncToken = "blt08854bd48e43a740951809";
         [Fact]
         public async Task SyncInit()
         {
