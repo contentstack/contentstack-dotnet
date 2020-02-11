@@ -1247,6 +1247,36 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// This method also includes owner information for all the entries returned in the response.
+        /// </summary>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.IncludeOwner();
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query IncludeOwner()
+        {
+            try
+            {
+                UrlQueries.Add("include_owner", true);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Specifies an array of &#39;only&#39; keys in BASE object that would be &#39;included&#39; in the response.
         /// </summary>
         /// <param name="fieldUid">Array of the &#39;only&#39; keys to be included in response.</param>
