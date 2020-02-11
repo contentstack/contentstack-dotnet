@@ -288,6 +288,13 @@ namespace Contentstack.Core
             {
                 mainJson.Add(kvp.Key, kvp.Value);
             }
+            if (param != null && param.Count() > 0)
+            {
+                foreach (var kvp in param)
+                {
+                    mainJson.Add(kvp.Key, kvp.Value);
+                }
+            }
             try
             {
                 HTTPRequestHandler RequestHandler = new HTTPRequestHandler();

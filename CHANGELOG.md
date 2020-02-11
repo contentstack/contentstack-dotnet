@@ -1,3 +1,14 @@
+### Version: 2.2.1
+#### Date: Feb-14-2020
+
+##### Update API:
+- Query
+  - update function 'IncludeOwner'
+- Entry
+  - update function 'IncludeOwner'
+
+##### Update API:
+  
 ### Version: 2.2.0
 #### Date: Nov-15-2019
 
