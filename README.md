@@ -1,4 +1,4 @@
-﻿l[![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
+﻿[![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
 # Contentstack dotnet
 
 .NET SDK for Contentstack's Content Delivery API
