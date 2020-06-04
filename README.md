@@ -72,7 +72,6 @@ Query query = client.ContentType("blog").Query();
 query.Where("title", "welcome"); 
 query.IncludeSchema(); 
 query.IncludeCount(); 
-query.ToJSON(); 
 query.Find<Blog>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
          ContentstackCollection<Blog> result = t.Result; 
