@@ -184,22 +184,9 @@ namespace Contentstack.Core.Models
                 {
                     headerAll.Add(header.Key, (String)header.Value);
                 }
-
-                if (headers.ContainsKey("environment"))
-                {
-                    UrlQueries.Add("environment", headers["environment"]);
-                    //Url = Url + "?environment=" + headers["environment"];
-                }
-                else if (headers.ContainsKey("environment_uid"))
-                {
-                    UrlQueries.Add("environment_uid", headers["environment_uid"]);
-                    //Url = Url + "?environment_uid=" + headers["environment_uid"];
-                }
-                else
-                {
-                    mainJson.Add("environment", this.Stack.config.Environment);
-                }
             }
+
+            mainJson.Add("environment", this.Stack.config.Environment);
 
             foreach (var kvp in UrlQueries)
             {
