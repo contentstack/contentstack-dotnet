@@ -9,21 +9,8 @@ namespace Contentstack.Core.Tests
 {
     public class SyncStackTest
     {
-        ContentstackClient client = StackConfig.GetSyncStack();
+        ContentstackClient client = StackConfig.GetStack();
 
-
-        //EU
-        //String PaginationToken = "blt222be844e75a1fca332e39";
-        //String SyncToken = "blt01ea4a23a76c1062adfec9";
-
-        //STAG 
-        //String PaginationToken = "blt222be844e75a1fca332e39";
-        //String SyncToken = "blt37f6aa8e41cbb327c6c6d3";
-
-
-        // //PROD
-        String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
-        String SyncToken = "blt08854bd48e43a740951809";
         [Fact]
         public async Task SyncInit()
         {
@@ -59,7 +46,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncContentType()
         {
 
-            SyncStack result = await client.SyncRecursive(ContentTypeUid: "session");
+            SyncStack result = await client.SyncRecursive(ContentTypeUid: "source");
 
             if (result == null)
             {
@@ -89,7 +76,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithContentType()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, ContentTypeUid: "session");
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, ContentTypeUid: "source");
 
             if (result == null)
             {
@@ -115,37 +102,5 @@ namespace Contentstack.Core.Tests
                 Assert.True(true);
             }
         }
-
-        // [Fact]
-        // public async Task SyncPaginationToken()
-        // {
-
-        //     SyncStack result = await client.SyncPaginationToken(PaginationToken);
-
-        //     if (result == null)
-        //     {
-        //         Assert.False(true, "Entry.Fetch is not match with expected result.");
-        //     }
-        //     else
-        //     {
-        //         Assert.True(true);
-        //     }
-        // }
-
-        // [Fact]
-        // public async Task SyncToketest()
-        // {
-
-        //     SyncStack result = await client.SyncToken(SyncToken);
-
-        //     if (result == null)
-        //     {
-        //         Assert.False(true, "Entry.Fetch is not match with expected result.");
-        //     }
-        //     else
-        //     {
-        //         Assert.True(true);
-        //     }
-        // }
     }
 }
