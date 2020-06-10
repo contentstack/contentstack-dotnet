@@ -12,13 +12,21 @@ namespace Contentstack.Core.Tests
 {
     public class AssetTest
     {
-        string uid = "blt9b96cb4720147bc1";
-        // string uid = "blt649cfadb08b577db";
+
         ContentstackClient client = StackConfig.GetStack();
+
+        public async Task<string> FetchAssetUID()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            Assert.True(assets.Count() > 0);
+            return assets.First<Asset>().Uid;
+        }
 
         [Fact]
         public async Task FetchAssetByUid()
         {
+            string uid = await FetchAssetUID();
             Asset asset = client.Asset(uid);
             await asset.Fetch().ContinueWith((t) =>
             {
