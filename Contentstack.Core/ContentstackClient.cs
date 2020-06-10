@@ -266,23 +266,8 @@ namespace Contentstack.Core
                 {
                     headerAll.Add(header.Key, (String)header.Value);
                 }
-
-                if (headers.ContainsKey("environment"))
-                {
-                    UrlQueries.Add("environment", headers["environment"]);
-                    //Url = Url + "?environment=" + headers["environment"];
-                }
-                else if (headers.ContainsKey("environment_uid"))
-                {
-                    UrlQueries.Add("environment_uid", headers["environment_uid"]);
-                    //Url = Url + "?environment_uid=" + headers["environment_uid"];
-                }
-                else
-                {
-
-                    mainJson.Add("environment", this.config.Environment);
-                }
             }
+            mainJson.Add("environment", this.config.Environment);
 
             foreach (var kvp in UrlQueries)
             {
@@ -431,33 +416,8 @@ namespace Contentstack.Core
         /// </example>
         public string GetEnvironment()
         {
-            return _LocalHeaders != null & _LocalHeaders.ContainsKey("environment") ? _LocalHeaders["environment"].ToString() : (_LocalHeaders != null & _LocalHeaders.ContainsKey("environment_uid")) ? _LocalHeaders["environment_uid"].ToString() : null;
+            return config.Environment;
         }
-
-        ///// <summary>
-        ///// Get whether environment or environment uid.
-        ///// </summary>
-        ///// <returns>true if environment id is present</returns>
-        ///// <example>
-        ///// <code>
-        /////     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        /////     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        /////     Stack stack = Contentstack.Stack(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        /////     bool isEnvironmentUid = stack.IsEnvironmentUid();
-        ///// </code>
-        ///// </example>
-        //public bool IsEnvironmentUid()
-        //{
-        //    if (_LocalHeaders != null & _LocalHeaders.ContainsKey("environment"))
-        //    {
-        //        return false;
-        //    }
-        //    else if (_LocalHeaders != null & _LocalHeaders.ContainsKey("environment_uid"))
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
 
         /// <summary>
         /// Remove header key.
