@@ -83,4 +83,4 @@ Localization support for Query and Entry is added.
 ### Version: 1.0.0 
 #### Date: Jun-1-2018 
 
-- Introduce ContentStack SDK for DOTNET.
+- Introduce Contentstack SDK for DOTNET.
