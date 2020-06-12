@@ -7,40 +7,44 @@ namespace Contentstack.Core.Internals
     public enum SyncType
     {
         /// <summary>
-        /// Every type of item.
+        /// Only published entries and assets
         /// </summary>
-        All,
+        Default,
 
         /// <summary>
-        /// Only Asset Published.
+        /// Only published assets.
         /// </summary>
-        asset_published,
+        AssetPublished,
 
         /// <summary>
-        /// Only Entry Published.
+        /// Only published entries.
         /// </summary>
-        entry_published,
+        EntryPublished,
 
         /// <summary>
-        /// Only Asset Unpublished.
+        /// Only unpublished assets.
         /// </summary>
-        asset_unpublished,
+        AssetUnpublished,
 
         /// <summary>
-        /// Only Asset Deleted.
+        /// Only unpublished entries.
         /// </summary>
-        asset_deleted,
+        EntryUnpublished,
 
         /// <summary>
-        /// Only Entry Deleted.
+        /// Only deleted assets.
         /// </summary>
-        entry_deleted,
+        AssetDeleted,
 
         /// <summary>
-        /// Only Deleted Content Type.
+        /// Only deleted entries.
         /// </summary>
-        content_type_deleted
+        EntryDeleted,
 
+        /// <summary>
+        /// Only deleted Content-Types entries.
+        /// </summary>
+        ContentTypeDeleted
     }
 
 }

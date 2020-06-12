@@ -478,7 +478,7 @@ namespace Contentstack.Core
         ///     stack.SyncRecursiveLanguage(&quot;SyncType&quot;, &quot;Locale&quot;);
         /// </code>
         /// </example>
-        public async Task<SyncStack> SyncRecursive(String Locale = null, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        public async Task<SyncStack> SyncRecursive(String Locale = null, SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
             SyncStack syncStack = await SyncLanguage(Locale: Locale, SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
             syncStack = await SyncPageinationRecursive(syncStack);
@@ -528,27 +528,26 @@ namespace Contentstack.Core
 
         private async Task<SyncStack> SyncPageinationRecursive(SyncStack syncStack)
         {
-            while (syncStack.pagination_token != null)
+            while (syncStack.PaginationToken != null)
             {
-                SyncStack newSyncStack = await SyncPaginationToken(syncStack.pagination_token);
-                syncStack.items = syncStack.items.Concat(newSyncStack.items);
-                syncStack.pagination_token = newSyncStack.pagination_token;
-                syncStack.skip = newSyncStack.skip;
-                syncStack.total_count = newSyncStack.total_count;
-                syncStack.sync_token = newSyncStack.sync_token;
+                SyncStack newSyncStack = await SyncPaginationToken(syncStack.PaginationToken);
+                syncStack.Items = syncStack.Items.Concat(newSyncStack.Items);
+                syncStack.PaginationToken = newSyncStack.PaginationToken;
+                syncStack.TotalCount = newSyncStack.TotalCount;
+                syncStack.SyncToken = newSyncStack.SyncToken;
             }
             return syncStack;
         }
 
-        private async Task<SyncStack> Sync(SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        private async Task<SyncStack> Sync(SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
-            return await GetResultAsync(Init: "true", ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
+            return await GetResultAsync(Init: "true", SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
         }
 
 
-        private async Task<SyncStack> SyncLanguage(String Locale, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
+        private async Task<SyncStack> SyncLanguage(String Locale, SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
-            return await GetResultAsync(Init: "true", ContentTypeUid: ContentTypeUid, StartFrom: StartFrom, Locale: Locale);
+            return await GetResultAsync(Init: "true", SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom, Locale: Locale);
         }
 
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
@@ -599,7 +598,7 @@ namespace Contentstack.Core
         }
 
 
-        private async Task<SyncStack> GetResultAsync(string Init = "false", string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Locale = null)
+        private async Task<SyncStack> GetResultAsync(string Init = "false", SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Locale = null)
         {
             //mainJson = null;
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
@@ -611,7 +610,7 @@ namespace Contentstack.Core
             if (StartFrom != null)
             {
                 DateTime startFrom = StartFrom ?? DateTime.MinValue;
-                mainJson.Add("start_from", startFrom.ToString("yyyy-MM-dd"));
+                mainJson.Add("start_from", startFrom.ToString("yyyy-MM-ddTHH\\:mm\\:ss.sssZ"));
             }
             if (SyncToken != null)
             {
@@ -628,6 +627,32 @@ namespace Contentstack.Core
             if (Locale != null)
             {
                 mainJson.Add("locale", Locale);
+            }
+            switch (SyncType)
+            {
+                case SyncType.EntryDeleted:
+                    mainJson.Add("type", "entry_deleted");
+                    break;
+                case SyncType.EntryPublished:
+                    mainJson.Add("type", "entry_published");
+                    break;
+                case SyncType.EntryUnpublished:
+                    mainJson.Add("type", "entry_unpublished");
+                    break;
+                case SyncType.AssetDeleted:
+                    mainJson.Add("type", "asset_deleted");
+                    break;
+                case SyncType.AssetPublished:
+                    mainJson.Add("type", "asset_published");
+                    break;
+                case SyncType.AssetUnpublished:
+                    mainJson.Add("type", "asset_unpublished");
+                    break;
+                case SyncType.ContentTypeDeleted:
+                    mainJson.Add("type", "content_type_deleted");
+                    break;
+                default:
+                    break;
             }
             try
             {

@@ -31,7 +31,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncSyncType()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.asset_published);
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.AssetPublished);
 
             if (result == null)
             {
@@ -76,7 +76,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithContentType()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, ContentTypeUid: "source");
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.EntryPublished, ContentTypeUid: "source");
 
             if (result == null)
             {
@@ -91,7 +91,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithStartFrom()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, StartFrom:DateTime.Now);
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.EntryPublished, StartFrom:DateTime.Now);
 
             if (result == null)
             {
