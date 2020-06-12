@@ -44,7 +44,7 @@
     <None Remove="appsetting.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ContentStack.Core\Contentstack.Core.csproj" />
+    <ProjectReference Include="..\Contentstack.Core\Contentstack.Core.csproj" />
     <ProjectReference Include="..\Contentstack.AspNetCore\Contentstack.AspNetCore.csproj" />
   </ItemGroup>
   <ItemGroup>
