@@ -1,4 +1,4 @@
-﻿[![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
+[![Contentstack](https://www.contentstack.com/docs/static/images/contentstack.png)](https://www.contentstack.com/)
 # Contentstack dotnet
 
 .NET SDK for Contentstack's Content Delivery API
@@ -55,8 +55,8 @@ Once you have initialized the SDK, you can start getting content in your app.
 
 To retrieve a single entry from a content type, use the code snippet given below:
 ``` cs
-Entry entry = client.ContentType("blog").Entry("blta464e9fbd048668c");
-entry.Fetch<Blog>().ContinueWith((t) => { 
+Entry entry = client.ContentType("product").Entry("blta464e9fbd048668c");
+entry.Fetch<Product>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
         Console.WriteLine("entry:" + t.Result);  
     } 
@@ -68,13 +68,14 @@ entry.Fetch<Blog>().ContinueWith((t) => {
 To retrieve multiple entries of a particular content type, use the code snippet given below:
 
 ``` cs
-Query query = client.ContentType("blog").Query(); 
+Query query = client.ContentType("product").Query(); 
 query.Where("title", "welcome"); 
 query.IncludeSchema(); 
 query.IncludeCount(); 
-query.Find<Blog>().ContinueWith((t) => { 
+query.ToJSON(); 
+query.Find<Product>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-         ContentstackCollection<Blog> result = t.Result; 
+         ContentstackCollection<Product> result = t.Result; 
          Console.WriteLine("result" + result.items); 
     } 
 });

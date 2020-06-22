@@ -9,21 +9,8 @@ namespace Contentstack.Core.Tests
 {
     public class SyncStackTest
     {
-        ContentstackClient client = StackConfig.GetSyncStack();
+        ContentstackClient client = StackConfig.GetStack();
 
-
-        //EU
-        //String PaginationToken = "blt222be844e75a1fca332e39";
-        //String SyncToken = "***REMOVED***";
-
-        //STAG 
-        //String PaginationToken = "blt222be844e75a1fca332e39";
-        //String SyncToken = "***REMOVED***";
-
-
-        // //PROD
-        String PaginationToken = "blt99c1e34e65f6cc0fd1d82b";
-        String SyncToken = "***REMOVED***";
         [Fact]
         public async Task SyncInit()
         {
@@ -44,7 +31,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncSyncType()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.asset_published);
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.AssetPublished);
 
             if (result == null)
             {
@@ -59,7 +46,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncContentType()
         {
 
-            SyncStack result = await client.SyncRecursive(ContentTypeUid: "session");
+            SyncStack result = await client.SyncRecursive(ContentTypeUid: "source");
 
             if (result == null)
             {
@@ -89,7 +76,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithContentType()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, ContentTypeUid: "session");
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.EntryPublished, ContentTypeUid: "source");
 
             if (result == null)
             {
@@ -104,7 +91,7 @@ namespace Contentstack.Core.Tests
         public async Task SyncTypeWithStartFrom()
         {
 
-            SyncStack result = await client.SyncRecursive(SyncType: SyncType.entry_published, StartFrom:DateTime.Now);
+            SyncStack result = await client.SyncRecursive(SyncType: SyncType.EntryPublished, StartFrom:DateTime.Now);
 
             if (result == null)
             {
@@ -115,37 +102,5 @@ namespace Contentstack.Core.Tests
                 Assert.True(true);
             }
         }
-
-        // [Fact]
-        // public async Task SyncPaginationToken()
-        // {
-
-        //     SyncStack result = await client.SyncPaginationToken(PaginationToken);
-
-        //     if (result == null)
-        //     {
-        //         Assert.False(true, "Entry.Fetch is not match with expected result.");
-        //     }
-        //     else
-        //     {
-        //         Assert.True(true);
-        //     }
-        // }
-
-        // [Fact]
-        // public async Task SyncToketest()
-        // {
-
-        //     SyncStack result = await client.SyncToken(SyncToken);
-
-        //     if (result == null)
-        //     {
-        //         Assert.False(true, "Entry.Fetch is not match with expected result.");
-        //     }
-        //     else
-        //     {
-        //         Assert.True(true);
-        //     }
-        // }
     }
 }
