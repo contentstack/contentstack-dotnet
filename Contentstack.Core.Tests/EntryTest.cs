@@ -15,20 +15,37 @@ namespace Contentstack.Core.Tests
 
         ////PROD STAG
         String source = "source";
-        String singelEntryFetchUID = "blt1f94e478501bba46";
-        string htmlSource = "blt2f0dd6a81f7f40e7";
+        String singelEntryFetchUID = "";
+        string htmlSource = "";
         String referenceFieldUID = "reference";
         //EU
         //String source = "source";
         //String singelEntryFetchUID = "bltf4268538a14fc5e1";
         //string htmlSource = "blt7c4197d43c1156ba";
         //String referenceFieldUID = "reference";
+        public async Task<string> GetUID(string title)
+        {
+            Query query = client.ContentType(source).Query();
+            var result = await query.Find<SourceModel>();
+            if (result != null)
+            {
+                foreach (var data in result.Items)
+                {
+                    if (data.Title == title)
+                    {
+                        return data.Uid;
+                    }
+                }
+            }
 
+            return null;
+        }
 
         [Fact]
         public async Task FetchByUid() {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
 
             await sourceEntry.Fetch<Entry>().ContinueWith((t) =>
              {
@@ -47,7 +64,9 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task IncludeReference() {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             sourceEntry.IncludeReference(referenceFieldUID);
             var result = await sourceEntry.Fetch<SourceModelIncludeRef>();
             if (result == null) {
@@ -68,7 +87,10 @@ namespace Contentstack.Core.Tests
         public async Task IncludeReferenceArray()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             sourceEntry.IncludeReference(new string[] {referenceFieldUID,"other_reference"});
             var result = await sourceEntry.Fetch<SourceModelIncludeRefAndOther>();
             if (result == null)
@@ -90,7 +112,10 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Only() {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             sourceEntry.Only(new string[] { "title", "number" });
             SourceModel result = await sourceEntry.Fetch<SourceModel>();
             if (result == null) {
@@ -108,7 +133,10 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task Except() {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             sourceEntry.Except(new string[] { "title", "number" });
             var result = await sourceEntry.Fetch<SourceModel>();
             if (result == null)
@@ -129,7 +157,10 @@ namespace Contentstack.Core.Tests
         public async Task GetCreateAt()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             var result = await sourceEntry.Fetch<SourceModel>();
             var Created_at = result.Created_at;
             if (result == null)
@@ -147,7 +178,10 @@ namespace Contentstack.Core.Tests
         public async Task GetUpdateAt()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             var result = await sourceEntry.Fetch<SourceModel>();
             var updated_at = result.updated_at;
             if (result == null)
@@ -164,7 +198,10 @@ namespace Contentstack.Core.Tests
         public async Task GetCreatedBy()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             var result = await sourceEntry.Fetch<SourceModel>();
             var created_by = result.created_by;
             if (created_by == null && created_by.Length == 0)
@@ -182,7 +219,10 @@ namespace Contentstack.Core.Tests
         public async Task GetUpdatedBy()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             var result = await sourceEntry.Fetch<SourceModel>();
             var Updated_by = result.Updated_by;
             if (Updated_by == null && Updated_by.Length == 0)
@@ -199,7 +239,10 @@ namespace Contentstack.Core.Tests
         public async Task GetTags()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(singelEntryFetchUID);
+
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             var result = await sourceEntry.Fetch<SourceModel>();
             var Tags = result.Tags;
             if (Tags == null && Tags.Length == 0)
@@ -216,7 +259,10 @@ namespace Contentstack.Core.Tests
         public async Task GetHTMLText()
         {
             ContentType contenttype = client.ContentType(source);
-            Entry sourceEntry = contenttype.Entry(htmlSource);
+
+            string uid = await GetUID("source");
+            Entry sourceEntry = contenttype.Entry(uid);
+
             var result = await sourceEntry.Fetch<SourceModel>();
 
 
