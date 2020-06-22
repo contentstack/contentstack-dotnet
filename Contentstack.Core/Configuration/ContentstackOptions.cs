@@ -12,33 +12,33 @@ namespace Contentstack.Core.Configuration
     public class ContentstackOptions
     {
         /// <summary>
-        /// The api key used when communicating with the ContentStack API.
+        /// The api key used when communicating with the Contentstack API.
         /// </summary>
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// The access token used when communicating with the ContentStack API.
+        /// The access token used when communicating with the Contentstack API.
         /// </summary>
         public string AccessToken { get; set; }
 
         /// <summary>
-        /// The environment used when communicating with the ContentStack API.
+        /// The environment used when communicating with the Contentstack API.
         /// </summary>
         public string Environment { get; set; }
 
         /// <summary>
-        /// The Host used to set host url for the ContentStack API.
+        /// The Host used to set host url for the Contentstack API.
         /// </summary>
         public string Host { get; set; }
 
         /// <summary>
-        /// The Region used to set region for the ContentStack API.
+        /// The Region used to set region for the Contentstack API.
         /// </summary>
         [TypeConverter(typeof(ContentstackRegionConverter))]
         public ContentstackRegion Region { get; set; } = ContentstackRegion.US;
 
         /// <summary>
-        /// The Version number for the ContentStack API.
+        /// The Version number for the Contentstack API.
         /// </summary>
         public string Version { get; set; }
     }
