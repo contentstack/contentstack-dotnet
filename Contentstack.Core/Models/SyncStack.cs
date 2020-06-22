@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Contentstack.Core.Models
 {
@@ -11,26 +12,21 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Readonly property contains all the Contents
         /// </summary>
-        public IEnumerable<dynamic> items { get; set; }
-        /// <summary>
-        /// Readonly property to check skip count
-        /// </summary>
-        public int skip { get; set; }
-        /// <summary>
-        /// Readonly property to check limit
-        /// </summary>
-        public int limit { get; set; }
+        public IEnumerable<dynamic> Items { get; set; }
         /// <summary>
         /// Readonly property to check totalCount
         /// </summary>
-        public int total_count { get; set; }
+        [JsonProperty("total_count")]
+        public int TotalCount { get; set; }
         /// <summary>
         /// Readonly property to delta sync.
         /// </summary>
-        public string sync_token { get; set; }
+        [JsonProperty("sync_token")]
+        public string SyncToken { get; set; }
         /// <summary>
         /// Readonly property for paginating sync
         /// </summary>
-        public string pagination_token { get; set;}
+        [JsonProperty("pagination_token")]
+        public string PaginationToken { get; set;}
     }
 }
