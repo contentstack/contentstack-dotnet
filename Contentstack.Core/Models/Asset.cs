@@ -26,7 +26,7 @@ namespace Contentstack.Core.Models
         {
             get
             {
-                Config config = this.StackInstance.config;
+                Config config = this.StackInstance.Config;
                 return String.Format("{0}/assets/{1}", config.BaseUrl, this.Uid);
             }
         }
@@ -238,7 +238,7 @@ namespace Contentstack.Core.Models
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("environment", this.StackInstance.config.Environment);
+            mainJson.Add("environment", this.StackInstance.Config.Environment);
 
             foreach (var kvp in UrlQueries)
             {
