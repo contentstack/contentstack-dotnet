@@ -38,7 +38,7 @@ namespace Contentstack.Core
          {
             get
             {
-                Config config = this.config;
+                Config config = this.Config;
                 return String.Format("{0}/stacks/sync",
                                      config.BaseUrl);
             }
@@ -48,7 +48,7 @@ namespace Contentstack.Core
         private string _Url
         {
          get { 
-                return String.Format("{0}/content_types/", config.BaseUrl);
+                return String.Format("{0}/content_types/", this.Config.BaseUrl);
             }
         }
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
@@ -140,7 +140,7 @@ namespace Contentstack.Core
 
         internal ContentstackConstants _Constants { get; set; }
         internal Dictionary<string, object> _LocalHeaders = new Dictionary<string, object>();
-        internal Config config;
+        internal Config Config;
         #endregion
 
         #region Private Constructor
@@ -213,7 +213,7 @@ namespace Contentstack.Core
         #region Internal Functions
         internal void SetConfig(Config cnfig)
         {
-            this.config = cnfig;
+            this.Config = cnfig;
 
         }
 
@@ -267,7 +267,7 @@ namespace Contentstack.Core
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("environment", this.config.Environment);
+            mainJson.Add("environment", this.Config.Environment);
 
             foreach (var kvp in UrlQueries)
             {
@@ -416,7 +416,7 @@ namespace Contentstack.Core
         /// </example>
         public string GetEnvironment()
         {
-            return config.Environment;
+            return this.Config.Environment;
         }
 
         /// <summary>
@@ -478,7 +478,7 @@ namespace Contentstack.Core
         ///     stack.SyncRecursiveLanguage(&quot;SyncType&quot;, &quot;Locale&quot;);
         /// </code>
         /// </example>
-        public async Task<SyncStack> SyncRecursive(String Locale = null, SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null)
+        public async Task<SyncStack> SyncRecursive(String Locale = null, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
             SyncStack syncStack = await SyncLanguage(Locale: Locale, SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
             syncStack = await SyncPageinationRecursive(syncStack);
@@ -539,13 +539,13 @@ namespace Contentstack.Core
             return syncStack;
         }
 
-        private async Task<SyncStack> Sync(SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null)
+        private async Task<SyncStack> Sync(SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
             return await GetResultAsync(Init: "true", SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom);
         }
 
 
-        private async Task<SyncStack> SyncLanguage(String Locale, SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null)
+        private async Task<SyncStack> SyncLanguage(String Locale, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
         {
             return await GetResultAsync(Init: "true", SyncType: SyncType, ContentTypeUid: ContentTypeUid, StartFrom: StartFrom, Locale: Locale);
         }
@@ -598,14 +598,14 @@ namespace Contentstack.Core
         }
 
 
-        private async Task<SyncStack> GetResultAsync(string Init = "false", SyncType SyncType = SyncType.Default, string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Locale = null)
+        private async Task<SyncStack> GetResultAsync(string Init = "false", SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null, string SyncToken = null, string PaginationToken = null, string Locale = null)
         {
             //mainJson = null;
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
             if (Init != "false")
             {
                 mainJson.Add("init", "true");
-                mainJson.Add("environment", config.Environment);
+                mainJson.Add("environment", this.Config.Environment);
             }
             if (StartFrom != null)
             {
