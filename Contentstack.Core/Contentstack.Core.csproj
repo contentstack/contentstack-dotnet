@@ -8,10 +8,9 @@
     <PackageVersion>2.3.0</PackageVersion>
     <Owners>Contentstack</Owners>
     <PackageReleaseNotes>Get Global fields added.</PackageReleaseNotes>
-    <Copyright>Copyright © 2012-2019 Contentstack. All Rights Reserved
-</Copyright>
+    <Copyright>Copyright © 2012-2020 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
-    <PackageTags>v2.2.1</PackageTags>
+    <PackageTags>v2.3.0</PackageTags>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/contentstack/contentstack-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     <ReleaseVersion>2.3.0</ReleaseVersion>
