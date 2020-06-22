@@ -40,7 +40,7 @@ namespace Contentstack.Core.Models
         {
             get
             {
-                Config config = this.StackInstance.config;
+                Config config = this.StackInstance.Config;
                 return String.Format("{0}/content_types/{1}", config.BaseUrl,this.ContentTypeId);
              }
         }
@@ -157,7 +157,7 @@ namespace Contentstack.Core.Models
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("environment", this.StackInstance.config.Environment);
+            mainJson.Add("environment", this.StackInstance.Config.Environment);
             foreach (var kvp in UrlQueries)
             {
                 mainJson.Add(kvp.Key, kvp.Value);

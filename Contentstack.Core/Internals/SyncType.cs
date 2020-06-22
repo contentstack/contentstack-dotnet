@@ -9,7 +9,7 @@ namespace Contentstack.Core.Internals
         /// <summary>
         /// Only published entries and assets
         /// </summary>
-        Default,
+        All,
 
         /// <summary>
         /// Only published assets.

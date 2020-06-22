@@ -1,3 +1,11 @@
+### Version: 2.3.0
+#### Date: Jun-22-2020
+
+##### Update API:
+ - GetEnvironment issue resolved
+ - GetDeleted at Method added
+ - SyncType issue resolved
+
 ### Version: 2.2.1
 #### Date: Feb-17-2020
 
