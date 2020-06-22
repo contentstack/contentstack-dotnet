@@ -30,7 +30,7 @@ namespace Contentstack.Core.Models
             get
             {
 
-                Config config = this.ContentTypeInstance.StackInstance.config;
+                Config config = this.ContentTypeInstance.StackInstance.Config;
 
                 if (!String.IsNullOrEmpty(this.Uid))
                     return String.Format("{0}/content_types/{1}/entries/{2}", config.BaseUrl, this.ContentTypeInstance.ContentTypeId, this.Uid);
@@ -1265,7 +1265,7 @@ namespace Contentstack.Core.Models
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.config.Environment);
+            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
 
             foreach (var kvp in UrlQueries) {
                 mainJson.Add(kvp.Key, kvp.Value);
