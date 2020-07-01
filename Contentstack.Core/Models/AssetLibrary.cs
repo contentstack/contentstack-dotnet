@@ -12,8 +12,8 @@ namespace Contentstack.Core.Models
 {
     public class AssetLibrary
     {
-        
-      
+
+
         #region Internal Variables
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
@@ -66,7 +66,7 @@ namespace Contentstack.Core.Models
         /// </example>
         public void SortWithKeyAndOrderBy(String key, OrderBy order)
         {
-           if (order == OrderBy.OrderByAscending)
+            if (order == OrderBy.OrderByAscending)
             {
                 UrlQueries.Add("asc", key);
             }
@@ -140,7 +140,8 @@ namespace Contentstack.Core.Models
         ///     entry.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
         /// </code>
         /// </example>
-        public void SetHeaderForKey(String key, String value){
+        public void SetHeaderForKey(String key, String value)
+        {
             if (key != null && value != null)
             {
                 if (this._Headers.ContainsKey(key))
@@ -164,8 +165,9 @@ namespace Contentstack.Core.Models
         /// </example>
         public void RemoveHeader(string key)
         {
-            if (this._Headers.ContainsKey(key)) { 
-             this._Headers.Remove(key);
+            if (this._Headers.ContainsKey(key))
+            {
+                this._Headers.Remove(key);
             }
         }
 
@@ -194,7 +196,7 @@ namespace Contentstack.Core.Models
             }
             try
             {
-                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
                 JObject json = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 var assets = json.SelectToken("$.assets").ToObject<IEnumerable<Asset>>(this.Stack.Serializer);

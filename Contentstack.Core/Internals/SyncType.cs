@@ -4,47 +4,53 @@ namespace Contentstack.Core.Internals
     /// <summary>
     /// The different types of items you can request a sync for.
     /// </summary>
-    public enum SyncType
+    [Flags]
+    public enum SyncType : byte
     {
+        /// <summary>
+        /// This will bring all published entries and published assets
+        /// </summary>
+        Default = 0,
+
         /// <summary>
         /// Only published entries and assets
         /// </summary>
-        All,
+        All = 1,
 
         /// <summary>
         /// Only published assets.
         /// </summary>
-        AssetPublished,
+        AssetPublished = 2,
 
         /// <summary>
         /// Only published entries.
         /// </summary>
-        EntryPublished,
+        EntryPublished = 4,
 
         /// <summary>
         /// Only unpublished assets.
         /// </summary>
-        AssetUnpublished,
+        AssetUnpublished = 8,
 
         /// <summary>
         /// Only unpublished entries.
         /// </summary>
-        EntryUnpublished,
+        EntryUnpublished = 16,
 
         /// <summary>
         /// Only deleted assets.
         /// </summary>
-        AssetDeleted,
+        AssetDeleted = 32,
 
         /// <summary>
         /// Only deleted entries.
         /// </summary>
-        EntryDeleted,
+        EntryDeleted = 64,
 
         /// <summary>
         /// Only deleted Content-Types entries.
         /// </summary>
-        ContentTypeDeleted
+        ContentTypeDeleted = 128,
     }
 
 }

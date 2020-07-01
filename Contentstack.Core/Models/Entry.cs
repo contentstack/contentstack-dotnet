@@ -333,10 +333,7 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
-        ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetContentType();
-        ///     });
+        ///     entry.GetContentType()
         /// </code>
         /// </example>
         public String GetContentType()
@@ -648,7 +645,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["created_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch 
+            catch
             {
                 //CSAppUtils.showLog(TAG, "-----------------getCreateAtDate|" + e);
             }
@@ -810,7 +807,7 @@ namespace Contentstack.Core.Models
                 String value = _ObjectAttributes["deleted_at"].ToString();
                 return ContentstackConvert.ToDateTime(value);
             }
-            catch 
+            catch
             {
                 // CSAppUtils.showLog(TAG, "-----------------GetDeletedAt|" + e);
             }
@@ -882,7 +879,7 @@ namespace Contentstack.Core.Models
         {
 
             JObject assetObject = (JObject)jObject.GetValue(key);
-            var asset = ContentTypeInstance.StackInstance.Asset(); 
+            var asset = ContentTypeInstance.StackInstance.Asset();
             asset.ParseObject(assetObject);
             return asset;
         }
@@ -956,7 +953,7 @@ namespace Contentstack.Core.Models
 
                 }
             }
-            catch 
+            catch
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -990,7 +987,8 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("include[]", referenceField);
                 }
                 return this;
-            } catch  {
+            }
+            catch  {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
 
@@ -1024,7 +1022,7 @@ namespace Contentstack.Core.Models
                 }
                 return this;
             }
-            catch 
+            catch
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1227,7 +1225,7 @@ namespace Contentstack.Core.Models
                     UrlQueries.Add("only[BASE][]", fieldUid);
                 }
             }
-            catch 
+            catch
             {
                 //CSAppUtils.showLog(TAG, "--include Reference-catch|" + e);
             }
@@ -1267,7 +1265,8 @@ namespace Contentstack.Core.Models
             }
             mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
 
-            foreach (var kvp in UrlQueries) {
+            foreach (var kvp in UrlQueries)
+            {
                 mainJson.Add(kvp.Key, kvp.Value);
             }
 
@@ -1279,10 +1278,15 @@ namespace Contentstack.Core.Models
                     cachePolicy = _CachePolicy;
                 }
 
-                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
-                return obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
+                var serializedObject = obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
+                if (serializedObject.GetType() == typeof(Entry))
+                {
+                    (serializedObject as Entry).ContentTypeInstance = this.ContentTypeInstance;
+                }
+                return serializedObject;
             }
             catch (Exception ex)
             {
@@ -1293,7 +1297,7 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Private Functions
-       
+
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
         {
             Dictionary<string, object> mainHeader = _FormHeaders;
