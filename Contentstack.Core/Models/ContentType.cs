@@ -33,7 +33,7 @@ namespace Contentstack.Core.Models
 
         #region Private Properties
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
-        
+
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
 
         private string _Url
@@ -41,8 +41,8 @@ namespace Contentstack.Core.Models
             get
             {
                 Config config = this.StackInstance.Config;
-                return String.Format("{0}/content_types/{1}", config.BaseUrl,this.ContentTypeId);
-             }
+                return String.Format("{0}/content_types/{1}", config.BaseUrl, this.ContentTypeId);
+            }
         }
         #endregion
 
@@ -51,7 +51,7 @@ namespace Contentstack.Core.Models
         /// 
         /// </summary>
         protected ContentType() { }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -142,7 +142,7 @@ namespace Contentstack.Core.Models
         /// </example>
         /// <param name="param">is dictionary of additional parameter</param>
         /// <returns>The Content-Type Schema Object.</returns>
-        public async Task<JObject>Fetch(Dictionary<string, object> param = null)
+        public async Task<JObject> Fetch(Dictionary<string, object> param = null)
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -162,7 +162,8 @@ namespace Contentstack.Core.Models
             {
                 mainJson.Add(kvp.Key, kvp.Value);
             }
-            if (param != null && param.Count() > 0) { 
+            if (param != null && param.Count() > 0)
+            {
                 foreach (var kvp in param)
                 {
                     mainJson.Add(kvp.Key, kvp.Value);
@@ -170,7 +171,7 @@ namespace Contentstack.Core.Models
             }
             try
             {
-                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.StackInstance.SerializerSettings);
                 JObject contentTypes = (Newtonsoft.Json.Linq.JObject)data["content_type"];
@@ -226,7 +227,7 @@ namespace Contentstack.Core.Models
                 this._Headers.Remove(key);
 
         }
-            
+
         /// <summary>
         /// Represents a Entry. 
         /// Create Entry Instance.
@@ -294,7 +295,7 @@ namespace Contentstack.Core.Models
             {
                 if (mainHeader != null && mainHeader.Count > 0)
                 {
-                    foreach (var entry in  localHeader)
+                    foreach (var entry in localHeader)
                     {
                         String key = entry.Key;
                         classHeaders.Add(key, entry.Value);

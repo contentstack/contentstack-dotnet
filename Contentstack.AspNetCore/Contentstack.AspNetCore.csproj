@@ -26,6 +26,6 @@
     <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2"><PrivateAssets>all</PrivateAssets>
 <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 </PackageReference>
-    <PackageReference Include="contentstack.csharp" Version="2.2.1" />
+    <PackageReference Include="contentstack.csharp" Version="1.0.0" />
   </ItemGroup>
 </Project>
