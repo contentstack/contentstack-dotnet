@@ -22,6 +22,37 @@ namespace Contentstack.Core.Tests
         public double EPSILON { get; private set; }
 
         [Fact]
+        public async Task FetchAllGetContentType()
+        {
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            var result = await query.Find<Entry>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else if (result != null)
+            {
+                bool IsTrue = false;
+                foreach (Entry data in result.Items)
+                {
+                    IsTrue = data.GetContentType() != null;
+                    if (!IsTrue)
+                    {
+                        break;
+                    }
+                }
+                Assert.True(IsTrue);
+                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
+            }
+            else
+            {
+                Assert.False(true, "Result doesn't mathced the count.");
+
+            }
+        }
+
+        [Fact]
         public async Task FetchAll()
         {
             Query query = client.ContentType(source).Query();
