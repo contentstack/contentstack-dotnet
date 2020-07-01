@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Contentstack.Core.Internals
 {
-    internal class HTTPRequestHandler
+    internal class HttpRequestHandler
     {
         public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null) {
 
