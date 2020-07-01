@@ -282,7 +282,7 @@ namespace Contentstack.Core
             }
             try
             {
-                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
@@ -461,7 +461,7 @@ namespace Contentstack.Core
             }
 
         }
-       
+
         /// <summary>
         /// Syncs the recursive language.
         /// </summary>
@@ -628,35 +628,51 @@ namespace Contentstack.Core
             {
                 mainJson.Add("locale", Locale);
             }
-            switch (SyncType)
+            if (SyncType.HasFlag(SyncType.All))
             {
-                case SyncType.EntryDeleted:
-                    mainJson.Add("type", "entry_deleted");
-                    break;
-                case SyncType.EntryPublished:
-                    mainJson.Add("type", "entry_published");
-                    break;
-                case SyncType.EntryUnpublished:
-                    mainJson.Add("type", "entry_unpublished");
-                    break;
-                case SyncType.AssetDeleted:
-                    mainJson.Add("type", "asset_deleted");
-                    break;
-                case SyncType.AssetPublished:
-                    mainJson.Add("type", "asset_published");
-                    break;
-                case SyncType.AssetUnpublished:
-                    mainJson.Add("type", "asset_unpublished");
-                    break;
-                case SyncType.ContentTypeDeleted:
-                    mainJson.Add("type", "content_type_deleted");
-                    break;
-                default:
-                    break;
+
             }
+            if (SyncType.HasFlag(SyncType.All))
+            {
+                mainJson.Add("type", "entry_published,asset_published,entry_unpublished,asset_unpublished,entry_deleted,asset_deleted,content_type_deleted");
+            }
+            else
+            {
+                List<string> Type = new List<string>();
+                if (SyncType.HasFlag(SyncType.EntryDeleted))
+                {
+                    Type.Add("entry_deleted");
+                }
+                if (SyncType.HasFlag(SyncType.EntryPublished))
+                {
+                    Type.Add("entry_published");
+                }
+                if (SyncType.HasFlag(SyncType.EntryUnpublished))
+                {
+                    Type.Add("entry_unpublished");
+                }
+                if (SyncType.HasFlag(SyncType.AssetDeleted))
+                {
+                    Type.Add("asset_deleted");
+                }
+                if (SyncType.HasFlag(SyncType.AssetPublished))
+                {
+                    Type.Add("asset_published");
+                }
+                if (SyncType.HasFlag(SyncType.AssetUnpublished))
+                {
+                    Type.Add("asset_unpublished");
+                }
+                if (SyncType.HasFlag(SyncType.ContentTypeDeleted))
+                {
+                    Type.Add("content_type_deleted");
+                }
+                mainJson.Add("type", String.Join(",", Type.ToArray()));
+            }
+           
             try
             {
-                HTTPRequestHandler requestHandler = new HTTPRequestHandler();
+                HttpRequestHandler requestHandler = new HttpRequestHandler();
                 string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson);
                 SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
                 return stackSyncOutput;
