@@ -58,8 +58,8 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    if (e.Source != null) 
-                    { 
+                    if (e.Source != null)
+                    {
                         Console.WriteLine("IOException source: {0}", e.Source);
                     }
                 }
@@ -79,7 +79,8 @@ namespace Contentstack.Core.Models
                     url = ContentstackConvert.ToString(this["url"]);
                 }
                 return url;
-            }set
+            }
+            set
             {
                 this["url"] = value;
             }
@@ -246,7 +247,7 @@ namespace Contentstack.Core.Models
             }
             try
             {
-                HTTPRequestHandler RequestHandler = new HTTPRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler();
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 return obj.SelectToken("$.asset").ToObject<Asset>(this.StackInstance.Serializer);
@@ -257,7 +258,7 @@ namespace Contentstack.Core.Models
             }
         }
 
-      
+
         #region Private Functions
 
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)

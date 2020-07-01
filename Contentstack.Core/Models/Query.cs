@@ -33,7 +33,7 @@ namespace Contentstack.Core.Models
             {
 
                 Config config = this.ContentTypeInstance.StackInstance.Config;
-              
+
                 return String.Format("{0}/content_types/{1}/entries",
                                      config.BaseUrl,
                                      this.ContentTypeId);
@@ -1667,11 +1667,18 @@ namespace Contentstack.Core.Models
 
             try
             {
-                HTTPRequestHandler requestHandler = new HTTPRequestHandler();
+                HttpRequestHandler requestHandler = new HttpRequestHandler();
                 var outputResult = await requestHandler.ProcessRequest(_Url, headers, mainJson);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 var entries = obj.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
                 var collection = obj.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+                foreach (var entry in entries)
+                {
+                    if (entry.GetType() == typeof(Entry))
+                    {
+                        (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
+                    }
+                }
                 collection.Items = entries;
                 return collection;
             }
