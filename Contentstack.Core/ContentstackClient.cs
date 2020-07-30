@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Collections;
+using System.Reflection;
 
 namespace Contentstack.Core
 {
@@ -35,7 +36,7 @@ namespace Contentstack.Core
 
         internal JsonSerializer Serializer => JsonSerializer.Create(SerializerSettings);
         internal string _SyncUrl
-         {
+        {
             get
             {
                 Config config = this.Config;
@@ -47,7 +48,8 @@ namespace Contentstack.Core
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private string _Url
         {
-         get { 
+            get
+            {
                 return String.Format("{0}/content_types/", this.Config.BaseUrl);
             }
         }
@@ -64,7 +66,7 @@ namespace Contentstack.Core
         ///     var options = new ContentstackOptions()
         ///     {
         ///        ApiKey = &quot;api_key&quot;,
-        ///        AccessToken = &quot;access_token&quot;
+        ///        DeliveryToken = &quot;delivery_token&quot;
         ///        Environment = &quot;environment&quot;
         ///      }
         ///     ContentstackClient stack = new ContentstackClient(options);
@@ -77,7 +79,13 @@ namespace Contentstack.Core
             this.StackApiKey = _options.ApiKey;
             this._LocalHeaders = new Dictionary<string, object>();
             this.SetHeader("api_key", _options.ApiKey);
-            this.SetHeader("access_token", _options.AccessToken);
+            if (_options.AccessToken != null)
+            {
+                this.SetHeader("access_token", _options.AccessToken);
+            } else if (_options.DeliveryToken != null)
+            {
+                this.SetHeader("access_token", _options.DeliveryToken);
+            }
             Config cnfig = new Config();
             cnfig.Environment = _options.Environment;
             if (_options.Host != null)
@@ -95,9 +103,11 @@ namespace Contentstack.Core
             this.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
             this.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             this.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-            SerializerSettings.Converters.Add(new AssetJsonConverter());
-            SerializerSettings.Converters.Add(new EntryJsonConverter());
 
+            foreach (Type t in CSJsonConverterAttribute.GetCustomAttribute(typeof(CSJsonConverterAttribute)))
+            {
+                SerializerSettings.Converters.Add((JsonConverter)Activator.CreateInstance(t));
+            }
         }
 
         public ContentstackClient(ContentstackOptions options) :
@@ -121,16 +131,16 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        public ContentstackClient(string apiKey, string accessToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null) :
+        public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
-            {
-                ApiKey = apiKey,
-                AccessToken = accessToken,
-                Environment = environment,
-                Host = host,
-                Region = region,
-                Version = version
-            }
+        {
+            ApiKey = apiKey,
+            DeliveryToken = deliveryToken,
+            Environment = environment,
+            Host = host,
+            Region = region,
+            Version = version
+        }
         ))
         {
 
@@ -148,12 +158,12 @@ namespace Contentstack.Core
         #endregion
 
         #region Internal Constructor
-        internal static ContentstackError GetContentstackError(Exception ex)
+        internal static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
             string errorMessage = string.Empty;
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            ContentstackError contentstackError = new ContentstackError(ex);
+            ContentstackException contentstackError = new ContentstackException(ex);
             Dictionary<string, object> errors = null;
             //ContentstackError.OtherErrors errors = null;
 
@@ -192,7 +202,7 @@ namespace Contentstack.Core
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackError()
+            contentstackError = new ContentstackException()
             {
                 ErrorCode = errorCode,
                 ErrorMessage = errorMessage,
@@ -669,7 +679,7 @@ namespace Contentstack.Core
                 }
                 mainJson.Add("type", String.Join(",", Type.ToArray()));
             }
-           
+
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler();
@@ -680,7 +690,7 @@ namespace Contentstack.Core
             catch (Exception ex)
             {
                 throw GetContentstackError(ex);
-            }           
+            }
         }
         #endregion
 
