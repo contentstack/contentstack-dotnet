@@ -161,12 +161,12 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Internal Functions
-        internal static ContentstackError GetContentstackError(Exception ex)
+        internal static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
             string errorMessage = string.Empty;
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            ContentstackError contentstackError = new ContentstackError(ex);
+            ContentstackException contentstackError = new ContentstackException(ex);
             Dictionary<string, object> errors = null;
             //ContentstackError.OtherErrors errors = null;
 
@@ -205,7 +205,7 @@ namespace Contentstack.Core.Models
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackError()
+            contentstackError = new ContentstackException()
             {
                 ErrorCode = errorCode,
                 ErrorMessage = errorMessage,
