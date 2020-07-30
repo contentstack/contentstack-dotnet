@@ -8,7 +8,7 @@ namespace Contentstack.Core.Internals
     /// <summary>
     /// The ContentstackError class is abstraction of general exception class.
     /// </summary>
-    public class ContentstackError : Exception
+    public class ContentstackException : Exception
     {
         #region Private Variables
         private string _ErrorMessage = string.Empty;
@@ -65,7 +65,7 @@ namespace Contentstack.Core.Internals
         /// <summary>
         /// The ContentstackError class is abstraction of general exception class.
         /// </summary>
-        public ContentstackError()
+        public ContentstackException()
         {
         }
 
@@ -73,7 +73,7 @@ namespace Contentstack.Core.Internals
         /// The ContentstackError class is abstraction of general exception class.
         /// </summary>
         /// <param name="errorMessage"> Error Message</param>
-        public ContentstackError(string errorMessage)
+        public ContentstackException(string errorMessage)
             : base(errorMessage)
         {
             this.ErrorMessage = errorMessage;
@@ -83,7 +83,7 @@ namespace Contentstack.Core.Internals
         /// The ContentstackError class is abstraction of general exception class.
         /// </summary>
         /// <param name="exception"> Exception</param>
-        public ContentstackError(Exception exception)
+        public ContentstackException(Exception exception)
             : base(exception.Message, exception.InnerException)
         {
             this.ErrorMessage = exception.Message;
