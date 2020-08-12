@@ -88,13 +88,13 @@ These were example of some of the basic queries of the SDK. For advanced queries
 ### Paginating Responses
 In a single instance, the [Get Multiple Entries](https://www.contentstack.com/docs/developers/dot-net/get-started-with-dot-net-sdk/#get-multiple-entries) query will retrieve only the first 100 items of the specified content type. You can paginate and retrieve the rest of the items in batches using the [skip](https://www.contentstack.com/docs/platforms/dot-net/api-reference/api/Contentstack.Core.Models.Query.html#Contentstack_Core_Models_Query_Skip_System_Int32_) and [limit](https://www.contentstack.com/docs/platforms/dot-net/api-reference/api/Contentstack.Core.Models.Query.html#Contentstack_Core_Models_Query_Limit_System_Int32_) parameters in subsequent requests.
 
-```
-Query query = client.ContentType("blog").Query();
+``` cs
+Query query = client.ContentType("product").Query();
 query.Skip(20);
 query.Limit(20); 
-query.Find<Blog>().ContinueWith((t) => { 
+query.Find<Product>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
-         ContentstackCollection<Blog> result = t.Result; 
+         ContentstackCollection<Product> result = t.Result; 
          Console.WriteLine("result" + result); 
     } 
 });
