@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections;
+using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Tests
 {
@@ -40,7 +41,7 @@ namespace Contentstack.Core.Tests
                     Assert.True(result.FileName.Length > 0);
                 }
             });
-       }
+        }
 
         [Fact]
         public async Task FetchAssets()
@@ -87,6 +88,94 @@ namespace Contentstack.Core.Tests
             {
                 Assert.DoesNotContain(asset.Url, "http");
                 Assert.True(asset.FileName.Length > 0);
+            }
+        }
+
+        [Fact]
+        public async Task FetchAssetCountAsync()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject jObject = await assetLibrary.Count();
+            if (jObject == null)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else if (jObject != null)
+            {
+                Assert.Equal(5, jObject.GetValue("assets"));
+                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
+            }
+            else
+            {
+                Assert.False(true, "Result doesn't mathced the count.");
+            }
+        }
+
+        [Fact]
+        public async Task FetchAssetSkipLimit()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary().Skip(2).Limit(5);
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            if (assets == null)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else if (assets != null)
+            {
+                Assert.Equal(3, assets.Items.Count());
+            }
+            else
+            {
+                Assert.False(true, "Result doesn't mathced the count.");
+            }
+        }
+
+        [Fact]
+        public async Task FetchAssetOnly()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary().Only(new string[] { "url"});
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            if (assets == null)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else if (assets != null)
+            {
+                foreach (Asset asset in assets)
+                {
+                    Assert.DoesNotContain(asset.Url, "http");
+                    Assert.Null(asset.Description);
+                    Assert.Null(asset.FileSize);
+                    Assert.Null(asset.Tags);
+                    Assert.Null(asset.Description);
+                }
+            }
+            else
+            {
+                Assert.False(true, "Result doesn't mathced the count.");
+            }
+        }
+
+        [Fact]
+        public async Task FetchAssetExcept()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary().Except(new string[] { "description" });
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            if (assets == null)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else if (assets != null)
+            {
+                foreach (Asset asset in assets)
+                {
+                    Assert.DoesNotContain(asset.Url, "http");
+                    Assert.Null(asset.Description);
+                }
+            }
+            else
+            {
+                Assert.False(true, "Result doesn't mathced the count.");
             }
         }
     }

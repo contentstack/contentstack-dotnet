@@ -36,7 +36,10 @@ namespace Contentstack.Core.Models
             get;
             set;
         }
-
+        internal void SetStackInstance(ContentstackClient contentstackClient)
+        {
+            this.StackInstance = contentstackClient;
+        }
         public object this[string key]
         {
             get
@@ -299,7 +302,7 @@ namespace Contentstack.Core.Models
                 return _StackHeaders;
             }
         }
-        internal static ContentstackError GetContentstackError(Exception ex)
+        internal static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
             string errorMessage = string.Empty;
@@ -347,7 +350,7 @@ namespace Contentstack.Core.Models
                 }
             }
 
-            ContentstackError contentstackError = new ContentstackError()
+            ContentstackException contentstackError = new ContentstackException()
             {
                 ErrorCode = errorCode,
                 ErrorMessage = errorMessage,
