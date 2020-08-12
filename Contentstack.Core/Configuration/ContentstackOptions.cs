@@ -19,7 +19,14 @@ namespace Contentstack.Core.Configuration
         /// <summary>
         /// The access token used when communicating with the Contentstack API.
         /// </summary>
+        [Obsolete("We have deprecated AccessToken and we will stop supporting it in the near future. " +
+            "We strongly recommend using DeliveryToken.")]
         public string AccessToken { get; set; }
+
+        /// <summary>
+        /// The delivery token used when communicating with the Contentstack API.
+        /// </summary>
+        public string DeliveryToken { get; set; }
 
         /// <summary>
         /// The environment used when communicating with the Contentstack API.
