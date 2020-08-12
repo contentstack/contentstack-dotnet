@@ -74,12 +74,12 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Internal Functions
-        internal static ContentstackError GetContentstackError(Exception ex)
+        internal static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
             string errorMessage = string.Empty;
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            ContentstackError contentstackError = new ContentstackError(ex);
+            ContentstackException contentstackError = new ContentstackException(ex);
             Dictionary<string, object> errors = null;
             //ContentstackError.OtherErrors errors = null;
 
@@ -118,7 +118,7 @@ namespace Contentstack.Core.Models
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackError()
+            contentstackError = new ContentstackException()
             {
                 ErrorCode = errorCode,
                 ErrorMessage = errorMessage,
@@ -1187,36 +1187,6 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// Retrieve only count of entries in result.
-        /// </summary>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
-        /// <example>
-        /// <code>
-        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
-        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     
-        ///     csQuery.Count();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
-        ///         //Your callback code.
-        ///     });
-        /// </code>
-        /// </example>
-        public Query Count()
-        {
-            try
-            {
-                UrlQueries.Add("count", "true");
-            }
-            catch (Exception e)
-            {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
-            }
-            return this;
-        }
-
-        /// <summary>
         /// Retrieve count and data of objects in result.
         /// </summary>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
@@ -1607,9 +1577,40 @@ namespace Contentstack.Core.Models
         /// </example>
         public async Task<ContentstackCollection<T>> Find<T>()
         {
-            return await Exec<T>();
+            return this.parseJObject<T>(await Exec());
 
         }
+
+        /// <summary>
+        /// Retrieve only count of entries in result.
+        /// </summary>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.Count();
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public async Task<JObject> Count()
+        {
+            try
+            {
+                UrlQueries.Add("count", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return await Exec();
+        }
+
 
         /// <summary>
         /// Execute a Query and Caches its result (Optional)
@@ -1637,11 +1638,26 @@ namespace Contentstack.Core.Models
             {
                 UrlQueries.Add("limit", 1);
             }
-            return await Exec<T>();
+            return this.parseJObject<T>(await Exec());
+        }
+
+        private ContentstackCollection<T> parseJObject<T>(JObject jObject)
+        {
+            var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+            var collection = jObject.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+            foreach (var entry in entries)
+            {
+                if (entry.GetType() == typeof(Entry))
+                {
+                    (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
+                }
+            }
+            collection.Items = entries;
+            return collection;
         }
 
         #endregion
-        private async Task<ContentstackCollection<T>> Exec<T>()
+        private async Task<JObject> Exec()
         {
             Dictionary<string, Object> headers = GetHeader(_Headers);
             Dictionary<string, object> headerAll = new Dictionary<string, object>();
@@ -1669,18 +1685,7 @@ namespace Contentstack.Core.Models
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler();
                 var outputResult = await requestHandler.ProcessRequest(_Url, headers, mainJson);
-                JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
-                var entries = obj.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
-                var collection = obj.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
-                foreach (var entry in entries)
-                {
-                    if (entry.GetType() == typeof(Entry))
-                    {
-                        (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
-                    }
-                }
-                collection.Items = entries;
-                return collection;
+                return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
             }
             catch (Exception ex)
             {

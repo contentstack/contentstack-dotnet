@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
+    [CSJsonConverter("EntryJsonConverter")]
     public class EntryJsonConverter : JsonConverter<Entry>
     {
         public override Entry ReadJson(JsonReader reader, Type objectType, Entry existingValue, bool hasExistingValue, JsonSerializer serializer)
