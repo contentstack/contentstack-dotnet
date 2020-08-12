@@ -34,7 +34,7 @@ namespace Contentstack.Core.Tests
             Configuration.ContentstackOptions contentstackOptions = new Configuration.ContentstackOptions
             {
                 ApiKey = apiKey,
-                AccessToken = delivery_token,
+                DeliveryToken = delivery_token,
                 Environment = environment,
                 Host = host,
             };
