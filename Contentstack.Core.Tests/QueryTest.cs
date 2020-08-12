@@ -53,6 +53,29 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
+        public async Task FetchAllCount()
+        {
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            var result = await query.Count();
+            if (result == null)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else if (result != null)
+            {
+
+                Assert.Equal(7, result.GetValue("entries"));
+                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
+            }
+            else
+            {
+                Assert.False(true, "Result doesn't mathced the count.");
+
+            }
+        }
+
+        [Fact]
         public async Task FetchAll()
         {
             Query query = client.ContentType(source).Query();

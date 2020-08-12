@@ -5,15 +5,16 @@
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
-    <PackageVersion>2.3.0</PackageVersion>
+    <PackageVersion>2.4.0</PackageVersion>
     <Owners>Contentstack</Owners>
-    <PackageReleaseNotes>Get Global fields added.</PackageReleaseNotes>
+    <PackageReleaseNotes>Entry model, JsonConverter added
+Bug fixes Environment, Entry content types resolved</PackageReleaseNotes>
     <Copyright>Copyright © 2012-2020 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
-    <PackageTags>v2.3.0</PackageTags>
+    <PackageTags>v2.4.0</PackageTags>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/contentstack/contentstack-dotnet/blob/master/LICENSE</PackageLicenseUrl>
-    <ReleaseVersion>2.3.0</ReleaseVersion>
+    <ReleaseVersion>2.4.0</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -37,6 +38,7 @@
   <ItemGroup>
     <Folder Include="Internals\" />
     <Folder Include="Models\" />
+    <Folder Include="Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".DS_Store" />
