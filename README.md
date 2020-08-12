@@ -82,6 +82,23 @@ query.Find<Product>().ContinueWith((t) => {
 ```
 These were example of some of the basic queries of the SDK. For advanced queries, refer to our API reference documentation by visiting the link given below.
 
+
+ > ***Note***: Currently, the .NET SDK does not support multiple content types referencing in a single query. For more information on how to query entries and assets, refer the Queries section of our Content Delivery API documentation.
+
+### Paginating Responses
+In a single instance, the [Get Multiple Entries](https://www.contentstack.com/docs/developers/dot-net/get-started-with-dot-net-sdk/#get-multiple-entries) query will retrieve only the first 100 items of the specified content type. You can paginate and retrieve the rest of the items in batches using the [skip](https://www.contentstack.com/docs/platforms/dot-net/api-reference/api/Contentstack.Core.Models.Query.html#Contentstack_Core_Models_Query_Skip_System_Int32_) and [limit](https://www.contentstack.com/docs/platforms/dot-net/api-reference/api/Contentstack.Core.Models.Query.html#Contentstack_Core_Models_Query_Limit_System_Int32_) parameters in subsequent requests.
+
+```
+Query query = client.ContentType("blog").Query();
+query.Skip(20);
+query.Limit(20); 
+query.Find<Blog>().ContinueWith((t) => { 
+    if (!t.IsFaulted) { 
+         ContentstackCollection<Blog> result = t.Result; 
+         Console.WriteLine("result" + result); 
+    } 
+});
+```
 ## API Reference
 Go through our .NET SDK API Reference guide to know about the methods that can be used to query your content in Contentstack.
 
