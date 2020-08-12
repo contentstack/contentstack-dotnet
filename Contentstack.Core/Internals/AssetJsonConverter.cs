@@ -1,10 +1,12 @@
 ﻿using System;
+using Contentstack.Core;
 using Contentstack.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
+    [CSJsonConverter("AssetJsonConverter")]
     public class AssetJsonConverter : JsonConverter<Asset>
     {
         public override Asset ReadJson(JsonReader reader, Type objectType, Asset existingValue, bool hasExistingValue, JsonSerializer serializer)
