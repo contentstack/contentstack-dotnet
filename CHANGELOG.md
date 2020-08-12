@@ -1,9 +1,31 @@
+### Version: 2.4.0
+#### Date: Aug-12-2020
+
+##### Update API:
+ - AssetLibrary
+   - Count function added
+   - Limit, Skip functionality added
+   - Only, Except function added
+ - Query 
+   - Count function added
+ - CSJsonConverter 
+   - Added class CSJsonConverter to allow autoloading of converters
+##### Enhancement
+ - Stack
+  - Sync function to allow multiple SyncType
+##### Bug Fixes
+ - Entry
+  - GetContentType exception resolved
+##### Deprecation
+ - Stack
+  - AccessToken deprecated with support to add DeliveryToken
+
 ### Version: 2.3.0
 #### Date: Jun-22-2020
 
 ##### Update API:
  - GetEnvironment issue resolved
- - GetDeleted at Method added
+ - GetDeleted at Method addedAssetLibrary
  - SyncType issue resolved
 
 ### Version: 2.2.1
