@@ -102,7 +102,7 @@ namespace Contentstack.Core.Tests
             }
             else if (jObject != null)
             {
-                Assert.Equal(7, jObject.GetValue("entries"));
+                Assert.Equal(5, jObject.GetValue("assets"));
                 //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
             else
