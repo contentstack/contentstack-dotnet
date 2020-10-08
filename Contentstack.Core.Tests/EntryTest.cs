@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Contentstack.Core.Tests.Models;
+using Newtonsoft.Json.Linq;
+
 namespace Contentstack.Core.Tests
 {
 
@@ -59,6 +61,36 @@ namespace Contentstack.Core.Tests
                      Assert.True(result.Uid == sourceEntry.Uid);
                  }
              });
+        }
+
+        [Fact]
+        public async Task FetchEntryByUIDPublishFallback()
+        {
+            List<string> list = new List<string>();
+            list.Add("en-us");
+            list.Add("ja-jp");
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = await contenttype.Entry(uid)
+                .SetLocale("ja-jp")
+                .IncludeFallback()
+                .Fetch<Entry>();
+
+            Assert.Contains((string)(sourceEntry.Get("publish_details") as JObject).GetValue("locale"), list);
+        }
+
+        [Fact]
+        public async Task FetchEntryByUIDPublishWithoutFallback()
+        {
+            List<string> list = new List<string>();
+            list.Add("ja-jp");
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = await contenttype.Entry(uid)
+                .SetLocale("ja-jp")
+                .Fetch<Entry>();
+
+            Assert.Contains((string)(sourceEntry.Get("publish_details") as JObject).GetValue("locale"), list);
         }
 
         [Fact]
