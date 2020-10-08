@@ -53,6 +53,40 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
+        public async Task FetchEntriesPublishFallback()
+        {
+            List<string> list = new List<string>();
+            list.Add("en-us");
+            list.Add("ja-jp");
+            ContentstackCollection<Entry> entries = await client.ContentType(source).Query()
+                .SetLocale("ja-jp")
+                .IncludeFallback()
+                .Find<Entry>();
+            ;
+            Assert.True(entries.Items.Count() > 0);
+            foreach (Entry entry in entries)
+            {
+                Assert.Contains((string)(entry.Get("publish_details") as JObject).GetValue("locale"), list);
+            }
+        }
+
+        [Fact]
+        public async Task FetchEntriesPublishWithoutFallback()
+        {
+            List<string> list = new List<string>();
+            list.Add("ja-jp");
+            ContentstackCollection<Entry> entries = await client.ContentType(source).Query()
+                .SetLocale("ja-jp")
+                .Find<Entry>();
+            ;
+            Assert.True(entries.Items.Count() > 0);
+            foreach (Entry entry in entries)
+            {
+                Assert.Contains((string)(entry.Get("publish_details") as JObject).GetValue("locale"), list);
+            }
+        }
+
+        [Fact]
         public async Task FetchAllCount()
         {
             Query query = client.ContentType(source).Query();
