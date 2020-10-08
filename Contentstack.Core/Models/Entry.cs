@@ -1099,6 +1099,35 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Include fallback locale publish content, if specified locale content is not publish.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.IncludeFallback();
+        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry IncludeFallback()
+        {
+            try
+            {
+                UrlQueries.Add("include_fallback", true);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Include schemas of all returned objects along with objects themselves.
         /// </summary>
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>

@@ -148,6 +148,28 @@ namespace Contentstack.Core.Models
 
         }
 
+        /// <summary>
+        /// Include fallback locale publish content, if specified locale content is not publish.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     asset.IncludeFallback();
+        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Asset includeFallback()
+        {
+            this.UrlQueries.Add("include_fallback", true);
+            return this;
+        }
+
         public void RemoveHeader(string key)
         {
             if (this._Headers.ContainsKey(key))
@@ -174,6 +196,25 @@ namespace Contentstack.Core.Models
                     Console.WriteLine("IOException source: {0}", e.Source);
             }
             return DateTime.MinValue;
+        }
+
+        public Object Get(String key)
+        {
+            try
+            {
+                if (_ObjectAttributes.ContainsKey(key))
+                {
+                    var value = _ObjectAttributes[key];
+                    return value;
+                }
+                else
+                    return null;
+            }
+            catch
+            {
+                //CSAppUtils.showLog(TAG, "-----------------getUpdateAtDate|" + e);
+            }
+            return null;
         }
 
         public String GetCreatedBy()

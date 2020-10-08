@@ -44,6 +44,40 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
+        public async Task FetchAssetsPublishFallback()
+        {
+            List<string> list = new List<string>();
+            list.Add("en-us");
+            list.Add("ja-jp");
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .SetLocale("ja-jp")
+                .IncludeFallback()
+                .FetchAll();
+            ;
+            Assert.True(assets.Items.Count() > 0);
+            foreach (Asset asset in assets)
+            {
+                Assert.Contains((string)(asset.Get("publish_details") as JObject).GetValue("locale"), list);
+            }
+        }
+
+        [Fact]
+        public async Task FetchAssetsPublishWithoutFallback()
+        {
+            List<string> list = new List<string>();
+            list.Add("ja-jp");
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .SetLocale("ja-jp")
+                .FetchAll();
+            ;
+            Assert.True(assets.Items.Count() > 0);
+            foreach (Asset asset in assets)
+            {
+                Assert.Contains((string)(asset.Get("publish_details") as JObject).GetValue("locale"), list);
+            }
+        }
+
+        [Fact]
         public async Task FetchAssets()
         {
             AssetLibrary assetLibrary = client.AssetLibrary();
@@ -94,7 +128,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task FetchAssetCountAsync()
         {
-            AssetLibrary assetLibrary = client.AssetLibrary();
+            AssetLibrary assetLibrary = client.AssetLibrary().SetLocale("en-us");
             JObject jObject = await assetLibrary.Count();
             if (jObject == null)
             {
@@ -114,7 +148,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task FetchAssetSkipLimit()
         {
-            AssetLibrary assetLibrary = client.AssetLibrary().Skip(2).Limit(5);
+            AssetLibrary assetLibrary = client.AssetLibrary().SetLocale("en-us").Skip(2).Limit(5);
             ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             if (assets == null)
             {

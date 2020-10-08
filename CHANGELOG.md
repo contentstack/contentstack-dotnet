@@ -1,3 +1,18 @@
+### Version: 2.5.0
+#### Date:
+
+##### Update API:
+ - AssetLibrary
+   - IncludeFallback function added
+   - SetLocale function added
+- Asset
+  - IncludeFallback function added
+  - Get function added
+- Entry
+  - IncludeFallback function added
+- Query
+  - IncludeFallback function added
+
 ### Version: 2.4.0
 #### Date: Aug-12-2020
 
