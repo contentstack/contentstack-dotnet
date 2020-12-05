@@ -95,6 +95,62 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Include fallback locale publish content, if specified locale content is not publish.
+        /// </summary>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.IncludeFallback();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public AssetLibrary IncludeFallback()
+        {
+            try
+            {
+                UrlQueries.Add("include_fallback", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the locale.
+        /// </summary>
+        /// <returns>The locale.</returns>
+        /// <param name="Locale">Locale.</param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.SetLocale("en-us");
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public AssetLibrary SetLocale(String Locale)
+        {
+            if (UrlQueries != null && !UrlQueries.ContainsKey("locale"))
+            {
+                UrlQueries.Remove("locale");
+                UrlQueries.Add("locale", Locale);
+            }
+            else
+            {
+                UrlQueries["locale"] = Locale;
+            }
+            return this;
+        }
+
+        /// <summary>
         /// This method also includes the total number of assets returned in the response.
         /// </summary>
         /// <example>
@@ -134,7 +190,7 @@ namespace Contentstack.Core.Models
         /// The number of objects to skip before returning any.
         /// </summary>
         /// <param name="number">No of objects to skip from returned objects.</param>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
@@ -162,7 +218,7 @@ namespace Contentstack.Core.Models
         /// A limit on the number of objects to return.
         /// </summary>
         /// <param name="number">No of objects to limit.</param>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
@@ -190,7 +246,7 @@ namespace Contentstack.Core.Models
         /// Specifies an array of &#39;only&#39; keys in BASE object that would be &#39;included&#39; in the response.
         /// </summary>
         /// <param name="fieldUid">Array of the &#39;only&#39; keys to be included in response.</param>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
@@ -222,7 +278,7 @@ namespace Contentstack.Core.Models
         /// Specifies list of field uids that would be excluded from the response.
         /// </summary>
         /// <param name="fieldUids">field uid  which get excluded from the response.</param>
-        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key

@@ -20,3 +20,4 @@ packages/
 *.nuspec
 *.trx
 */TestResults/
+*/app.config

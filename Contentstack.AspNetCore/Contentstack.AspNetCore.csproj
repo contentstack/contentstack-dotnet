@@ -7,14 +7,17 @@
     <Authors>Contentstack</Authors>
     <Owners>Contentstack</Owners>
     <ReleaseVersion>2.1.1</ReleaseVersion>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>2.5.0</PackageVersion>
     <Description>Main release</Description>
     <Copyright>Copyright (c) 2012-2020 Contentstack (http://app.contentstack.com). All Rights Reserved</Copyright>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
-    <PackageTags>v1.0.0</PackageTags>
-    <ReleaseVersion>2.4.0</ReleaseVersion>
+    <PackageTags>v2.5.0</PackageTags>
+    <ReleaseVersion>2.5.0</ReleaseVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType></DebugType>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Contentstack.Core">
       <HintPath>..\Contentstack.Core\bin\Debug\Contentstack.Core.dll</HintPath>
