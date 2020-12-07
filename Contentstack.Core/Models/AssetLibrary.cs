@@ -17,7 +17,7 @@ namespace Contentstack.Core.Models
         #region Internal Variables
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
-        private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
+        private Dictionary<string, object> _StackHeaders = new Dictionary<strinSortWithKeyAndOrderByg, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
 
         private string _Url
@@ -62,7 +62,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.SortWithKeyAndOrderBy(&quot;custom_key&quot;, &quot;custom_value&quot;);
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public void SortWithKeyAndOrderBy(String key, OrderBy order)
@@ -105,7 +105,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeFallback();
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary IncludeFallback()
@@ -133,7 +133,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.SetLocale("en-us");
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary SetLocale(String Locale)
@@ -160,7 +160,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeCount();
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public void IncludeCount()
@@ -178,7 +178,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeRelativeUrls();
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public void IncludeRelativeUrls()
@@ -198,7 +198,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.Skip(2);
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Skip(int number)
@@ -226,7 +226,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.Limit(20);
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Limit(int number)
@@ -254,7 +254,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.Only(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Only(String[] fieldUid)
@@ -286,7 +286,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.Except(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Except(String[] fieldUids)
@@ -319,7 +319,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.SetHeaderForKey(&quot;custom_header_key&quot;, &quot;custom_header_value&quot;);
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary SetHeaderForKey(String key, String value)
@@ -344,7 +344,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.RemoveHeader(&quot;custom_key&quot;);
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary RemoveHeader(string key)
@@ -366,7 +366,7 @@ namespace Contentstack.Core.Models
         ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </code>
         /// </example>
