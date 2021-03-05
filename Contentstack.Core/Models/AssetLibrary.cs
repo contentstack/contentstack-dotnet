@@ -17,7 +17,7 @@ namespace Contentstack.Core.Models
         #region Internal Variables
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
-        private Dictionary<string, object> _StackHeaders = new Dictionary<strinSortWithKeyAndOrderByg, object>();
+        private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
 
         private string _Url
