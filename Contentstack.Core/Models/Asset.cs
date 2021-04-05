@@ -166,7 +166,7 @@ namespace Contentstack.Core.Models
         /// </example>
         public Asset includeFallback()
         {
-            this.UrlQueries.Add("include_fallback", true);
+            this.UrlQueries.Add("include_fallback", "true");
             return this;
         }
 

@@ -1179,6 +1179,16 @@ namespace Contentstack.Core.Tests
 
 
         [Fact]
+        public async Task IncludeEmbeddedItems()
+        {
+            ContentType contenttype = client.ContentType(source);
+            Query query = contenttype.Query();
+            query.includeEmbeddedItems();
+            var result = await query.Find<SourceModelIncludeRef>();
+
+        }
+
+        [Fact]
         public async Task IncludeReference()
         {
             ContentType contenttype = client.ContentType(source);
