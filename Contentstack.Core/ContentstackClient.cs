@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Collections;
-
+using Contentstack.Utils;
 namespace Contentstack.Core
 {
     /// <summary>

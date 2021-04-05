@@ -1118,7 +1118,36 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                UrlQueries.Add("include_fallback", true);
+                UrlQueries.Add("include_fallback", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Include Embedded Objects (Entries and Assets) along with entry/entries details.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.includeEmbeddedItems();
+        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry includeEmbeddedItems()
+        {
+            try
+            {
+                UrlQueries.Add("include_embedded_items[]", "BASE");
             }
             catch (Exception e)
             {
