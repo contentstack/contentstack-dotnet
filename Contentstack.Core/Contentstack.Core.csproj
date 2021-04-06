@@ -5,15 +5,15 @@
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
-    <PackageVersion>2.5.0</PackageVersion>
+    <PackageVersion>2.6.0</PackageVersion>
     <Owners>Contentstack</Owners>
-    <PackageReleaseNotes>Publish content fallback </PackageReleaseNotes>
+    <PackageReleaseNotes>Embedded Objects fearure added</PackageReleaseNotes>
     <Copyright>Copyright © 2012-2020 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
-    <PackageTags>v2.5.0</PackageTags>
+    <PackageTags>v2.6.0</PackageTags>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/contentstack/contentstack-dotnet/blob/master/LICENSE</PackageLicenseUrl>
-    <ReleaseVersion>2.5.0</ReleaseVersion>
+    <ReleaseVersion>2.6.0</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,6 +29,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.5" />
     <PackageReference Include="Markdig" Version="0.22.0" />
+    <PackageReference Include="contentstack.utils" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Internals\" />
