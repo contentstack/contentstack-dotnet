@@ -1181,11 +1181,25 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task IncludeEmbeddedItems()
         {
-            ContentType contenttype = client.ContentType(source);
+            ContentType contenttype = client.ContentType("rte_embed");
             Query query = contenttype.Query();
             query.includeEmbeddedItems();
             var result = await query.Find<SourceModelIncludeRef>();
-
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.False(true, "Query.Exec is not match with expected result.");
+            }
+            else
+            {
+                if (result.Items != null)
+                {
+                    Assert.True(true);
+                }
+                else
+                {
+                    Assert.False(true, "Doesn't mached the expected count.");
+                }
+            }
         }
 
         [Fact]
