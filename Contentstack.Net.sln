@@ -132,6 +132,6 @@ Global
 		$0.XmlFormattingPolicy = $9
 		$9.scope = application/xml
 		$0.StandardHeader = $10
-		version = 2.6.0
+		version = 2.6.1
 	EndGlobalSection
 EndGlobal
