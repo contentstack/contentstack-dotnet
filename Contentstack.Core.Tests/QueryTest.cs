@@ -1183,7 +1183,7 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             Query query = contenttype.Query();
             query.includeEmbeddedItems();
-            var result = await query.Find<SourceModelIncludeRef>();
+            var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
                 Assert.False(true, "Query.Exec is not match with expected result.");

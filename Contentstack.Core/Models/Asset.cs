@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
+using Contentstack.Utils.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,7 +15,7 @@ namespace Contentstack.Core.Models
     /// <summary>
     /// Assets refer to all the media files (images, videos, PDFs, audio files, and so on) uploaded in your Contentstack repository for future use
     /// </summary>
-    public class Asset
+    public class Asset : IEmbeddedObject
     {
         #region Internal & Private Properties
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
@@ -90,9 +91,15 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// This is Entry Uid of an entry.
+        /// This is Asset Uid of an Asset.
         /// </summary>
         public string Uid { get; set; }
+
+        /// <summary>
+        /// This is Asset type uid.
+        /// </summary>
+        [JsonProperty(propertyName: "_content_type_uid")]
+        public string ContentTypeUid { get; set; }
 
         /// <summary>
         /// The size of the file in bytes.
@@ -105,6 +112,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         public string FileName { get; set; }
 
+        /// <summary>
+        /// This is Asset description.
+        /// </summary>
         public string Description { get; set; }
 
         /// <summary>
