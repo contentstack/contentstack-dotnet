@@ -1,3 +1,12 @@
+### Version: 2.6.0
+#### Date: Apr-05-2021
+
+##### New Feature:
+- Entry
+  - IncludeEmbeddedItems function added
+- Query
+  - IncludeEmbeddedItems function added
+
 ### Version: 2.5.0
 #### Date: Dec-05-2020
 
