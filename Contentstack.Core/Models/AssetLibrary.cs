@@ -368,7 +368,6 @@ namespace Contentstack.Core.Models
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
-        /// </code>
         /// </example>
         public async Task<ContentstackCollection<Asset>> FetchAll()
         {
@@ -412,7 +411,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Stack.Config.Branch);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                
             }

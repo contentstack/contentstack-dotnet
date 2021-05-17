@@ -11,7 +11,7 @@ namespace Contentstack.Core.Internals
 {
     internal class HttpRequestHandler
     {
-        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null) {
+        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, string Branch = null) {
 
             String queryParam = String.Join("&", BodyJson.Select(kvp => {
                 var value = "";
@@ -39,7 +39,10 @@ namespace Contentstack.Core.Internals
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Headers["x-user-agent"]="DOTNET 1.1.0";
-
+            if (Branch != null)
+            {
+                request.Headers["branch"] = Branch;
+            }
             if (Headers != default(IDictionary<string, string>)) {
                 foreach (var header in Headers) {
                     try {

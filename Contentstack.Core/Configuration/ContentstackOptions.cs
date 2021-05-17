@@ -48,6 +48,11 @@ namespace Contentstack.Core.Configuration
         /// The Version number for the Contentstack API.
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// The Branch used to set Branch for the Contentstack API.
+        /// </summary>
+        public string Branch { get; set; }
     }
 
     internal class ContentstackRegionConverter : TypeConverter
