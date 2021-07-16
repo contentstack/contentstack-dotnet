@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections;
 using Newtonsoft.Json.Linq;
-
+using Contentstack.Utils;
 namespace Contentstack.Core.Tests
 {
     public class AssetTest
