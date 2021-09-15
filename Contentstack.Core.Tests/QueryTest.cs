@@ -372,6 +372,10 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task And()
         {
+            //var dict = new Dictionary<string, string>();
+            //dict.Add("hash", "dsdfsdf");
+            //dict.Add("content_type_uid", "source");
+            //client.LivePreviewQuery(dict);
             ContentType contentTypeObj = client.ContentType(source);
             Query query = contentTypeObj.Query();
 

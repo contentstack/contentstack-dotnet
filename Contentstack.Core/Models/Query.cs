@@ -31,13 +31,12 @@ namespace Contentstack.Core.Models
         {
             get
             {
-
                 Config config = this.ContentTypeInstance.StackInstance.Config;
+                string baseURL = config.getBaseUrl(this.ContentTypeInstance.StackInstance.LivePreviewConfig, this.ContentTypeId);
 
                 return String.Format("{0}/content_types/{1}/entries",
-                                     config.BaseUrl,
+                                     baseURL,
                                      this.ContentTypeId);
-
             }
         }
         #endregion
@@ -1728,11 +1727,22 @@ namespace Contentstack.Core.Models
             {
                 foreach (var header in headers)
                 {
+                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig != null && this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId && header.Key == "access_token")
+                    {
+                        continue;
+                    }
                     headerAll.Add(header.Key, (string)header.Value);
                 }
             }
-            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
-
+            if (this.ContentTypeInstance.StackInstance.LivePreviewConfig != null && this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
+            {
+                headerAll["hash"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.Hash ?? "init";
+                headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.Authorization;
+            }
+            else
+            {
+                mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
+            }
             if (QueryValueJson != null && QueryValueJson.Count > 0)
                 mainJson.Add("query", QueryValueJson);
 
@@ -1744,7 +1754,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler();
-                var outputResult = await requestHandler.ProcessRequest(_Url, headers, mainJson);
+                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, null, this.ContentTypeInstance.StackInstance.LivePreviewConfig);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
             }
             catch (Exception ex)

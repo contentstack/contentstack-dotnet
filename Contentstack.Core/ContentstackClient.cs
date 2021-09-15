@@ -43,6 +43,8 @@ namespace Contentstack.Core
                                      config.BaseUrl);
             }
         }
+
+        internal LivePreviewConfig LivePreviewConfig;
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private string _Url
@@ -97,7 +99,7 @@ namespace Contentstack.Core
             }
             cnfig.Region = _options.Region;
             this.SetConfig(cnfig);
-
+            this.LivePreviewConfig = _options.LivePreview;
             this.SerializerSettings.DateParseHandling = DateParseHandling.None;
             this.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
             this.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
@@ -469,6 +471,30 @@ namespace Contentstack.Core
                 this._LocalHeaders.Add(key, value);
             }
 
+        }
+
+        /// <summary>
+        /// To add live preview Query for contentstack preview call
+        /// </summary>
+        /// <param name="query">Query parameter containing hash and content type UID </param>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     stack.LivePreviewQuery(query);
+        /// </code>
+        /// </example>
+        public void LivePreviewQuery(Dictionary<string, string> query)
+        {
+            string contentTypeUID = null;
+            query.TryGetValue("content_type_uid", out contentTypeUID);
+            this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
+
+            string hash = null;
+            query.TryGetValue("hash", out hash);
+            this.LivePreviewConfig.Hash = hash;
+             
         }
 
         /// <summary>

@@ -31,11 +31,11 @@ namespace Contentstack.Core.Models
             {
 
                 Config config = this.ContentTypeInstance.StackInstance.Config;
-
+                string baseURL = config.getBaseUrl(this.ContentTypeInstance.StackInstance.LivePreviewConfig, this.ContentTypeInstance.ContentTypeId);
                 if (!String.IsNullOrEmpty(this.Uid))
-                    return String.Format("{0}/content_types/{1}/entries/{2}", config.BaseUrl, this.ContentTypeInstance.ContentTypeId, this.Uid);
+                    return String.Format("{0}/content_types/{1}/entries/{2}", baseURL, this.ContentTypeInstance.ContentTypeId, this.Uid);
                 else
-                    return String.Format("{0}/content_types/{1}/entries", config.BaseUrl, this.ContentTypeInstance.ContentTypeId);
+                    return String.Format("{0}/content_types/{1}/entries", baseURL, this.ContentTypeInstance.ContentTypeId);
             }
         }
         #endregion
@@ -1318,10 +1318,23 @@ namespace Contentstack.Core.Models
             {
                 foreach (var header in headers)
                 {
+                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
+                    {
+                        continue;
+                    }
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
+            if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
+            {
+                headerAll["hash"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.Hash ?? "init";
+                headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.Authorization;
+            }
+            else 
+            {
+                mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
+            }
+            
 
             foreach (var kvp in UrlQueries)
             {
@@ -1337,7 +1350,7 @@ namespace Contentstack.Core.Models
                 }
 
                 HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, null, this.ContentTypeInstance.StackInstance.LivePreviewConfig);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 var serializedObject = obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
                 if (serializedObject.GetType() == typeof(Entry))

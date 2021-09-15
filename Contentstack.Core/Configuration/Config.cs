@@ -70,6 +70,18 @@ namespace Contentstack.Core.Configuration
 
         #region Internal
 
+        internal string getBaseUrl (LivePreviewConfig livePreviewConfig, string contentTypeUID)
+        {
+            if (livePreviewConfig != null && livePreviewConfig.Enable && livePreviewConfig.ContentTypeUID == contentTypeUID)
+            {
+                return string.Format("{0}://{1}/{2}",
+                                              this.Protocol.Trim('/').Trim('\\'),
+                                              livePreviewConfig.Host.Trim('/').Trim('\\'),
+                                              this.Version.Trim('/').Trim('\\'));
+            }
+            return BaseUrl;
+        }
+
         internal string regionCode()
         {
             if (Region == ContentstackRegion.US) return "";

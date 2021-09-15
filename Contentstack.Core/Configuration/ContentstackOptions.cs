@@ -48,6 +48,11 @@ namespace Contentstack.Core.Configuration
         /// The Version number for the Contentstack API.
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// The Live preview configuration for the Contentstack API.
+        /// </summary>
+        public LivePreviewConfig LivePreview { get; set; }
     }
 
     internal class ContentstackRegionConverter : TypeConverter

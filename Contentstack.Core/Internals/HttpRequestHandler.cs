@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Contentstack.Core.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Contentstack.Core.Internals
 {
     internal class HttpRequestHandler
     {
-        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null) {
+        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, LivePreviewConfig config = null) {
 
             String queryParam = String.Join("&", BodyJson.Select(kvp => {
                 var value = "";
@@ -39,7 +40,7 @@ namespace Contentstack.Core.Internals
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Headers["x-user-agent"]="DOTNET 1.1.0";
-
+            
             if (Headers != default(IDictionary<string, string>)) {
                 foreach (var header in Headers) {
                     try {
