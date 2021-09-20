@@ -1348,6 +1348,36 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Include branch for publish content.
+        /// </summary>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.IncludeBranch();
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query IncludeBranch()
+        {
+            try
+            {
+                UrlQueries.Add("include_branch", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Include Embedded Objects (Entries and Assets) along with entry/entries details.
         /// </summary>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
