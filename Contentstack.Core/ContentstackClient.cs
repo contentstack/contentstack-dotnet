@@ -492,7 +492,7 @@ namespace Contentstack.Core
             this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
 
             string hash = null;
-            query.TryGetValue("hash", out hash);
+            query.TryGetValue("live_preview", out hash);
             this.LivePreviewConfig.Hash = hash;
              
         }
