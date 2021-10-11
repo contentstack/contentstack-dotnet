@@ -1736,8 +1736,8 @@ namespace Contentstack.Core.Models
             }
             if (this.ContentTypeInstance.StackInstance.LivePreviewConfig != null && this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
-                headerAll["hash"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.Hash ?? "init";
-                headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.Authorization;
+                mainJson.Add("live_preview", this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview ?? "init");
+                headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
             }
             else
             {
