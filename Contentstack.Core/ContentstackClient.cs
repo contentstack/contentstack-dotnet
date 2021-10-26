@@ -98,6 +98,7 @@ namespace Contentstack.Core
                 cnfig.Version = _options.Version;
             }
             cnfig.Region = _options.Region;
+            cnfig.Branch = _options.Branch;
             this.SetConfig(cnfig);
             this.LivePreviewConfig = _options.LivePreview;
             this.SerializerSettings.DateParseHandling = DateParseHandling.None;
@@ -258,6 +259,9 @@ namespace Contentstack.Core
         ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
         ///     var param = new Dictionary&lt;string, object&gt;();
         ///     param.Add("include_global_field_schema",true);
+        ///     param.Add("limit", 10);
+        ///     param.Add("skip", 10);
+        ///     param.Add("include_count", "true");
         ///     var result = await stack.GetContentTypes(param);
         /// </code>
         /// </example>
@@ -294,7 +298,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
                 return contentTypes;
@@ -708,7 +712,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler();
-                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson);
+                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch);
                 SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
                 return stackSyncOutput;
             }

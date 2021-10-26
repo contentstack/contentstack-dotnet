@@ -15,6 +15,7 @@ namespace Contentstack.Core.Configuration
         private string _Port;
         private string _Version;
         private string _Environment;
+        private string _Branch;
         #endregion
 
         #region Public Properties
@@ -51,6 +52,12 @@ namespace Contentstack.Core.Configuration
         {
             get { return this._Environment ?? null; }
             set { this._Environment = value; }
+        }
+
+        public string Branch
+        {
+            get { return this._Branch ?? null; }
+            set { this._Branch = value; }
         }
 
         public string BaseUrl

@@ -53,6 +53,11 @@ namespace Contentstack.Core.Configuration
         /// The Live preview configuration for the Contentstack API.
         /// </summary>
         public LivePreviewConfig LivePreview { get; set; }
+
+        /// <summary>
+        /// The Branch used to set Branch for the Contentstack API.
+        /// </summary>
+        public string Branch { get; set; }
     }
 
     internal class ContentstackRegionConverter : TypeConverter

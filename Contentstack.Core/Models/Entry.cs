@@ -1128,6 +1128,35 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Include branch for publish content.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.IncludeBranch();
+        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry IncludeBranch()
+        {
+            try
+            {
+                UrlQueries.Add("include_branch", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Include Embedded Objects (Entries and Assets) along with entry/entries details.
         /// </summary>
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
@@ -1350,7 +1379,7 @@ namespace Contentstack.Core.Models
                 }
 
                 HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, null, this.ContentTypeInstance.StackInstance.LivePreviewConfig);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, config: this.ContentTypeInstance.StackInstance.LivePreviewConfig);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 var serializedObject = obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
                 if (serializedObject.GetType() == typeof(Entry))

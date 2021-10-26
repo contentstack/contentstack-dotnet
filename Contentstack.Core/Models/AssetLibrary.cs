@@ -122,6 +122,33 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Include branch for publish content.
+        /// </summary>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     //&quot;blt5d4sample2633b&quot; is a dummy Stack API key
+        ///     //&quot;blt6d0240b5sample254090d&quot; is dummy access token.
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;blt5d4sample2633b&quot;, &quot;blt6d0240b5sample254090d&quot;, &quot;stag&quot;);
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.IncludeBranch();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public AssetLibrary IncludeBranch()
+        {
+            try
+            {
+                UrlQueries.Add("include_branch", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Sets the locale.
         /// </summary>
         /// <returns>The locale.</returns>
@@ -368,7 +395,6 @@ namespace Contentstack.Core.Models
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
-        /// </code>
         /// </example>
         public async Task<ContentstackCollection<Asset>> FetchAll()
         {
@@ -412,7 +438,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Stack.Config.Branch);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                
             }
