@@ -15,6 +15,7 @@ namespace Contentstack.Core.Configuration
         private string _Port;
         private string _Version;
         private string _Environment;
+        private string _Branch;
         #endregion
 
         #region Public Properties
@@ -53,6 +54,12 @@ namespace Contentstack.Core.Configuration
             set { this._Environment = value; }
         }
 
+        public string Branch
+        {
+            get { return this._Branch ?? null; }
+            set { this._Branch = value; }
+        }
+
         public string BaseUrl
         {
             get
@@ -69,6 +76,18 @@ namespace Contentstack.Core.Configuration
         #endregion
 
         #region Internal
+
+        internal string getBaseUrl (LivePreviewConfig livePreviewConfig, string contentTypeUID)
+        {
+            if (livePreviewConfig != null && livePreviewConfig.Enable && livePreviewConfig.ContentTypeUID == contentTypeUID)
+            {
+                return string.Format("{0}://{1}/{2}",
+                                              this.Protocol.Trim('/').Trim('\\'),
+                                              livePreviewConfig.Host.Trim('/').Trim('\\'),
+                                              this.Version.Trim('/').Trim('\\'));
+            }
+            return BaseUrl;
+        }
 
         internal string regionCode()
         {

@@ -1,3 +1,9 @@
+### Version: 2.7.0
+#### Date: Oct-14-2021
+
+##### New Feature:
+- Live preview feature support added
+
 ### Version: 2.6.0
 #### Date: Apr-05-2021
 

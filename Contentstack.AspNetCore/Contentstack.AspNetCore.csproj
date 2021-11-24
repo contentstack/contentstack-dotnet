@@ -6,13 +6,12 @@
     <PackageId>contentstack.aspnetcore</PackageId>
     <Authors>Contentstack</Authors>
     <Owners>Contentstack</Owners>
-    <ReleaseVersion>2.1.1</ReleaseVersion>
-    <PackageVersion>2.5.0</PackageVersion>
+    <PackageVersion>2.7.0</PackageVersion>
     <Description>Main release</Description>
     <Copyright>Copyright (c) 2012-2020 Contentstack (http://app.contentstack.com). All Rights Reserved</Copyright>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
-    <PackageTags>v2.5.0</PackageTags>
-    <ReleaseVersion>2.6.2</ReleaseVersion>
+    <PackageTags>v2.7.0</PackageTags>
+    <ReleaseVersion>2.7.0</ReleaseVersion>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 

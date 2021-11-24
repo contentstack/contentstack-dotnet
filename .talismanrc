@@ -1,0 +1,3 @@
+fileignoreconfig:
+- filename: Contentstack.Core/Models/Query.cs
+  checksum: 8b1e97322c015212729e59d9feb24cfa265730cc0c4ae8f0e09690e3a55f3566
