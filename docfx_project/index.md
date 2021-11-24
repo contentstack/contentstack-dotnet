@@ -38,7 +38,7 @@ You will need to specify the API key, Access token, and Environment Name of your
 
 ``` cs
 // Initialize the Contentstack 
-ContentstackClient stack = new ContentstackClient("api_key", "access_token", "enviroment_name");
+ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "enviroment_name");
 ```
 
 or:
@@ -48,7 +48,7 @@ or:
 var options = new ContentstackOptions()
 {
     ApiKey = "<api_key>",
-    AccessToken = "<access_token>"
+    DeliveryToken = "<delivery_token>"
     Environment = "<environment>"
 }
 ContentstackClient stack = new ContentstackClient(options);
