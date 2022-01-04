@@ -1294,7 +1294,7 @@ namespace Contentstack.Core.Models
                 }
 
                 HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, config: this.ContentTypeInstance.StackInstance.LivePreviewConfig);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, config: this.ContentTypeInstance.StackInstance.LivePreviewConfig);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 var serializedObject = obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
                 if (serializedObject.GetType() == typeof(Entry))
