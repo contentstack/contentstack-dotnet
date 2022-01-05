@@ -1,3 +1,9 @@
+### Version: 2.7.1
+#### Date: Jan-11-2021
+
+##### Bug fix:
+- Live preview Query issue 
+
 ### Version: 2.7.0
 #### Date: Oct-14-2021
 

@@ -983,20 +983,18 @@ namespace Contentstack.Core.Models
         /// </example>
         public Entry IncludeOnlyReference(string[] keys, string referenceKey)
         {
-            List<string> objectUidForOnly = new List<string>();
-            Dictionary<string, object> onlyValueJson = new Dictionary<string, object>();
             if (keys != null && keys.Length > 0)
             {
-
-                int count = keys.Length;
-                for (int i = 0; i < count; i++)
+                var referenceKeys = new string[] { referenceKey };
+                if (UrlQueries.ContainsKey("include[]") == false)
                 {
-                    objectUidForOnly.Add(keys[i]);
-                }
-                onlyValueJson.Add(referenceKey, objectUidForOnly);
-                UrlQueries.Add("include", new object[] { referenceKey });
-                UrlQueries.Add("only", onlyValueJson);
+                    UrlQueries.Add("", referenceKeys);
 
+                }
+                if (UrlQueries.ContainsKey($"only[{referenceKey}][]") == false)
+                {
+                    UrlQueries.Add($"only[{referenceKey}][]", keys);
+                }
             }
 
             return this;
@@ -1184,22 +1182,20 @@ namespace Contentstack.Core.Models
         /// </example>
         public Entry IncludeExceptReference(string[] keys, string referenceKey)
         {
-            List<string> objectUidForOnly = new List<string>();
-            Dictionary<string, object> onlyValueJson = new Dictionary<string, object>();
+           
             if (keys != null && keys.Length > 0)
             {
-
-                int count = keys.Length;
-                for (int i = 0; i < count; i++)
+                var referenceKeys = new string[] { referenceKey };
+                if (UrlQueries.ContainsKey("include[]") == false)
                 {
-                    objectUidForOnly.Add(keys[i]);
+                    UrlQueries.Add("include[]", referenceKeys);
+
                 }
-                onlyValueJson.Add(referenceKey, objectUidForOnly);
-                UrlQueries.Add("include", new object[] { referenceKey });
-                UrlQueries.Add("except", onlyValueJson);
-
+                if (UrlQueries.ContainsKey($"except[{ referenceKey}][]") == false)
+                {
+                    UrlQueries.Add($"except[{referenceKey}][]", keys);
+                }
             }
-
             return this;
         }
 
