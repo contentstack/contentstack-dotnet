@@ -1216,6 +1216,40 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Specifies an array of only keys that would be included in the response.
+        /// </summary>
+        /// <param name="keys">Array of the only reference keys to be included in response.</param>
+        /// <param name="referenceKey">Key who has reference to some other class object.</param>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.IncludeOnlyReference(new String[]{&quot;name&quot;, &quot;description&quot;}, &quot;referenceUid&quot;);
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query IncludeOnlyReference(string[] keys, string referenceKey)
+        {
+            if (keys != null && keys.Length > 0)
+            {
+                var referenceKeys = new string[] { referenceKey };
+                if (UrlQueries.ContainsKey("include[]") == false)
+                {
+                    UrlQueries.Add("include[]", referenceKeys);
+
+                }
+                if (UrlQueries.ContainsKey($"only[{ referenceKey}][]") == false)
+                {
+                    UrlQueries.Add($"only[{referenceKey}][]", keys);
+                }
+            }
+            return this;
+        }
+        /// <summary>
         /// Specifies list of field uids that would be excluded from the response.
         /// </summary>
         /// <param name="fieldUids">field uid  which get excluded from the response.</param>
@@ -1245,6 +1279,40 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 Console.WriteLine("IOException source: {0}", e.Source);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Specifies an array of except keys that would be excluded in the response.
+        /// </summary>
+        /// <param name="keys">Array of the except reference keys to be excluded in response.</param>
+        /// <param name="referenceKey">Key who has reference to some other class object.</param>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     csQuery.IncludeExceptReference(new String[]{&quot;name&quot;, &quot;description&quot;},&quot;referenceUid&quot;);
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query IncludeExceptReference(string[] keys, string referenceKey)
+        {
+            if (keys != null && keys.Length > 0)
+            {
+                var referenceKeys = new string[] { referenceKey };
+                if (UrlQueries.ContainsKey("include[]") == false)
+                {
+                    UrlQueries.Add("include[]", referenceKeys);
+
+                }
+                if (UrlQueries.ContainsKey($"except[{ referenceKey}][]") == false)
+                {
+                    UrlQueries.Add($"except[{referenceKey}][]", keys);
+                }
             }
             return this;
         }
@@ -1693,7 +1761,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler();
-                var outputResult = await requestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, config: this.ContentTypeInstance.StackInstance.LivePreviewConfig);
+                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, config: this.ContentTypeInstance.StackInstance.LivePreviewConfig);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
             }
             catch (Exception ex)

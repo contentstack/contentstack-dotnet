@@ -1,3 +1,16 @@
+### Version: 2.8.0
+#### Date: Jan-11-2021
+
+##### Bug fix:
+- Live preview Query issue
+##### New Feature: 
+- Entry
+  - IncludeOnlyReference function added
+  - IncludeExceptReference function added
+- Query
+  - IncludeOnlyReference function added
+  - IncludeExceptReference function added
+
 ### Version: 2.7.0
 #### Date: Oct-14-2021
 
