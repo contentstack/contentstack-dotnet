@@ -477,14 +477,18 @@ namespace Contentstack.Core
         /// </example>
         public void LivePreviewQuery(Dictionary<string, string> query)
         {
-            string contentTypeUID = null;
-            query.TryGetValue("content_type_uid", out contentTypeUID);
-            this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
-
-            string hash = null;
-            query.TryGetValue("live_preview", out hash);
-            this.LivePreviewConfig.LivePreview = hash;
-             
+            if (query.Keys.Contains("content_type_uid"))
+            {
+                string contentTypeUID = null;
+                query.TryGetValue("content_type_uid", out contentTypeUID);
+                this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
+            }
+            if (query.Keys.Contains("live_preview"))
+            {
+                string hash = null;
+                query.TryGetValue("live_preview", out hash);
+                this.LivePreviewConfig.LivePreview = hash;
+            }
         }
 
         /// <summary>
