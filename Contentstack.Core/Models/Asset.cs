@@ -316,7 +316,7 @@ namespace Contentstack.Core.Models
             }
             try
             {
-                HttpRequestHandler RequestHandler = new HttpRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler(this.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.StackInstance.Config.Branch);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 return obj.SelectToken("$.asset").ToObject<Asset>(this.StackInstance.Serializer);
