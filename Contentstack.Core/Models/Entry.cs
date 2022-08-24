@@ -1258,7 +1258,9 @@ namespace Contentstack.Core.Models
             {
                 foreach (var header in headers)
                 {
-                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
+                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
+                        && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
+                        && header.Key == "access_token")
                     {
                         continue;
                     }
@@ -1289,8 +1291,8 @@ namespace Contentstack.Core.Models
                     cachePolicy = _CachePolicy;
                 }
 
-                HttpRequestHandler RequestHandler = new HttpRequestHandler();
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, config: this.ContentTypeInstance.StackInstance.LivePreviewConfig);
+                HttpRequestHandler RequestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 var serializedObject = obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
                 if (serializedObject.GetType() == typeof(Entry))
