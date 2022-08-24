@@ -76,15 +76,20 @@ namespace Contentstack.Core.Configuration
         #endregion
 
         #region Internal
+        internal string getLivePreviewUrl(LivePreviewConfig livePreviewConfig)
+        {
+            
+            return string.Format("{0}://{1}/{2}",
+                                            this.Protocol.Trim('/').Trim('\\'),
+                                            livePreviewConfig.Host.Trim('/').Trim('\\'),
+                                            this.Version.Trim('/').Trim('\\'));
+        }
 
         internal string getBaseUrl (LivePreviewConfig livePreviewConfig, string contentTypeUID)
         {
             if (livePreviewConfig != null && livePreviewConfig.Enable && livePreviewConfig.ContentTypeUID == contentTypeUID)
             {
-                return string.Format("{0}://{1}/{2}",
-                                              this.Protocol.Trim('/').Trim('\\'),
-                                              livePreviewConfig.Host.Trim('/').Trim('\\'),
-                                              this.Version.Trim('/').Trim('\\'));
+                return getLivePreviewUrl(livePreviewConfig);
             }
             return BaseUrl;
         }
