@@ -48,7 +48,7 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["x-user-agent"]="contentstack-dotnet/2.8.0";
+            request.Headers["x-user-agent"]="contentstack-dotnet/2.9.0";
             if (Branch != null)
             {
                 request.Headers["branch"] = Branch;
