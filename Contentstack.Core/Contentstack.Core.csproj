@@ -7,7 +7,7 @@
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
     <PackageVersion>2.9.0</PackageVersion>
     <Owners>Contentstack</Owners>
-    <PackageReleaseNotes>Live preview feature support added</PackageReleaseNotes>
+    <PackageReleaseNotes>Reference in entry Live preview support added</PackageReleaseNotes>
     <Copyright>Copyright © 2012-2022 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
     <PackageTags>v2.9.0</PackageTags>
