@@ -303,7 +303,7 @@ namespace Contentstack.Core
             }
             try
             {
-                HttpRequestHandler RequestHandler = new HttpRequestHandler();
+                HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
@@ -312,6 +312,40 @@ namespace Contentstack.Core
             catch (Exception ex)
             {
                 throw GetContentstackError(ex);
+            }
+        }
+
+        private async Task<JObject> GetLivePreviewData()
+        {
+  
+            Dictionary<String, object> headerAll = new Dictionary<string, object>();
+            Dictionary<string, object> mainJson = new Dictionary<string, object>();
+            Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
+            if (headers != null && headers.Count() > 0)
+            {
+                foreach (var header in headers)
+                {
+                    if (this.LivePreviewConfig.Enable == true
+                        && header.Key == "access_token")
+                    {
+                        continue;
+                    }
+                    headerAll.Add(header.Key, (String)header.Value);
+                }
+            }
+            mainJson.Add("live_preview", this.LivePreviewConfig.LivePreview ?? "init");
+            headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
+
+            try
+            {
+                HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
+                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true);
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
+                return (JObject)data["entry"];
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -475,7 +509,7 @@ namespace Contentstack.Core
         ///     stack.LivePreviewQuery(query);
         /// </code>
         /// </example>
-        public void LivePreviewQuery(Dictionary<string, string> query)
+        public async Task LivePreviewQueryAsync(Dictionary<string, string> query)
         {
             if (query.Keys.Contains("content_type_uid"))
             {
@@ -483,12 +517,19 @@ namespace Contentstack.Core
                 query.TryGetValue("content_type_uid", out contentTypeUID);
                 this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
             }
+            if (query.Keys.Contains("entry_uid"))
+            {
+                string contentTypeUID = null;
+                query.TryGetValue("entry_uid", out contentTypeUID);
+                this.LivePreviewConfig.EntryUID = contentTypeUID;
+            }
             if (query.Keys.Contains("live_preview"))
             {
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
             }
+            this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
         }
 
         /// <summary>
@@ -695,7 +736,7 @@ namespace Contentstack.Core
 
             try
             {
-                HttpRequestHandler requestHandler = new HttpRequestHandler();
+                HttpRequestHandler requestHandler = new HttpRequestHandler(this);
                 string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch);
                 SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
                 return stackSyncOutput;
