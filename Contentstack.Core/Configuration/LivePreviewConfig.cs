@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using Newtonsoft.Json.Linq;
+
 namespace Contentstack.Core.Configuration
 {
     public class LivePreviewConfig
@@ -8,5 +11,7 @@ namespace Contentstack.Core.Configuration
         public string Host { get; set; }
         internal string LivePreview { get; set; }
         internal string ContentTypeUID { get; set; }
+        internal string EntryUID { get; set; }
+        internal JObject PreviewResponse { get; set; }
     }
 }
