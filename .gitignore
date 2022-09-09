@@ -21,3 +21,4 @@ packages/
 *.trx
 */TestResults/
 */app.config
+*/LivePreviewTest.cs
