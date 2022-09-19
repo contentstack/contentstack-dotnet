@@ -36,7 +36,7 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build solution and generate NuGet package
         run: |
-          cd Contentstack.Management.Core
+          cd contentstack-dotnet
           dotnet pack -c Release -o out
 
       - name: Push generated package to GitHub registry
