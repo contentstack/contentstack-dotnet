@@ -12,10 +12,9 @@ jobs:
         run: |
           dotnet restore
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/dotnet@master
-        with:
-            dotnet-version: '3.1.x'
+        uses: snyk/actions/dotnet@master            
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
+          dotnet-version: '3.1.x'
           args: --file=Contentstack.Core/obj/project.assets.json
