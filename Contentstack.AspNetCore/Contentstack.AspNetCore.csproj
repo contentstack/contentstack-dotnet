@@ -6,12 +6,12 @@
     <PackageId>contentstack.aspnetcore</PackageId>
     <Authors>Contentstack</Authors>
     <Owners>Contentstack</Owners>
-    <PackageVersion>2.9.0</PackageVersion>
+    <PackageVersion>2.10.0</PackageVersion>
     <Description>Main release</Description>
-    <Copyright>Copyright (c) 2012-2022 Contentstack (http://app.contentstack.com). All Rights Reserved</Copyright>
+    <Copyright>Copyright (c) 2012-2023 Contentstack (http://app.contentstack.com). All Rights Reserved</Copyright>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
-    <PackageTags>v2.9.0</PackageTags>
-    <ReleaseVersion>2.9.0</ReleaseVersion>
+    <PackageTags>v2.10.0</PackageTags>
+    <ReleaseVersion>2.10.0</ReleaseVersion>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
@@ -24,11 +24,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2"><PrivateAssets>all</PrivateAssets>
 <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 </PackageReference>
-    <PackageReference Include="contentstack.csharp" Version="2.8.0" />
+    <PackageReference Include="contentstack.csharp" Version="2.9.0" />
   </ItemGroup>
 </Project>
