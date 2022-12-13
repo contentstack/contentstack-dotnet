@@ -13,6 +13,8 @@ jobs:
           dotnet restore
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
+        with:
+            dotnet-version: '3.1.x'
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
