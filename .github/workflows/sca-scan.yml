@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@master
+      - name: Setup .NET Core @ Latest
+        uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: '3.1.x'
       - name: Run Dotnet Restore
         run: |
           dotnet restore
@@ -16,5 +20,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          dotnet-version: '3.1.x'
           args: --file=Contentstack.Core/obj/project.assets.json
