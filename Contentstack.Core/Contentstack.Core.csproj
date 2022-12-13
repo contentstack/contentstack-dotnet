@@ -5,15 +5,15 @@
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
-    <PackageVersion>2.9.0</PackageVersion>
+    <PackageVersion>2.10.0</PackageVersion>
     <Owners>Contentstack</Owners>
     <PackageReleaseNotes>Reference in entry Live preview support added</PackageReleaseNotes>
     <Copyright>Copyright © 2012-2022 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
-    <PackageTags>v2.9.0</PackageTags>
+    <PackageTags>v2.10.0</PackageTags>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <ReleaseVersion>2.9.0</ReleaseVersion>
+    <ReleaseVersion>2.10.0</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -26,10 +26,13 @@
     <AllowUnsafeBlocks></AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Markdig" Version="0.30.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+    <PackageReference Include="Markdig" Version="0.30.4" />
     <PackageReference Include="contentstack.utils" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
@@ -38,6 +41,7 @@
     <Folder Include="Internals\" />
     <Folder Include="Models\" />
     <Folder Include="Attributes\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
