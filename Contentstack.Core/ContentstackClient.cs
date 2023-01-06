@@ -509,7 +509,7 @@ namespace Contentstack.Core
         ///     stack.LivePreviewQuery(query);
         /// </code>
         /// </example>
-        public async Task LivePreviewQueryAsync(Dictionary<string, string> query)
+        public async Task<JObject> LivePreviewQueryAsync(Dictionary<string, string> query)
         {
             if (query.Keys.Contains("content_type_uid"))
             {
@@ -530,6 +530,7 @@ namespace Contentstack.Core
                 this.LivePreviewConfig.LivePreview = hash;
             }
             this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
+            return this.LivePreviewConfig.PreviewResponse;
         }
 
         /// <summary>
