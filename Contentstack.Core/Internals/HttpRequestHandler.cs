@@ -65,7 +65,7 @@ namespace Contentstack.Core.Internals
 
             foreach (var plugin in client.Plugins)
             {
-                request = plugin.OnRequest(client, request);
+                request = await plugin.OnRequest(client, request);
             };
 
             var serializedresult = JsonConvert.SerializeObject(BodyJson);
