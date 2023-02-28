@@ -21,10 +21,11 @@ namespace Contentstack.Core.Tests.Models
             injectData = JsonConvert.DeserializeObject<JObject>(resp.Replace("\r\n", ""), Client.SerializerSettings);
         }
         
-        public virtual async void OnRequest(ContentstackClient stack, HttpWebRequest request)
+        public virtual async Task<HttpWebRequest> OnRequest(ContentstackClient stack, HttpWebRequest request)
         {
             request.Headers["test-header"] = "new header";
             _ = await Client.AssetLibrary().FetchAll();
+            return request;
         }
 
         public virtual async Task<string> OnResponse(ContentstackClient stack, HttpWebRequest request, HttpWebResponse response, string responseString)
@@ -42,7 +43,7 @@ namespace Contentstack.Core.Tests.Models
             {
                 response.Merge(injectData, new JsonMergeSettings()
                 {
-                    MergeArrayHandling = MergeArrayHandling.Union
+                    MergeArrayHandling = MergeArrayHandling.Replace
                 });
             }
             else
