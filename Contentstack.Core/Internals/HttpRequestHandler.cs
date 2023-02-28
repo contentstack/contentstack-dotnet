@@ -65,7 +65,7 @@ namespace Contentstack.Core.Internals
 
             foreach (var plugin in client.Plugins)
             {
-               plugin.OnRequest(client, request);
+                request = plugin.OnRequest(client, request);
             };
 
             var serializedresult = JsonConvert.SerializeObject(BodyJson);
@@ -114,7 +114,7 @@ namespace Contentstack.Core.Internals
             {
                 response.Merge(this.client.LivePreviewConfig.PreviewResponse, new JsonMergeSettings()
                 {
-                    MergeArrayHandling = MergeArrayHandling.Union
+                    MergeArrayHandling = MergeArrayHandling.Replace
                 });
             }
             else

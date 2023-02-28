@@ -6,7 +6,7 @@ namespace Contentstack.Core.Interfaces
 {
     public interface IContentstackPlugin
     {
-        void OnRequest(ContentstackClient stack, HttpWebRequest request);
+        HttpWebRequest OnRequest(ContentstackClient stack, HttpWebRequest request);
         Task<string> OnResponse(ContentstackClient stack, HttpWebRequest request, HttpWebResponse response, string responseString);
     }
 }
