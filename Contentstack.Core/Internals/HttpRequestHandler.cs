@@ -48,7 +48,7 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["x-user-agent"]="contentstack-dotnet/2.9.0";
+            request.Headers["x-user-agent"]="contentstack-dotnet/2.10.0";
             if (Branch != null)
             {
                 request.Headers["branch"] = Branch;
@@ -63,6 +63,11 @@ namespace Contentstack.Core.Internals
                 }
             }
 
+            foreach (var plugin in client.Plugins)
+            {
+                request = await plugin.OnRequest(client, request);
+            };
+
             var serializedresult = JsonConvert.SerializeObject(BodyJson);
             byte[] requestBody = Encoding.UTF8.GetBytes(serializedresult);
             StreamReader reader = null;
@@ -74,6 +79,10 @@ namespace Contentstack.Core.Internals
                     reader = new StreamReader(response.GetResponseStream());
 
                     string responseString = await reader.ReadToEndAsync();
+                    foreach (var plugin in client.Plugins)
+                    {
+                        responseString = await plugin.OnResponse(client, request, response, responseString);
+                    }
 
                     if (isLivePreview == false && this.client.LivePreviewConfig.Enable == true)
                     {
@@ -105,7 +114,7 @@ namespace Contentstack.Core.Internals
             {
                 response.Merge(this.client.LivePreviewConfig.PreviewResponse, new JsonMergeSettings()
                 {
-                    MergeArrayHandling = MergeArrayHandling.Union
+                    MergeArrayHandling = MergeArrayHandling.Replace
                 });
             }
             else
