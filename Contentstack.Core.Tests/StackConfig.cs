@@ -40,6 +40,7 @@ namespace Contentstack.Core.Tests
             };
 
             ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));
+            
             return contentstackClient;
 
         }

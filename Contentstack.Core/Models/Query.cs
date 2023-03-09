@@ -1740,11 +1740,13 @@ namespace Contentstack.Core.Models
                     headerAll.Add(header.Key, (string)header.Value);
                 }
             }
+            bool isLivePreview = false;
             if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
                 && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
                 mainJson.Add("live_preview", this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview ?? "init");
                 headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
+                isLivePreview = true;
             }
             else
             {
@@ -1761,7 +1763,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
-                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch);
+                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
             }
             catch (Exception ex)
