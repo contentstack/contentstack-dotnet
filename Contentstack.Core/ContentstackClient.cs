@@ -12,6 +12,8 @@ using System.Net;
 using System.IO;
 using System.Collections;
 using Contentstack.Utils;
+using Contentstack.Core.Interfaces;
+
 namespace Contentstack.Core
 {
     /// <summary>
@@ -55,7 +57,7 @@ namespace Contentstack.Core
             }
         }
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
-
+        public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
         /// </summary>
