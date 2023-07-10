@@ -37,6 +37,11 @@ namespace Contentstack.Core.Tests
                 DeliveryToken = delivery_token,
                 Environment = environment,
                 Host = host,
+                MaxResponseContentBufferSize = 1234,
+                Timeout = TimeSpan.FromSeconds(20),
+                RetryOnError = false,
+                ProxyHost = "proxyHost",
+                ProxyPort = 22
             };
 
             ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));

@@ -62,6 +62,24 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
+        public async Task FetchAssetsPublishMetadata()
+        {
+            List<string> list = new List<string>();
+            list.Add("en-us");
+            list.Add("ja-jp");
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .SetLocale("ja-jp")
+                .IncludeMetadata()
+                .FetchAll();
+            ;
+            Assert.True(assets.Items.Count() > 0);
+            foreach (Asset asset in assets)
+            {
+                Assert.Contains((string)(asset.Get("publish_details") as JObject).GetValue("locale"), list);
+            }
+        }
+
+        [Fact]
         public async Task FetchAssetsPublishWithoutFallback()
         {
             List<string> list = new List<string>();

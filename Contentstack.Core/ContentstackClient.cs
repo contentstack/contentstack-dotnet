@@ -14,6 +14,10 @@ using System.Collections;
 using Contentstack.Utils;
 using Contentstack.Core.Interfaces;
 
+using System.Net.Http.Headers;
+using Contentstack.Core.Handler;
+using System.Net.Http;
+
 namespace Contentstack.Core
 {
     /// <summary>
@@ -25,6 +29,9 @@ namespace Contentstack.Core
         /// Gets or sets the settings that should be used for deserialization.
         /// </summary>
         public JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings();
+        internal ContentstackRuntimePipeline ContentstackPipeline { get; set; }
+
+        //internal ContentstackOptions contentstackOptions;
 
         #region Internal Variables
 
@@ -34,6 +41,8 @@ namespace Contentstack.Core
             set;
         }
         private ContentstackOptions _options;
+        private HttpClient _httpClient;
+        private string xUserAgent => $"contentstack-delivery-dotnet/{Version}";
 
         internal JsonSerializer Serializer => JsonSerializer.Create(SerializerSettings);
         internal string _SyncUrl
@@ -76,6 +85,10 @@ namespace Contentstack.Core
         /// </example>
         public ContentstackClient(IOptions<ContentstackOptions> options)
         {
+
+            Initialize();
+            BuildPipeline();
+
             _options = options.Value;
             this.StackApiKey = _options.ApiKey;
             this._LocalHeaders = new Dictionary<string, object>();
@@ -146,7 +159,15 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null) :
+        public ContentstackClient(string apiKey,
+                                string deliveryToken,
+                                string environment,
+                                string host = null,
+                                ContentstackRegion region = ContentstackRegion.US,
+                                string version = null,
+                                string proxyHost = null,
+                                int proxyPort = -1,
+                                ICredentials proxyCredentials = null) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
         {
             ApiKey = apiKey,
@@ -154,12 +175,52 @@ namespace Contentstack.Core
             Environment = environment,
             Host = host,
             Region = region,
-            Version = version
+            Version = version,
+            ProxyHost = proxyHost,
+            ProxyPort = proxyPort,
+            ProxyCredentials = proxyCredentials
         }
         ))
         {
 
         }
+
+        protected void Initialize()
+        {
+            HttpClientHandler httpClientHandler = new HttpClientHandler
+            {
+                Proxy = _options.GetWebProxy()
+            };
+            _httpClient = new HttpClient(httpClientHandler);
+
+            _httpClient.DefaultRequestHeaders.Add(HeadersKey.XUserAgentHeader, $"{xUserAgent}");
+
+            if (!_httpClient.DefaultRequestHeaders.UserAgent.Any())
+            {
+                _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("contentstack-delivery-dotnet", Version));
+                _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("DotNet", Environment.Version.ToString()));
+            }
+
+            if (_options != null)
+            {
+                _httpClient.Timeout = _options.Timeout;
+                _httpClient.MaxResponseContentBufferSize = _options.MaxResponseContentBufferSize;
+                //LogManager = _options.DisableLogging ? LogManager.EmptyLogger : LogManager.GetLogManager(GetType());
+            }
+        }
+
+        protected void BuildPipeline()
+        {
+            HttpHandler httpClientHandler = new HttpHandler(_httpClient);
+
+            RetryPolicy retryPolicy = _options.RetryPolicy ?? new DefaultRetryPolicy(_options.RetryLimit, _options.RetryDelay);
+            ContentstackPipeline = new ContentstackRuntimePipeline(new List<IPipelineHandler>()
+            {
+                httpClientHandler,
+                new RetryHandler(retryPolicy)
+            });
+        }
+
 
         internal string Version { get; set; }
 
