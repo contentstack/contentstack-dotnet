@@ -62,18 +62,6 @@ namespace Contentstack.Core.Configuration
         public string Branch { get; set; }
 
         /// <summary>
-        /// Gets or sets the DisableLogging. When set to true, the logging of the client is disabled.
-        /// The default value is false.
-        /// </summary>
-        public bool DisableLogging { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets the maximum number of bytes to buffer when reading the response content.
-        /// The default value for this property is 1 gigabytes.
-        /// </summary>
-        public long MaxResponseContentBufferSize { get; set; } = CSConstants.ContentBufferSize;
-
-        /// <summary>
         /// Gets or sets the timespan to wait before the request times out.
         /// The default value for time out is 30 seconds.
         /// </summary>

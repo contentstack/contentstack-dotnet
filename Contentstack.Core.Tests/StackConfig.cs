@@ -37,7 +37,7 @@ namespace Contentstack.Core.Tests
                 DeliveryToken = delivery_token,
                 Environment = environment,
                 Host = host,
-                MaxResponseContentBufferSize = 1234,
+                Region = Internals.ContentstackRegion.US,
                 Timeout = TimeSpan.FromSeconds(20),
                 RetryOnError = false,
                 ProxyHost = "proxyHost",

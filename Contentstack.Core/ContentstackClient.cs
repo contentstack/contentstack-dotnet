@@ -204,7 +204,7 @@ namespace Contentstack.Core
             if (_options != null)
             {
                 _httpClient.Timeout = _options.Timeout;
-                _httpClient.MaxResponseContentBufferSize = _options.MaxResponseContentBufferSize;
+                //httpClient.MaxResponseContentBufferSize = _options.MaxResponseContentBufferSize;
                 //LogManager = _options.DisableLogging ? LogManager.EmptyLogger : LogManager.GetLogManager(GetType());
             }
         }
