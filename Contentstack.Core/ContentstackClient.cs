@@ -42,7 +42,7 @@ namespace Contentstack.Core
         }
         private ContentstackOptions _options;
         private HttpClient _httpClient;
-        private string xUserAgent => $"contentstack-delivery-dotnet/{Version}";
+        private string xUserAgent => $"contentstack-dotnet/{Version}";
 
         internal JsonSerializer Serializer => JsonSerializer.Create(SerializerSettings);
         internal string _SyncUrl
@@ -197,7 +197,7 @@ namespace Contentstack.Core
 
             if (!_httpClient.DefaultRequestHeaders.UserAgent.Any())
             {
-                _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("contentstack-delivery-dotnet", Version));
+                _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("contentstack-dotnet", Version));
                 _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("DotNet", Environment.Version.ToString()));
             }
 
