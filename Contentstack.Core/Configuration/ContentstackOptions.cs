@@ -65,7 +65,7 @@ namespace Contentstack.Core.Configuration
         /// Gets or sets the timespan to wait before the request times out.
         /// The default value for time out is 30 seconds.
         /// </summary>
-        public TimeSpan Timeout { get; set; } = CSConstants.Timeout;
+        public TimeSpan Timeout { get; set; } = StackConstants.Timeout;
 
         /// <summary>
         /// When set to true, the client will retry requests.
@@ -85,7 +85,7 @@ namespace Contentstack.Core.Configuration
         /// Returns the flag indicating delay in retrying HTTP requests.
         /// The default value is 300ms.
         /// </summary>
-        public TimeSpan RetryDelay { get; set; } = CSConstants.Delay;
+        public TimeSpan RetryDelay { get; set; } = StackConstants.Delay;
 
         /// <summary>
         /// The retry policy which specifies when 

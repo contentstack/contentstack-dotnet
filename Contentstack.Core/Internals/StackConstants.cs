@@ -47,5 +47,8 @@ namespace Contentstack.Core.Internals
         public static String ErrorMessage_QueryFilterException = "Please provide valid params.";
         public static String ErrorMessage_EntryNotFoundInCache = "Entry is not present in cache";
         public static String ErrorMessage_SavingNetworkCallResponseForCache = "Error while saving network call response.";
+
+        internal readonly static TimeSpan Timeout = TimeSpan.FromSeconds(30);
+        internal readonly static TimeSpan Delay = TimeSpan.FromMilliseconds(300);
     }
 }
