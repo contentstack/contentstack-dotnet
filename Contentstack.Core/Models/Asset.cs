@@ -178,6 +178,27 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+
+        /// <summary>
+        /// Include metadata locale publish content, if specified locale content is not publish.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     asset.IncludeMetadata();
+        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Asset IncludeMetadata()
+        {
+            this.UrlQueries.Add("include_metadata", "true");
+            return this;
+        }
+
         /// <summary>
         /// Include branch for publish content.
         /// </summary>

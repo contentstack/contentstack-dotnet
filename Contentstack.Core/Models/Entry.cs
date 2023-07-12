@@ -1055,6 +1055,33 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Include metadata locale publish content, if specified locale content is not publish.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.IncludeMetadata();
+        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry IncludeMetadata()
+        {
+            try
+            {
+                UrlQueries.Add("include_metadata", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Include branch for publish content.
         /// </summary>
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
