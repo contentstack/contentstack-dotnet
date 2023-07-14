@@ -97,7 +97,7 @@ namespace Contentstack.Core.Configuration
         internal string regionCode()
         {
             if (Region == ContentstackRegion.US) return "";
-            if (Region == ContentstackRegion.Azure_NA) return "azure-";
+            if (Region == ContentstackRegion.AZURE_NA) return "azure-";
             ContentstackRegionCode[] regionCodes = Enum.GetValues(typeof(ContentstackRegionCode)).Cast<ContentstackRegionCode>().ToArray();
             return string.Format("{0}-", regionCodes[(int)Region].ToString());
         }
@@ -108,9 +108,9 @@ namespace Contentstack.Core.Configuration
             {
                 if (Region == ContentstackRegion.EU)
                     return "cdn.contentstack.com";
-                if (Region == ContentstackRegion.Azure_EU)
+                if (Region == ContentstackRegion.AZURE_EU)
                     return "eu-cdn.contentstack.com";
-                if (Region == ContentstackRegion.Azure_NA)
+                if (Region == ContentstackRegion.AZURE_NA)
                     return "na-cdn.contentstack.com";
                 return "cdn.contentstack.io";
             }
