@@ -107,6 +107,16 @@ namespace Contentstack.Core.Configuration
             {
                 if (Region == ContentstackRegion.EU)
                     return "cdn.contentstack.com";
+                if (Region == ContentstackRegion.AZURE_EU || Region == ContentstackRegion.AZURE_NA) {
+                    if (Region == ContentstackRegion.AZURE_NA) {
+                        return "azure-na-cdn.contentstack.com";
+                    }
+                    if (Region == ContentstackRegion.AZURE_EU)
+                    {
+                        return "azure-eu-cdn.contentstack.com";
+                    }
+                }
+                    
                 return "cdn.contentstack.io";
             }
         }
