@@ -1154,6 +1154,35 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+
+
+        /// <summary>
+        /// This call includes metadata in the response.
+        /// </summary>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     csQuery.IncludeMetadata();
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your metadata code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query IncludeMetadata()
+        {
+            try
+            {
+                UrlQueries.Add("include_metadata", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
         /// <summary>
         /// This method also includes owner information for all the entries returned in the response.
         /// </summary>
