@@ -185,6 +185,35 @@ namespace Contentstack.Core.Models
             UrlQueries.Add("include_count", "true");
         }
 
+
+
+
+        /// <summary>
+        /// This call includes metadata in the response.
+        /// </summary>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.IncludeMetadata();
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public void IncludeMetadata()
+        {
+            try
+            {
+                UrlQueries.Add("include_metadata", "true");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+        }
+
+
+
         /// <summary>
         ///  This method includes the relative url of assets.
         /// </summary>
