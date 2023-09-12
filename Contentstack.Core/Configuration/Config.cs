@@ -98,25 +98,15 @@ namespace Contentstack.Core.Configuration
         {
             if (Region == ContentstackRegion.US) return "";
             ContentstackRegionCode[] regionCodes = Enum.GetValues(typeof(ContentstackRegionCode)).Cast<ContentstackRegionCode>().ToArray();
-            return string.Format("{0}-", regionCodes[(int)Region].ToString());
+            return string.Format("{0}-", regionCodes[(int)Region].ToString().Replace("_", "-"));
         }
 
         internal string HostURL
         {
             get
             {
-                if (Region == ContentstackRegion.EU)
+                if (Region == ContentstackRegion.EU || Region == ContentstackRegion.AZURE_EU || Region == ContentstackRegion.AZURE_NA)
                     return "cdn.contentstack.com";
-                if (Region == ContentstackRegion.AZURE_EU || Region == ContentstackRegion.AZURE_NA) {
-                    if (Region == ContentstackRegion.AZURE_NA) {
-                        return "azure-na-cdn.contentstack.com";
-                    }
-                    if (Region == ContentstackRegion.AZURE_EU)
-                    {
-                        return "azure-eu-cdn.contentstack.com";
-                    }
-                }
-                    
                 return "cdn.contentstack.io";
             }
         }
