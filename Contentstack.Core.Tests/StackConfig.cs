@@ -37,6 +37,7 @@ namespace Contentstack.Core.Tests
                 DeliveryToken = delivery_token,
                 Environment = environment,
                 Host = host,
+                
             };
 
             ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));
