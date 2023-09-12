@@ -200,7 +200,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
-        public void IncludeMetadata()
+        public AssetLibrary IncludeMetadata()
         {
             try
             {
@@ -210,6 +210,7 @@ namespace Contentstack.Core.Models
             {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
             }
+            return this;
         }
 
 
