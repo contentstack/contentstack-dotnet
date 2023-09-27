@@ -48,7 +48,7 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             string uid = await GetUID("source1");
             Entry sourceEntry = contenttype.Entry(uid);
-
+            sourceEntry.IncludeMetadata();
             await sourceEntry.Fetch<Entry>().ContinueWith((t) =>
              {
                  Entry result = t.Result;
