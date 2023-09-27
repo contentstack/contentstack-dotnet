@@ -61,6 +61,7 @@ namespace Contentstack.Core.Tests
             ContentstackCollection<Entry> entries = await client.ContentType(source).Query()
                 .SetLocale("ja-jp")
                 .IncludeFallback()
+                .IncludeMetadata()
                 .Find<Entry>();
             ;
             Assert.True(entries.Items.Count() > 0);
