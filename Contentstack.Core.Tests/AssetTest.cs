@@ -2,13 +2,9 @@
 using Xunit;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
-using Contentstack.Core.Configuration;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Collections;
 using Newtonsoft.Json.Linq;
-using Contentstack.Utils;
 namespace Contentstack.Core.Tests
 {
     public class AssetTest
@@ -128,7 +124,8 @@ namespace Contentstack.Core.Tests
         [Fact]
         public async Task FetchAssetCountAsync()
         {
-            AssetLibrary assetLibrary = client.AssetLibrary().SetLocale("en-us");
+            AssetLibrary assetLibrary = client.AssetLibrary().
+                IncludeMetadata().SetLocale("en-us");
             JObject jObject = await assetLibrary.Count();
             if (jObject == null)
             {

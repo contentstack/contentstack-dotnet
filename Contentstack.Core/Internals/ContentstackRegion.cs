@@ -13,7 +13,16 @@ namespace Contentstack.Core.Internals
         /// <summary>
         /// To specify EU region.
         /// </summary>
-        EU
+        EU,
+        /// <summary>
+        /// To specify EU region.
+        /// </summary>
+        AZURE_EU,
+
+        /// <summary>
+        /// To specify EU region.
+        /// </summary>
+        AZURE_NA
     }
 
 
@@ -21,6 +30,11 @@ namespace Contentstack.Core.Internals
     {
         us,
 
-        eu
+        eu,
+
+        azure_eu,
+
+        azure_na
+        
     }
 }
