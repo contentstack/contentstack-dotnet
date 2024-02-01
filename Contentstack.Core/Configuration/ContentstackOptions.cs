@@ -58,6 +58,11 @@ namespace Contentstack.Core.Configuration
         /// The Branch used to set Branch for the Contentstack API.
         /// </summary>
         public string Branch { get; set; }
+
+        /// <summary>
+        /// The Timeout used to set Timeout for the Contentstack API.
+        /// </summary>
+        public int Timeout { get; set; }
     }
 
     internal class ContentstackRegionConverter : TypeConverter
