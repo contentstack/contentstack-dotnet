@@ -1792,7 +1792,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
-                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview);
+                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
             }
             catch (Exception ex)

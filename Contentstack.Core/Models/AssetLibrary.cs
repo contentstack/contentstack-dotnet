@@ -440,7 +440,7 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.Stack);
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Stack.Config.Branch);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Stack.Config.Branch, timeout: this.Stack.Config.Timeout);
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                
             }
