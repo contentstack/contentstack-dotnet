@@ -16,6 +16,7 @@ namespace Contentstack.Core.Configuration
         private string _Version;
         private string _Environment;
         private string _Branch;
+        private int _Timeout;
         #endregion
 
         #region Public Properties
@@ -58,6 +59,12 @@ namespace Contentstack.Core.Configuration
         {
             get { return this._Branch ?? null; }
             set { this._Branch = value; }
+        }
+
+        public int Timeout
+        {
+            get { return this._Timeout; }
+            set { this._Timeout = value; }
         }
 
         public string BaseUrl
