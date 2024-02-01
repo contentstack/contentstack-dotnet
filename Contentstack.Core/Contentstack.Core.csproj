@@ -5,15 +5,15 @@
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
     <Description>.NET SDK for the Contentstack Content Delivery API.</Description>
-    <PackageVersion>2.11.0</PackageVersion>
+    <PackageVersion>2.12.0</PackageVersion>
     <Owners>Contentstack</Owners>
     <PackageReleaseNotes>Reference in entry Live preview support added</PackageReleaseNotes>
     <Copyright>Copyright © 2012-2023 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
-    <PackageTags>v2.11.0</PackageTags>
+    <PackageTags>v2.12.0</PackageTags>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <ReleaseVersion>2.11.0</ReleaseVersion>
+    <ReleaseVersion>2.12.0</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

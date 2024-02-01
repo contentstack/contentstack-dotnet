@@ -99,6 +99,10 @@ namespace Contentstack.Core
             }
             cnfig.Region = _options.Region;
             cnfig.Branch = _options.Branch;
+            if (_options.Timeout != null)
+            {
+                cnfig.Timeout = _options.Timeout;
+            }
             this.SetConfig(cnfig);
             if (_options.LivePreview != null)
             {
@@ -146,7 +150,7 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null) :
+        public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null, int timeout = 100000) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
         {
             ApiKey = apiKey,
@@ -154,7 +158,8 @@ namespace Contentstack.Core
             Environment = environment,
             Host = host,
             Region = region,
-            Version = version
+            Version = version,
+            Timeout = timeout
         }
         ))
         {
@@ -306,7 +311,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
                 return contentTypes;
@@ -341,7 +346,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
-                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true);
+                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 return (JObject)data["entry"];
             }
@@ -739,7 +744,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler(this);
-                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch);
+                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout);
                 SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
                 return stackSyncOutput;
             }
