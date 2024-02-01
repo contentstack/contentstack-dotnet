@@ -1,3 +1,16 @@
+### Version: 2.12.0
+#### Date: Feb-01-2024
+
+##### New Feature: 
+- Timeout support added
+
+### Version: 2.11.0
+#### Date: Sep-27-2023
+
+##### New Feature: 
+- Region support added
+- IncludeMetadata support added
+
 ### Version: 2.8.0
 #### Date: Jan-11-2021
 
