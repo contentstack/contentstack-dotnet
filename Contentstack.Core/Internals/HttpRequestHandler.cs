@@ -21,7 +21,7 @@ namespace Contentstack.Core.Internals
         {
             client = contentstackClient;
         }
-        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, string Branch = null, bool isLivePreview = false) {
+        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, string Branch = null, bool isLivePreview = false, int timeout = 30000) {
 
             String queryParam = String.Join("&", BodyJson.Select(kvp => {
                 var value = "";
@@ -48,7 +48,8 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["x-user-agent"]="contentstack-dotnet/2.11.0";
+            request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.12.0";
+            request.Timeout = timeout;
             if (Branch != null)
             {
                 request.Headers["branch"] = Branch;
