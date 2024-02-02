@@ -37,7 +37,7 @@ namespace Contentstack.Core.Tests
                 DeliveryToken = delivery_token,
                 Environment = environment,
                 Host = host,
-                
+                Timeout = 4500
             };
 
             ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));
