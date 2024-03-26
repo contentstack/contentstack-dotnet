@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using Contentstack.Core.Internals;
 
 namespace Contentstack.Core.Configuration
@@ -17,6 +15,7 @@ namespace Contentstack.Core.Configuration
         private string _Environment;
         private string _Branch;
         private int _Timeout;
+        private WebProxy _proxy;
         #endregion
 
         #region Public Properties
@@ -65,6 +64,12 @@ namespace Contentstack.Core.Configuration
         {
             get { return this._Timeout; }
             set { this._Timeout = value; }
+        }
+
+        public WebProxy Proxy
+        {
+            get { return this._proxy; }
+            set { this._proxy = value; }
         }
 
         public string BaseUrl
