@@ -37,7 +37,8 @@ namespace Contentstack.Core.Tests
                 DeliveryToken = delivery_token,
                 Environment = environment,
                 Host = host,
-                Timeout = 4500
+                Timeout = 4500,
+                Proxy = new System.Net.WebProxy("http://example.com:8080")
             };
 
             ContentstackClient contentstackClient = new ContentstackClient(new OptionsWrapper<Configuration.ContentstackOptions>(contentstackOptions));
