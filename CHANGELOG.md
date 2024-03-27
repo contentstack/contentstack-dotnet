@@ -1,3 +1,9 @@
+### Version: 2.13.0
+#### Date: April-02-2024
+
+##### New Feature: 
+- Proxy support added
+
 ### Version: 2.12.0
 #### Date: Feb-01-2024
 

@@ -1,5 +1,7 @@
 fileignoreconfig:
-- filename: Contentstack.Core/ContentstackClient.cs
-  checksum: f960fff17b452a71e39e51ae8b92759dd1e30638d379155185e3e8bd63f407a4
 - filename: Contentstack.Core/Internals/HttpRequestHandler.cs
   checksum: 93c1659f3bc7527956f0fd12db46441297fac3a4366d273bcbb3425d2351300e
+- filename: Contentstack.Core/Models/Entry.cs
+  checksum: bc0da69dde3bebecf09aa319aa961f82d7637e200bb8539821fa6116c0129f1b
+- filename: Contentstack.Core/ContentstackClient.cs
+  checksum: 1cb7c9bd62881ae71406449c948b1e85aa865d0c7191013f77f9b9a60df700d9

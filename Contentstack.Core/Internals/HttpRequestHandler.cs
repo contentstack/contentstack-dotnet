@@ -1,13 +1,12 @@
-﻿using Contentstack.Core.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
@@ -21,7 +20,8 @@ namespace Contentstack.Core.Internals
         {
             client = contentstackClient;
         }
-        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, string Branch = null, bool isLivePreview = false, int timeout = 30000) {
+        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, string Branch = null, bool isLivePreview = false, int timeout = 30000, WebProxy proxy = null)
+        {
 
             String queryParam = String.Join("&", BodyJson.Select(kvp => {
                 var value = "";
@@ -50,6 +50,12 @@ namespace Contentstack.Core.Internals
             request.ContentType = "application/json";
             request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.12.0";
             request.Timeout = timeout;
+
+            if (proxy != null)
+            {
+                request.Proxy = proxy;
+            }
+
             if (Branch != null)
             {
                 request.Headers["branch"] = Branch;
