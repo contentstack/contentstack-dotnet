@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using Contentstack.Core.Internals;
 
 namespace Contentstack.Core.Configuration
@@ -39,6 +40,11 @@ namespace Contentstack.Core.Configuration
         public string Host { get; set; }
 
         /// <summary>
+        /// The Proxy used when communicating with the Contentstack API.
+        /// </summary>
+        public WebProxy Proxy { get; set; }
+
+        /// <summary>
         /// The Region used to set region for the Contentstack API.
         /// </summary>
         [TypeConverter(typeof(ContentstackRegionConverter))]
@@ -63,6 +69,11 @@ namespace Contentstack.Core.Configuration
         /// The Timeout used to set Timeout for the Contentstack API.
         /// </summary>
         public int Timeout { get; set; }
+
+        public ContentstackOptions()
+        {
+            Timeout = 30000; // Set default value
+        }
     }
 
     internal class ContentstackRegionConverter : TypeConverter

@@ -97,12 +97,13 @@ namespace Contentstack.Core
             {
                 cnfig.Version = _options.Version;
             }
+            if (_options.Proxy != null)
+            {
+                cnfig.Proxy = _options.Proxy;
+            }
             cnfig.Region = _options.Region;
             cnfig.Branch = _options.Branch;
-            if (_options.Timeout != null)
-            {
-                cnfig.Timeout = _options.Timeout;
-            }
+            cnfig.Timeout = _options.Timeout;
             this.SetConfig(cnfig);
             if (_options.LivePreview != null)
             {
@@ -150,7 +151,7 @@ namespace Contentstack.Core
         ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
         /// </code>
         /// </example>
-        public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null, int timeout = 100000) :
+        public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null, int? timeout = null, WebProxy proxy = null) :
         this(new OptionsWrapper<ContentstackOptions>(new ContentstackOptions()
         {
             ApiKey = apiKey,
@@ -159,7 +160,8 @@ namespace Contentstack.Core
             Host = host,
             Region = region,
             Version = version,
-            Timeout = timeout
+            Timeout = timeout ?? 30000,
+            Proxy = proxy
         }
         ))
         {
@@ -311,7 +313,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout);
+                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 IList contentTypes = (IList)data["content_types"];
                 return contentTypes;
@@ -346,7 +348,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
-                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout);
+                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 return (JObject)data["entry"];
             }
@@ -744,7 +746,7 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler(this);
-                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout);
+                string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
                 SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
                 return stackSyncOutput;
             }
