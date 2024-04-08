@@ -35,13 +35,13 @@
     <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
-    <None Include="..\CHANGELOG.md">
+    <Content Include="LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
+    <Content Include="..\CHANGELOG.md">
       <Link>CHANGELOG.md</Link>
-    </None>
-    <None Include="..\README.md">
+    </Content>
+    <Content Include="..\README.md">
       <Link>README.md</Link>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Internals\" />
