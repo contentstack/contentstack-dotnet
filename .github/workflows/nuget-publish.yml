@@ -11,18 +11,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
       - name: Setup .NET Core @ Latest
-        uses: actions/setup-dotnet@v1
-        with:
-            dotnet-version: '3.1.x'
+        uses: actions/setup-dotnet@v3
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
       - name: Build solution and generate NuGet package
         run: |
-          cd contentstack-dotnet
           dotnet pack -c Release -o out
 
       - name: Push generated package to GitHub registry
-        run: dotnet nuget push ./contentstack-dotnet/out/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate --no-symbols true
+        run: |
+          cd out
+          ls
+          dotnet nuget push "contentstack.csharp.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols true --source https://api.nuget.org/v3/index.json
 
   publish-git:  
     runs-on: windows-latest
@@ -30,16 +30,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
       - name: Setup .NET Core @ Latest
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '3.1.x'
           source-url: https://nuget.pkg.github.com/Contentstack/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build solution and generate NuGet package
         run: |
-          cd contentstack-dotnet
           dotnet pack -c Release -o out
 
       - name: Push generated package to GitHub registry
-        run: dotnet nuget push ./contentstack-dotnet/out/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate --no-symbols true
+        run: |
+          cd out
+          dotnet nuget push "contentstack.csharp.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols true --source https://api.nuget.org/v3/index.json
