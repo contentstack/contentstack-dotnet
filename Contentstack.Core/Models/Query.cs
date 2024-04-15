@@ -125,7 +125,7 @@ namespace Contentstack.Core.Models
         internal void SetContentTypeInstance(ContentType contentTypeInstance)
         {
             this.ContentTypeInstance = contentTypeInstance;
-            SetLocale("en-us");
+            //SetLocale("en-us");
         }
 
         #endregion
