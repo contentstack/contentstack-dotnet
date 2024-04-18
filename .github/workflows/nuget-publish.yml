@@ -11,9 +11,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
       - name: Setup .NET Core @ Latest
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1
+        uses: actions/setup-dotnet@v3
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
       - name: Build solution and generate NuGet package
@@ -31,9 +29,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
       - name: Setup .NET Core @ Latest
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 3.1.x
           source-url: https://nuget.pkg.github.com/Contentstack/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
