@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackOnBuild>true</PackOnBuild>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Title>Contentstack Delivery</Title>
     <PackageId>contentstack.aspnetcore</PackageId>
     <Authors>Contentstack</Authors>
     <Owners>Contentstack</Owners>
@@ -13,6 +13,7 @@
     <PackageTags>v$(Version)</PackageTags>
     <ReleaseVersion>$(Version)</ReleaseVersion>
     <Configurations>Release;Debug</Configurations>
+    <RootNamespace>Contentstack.ASPNETCore</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
