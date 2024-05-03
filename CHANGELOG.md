@@ -1,3 +1,9 @@
+### Version: 2.14.0
+#### Date: May-07-2024
+
+##### New Feature: 
+- GCP_NA region support added
+
 ### Version: 2.13.0
 #### Date: April-02-2024
 
