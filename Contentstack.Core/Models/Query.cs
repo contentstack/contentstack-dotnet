@@ -1402,6 +1402,34 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+
+        /// <summary>
+        /// Add param in URL query.
+        /// </summary>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.AddParam("include_branch", "true");
+        ///     entry.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query AddParam(string key, string value)
+        {
+            try
+            {
+                UrlQueries.Add(key, value);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
         /// <summary>
         /// Include Embedded Objects (Entries and Assets) along with entry/entries details.
         /// </summary>
