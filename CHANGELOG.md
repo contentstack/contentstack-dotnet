@@ -1,8 +1,9 @@
 ### Version: 2.14.0
-#### Date: May-07-2024
+#### Date: May-28-2024
 
 ##### New Feature: 
 - GCP_NA region support added
+- AddParam method added for Entry, Asset, AssetLibrary and Query
 
 ### Version: 2.13.0
 #### Date: April-02-2024

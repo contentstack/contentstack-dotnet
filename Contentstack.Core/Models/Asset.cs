@@ -172,7 +172,7 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Asset includeFallback()
+        public Asset IncludeFallback()
         {
             this.UrlQueries.Add("include_fallback", "true");
             return this;
@@ -216,15 +216,36 @@ namespace Contentstack.Core.Models
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
         ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
-        ///     asset.includeBranch();
+        ///     asset.IncludeBranch();
         ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
         ///         //Your callback code.
         ///     });
         /// </code>
         /// </example>
-        public Asset includeBranch()
+        public Asset IncludeBranch()
         {
             this.UrlQueries.Add("include_branch", "true");
+            return this;
+        }
+
+
+        /// <summary>
+        /// Add param in URL query.
+        /// </summary>
+        /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     asset.AddParam("include_branch", "true");
+        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Asset AddParam(string key, string value)
+        {
+            this.UrlQueries.Add(key, value);
             return this;
         }
 
