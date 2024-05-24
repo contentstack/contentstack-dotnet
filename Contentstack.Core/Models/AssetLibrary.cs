@@ -142,6 +142,26 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+
+        /// <summary>
+        /// Add param in URL query.
+        /// </summary>
+        /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.AddParam("include_branch", "true");
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public AssetLibrary AddParam(string key, string value)
+        {
+            UrlQueries.Add(key, value);
+
+            return this;
+        }
+
         /// <summary>
         /// Sets the locale.
         /// </summary>
