@@ -150,11 +150,9 @@ namespace Contentstack.Core.Models
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
-        ///     asset.AddParam("include_branch", "true");
-        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
-        ///         //Your callback code.
-        ///     });
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.AddParam("include_branch", "true");
+        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary AddParam(string key, string value)
