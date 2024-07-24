@@ -1,3 +1,9 @@
+### Version: 2.15.0
+#### Date: Jul-30-2024
+
+##### New Feature: 
+- Taxonomy class added
+
 ### Version: 2.14.0
 #### Date: May-28-2024
 
