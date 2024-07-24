@@ -24,14 +24,15 @@ namespace Contentstack.Core.Tests
 
         [Fact]
 
-        public async Task GetEntriesWithAnyTaxonomyTerms() 
+        public async Task TaxonomyExists() 
         {
+            // Description: Taxonomy Exists - Get Entries With Any Taxonomy Terms ($exists)
             Taxonomy query = client.Taxonomies();
             query.Exists("taxonomies.one");
             var result = await query.Find<Entry>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail("Query.Exec is not match with expected result.");
             }
             else if (result != null)
             {
@@ -48,19 +49,20 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail("Result doesn't mathced the count.");
             }
         }
 
         [Fact]
-        public async Task GetEntriesWithTaxonomyTermsandAlsoMatchingItsChildrenTerm()
+        public async Task TaxonomyEqualAndBelow()
         {
+            // Description: Taxonomy EqualAndBelow - Get Entries With Taxonomy Terms and Also Matching Its Children Term ($eq_below, level)
             Taxonomy query = client.Taxonomies();
             query.EqualAndBelow("taxonomies.one", "term_one");
             var result = await query.Find<Entry>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail("Query.Exec is not match with expected result.");
             }
             else if (result != null)
             {
@@ -77,7 +79,97 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail("Result doesn't mathced the count.");
+            }
+        }
+
+        [Fact]
+        public async Task TaxonomyBelow()
+        {
+            // Description: Taxonomy Below - Get Entries With Taxonomy Terms Children\'s and Excluding the term itself ($below, level)
+            Taxonomy query = client.Taxonomies();
+            query.Below("taxonomies.one", "term_one");
+            var result = await query.Find<Entry>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Exec is not match with expected result.");
+            }
+            else if (result != null)
+            {
+                bool IsTrue = false;
+                foreach (Entry data in result.Items)
+                {
+                    IsTrue = data.GetContentType() != null;
+                    if (!IsTrue)
+                    {
+                        break;
+                    }
+                }
+                Assert.True(IsTrue);
+            }
+            else
+            {
+                Assert.Fail("Result doesn't mathced the count.");
+            }
+        }
+
+        [Fact]
+        public async Task TaxonomyEqualAndAbove()
+        {
+            // Description: Taxonomy EqualAndAbove - Get Entries With Taxonomy Terms and Also Matching Its Parent Term ($eq_above, level)
+            Taxonomy query = client.Taxonomies();
+            query.EqualAndAbove("taxonomies.one", "term_one");
+            var result = await query.Find<Entry>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Exec is not match with expected result.");
+            }
+            else if (result != null)
+            {
+                bool IsTrue = false;
+                foreach (Entry data in result.Items)
+                {
+                    IsTrue = data.GetContentType() != null;
+                    if (!IsTrue)
+                    {
+                        break;
+                    }
+                }
+                Assert.True(IsTrue);
+            }
+            else
+            {
+                Assert.Fail("Result doesn't mathced the count.");
+            }
+        }
+
+        [Fact]
+        public async Task TaxonomyAbove()
+        {
+            // Description: Taxonomy Above - Get Entries With Taxonomy Terms Parent and Excluding the term itself ($above, level)
+            Taxonomy query = client.Taxonomies();
+            query.Above("taxonomies.one", "term_one");
+            var result = await query.Find<Entry>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Exec is not match with expected result.");
+            }
+            else if (result != null)
+            {
+                bool IsTrue = false;
+                foreach (Entry data in result.Items)
+                {
+                    IsTrue = data.GetContentType() != null;
+                    if (!IsTrue)
+                    {
+                        break;
+                    }
+                }
+                Assert.True(IsTrue);
+            }
+            else
+            {
+                Assert.Fail("Result doesn't mathced the count.");
             }
         }
 
