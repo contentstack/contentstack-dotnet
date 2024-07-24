@@ -410,6 +410,22 @@ namespace Contentstack.Core
         }
 
         /// <summary>
+        /// Represents a Taxonomy. Creates Taxonomy Instance.
+        /// </summary>
+        /// <returns>Current instance of Taxonomy, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Taxonomy taxonomy = stack.Taxonomy();
+        /// </code>
+        /// </example>
+        public Taxonomy Taxonomies()
+        {
+            Taxonomy tx = new Taxonomy(this);
+            return tx;
+        }
+
+        /// <summary>
         /// Get version.
         /// </summary>
         /// <returns>Version</returns>

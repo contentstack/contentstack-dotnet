@@ -590,7 +590,6 @@ namespace Contentstack.Core.Models
         /// </example>
         public Query LessThanOrEqualTo(String key, Object value)
         {
-
             if (key != null && value != null)
             {
 
@@ -745,7 +744,6 @@ namespace Contentstack.Core.Models
             {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
             }
-
             return this;
 
         }

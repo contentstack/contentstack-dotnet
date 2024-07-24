@@ -11,3 +11,5 @@ fileignoreconfig:
   checksum: 98b819cb9b1e6a9a9e5394ac23c07bc642a41c0c7512d169afc63afe3baa6fb3
 - filename: Contentstack.Core/Models/Query.cs
   checksum: ceea632e4ea870f35ad3bd313e9f8b4e5ec21aa86f006fca2e0a32945999ba67
+- filename: Contentstack.Core/Models/Taxonomy.cs
+  checksum: db8bcefdc7aafde4286e7fb6d67348bec49f1ac27b54d84fddca8124135bd779
