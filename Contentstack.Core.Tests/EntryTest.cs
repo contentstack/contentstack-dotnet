@@ -71,12 +71,57 @@ namespace Contentstack.Core.Tests
             list.Add("ja-jp");
             ContentType contenttype = client.ContentType(source);
             string uid = await GetUID("source1");
-            Entry sourceEntry = await contenttype.Entry(uid)
+            Entry sourceEntry = contenttype.Entry(uid);
+            await sourceEntry
                 .SetLocale("ja-jp")
                 .IncludeFallback()
                 .Fetch<Entry>();
 
             Assert.Contains((string)(sourceEntry.Get("publish_details") as JObject).GetValue("locale"), list);
+        }
+
+        [Fact]
+        public async Task FetchEntryByVariant()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+            await sourceEntry
+                .Variant("variant1")
+                .Fetch<Entry>().ContinueWith((t) =>
+                {
+                    Entry result = t.Result;
+                    if (result == null)
+                    {
+                        Assert.False(true, "Entry.Fetch is not match with expected result.");
+                    }
+                    else
+                    {
+                        Assert.True(result.Uid == sourceEntry.Uid);
+                    }
+                });
+        }
+
+        [Fact]
+        public async Task FetchEntryByVariants()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+            await sourceEntry
+                .Variant(new List<string> { "variant1", "variant2" })
+                .Fetch<Entry>().ContinueWith((t) =>
+                {
+                    Entry result = t.Result;
+                    if (result == null)
+                    {
+                        Assert.False(true, "Entry.Fetch is not match with expected result.");
+                    }
+                    else
+                    {
+                        Assert.True(result.Uid == sourceEntry.Uid);
+                    }
+                });
         }
 
         [Fact]
