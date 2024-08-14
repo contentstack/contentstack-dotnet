@@ -13,3 +13,5 @@ fileignoreconfig:
   checksum: ceea632e4ea870f35ad3bd313e9f8b4e5ec21aa86f006fca2e0a32945999ba67
 - filename: Contentstack.Core/Models/Taxonomy.cs
   checksum: db8bcefdc7aafde4286e7fb6d67348bec49f1ac27b54d84fddca8124135bd779
+- filename: .github/workflows/nuget-publish.yml
+  checksum: 53ba4ce874c4d2362ad00deb23f5a6ec219318860352f997b945e9161a580651
