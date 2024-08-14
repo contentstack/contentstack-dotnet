@@ -21,7 +21,7 @@ jobs:
       - name: Push generated package to GitHub registry
         run: |
           cd out
-          dotnet nuget push "contentstack.csharp.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols true --source https://api.nuget.org/v3/index.json
+          dotnet nuget push "contentstack.csharp.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols --source https://api.nuget.org/v3/index.json
 
   publish-git:  
     runs-on: windows-latest
@@ -41,4 +41,4 @@ jobs:
       - name: Push generated package to GitHub registry
         run: |
           cd out
-          dotnet nuget push "contentstack.csharp.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols true --source https://api.nuget.org/v3/index.json
+          dotnet nuget push "contentstack.csharp.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols --source https://api.nuget.org/v3/index.json
