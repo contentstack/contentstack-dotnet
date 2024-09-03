@@ -87,6 +87,10 @@ namespace Contentstack.Core
             {
                 this.SetHeader("access_token", _options.DeliveryToken);
             }
+            if(_options.EarlyAccessHeader !=null)
+            {
+                this.SetHeader("x-header-ea", string.Join(",", _options.EarlyAccessHeader));
+            }
             Config cnfig = new Config();
             cnfig.Environment = _options.Environment;
             if (_options.Host != null)
