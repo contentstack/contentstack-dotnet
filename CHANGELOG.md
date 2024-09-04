@@ -1,3 +1,9 @@
+### Version: 2.16.0
+#### Date: Sep-3-2024
+
+##### New Feature: 
+- Added Early Access Header Support
+
 ### Version: 2.15.0
 #### Date: Jul-30-2024
 
