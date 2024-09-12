@@ -87,6 +87,10 @@ namespace Contentstack.Core
             {
                 this.SetHeader("access_token", _options.DeliveryToken);
             }
+            if(_options.EarlyAccessHeader !=null)
+            {
+                this.SetHeader("x-header-ea", string.Join(",", _options.EarlyAccessHeader));
+            }
             Config cnfig = new Config();
             cnfig.Environment = _options.Environment;
             if (_options.Host != null)
@@ -407,6 +411,22 @@ namespace Contentstack.Core
         {
             AssetLibrary asset = new AssetLibrary(this);
             return asset;
+        }
+
+        /// <summary>
+        /// Represents a Taxonomy. Creates Taxonomy Instance.
+        /// </summary>
+        /// <returns>Current instance of Taxonomy, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Taxonomy taxonomy = stack.Taxonomy();
+        /// </code>
+        /// </example>
+        public Taxonomy Taxonomies()
+        {
+            Taxonomy tx = new Taxonomy(this);
+            return tx;
         }
 
         /// <summary>

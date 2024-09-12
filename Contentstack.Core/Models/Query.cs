@@ -590,7 +590,6 @@ namespace Contentstack.Core.Models
         /// </example>
         public Query LessThanOrEqualTo(String key, Object value)
         {
-
             if (key != null && value != null)
             {
 
@@ -745,7 +744,6 @@ namespace Contentstack.Core.Models
             {
                 throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
             }
-
             return this;
 
         }
@@ -1683,6 +1681,54 @@ namespace Contentstack.Core.Models
         public Query SetCachePolicy(CachePolicy cachePolicy)
         {
             this._CachePolicy = cachePolicy;
+            return this;
+        }
+
+
+
+        /// <summary>
+        /// To set variants header using query instance.
+        /// </summary>
+        /// <param name="Variant">Query instance</param>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.Variant("variant_entry_1");
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query Variant(string variant_header)
+        {
+            this.SetHeader("x-cs-variant-uid", variant_header);
+            return this;
+        }
+
+
+
+        /// <summary>
+        /// To set multiple variants headers using query instance.
+        /// </summary>
+        /// <param name="Variant">Query instance</param>
+        /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csQuery.Variant(new List<string> { "variant_entry_1", "variant_entry_2", "variant_entry_3" });
+        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///         //Your callback code.
+        ///     });
+        /// </code>
+        /// </example>
+        public Query Variant(List<string> variant_headers)
+        {
+            this.SetHeader("x-cs-variant-uid", string.Join(",", variant_headers));
             return this;
         }
 
