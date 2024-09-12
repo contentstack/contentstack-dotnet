@@ -1,14 +1,9 @@
-### Version: 2.16.0
-#### Date: Sep-3-2024
-
-##### New Feature: 
-- Added Early Access Header Support
-
 ### Version: 2.15.0
 #### Date: Jul-30-2024
 
 ##### New Feature: 
 - Taxonomy class added
+- Added Early Access Header Support
 
 ### Version: 2.14.0
 #### Date: May-28-2024
