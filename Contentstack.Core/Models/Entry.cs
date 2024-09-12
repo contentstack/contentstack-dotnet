@@ -378,6 +378,56 @@ namespace Contentstack.Core.Models
 
         }
 
+
+
+        /// <summary>
+        /// To set variants header using Entry instance.
+        /// </summary>
+        /// <param name="variant_header">Entry instance</param>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Entry csEntry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     
+        ///     csEntry.Variant("variant_entry_1");
+        ///     csEntry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///         //var result = entryResult.Result.GetMetadata();
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry Variant(string variant_header)
+        {
+            this.SetHeader("x-cs-variant-uid", variant_header);
+            return this;
+        }
+
+
+
+        /// <summary>
+        /// To set multiple variants headers using Entry instance.
+        /// </summary>
+        /// <param name="variant_headers">Entry instance</param>
+        /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Entry csEntry = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     
+        ///     csEntry.Variant(new List<string> { "variant_entry_1", "variant_entry_2", "variant_entry_3" });
+        ///     csEntry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///         //var result = entryResult.Result.GetMetadata();
+        ///     });
+        /// </code>
+        /// </example>
+        public Entry Variant(List<string> variant_headers)
+        {
+            this.SetHeader("x-cs-variant-uid", string.Join(",", variant_headers));
+            return this;
+        }
+
         /// <summary>
         /// Get metadata of entry.
         /// </summary>

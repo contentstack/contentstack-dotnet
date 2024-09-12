@@ -1,5 +1,4 @@
-﻿using System;
-namespace Contentstack.Core.Internals
+﻿namespace Contentstack.Core.Internals
 {
     /// <summary>
     /// Contentstack region.

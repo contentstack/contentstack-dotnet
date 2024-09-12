@@ -74,8 +74,13 @@ namespace Contentstack.Core.Configuration
         {
             Timeout = 30000; // Set default value
         }
-    }
 
+        /// <summary>
+        /// TheEarlyAccessHeader used to set service which the user has early access to.
+        /// </summary>
+        public string[] EarlyAccessHeader { get; set; }
+    }
+   
     internal class ContentstackRegionConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
