@@ -99,7 +99,7 @@ namespace Contentstack.Core.Tests
                     {
                         Assert.True(result.Uid == sourceEntry.Uid);
                         Assert.NotNull(result._variant);
-                        Assert.NotNull(result._variant.uid);
+                        Assert.NotNull(result._variant["uid"]);
                     }
                 });
         }
