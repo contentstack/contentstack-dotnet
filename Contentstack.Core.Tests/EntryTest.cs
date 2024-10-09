@@ -98,6 +98,8 @@ namespace Contentstack.Core.Tests
                     else
                     {
                         Assert.True(result.Uid == sourceEntry.Uid);
+                        Assert.NotNull(result._variant);
+                        Assert.NotNull(result._variant["_uid"]);
                     }
                 });
         }
@@ -120,6 +122,8 @@ namespace Contentstack.Core.Tests
                     else
                     {
                         Assert.True(result.Uid == sourceEntry.Uid);
+                        Assert.NotNull(result._variant);
+                        Assert.NotNull(result._variant["_uid"]);
                     }
                 });
         }

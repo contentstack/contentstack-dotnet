@@ -123,6 +123,22 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
+        public Dictionary<string, object> _variant { get; set; }
+
+
+        /// <summary>
+        /// Set key/value attributes of an current entry instance.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///         //Your callback code.
+        ///         //var result = entryResult.Result.Object;
+        ///     });
+        /// </code>
+        /// </example>
         public Dictionary<string, object> Object
         {
             get
