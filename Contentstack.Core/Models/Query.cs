@@ -1851,10 +1851,8 @@ namespace Contentstack.Core.Models
                 headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
                 isLivePreview = true;
             }
-            else
-            {
-                mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
-            }
+            
+            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
             if (QueryValueJson != null && QueryValueJson.Count > 0)
                 mainJson.Add("query", QueryValueJson);
 
