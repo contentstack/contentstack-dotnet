@@ -123,7 +123,16 @@ namespace Contentstack.Core
             }
             if (this.LivePreviewConfig.Host == null)
             {
-                this.LivePreviewConfig.Host = "api.contentstack.io";
+                if (this.LivePreviewConfig.ManagementToken != null)
+                {
+                    this.LivePreviewConfig.Host = "api.contentstack.io";
+                }
+                else if (this.LivePreviewConfig.PreviewToken != null)
+                {
+                    this.LivePreviewConfig.Host = "rest-preview.contentstack.com";
+                } else {
+                    throw new InvalidOperationException("Add PreviewToken or ManagementToken in LivePreviewConfig");
+                }
             }
             this.SerializerSettings.DateParseHandling = DateParseHandling.None;
             this.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
@@ -347,7 +356,14 @@ namespace Contentstack.Core
                 }
             }
             mainJson.Add("live_preview", this.LivePreviewConfig.LivePreview ?? "init");
-            headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
+            
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken)) {
+                headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
+            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken)) {
+                headerAll["preview_token"] = this.LivePreviewConfig.PreviewToken;
+            } else {
+                throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+            }
 
             try
             {
