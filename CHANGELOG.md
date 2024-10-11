@@ -1,3 +1,11 @@
+### Version: 2.16.0
+#### Date: Oct-11-2024
+
+##### Feat: 
+- Live Preview 2.0 Implementation
+##### Fix: 
+- Removed exclusion of env when adding headers
+
 ### Version: 2.15.0
 #### Date: Jul-30-2024
 

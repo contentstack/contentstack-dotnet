@@ -1848,13 +1848,19 @@ namespace Contentstack.Core.Models
                 && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
                 mainJson.Add("live_preview", this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview ?? "init");
-                headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
+
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken)) {
+                    headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
+                } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
+                    headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
+                } else {
+                    throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+                }
+
                 isLivePreview = true;
             }
-            else
-            {
-                mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
-            }
+            
+            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
             if (QueryValueJson != null && QueryValueJson.Count > 0)
                 mainJson.Add("query", QueryValueJson);
 
