@@ -1,3 +1,9 @@
+### Version: 2.16.0
+#### Date: Oct-11-2024
+
+##### Feat: 
+- Live Preview 2.0 Implementation
+
 ### Version: 2.15.1
 #### Date: Oct-08-2024
 
