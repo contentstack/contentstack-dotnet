@@ -3,10 +3,6 @@
 
 ##### Feat: 
 - Live Preview 2.0 Implementation
-
-### Version: 2.15.1
-#### Date: Oct-08-2024
-
 ##### Fix: 
 - Removed exclusion of env when adding headers
 
