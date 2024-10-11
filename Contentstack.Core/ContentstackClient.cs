@@ -118,10 +118,9 @@ namespace Contentstack.Core
                 this.LivePreviewConfig = new LivePreviewConfig()
                 {
                     Enable = false,
-                    
                 };
             }
-            if (this.LivePreviewConfig.Host == null)
+            if (this.LivePreviewConfig.Host == null && this.LivePreviewConfig.Enable)
             {
                 if (this.LivePreviewConfig.ManagementToken != null)
                 {
