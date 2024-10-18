@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+
 namespace Contentstack.Core.Tests
 {
     public class AssetTest
@@ -113,6 +114,22 @@ namespace Contentstack.Core.Tests
             AssetLibrary assetLibrary = client.AssetLibrary();
             assetLibrary.IncludeRelativeUrls();
             ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            Assert.True(assets.Count() > 0);
+            foreach (Asset asset in assets)
+            {
+                Assert.DoesNotContain(asset.Url, "http");
+                Assert.True(asset.FileName.Length > 0);
+            }
+        }
+
+        [Fact]
+        public async Task FetchAssetWithQuery()
+        {
+            JObject queryObject = new JObject
+            {
+                { "filename", "image3.png" }
+            };
+            ContentstackCollection<Asset> assets = await client.AssetLibrary().Query(queryObject).FetchAll();
             Assert.True(assets.Count() > 0);
             foreach (Asset asset in assets)
             {
