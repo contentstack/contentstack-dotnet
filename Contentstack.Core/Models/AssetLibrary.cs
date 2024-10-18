@@ -92,6 +92,18 @@ namespace Contentstack.Core.Models
             return await Exec();
         }
 
+        public AssetLibrary Query(JObject QueryObject)
+        {
+            try
+            {
+                UrlQueries.Add("query", QueryObject);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
         /// <summary>
         /// Include fallback locale publish content, if specified locale content is not publish.
         /// </summary>
@@ -155,6 +167,7 @@ namespace Contentstack.Core.Models
         ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
+        /// Where function 
         public AssetLibrary AddParam(string key, string value)
         {
             UrlQueries.Add(key, value);

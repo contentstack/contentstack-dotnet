@@ -48,7 +48,7 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.16.0";
+            request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.17.0";
             request.Timeout = timeout;
 
             if (proxy != null)
