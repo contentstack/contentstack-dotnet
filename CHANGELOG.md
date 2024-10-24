@@ -1,3 +1,9 @@
+### Version: 2.17.0
+#### Date: Oct-21-2024
+
+##### Feat: 
+- Added support for fetch asset by Query 
+
 ### Version: 2.16.0
 #### Date: Oct-11-2024
 
