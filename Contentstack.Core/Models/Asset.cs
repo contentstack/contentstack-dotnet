@@ -110,6 +110,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// The original name of the file.
         /// </summary>
+        [JsonProperty(PropertyName = "filename")]
         public string FileName { get; set; }
 
         /// <summary>
@@ -121,6 +122,55 @@ namespace Contentstack.Core.Models
         /// Set array of Tags
         /// </summary>
         public Object[] Tags { get; set; }
+
+        /// <summary>
+        /// This content_type in asset.
+        /// </summary>
+        [JsonProperty(propertyName: "content_type")]
+        public string ContentType { get; set; }
+
+        /// <summary>
+        /// This for whether it is asset directory
+        /// </summary>
+        [JsonProperty(propertyName: "is_dir")]
+        public Boolean IsDir { get; set; }
+
+        /// <summary>
+        /// Uid of user who updated the file
+        /// </summary>
+        [JsonProperty(PropertyName = "updated_by")]
+        public string UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Uid of user who updated the file
+        /// </summary>
+        [JsonProperty(PropertyName = "created_by")]
+        public string CreatedBy { get; set; }
+
+
+        /// <summary>
+        /// The Uid of folder in which the asset is present
+        /// </summary>
+        [JsonProperty(PropertyName = "parent_uid")]
+        public string ParentUid { get; set; }
+
+        /// <summary>
+        /// The Version of Asset
+        /// </summary>
+        [JsonProperty(PropertyName = "_version")]
+        public string Version { get; set; }
+
+        /// <summary>
+        /// Dimension Object of the asset containing Height and width
+        /// </summary>
+        [JsonProperty(PropertyName = "dimension")]
+        public Dictionary<string, object> Dimension { get; set; }
+
+        /// <summary>
+        /// Dimension Object of the asset containing Height and width
+        /// </summary>
+        [JsonProperty(PropertyName = "publish_details")]
+        public Dictionary<string, object> PublishDetails { get; set; }
 
         #region Internal Constructors
         internal Asset(ContentstackClient stack, string uid)
