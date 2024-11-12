@@ -1,3 +1,9 @@
+### Version: 2.18.0
+#### Date: Nov-18-2024
+
+##### Feat: 
+- Added support to access different properties of asset
+
 ### Version: 2.17.0
 #### Date: Oct-21-2024
 
