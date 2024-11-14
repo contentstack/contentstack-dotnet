@@ -41,6 +41,22 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
+        public async Task FetchAssetToAccessAttributes()
+        {
+            string uid = await FetchAssetUID();
+            Asset a1 = await client.Asset(uid).AddParam("include_dimension", "true").Fetch();
+            Assert.NotEmpty(a1.Url);
+            Assert.NotEmpty(a1.ContentType);
+            Assert.NotEmpty(a1.Version);
+            Assert.NotEmpty(a1.FileSize);
+            Assert.NotEmpty(a1.FileName);
+            Assert.NotEmpty(a1.Description);
+            Assert.NotEmpty(a1.UpdatedBy);
+            Assert.NotEmpty(a1.CreatedBy);
+            Assert.NotEmpty(a1.PublishDetails);
+        }
+
+        [Fact]
         public async Task FetchAssetsPublishFallback()
         {
             List<string> list = new List<string>();
