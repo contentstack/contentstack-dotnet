@@ -48,7 +48,7 @@ namespace Contentstack.Core.Internals
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.18.0";
+            request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.19.0";
             request.Timeout = timeout;
 
             if (proxy != null)
@@ -89,13 +89,6 @@ namespace Contentstack.Core.Internals
                     foreach (var plugin in client.Plugins)
                     {
                         responseString = await plugin.OnResponse(client, request, response, responseString);
-                    }
-
-                    if (isLivePreview == false && this.client.LivePreviewConfig.Enable == true)
-                    {
-                        JObject data = JsonConvert.DeserializeObject<JObject>(responseString.Replace("\r\n", ""), this.client.SerializerSettings);
-                        updateLivePreviewContent(data);
-                        responseString = JsonConvert.SerializeObject(data);
                     }
                     return responseString;
                 } else {
