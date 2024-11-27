@@ -1,3 +1,9 @@
+### Version: 2.19.0
+#### Date: Nov-30-2024
+
+##### Fix: 
+- Remove updateLPContent call to resolve incorrect display of unsaved changes
+
 ### Version: 2.18.0
 #### Date: Nov-18-2024
 
