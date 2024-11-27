@@ -90,13 +90,6 @@ namespace Contentstack.Core.Internals
                     {
                         responseString = await plugin.OnResponse(client, request, response, responseString);
                     }
-
-                    if (isLivePreview == false && this.client.LivePreviewConfig.Enable == true)
-                    {
-                        JObject data = JsonConvert.DeserializeObject<JObject>(responseString.Replace("\r\n", ""), this.client.SerializerSettings);
-                        updateLivePreviewContent(data);
-                        responseString = JsonConvert.SerializeObject(data);
-                    }
                     return responseString;
                 } else {
                     return null;
