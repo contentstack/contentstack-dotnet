@@ -572,6 +572,8 @@ namespace Contentstack.Core
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
+            } else {
+                this.LivePreviewConfig.LivePreview = "init";
             }
             this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
         }
