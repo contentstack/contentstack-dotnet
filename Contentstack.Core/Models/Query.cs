@@ -1830,19 +1830,6 @@ namespace Contentstack.Core.Models
             Dictionary<string, object> headerAll = new Dictionary<string, object>();
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
 
-            if (headers != null && headers.Count() > 0)
-            {
-                foreach (var header in headers)
-                {
-                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
-                        && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
-                        && header.Key == "access_token")
-                    {
-                        continue;
-                    }
-                    headerAll.Add(header.Key, (string)header.Value);
-                }
-            }
             bool isLivePreview = false;
             if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
                 && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
@@ -1859,7 +1846,27 @@ namespace Contentstack.Core.Models
 
                 isLivePreview = true;
             }
+
+            if (headers != null && headers.Count() > 0)
+            {
+                foreach (var header in headers)
+                {
+                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
+                        && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
+                        && header.Key == "access_token"
+                        && isLivePreview)
+                    {
+                        continue;
+                    }
+                    headerAll.Add(header.Key, (string)header.Value);
+                }
+            }
             
+            if (!isLivePreview && headerAll.ContainsKey("preview_token"))
+            {
+                headerAll.Remove("preview_token");
+            }
+
             mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
             if (QueryValueJson != null && QueryValueJson.Count > 0)
                 mainJson.Add("query", QueryValueJson);

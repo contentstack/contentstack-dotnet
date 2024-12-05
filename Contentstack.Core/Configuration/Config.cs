@@ -99,7 +99,10 @@ namespace Contentstack.Core.Configuration
 
         internal string getBaseUrl (LivePreviewConfig livePreviewConfig, string contentTypeUID)
         {
-            if (livePreviewConfig != null && livePreviewConfig.Enable && livePreviewConfig.ContentTypeUID == contentTypeUID)
+            if (livePreviewConfig != null 
+                && livePreviewConfig.Enable 
+                && livePreviewConfig.LivePreview != "init"
+                && livePreviewConfig.ContentTypeUID == contentTypeUID)
             {
                 return getLivePreviewUrl(livePreviewConfig);
             }
