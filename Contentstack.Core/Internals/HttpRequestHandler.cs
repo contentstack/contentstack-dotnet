@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
@@ -35,7 +35,7 @@ namespace Contentstack.Core.Internals
                     return value;
                 }
                 else if (kvp.Value is Dictionary<string, object>)
-                    value = JsonConvert.SerializeObject(kvp.Value);
+                    value = JsonSerializer.Serialize(kvp.Value);
                 else
                     return String.Format("{0}={1}", kvp.Key, kvp.Value);
 
@@ -75,7 +75,7 @@ namespace Contentstack.Core.Internals
                 request = await plugin.OnRequest(client, request);
             };
 
-            var serializedresult = JsonConvert.SerializeObject(BodyJson);
+            var serializedresult = JsonSerializer.Serialize(BodyJson);
             byte[] requestBody = Encoding.UTF8.GetBytes(serializedresult);
             StreamReader reader = null;
             HttpWebResponse response = null;
@@ -108,42 +108,42 @@ namespace Contentstack.Core.Internals
 
         }
 
-        internal void updateLivePreviewContent(JObject response)
+        internal void updateLivePreviewContent(JsonObject response)
         {
             if (response.ContainsKey("uid") && response["uid"].ToString() == this.client.LivePreviewConfig.EntryUID)
             {
-                response.Merge(this.client.LivePreviewConfig.PreviewResponse, new JsonMergeSettings()
+                foreach (var property in this.client.LivePreviewConfig.PreviewResponse.AsObject())
                 {
-                    MergeArrayHandling = MergeArrayHandling.Replace
-                });
+                    response[property.Key] = property.Value;
+                }
             }
             else
             {
                 foreach (var content in response)
                 {
-                    if (content.Value.Type == JTokenType.Array)
+                    if (content.Value is JsonArray)
                     {
-                        updateArray((JArray)response[content.Key]);
+                        updateArray((JsonArray)response[content.Key]);
                     }
-                    else if (content.Value.Type == JTokenType.Object)
+                    else if (content.Value is JsonObject)
                     {
-                        updateLivePreviewContent((JObject)response[content.Key]);
+                        updateLivePreviewContent((JsonObject)response[content.Key]);
                     }
                 }
             }
         }
 
-        internal void updateArray(JArray array)
+        internal void updateArray(JsonArray array)
         {
             for (var i = 0; i < array.Count(); i++)
             {
-                if (array[i].Type == JTokenType.Array)
+                if (array[i] is JsonArray)
                 {
-                    updateArray((JArray)array[i]);
+                    updateArray((JsonArray)array[i]);
                 }
-                else if (array[i].Type == JTokenType.Object)
+                else if (array[i] is JsonObject)
                 {
-                    updateLivePreviewContent((JObject)array[i]);
+                    updateLivePreviewContent((JsonObject)array[i]);
                 }
             }
         }
