@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Models
 {
@@ -86,13 +87,13 @@ namespace Contentstack.Core.Models
         ///     JObject jObject = await assetLibrary.Count();
         /// </code>
         /// </example>
-        public async Task<JObject> Count()
+        public async Task<JsonObject> Count()
         {
             UrlQueries.Add("count", "true");
             return await Exec();
         }
 
-        public AssetLibrary Query(JObject QueryObject)
+        public AssetLibrary Query(JsonObject QueryObject)
         {
             try
             {
@@ -435,9 +436,10 @@ namespace Contentstack.Core.Models
         /// </example>
         public async Task<ContentstackCollection<Asset>> FetchAll()
         {
-            JObject json = await Exec();
-            var assets = json.SelectToken("$.assets").ToObject<IEnumerable<Asset>>(this.Stack.Serializer);
-            var collection = json.ToObject<ContentstackCollection<Asset>>(this.Stack.Serializer);
+            JsonObject json = await Exec();
+            // TODO: the serializer earlier taken was this.StackInstance.Serializer
+            var assets = JsonSerializer.Deserialize<IEnumerable<Asset>>(json["assets"].ToJsonString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var collection = JsonSerializer.Deserialize<ContentstackCollection<Asset>>(json.ToJsonString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             foreach (var entry in assets)
             {
                 if (entry.GetType() == typeof(Asset))
@@ -449,7 +451,7 @@ namespace Contentstack.Core.Models
             return collection;
         }
 
-        private async Task<JObject> Exec()
+        private async Task<JsonObject> Exec()
         {
             Dictionary<string, object> headers = GetHeader(_Headers);
 
@@ -474,7 +476,7 @@ namespace Contentstack.Core.Models
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.Stack);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Stack.Config.Branch, timeout: this.Stack.Config.Timeout, proxy: this.Stack.Config.Proxy);
-                return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                return JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}")).AsObject();
                
             }
             catch (Exception ex)
@@ -541,23 +543,22 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    JsonObject data = JsonNode.Parse(errorMessage.Replace("\r\n", "")).AsObject();
 
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
+                    if (data.TryGetPropertyValue("error_code", out JsonNode token))
+                        errorCode = token.GetValue<int>();
 
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
+                    if (data.TryGetPropertyValue("error_message", out token))
+                        errorMessage = token.GetValue<string>();
 
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                    if (data.TryGetPropertyValue("errors", out token))
+                        errors = JsonSerializer.Deserialize<Dictionary<string, object>>(token.ToJsonString());
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)
+                    {
                         statusCode = response.StatusCode;
+                    }
                 }
             }
             catch
