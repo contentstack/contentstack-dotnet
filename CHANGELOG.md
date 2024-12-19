@@ -1,3 +1,9 @@
+### Version: 2.20.0
+#### Date: Dec-19-2024
+
+##### Fix: 
+- Reset `LivePreviewConfig` to prevent overwriting fetched data with live preview data during regular fetch calls.
+
 ### Version: 2.19.0
 #### Date: Nov-30-2024
 
