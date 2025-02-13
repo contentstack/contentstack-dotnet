@@ -554,6 +554,10 @@ namespace Contentstack.Core
         /// </example>
         public async Task LivePreviewQueryAsync(Dictionary<string, string> query)
         {
+            this.LivePreviewConfig.LivePreview = null;
+            this.LivePreviewConfig.ContentTypeUID = null;
+            this.LivePreviewConfig.EntryUID = null;
+
             if (query.Keys.Contains("content_type_uid"))
             {
                 string contentTypeUID = null;
@@ -571,8 +575,6 @@ namespace Contentstack.Core
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
-            } else {
-                this.LivePreviewConfig.LivePreview = "init";
             }
             this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
         }
