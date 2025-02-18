@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Contentstack.Core.Internals
 {
@@ -33,7 +33,7 @@ namespace Contentstack.Core.Internals
         /// <summary>
         /// This is error message.
         /// </summary>
-        [JsonProperty("error_message")]
+        [JsonPropertyName("error_message")]
         public string ErrorMessage
         {
             get
@@ -50,13 +50,13 @@ namespace Contentstack.Core.Internals
         /// <summary>
         /// This is error code.
         /// </summary>
-        [JsonProperty("error_code")]
+        [JsonPropertyName("error_code")]
         public int ErrorCode { get; set; }
 
         /// <summary>
         /// Set of errors in detail.
         /// </summary>
-        [JsonProperty("errors")]
+        [JsonPropertyName("errors")]
         public Dictionary<string, object> Errors { get; set; }
 
         #endregion

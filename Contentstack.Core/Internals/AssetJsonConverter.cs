@@ -1,25 +1,25 @@
 ﻿using System;
-using Contentstack.Core;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Contentstack.Core.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
     [CSJsonConverter("AssetJsonConverter")]
     public class AssetJsonConverter : JsonConverter<Asset>
     {
-        public override Asset ReadJson(JsonReader reader, Type objectType, Asset existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override Asset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            JObject jObject = JObject.Load(reader);
-            JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
-            JsonSerializer Serializer = JsonSerializer.Create(SerializerSettings);
-            Asset asset = jObject.ToObject<Asset>(Serializer);
-            asset.ParseObject(jObject);
-            return asset;
+            using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+            {
+                JsonElement root = document.RootElement;
+                Asset asset = JsonSerializer.Deserialize<Asset>(root.GetRawText(), options);
+                asset.ParseObject(root);
+                return asset;
+            }
         }
 
-        public override void WriteJson(JsonWriter writer, Asset value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, Asset value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }
