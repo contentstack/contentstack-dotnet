@@ -1,3 +1,9 @@
+### Version: 2.21.0
+#### Date: Dec-19-2024
+
+##### Feat: 
+- Updating to system.text.json
+
 ### Version: 2.20.0
 #### Date: Dec-19-2024
 
