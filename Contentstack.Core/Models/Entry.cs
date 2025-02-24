@@ -1398,6 +1398,10 @@ namespace Contentstack.Core.Models
                     headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
                 } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
                     headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
+                } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.releaseId)) {
+                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.releaseId;
+                } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.previewTimestamp)) {
+                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.previewTimestamp;
                 } else {
                     throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
                 }

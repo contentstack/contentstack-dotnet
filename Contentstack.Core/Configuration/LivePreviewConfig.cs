@@ -12,5 +12,7 @@ namespace Contentstack.Core.Configuration
         internal string ContentTypeUID { get; set; }
         internal string EntryUID { get; set; }
         internal JsonElement PreviewResponse { get; set; }
+        internal string releaseId {get; set;}
+        internal string previewTimestamp {get; set;}
     }
 }
