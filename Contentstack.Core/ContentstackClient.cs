@@ -66,19 +66,22 @@ namespace Contentstack.Core
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
         public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
         /// <summary>
-        /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
+        /// Initializes a new instance of the <see cref="ContentstackClient"/> class.
         /// </summary>
-        /// <param name="options"> used to get stack details via class <see cref="ContentstackOptions"/> to create client.</param>
+        /// <param name="options">
+        /// The configuration options used to retrieve stack details, provided through the <see cref="ContentstackOptions"/> class.
+        /// </param>
         /// <example>
+        /// This example demonstrates how to create a <see cref="ContentstackClient"/> instance and retrieve a content type:
         /// <code>
-        ///     var options = new ContentstackOptions()
-        ///     {
-        ///        ApiKey = &quot;api_key&quot;,
-        ///        DeliveryToken = &quot;delivery_token&quot;
-        ///        Environment = &quot;environment&quot;
-        ///      }
-        ///     ContentstackClient stack = new ContentstackClient(options);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
+        /// var options = new ContentstackOptions
+        /// {
+        ///     ApiKey = "api_key",
+        ///     DeliveryToken = "delivery_token",
+        ///     Environment = "environment"
+        /// };
+        /// ContentstackClient stack = new ContentstackClient(options);
+        /// ContentType contentType = stack.ContentType("contentType_name");
         /// </code>
         /// </example>
         public ContentstackClient(IOptions<ContentstackOptions> options)
@@ -359,6 +362,10 @@ namespace Contentstack.Core
                 headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
             } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken)) {
                 headerAll["preview_token"] = this.LivePreviewConfig.PreviewToken;
+            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.releaseId)) {
+                headerAll["release_id"] = this.LivePreviewConfig.releaseId;
+            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.previewTimestamp)) {
+                headerAll["preview_timestamp"] = this.LivePreviewConfig.previewTimestamp;
             } else {
                 throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
             }
@@ -575,6 +582,16 @@ namespace Contentstack.Core
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
+            }
+            if (query.Keys.Contains("release_id")) {
+                string releaseId = null;
+                query.TryGetValue("release_id", out releaseId);
+                this.LivePreviewConfig.releaseId = releaseId;
+            }
+            if (query.Keys.Contains("preview_timestamp")) {
+                string previewTimestamp = null;
+                query.TryGetValue("preview_timestamp", out previewTimestamp);
+                this.LivePreviewConfig.previewTimestamp = previewTimestamp;
             }
             this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
         }

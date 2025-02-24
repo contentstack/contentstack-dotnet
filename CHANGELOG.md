@@ -1,3 +1,9 @@
+### Version: 2.21.0
+#### Date: March-03-2025
+
+##### Feat: 
+- Added Support for Timeline Preview
+
 ### Version: 2.20.0
 #### Date: Dec-19-2024
 
