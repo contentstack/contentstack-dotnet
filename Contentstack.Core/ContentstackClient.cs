@@ -360,6 +360,10 @@ namespace Contentstack.Core
                 headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
             } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken)) {
                 headerAll["preview_token"] = this.LivePreviewConfig.PreviewToken;
+            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.releaseId)) {
+                headerAll["release_id"] = this.LivePreviewConfig.releaseId;
+            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.previewTimestamp)) {
+                headerAll["preview_timestamp"] = this.LivePreviewConfig.previewTimestamp;
             } else {
                 throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
             }
@@ -576,6 +580,16 @@ namespace Contentstack.Core
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
+            } 
+            if (query.Keys.Contains("release_id")) {
+                string releaseId = null;
+                query.TryGetValue("release_id", out releaseId);
+                this.LivePreviewConfig.releaseId = releaseId;
+            }
+            if (query.Keys.Contains("preview_timestamp")) {
+                string previewTimestamp = null;
+                query.TryGetValue("preview_timestamp", out previewTimestamp);
+                this.LivePreviewConfig.previewTimestamp = previewTimestamp;
             }
             this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
         }
