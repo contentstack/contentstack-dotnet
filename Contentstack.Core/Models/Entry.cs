@@ -110,6 +110,8 @@ namespace Contentstack.Core.Models
         /// </example>
         public Dictionary<string, object> Metadata { get; set; }
 
+        public Dictionary<string, object> publish_details { get; set; }
+
         /// <summary>
         /// Set key/value attributes of an current entry instance.
         /// </summary>
@@ -1422,7 +1424,7 @@ namespace Contentstack.Core.Models
                 {
                     cachePolicy = _CachePolicy;
                 }
-
+                
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout, proxy: this.ContentTypeInstance.StackInstance.Config.Proxy);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
@@ -1488,7 +1490,12 @@ namespace Contentstack.Core.Models
             this._ObjectAttributes = jsonObj.ToObject<Dictionary<string, object>>();
             if (_ObjectAttributes != null && _ObjectAttributes.ContainsKey("_metadata"))
             {
-                Dictionary<string, object> _metadataJSON = (Dictionary<string, object>)_ObjectAttributes["_metadata"];
+                var jObject = (Newtonsoft.Json.Linq.JObject)_ObjectAttributes["_metadata"];
+                var _metadataJSON = new Dictionary<string, object>();
+                foreach (var property in jObject.Properties())
+                {
+                    _metadataJSON[property.Name] = property.Value.ToObject<object>();
+                }
                 List<string> iterator = _metadataJSON.Keys.ToList();
                 Metadata = new Dictionary<string, object>();
                 foreach (var key in iterator)

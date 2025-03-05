@@ -8,7 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
-
+using Contentstack.Core.Models;
 
 namespace Contentstack.Core.Models
 {
@@ -22,12 +22,12 @@ namespace Contentstack.Core.Models
         internal Dictionary<string, object> _FormHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
-        private Dictionary<string, object> QueryValueJson = new Dictionary<string, object>();
+
+        protected Dictionary<string, object> QueryValueJson = new Dictionary<string, object>();
         private string _ResultJson = string.Empty; private CachePolicy _CachePolicy;
-
         private ContentType ContentTypeInstance { get; set; }
-
-        private string _Url
+        private ContentstackClient TaxonomyInstance { get; set; }
+        protected virtual string _Url
         {
             get
             {
@@ -38,6 +38,7 @@ namespace Contentstack.Core.Models
                                      baseURL,
                                      this.ContentTypeId);
             }
+           
         }
         #endregion
 
@@ -56,6 +57,7 @@ namespace Contentstack.Core.Models
         /// </code>
         /// </example>
         public string ContentTypeId { get; set; }
+        public ContentstackClient Stack { get; private set; }
 
         #endregion
 
@@ -68,9 +70,14 @@ namespace Contentstack.Core.Models
         {
             this.ContentTypeId = contentTypeName;
         }
+        internal Query(ContentstackClient Tax)
+        {
+            SetTaxonomyInstance(Tax);
+        }
         #endregion
 
         #region Internal Functions
+
         internal static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
@@ -127,6 +134,12 @@ namespace Contentstack.Core.Models
             this.ContentTypeInstance = contentTypeInstance;
             //SetLocale("en-us");
         }
+        internal void SetTaxonomyInstance(ContentstackClient Tax)
+        {
+            this.TaxonomyInstance = Tax;
+            //SetLocale("en-us");
+        }
+
 
         #endregion
 
@@ -1810,17 +1823,36 @@ namespace Contentstack.Core.Models
 
         private ContentstackCollection<T> parseJObject<T>(JObject jObject)
         {
-            var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
-            var collection = jObject.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
-            foreach (var entry in entries)
+          
+            if(this.TaxonomyInstance!=null)
             {
-                if (entry.GetType() == typeof(Entry))
+                var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.TaxonomyInstance.Serializer);
+                var collection = jObject.ToObject<ContentstackCollection<T>>(this.TaxonomyInstance.Serializer);
+                foreach (var entry in entries)
                 {
-                    (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
+                    if (entry.GetType() == typeof(Entry))
+                    {
+                        (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
+                    }
                 }
+                collection.Items = entries;
+                return collection;
+
+            } else
+            {
+                var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+                var collection = jObject.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+                foreach (var entry in entries)
+                {
+                    if (entry.GetType() == typeof(Entry))
+                    {
+                        (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
+                    }
+                }
+                collection.Items = entries;
+                return collection;
             }
-            collection.Items = entries;
-            return collection;
+           
         }
 
         #endregion
@@ -1831,8 +1863,8 @@ namespace Contentstack.Core.Models
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
 
             bool isLivePreview = false;
-            if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
-                && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
+            if (this.ContentTypeInstance!=null && this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
+                && this.ContentTypeInstance.StackInstance?.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
                 mainJson.Add("live_preview", this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview ?? "init");
 
@@ -1855,8 +1887,8 @@ namespace Contentstack.Core.Models
             {
                 foreach (var header in headers)
                 {
-                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
-                        && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
+                    if (this.ContentTypeInstance!=null && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.Enable == true
+                        && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance?.ContentTypeId
                         && header.Key == "access_token"
                         && isLivePreview)
                     {
@@ -1865,7 +1897,14 @@ namespace Contentstack.Core.Models
                     headerAll.Add(header.Key, (string)header.Value);
                 }
             }
-            
+
+            if(this.TaxonomyInstance!=null && this.TaxonomyInstance._LocalHeaders!=null)
+            {
+                foreach (var header in this.TaxonomyInstance._LocalHeaders)
+                {
+                    headerAll.Add(header.Key, (string)header.Value);
+                }
+            }
             if (!isLivePreview && headerAll.ContainsKey("preview_token"))
             {
                 headerAll.Remove("preview_token");
@@ -1879,7 +1918,14 @@ namespace Contentstack.Core.Models
                 headerAll.Remove("preview_timestamp");
             }
 
-            mainJson.Add("environment", this.ContentTypeInstance.StackInstance.Config.Environment);
+            if(this.ContentTypeInstance!=null)
+            {
+                mainJson.Add("environment", this.ContentTypeInstance?.StackInstance.Config.Environment);
+            }
+            if (this.TaxonomyInstance!=null && this.TaxonomyInstance.Config.Environment != null)
+            {
+                mainJson.Add("environment", this.TaxonomyInstance?.Config.Environment);
+            }
             if (QueryValueJson != null && QueryValueJson.Count > 0)
                 mainJson.Add("query", QueryValueJson);
 
@@ -1890,15 +1936,26 @@ namespace Contentstack.Core.Models
 
             try
             {
-                HttpRequestHandler requestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
-                var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout);
-                return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                if(this.TaxonomyInstance!=null)
+                {
+                    HttpRequestHandler requestHandler = new HttpRequestHandler(this.TaxonomyInstance);
+                    var branch = this.TaxonomyInstance.Config.Branch != null ? this.TaxonomyInstance.Config.Branch : "main";
+                    var outputResult = await requestHandler.ProcessRequest(this._Url, headerAll, mainJson, Branch: branch, isLivePreview: isLivePreview, timeout: this.TaxonomyInstance.Config.Timeout);
+                    return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                }
+                else
+                {
+                    HttpRequestHandler requestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
+                    var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout);
+                    return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                }
             }
             catch (Exception ex)
             {
                 throw GetContentstackError(ex);
             }
         }
+
 
         #region Private Functions
         private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
