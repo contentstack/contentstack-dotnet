@@ -1,14 +1,8 @@
 using System;
 using Xunit;
-using Contentstack.Core;
-using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Linq;
-using Contentstack.Core.Tests.Models;
-using Newtonsoft.Json.Linq;
-using System.Reflection.PortableExecutable;
 
 namespace Contentstack.Core.Tests
 {

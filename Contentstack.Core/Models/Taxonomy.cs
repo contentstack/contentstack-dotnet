@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Newtonsoft.Json.Linq;

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Collections;
-using Contentstack.Utils;
 using Contentstack.Core.Interfaces;
 
 namespace Contentstack.Core
@@ -46,7 +45,7 @@ namespace Contentstack.Core
             }
         }
 
-        internal LivePreviewConfig LivePreviewConfig;
+        internal LivePreviewConfig LivePreviewConfig { get; set; }
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private string _Url
@@ -360,17 +359,23 @@ namespace Contentstack.Core
                 headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
             } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken)) {
                 headerAll["preview_token"] = this.LivePreviewConfig.PreviewToken;
-            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.releaseId)) {
-                headerAll["release_id"] = this.LivePreviewConfig.releaseId;
-            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.previewTimestamp)) {
-                headerAll["preview_timestamp"] = this.LivePreviewConfig.previewTimestamp;
             } else {
                 throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+            }
+
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.releaseId))
+            {
+                headerAll["release_id"] = this.LivePreviewConfig.releaseId;
+            }
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.previewTimestamp))
+            {
+                headerAll["preview_timestamp"] = this.LivePreviewConfig.previewTimestamp;
             }
 
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
+                //string branch =  this.Config.Branch ? this.Config.Branch : "main";
                 var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 return (JObject)data["entry"];
@@ -477,6 +482,13 @@ namespace Contentstack.Core
         {
             return StackApiKey;
         }
+
+
+        public LivePreviewConfig GetLivePreviewConfig()
+        {
+            return LivePreviewConfig;
+        }
+
 
         /// <summary>
         /// Get stack access token
