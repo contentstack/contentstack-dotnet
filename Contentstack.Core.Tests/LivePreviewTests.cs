@@ -82,7 +82,7 @@ namespace Contentstack.Core.Tests
             };
             Lpclient.LivePreviewQueryAsync(query);
             var LPConfig = Lpclient.GetLivePreviewConfig();
-            Assert.Equal(LPConfig.previewTimestamp, "preview_timestamp");
+            Assert.Equal(LPConfig.PreviewTimestamp, "preview_timestamp");
             Assert.NotEmpty(LPConfig.PreviewToken);
             Assert.NotEmpty(LPConfig.PreviewToken);
             Assert.NotEmpty(LPConfig.Host);

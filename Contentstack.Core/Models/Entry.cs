@@ -109,7 +109,11 @@ namespace Contentstack.Core.Models
         /// </example>
         public Dictionary<string, object> Metadata { get; set; }
 
-        public Dictionary<string, object> publish_details { get; set; }
+        /// <summary>
+        /// Dimension Object of the entries publish details
+        /// </summary>
+        [JsonProperty(PropertyName = "publish_details")]
+        public Dictionary<string, object> PublishDetails { get; set; }
 
         /// <summary>
         /// Set key/value attributes of an current entry instance.
@@ -1403,13 +1407,13 @@ namespace Contentstack.Core.Models
                     throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
                 }
 
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.releaseId))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
                 {
-                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.releaseId;
+                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId;
                 }
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.previewTimestamp))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp))
                 {
-                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.previewTimestamp;
+                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp;
                 }
 
                 isLivePreview = true;

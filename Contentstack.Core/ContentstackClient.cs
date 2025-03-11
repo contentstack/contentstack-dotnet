@@ -363,13 +363,13 @@ namespace Contentstack.Core
                 throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
             }
 
-            if (!string.IsNullOrEmpty(this.LivePreviewConfig.releaseId))
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.ReleaseId))
             {
-                headerAll["release_id"] = this.LivePreviewConfig.releaseId;
+                headerAll["release_id"] = this.LivePreviewConfig.ReleaseId;
             }
-            if (!string.IsNullOrEmpty(this.LivePreviewConfig.previewTimestamp))
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewTimestamp))
             {
-                headerAll["preview_timestamp"] = this.LivePreviewConfig.previewTimestamp;
+                headerAll["preview_timestamp"] = this.LivePreviewConfig.PreviewTimestamp;
             }
 
             try
@@ -594,14 +594,14 @@ namespace Contentstack.Core
                 this.LivePreviewConfig.LivePreview = hash;
             } 
             if (query.Keys.Contains("release_id")) {
-                string releaseId = null;
-                query.TryGetValue("release_id", out releaseId);
-                this.LivePreviewConfig.releaseId = releaseId;
+                string ReleaseId = null;
+                query.TryGetValue("release_id", out ReleaseId);
+                this.LivePreviewConfig.ReleaseId = ReleaseId;
             }
             if (query.Keys.Contains("preview_timestamp")) {
-                string previewTimestamp = null;
-                query.TryGetValue("preview_timestamp", out previewTimestamp);
-                this.LivePreviewConfig.previewTimestamp = previewTimestamp;
+                string PreviewTimestamp = null;
+                query.TryGetValue("preview_timestamp", out PreviewTimestamp);
+                this.LivePreviewConfig.PreviewTimestamp = PreviewTimestamp;
             }
             this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
         }

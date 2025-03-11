@@ -1826,13 +1826,6 @@ namespace Contentstack.Core.Models
             {
                 var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.TaxonomyInstance.Serializer);
                 var collection = jObject.ToObject<ContentstackCollection<T>>(this.TaxonomyInstance.Serializer);
-                foreach (var entry in entries)
-                {
-                    if (entry.GetType() == typeof(Entry))
-                    {
-                        (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
-                    }
-                }
                 collection.Items = entries;
                 return collection;
 
@@ -1874,13 +1867,13 @@ namespace Contentstack.Core.Models
                     throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
                 }
 
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.releaseId))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
                 {
-                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.releaseId;
+                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId;
                 }
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.previewTimestamp))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp))
                 {
-                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.previewTimestamp;
+                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp;
                 }
 
                 isLivePreview = true;
@@ -1925,7 +1918,7 @@ namespace Contentstack.Core.Models
             {
                 mainJson.Add("environment", this.ContentTypeInstance?.StackInstance.Config.Environment);
             }
-            if (this.TaxonomyInstance!=null && this.TaxonomyInstance.Config.Environment != null)
+            else if (this.TaxonomyInstance!=null && this.TaxonomyInstance.Config.Environment != null)
             {
                 mainJson.Add("environment", this.TaxonomyInstance?.Config.Environment);
             }
