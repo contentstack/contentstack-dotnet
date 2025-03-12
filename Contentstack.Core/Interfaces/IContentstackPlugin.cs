@@ -1,7 +1,5 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
-using Contentstack.Core.Models;
 namespace Contentstack.Core.Interfaces
 {
     public interface IContentstackPlugin

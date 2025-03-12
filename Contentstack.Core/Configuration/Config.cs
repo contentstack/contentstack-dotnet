@@ -13,7 +13,7 @@ namespace Contentstack.Core.Configuration
         private string _Port;
         private string _Version;
         private string _Environment;
-        private string _Branch;
+        private string _Branch="main";
         private int _Timeout;
         private WebProxy _proxy;
         #endregion

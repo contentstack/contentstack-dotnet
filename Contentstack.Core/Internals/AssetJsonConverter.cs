@@ -1,5 +1,4 @@
 ﻿using System;
-using Contentstack.Core;
 using Contentstack.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
