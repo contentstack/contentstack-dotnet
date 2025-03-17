@@ -167,7 +167,7 @@ namespace Contentstack.Core.Models
         public Dictionary<string, object> Dimension { get; set; }
 
         /// <summary>
-        /// Dimension Object of the asset containing Height and width
+        /// Dimension Object of the asset publish details
         /// </summary>
         [JsonProperty(PropertyName = "publish_details")]
         public Dictionary<string, object> PublishDetails { get; set; }

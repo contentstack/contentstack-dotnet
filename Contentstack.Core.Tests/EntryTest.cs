@@ -72,7 +72,7 @@ namespace Contentstack.Core.Tests
             ContentType contenttype = client.ContentType(source);
             string uid = await GetUID("source1");
             Entry sourceEntry = contenttype.Entry(uid);
-            await sourceEntry
+            sourceEntry = await sourceEntry
                 .SetLocale("ja-jp")
                 .IncludeFallback()
                 .Fetch<Entry>();
@@ -98,8 +98,7 @@ namespace Contentstack.Core.Tests
                     else
                     {
                         Assert.True(result.Uid == sourceEntry.Uid);
-                        Assert.NotNull(result._variant);
-                        Assert.NotNull(result._variant["_uid"]);
+                        Assert.Null(result._variant);
                     }
                 });
         }
@@ -122,8 +121,7 @@ namespace Contentstack.Core.Tests
                     else
                     {
                         Assert.True(result.Uid == sourceEntry.Uid);
-                        Assert.NotNull(result._variant);
-                        Assert.NotNull(result._variant["_uid"]);
+                        Assert.Null(result._variant);
                     }
                 });
         }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Newtonsoft.Json.Linq;
@@ -13,15 +11,13 @@ namespace Contentstack.Core.Models
     public class Taxonomy: Query
     {
 
-
         #region Internal Variables
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
-        private Dictionary<string, object> QueryValueJson = new Dictionary<string, object>();
 
-        private string _Url
+        protected override string _Url
         {
             get
             {
@@ -30,19 +26,19 @@ namespace Contentstack.Core.Models
             }
         }
         #endregion
-
         public ContentstackClient Stack
         {
             get;
             set;
         }
 
+       
         #region Internal Constructors
 
         internal Taxonomy()
         {
         }
-        internal Taxonomy(ContentstackClient stack)
+        internal Taxonomy(ContentstackClient stack): base(stack)
         {
             this.Stack = stack;
             this._StackHeaders = stack._LocalHeaders;
@@ -189,7 +185,7 @@ namespace Contentstack.Core.Models
             {
                 try
                 {
-                    Dictionary<string, object> queryValue = new Dictionary<string, object> { { "eq_$below", value } };
+                    Dictionary<string, object> queryValue = new Dictionary<string, object> { { "$eq_below", value } };
                     QueryValueJson.Add(key, queryValue);
                 }
                 catch (Exception e)
