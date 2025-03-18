@@ -11,7 +11,7 @@ namespace Contentstack.Core
     {
         private readonly string name;
         private readonly bool isAutoloadEnable;
-        private static ConcurrentDictionary<Type, List<Type>> _types = new ConcurrentDictionary<Type, List<Type>>();
+        private static readonly ConcurrentDictionary<Type, List<Type>> _types = new ConcurrentDictionary<Type, List<Type>>();
 
         /// <summary>
         /// Name for the JsonConverter
