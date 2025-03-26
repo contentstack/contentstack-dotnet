@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
+using System.Threading.Tasks;
+using System.Net;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Contentstack.Core.Models
 {
@@ -82,22 +82,23 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JsonObject data = JsonNode.Parse(errorMessage.Replace("\r\n", "")).AsObject();
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
 
-                    if (data.TryGetPropertyValue("error_code", out JsonNode token))
-                        errorCode = token.GetValue<int>();
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
 
-                    if (data.TryGetPropertyValue("error_message", out token))
-                        errorMessage = token.GetValue<string>();
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
 
-                    if (data.TryGetPropertyValue("errors", out token))
-                        errors = JsonSerializer.Deserialize<Dictionary<string, object>>(token.ToJsonString());
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)
-                    {
                         statusCode = response.StatusCode;
-                    }
                 }
             }
             catch
@@ -138,7 +139,7 @@ namespace Contentstack.Core.Models
         /// </example>
         /// <param name="param">is dictionary of additional parameter</param>
         /// <returns>The Content-Type Schema Object.</returns>
-        public async Task<JsonObject> Fetch(Dictionary<string, object> param = null)
+        public async Task<JObject> Fetch(Dictionary<string, object> param = null)
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -169,8 +170,8 @@ namespace Contentstack.Core.Models
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.StackInstance.Config.Branch, timeout: this.StackInstance.Config.Timeout, proxy: this.StackInstance.Config.Proxy);
-                JsonObject data = JsonNode.Parse(outputResult.Replace("\r\n", "")).AsObject();
-                JsonObject contentTypes = data["content_type"].AsObject();
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.StackInstance.SerializerSettings);
+                JObject contentTypes = (Newtonsoft.Json.Linq.JObject)data["content_type"];
                 return contentTypes;
             }
             catch (Exception ex)
