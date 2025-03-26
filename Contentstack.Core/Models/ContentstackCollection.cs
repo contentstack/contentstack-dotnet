@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Contentstack.Core.Models
 {
+    [JsonObject]
     public class ContentstackCollection<T> : IEnumerable<T>
     {
         /// <summary>

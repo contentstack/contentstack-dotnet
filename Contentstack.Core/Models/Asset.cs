@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Contentstack.Utils.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Models
 {
@@ -99,19 +98,19 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// This is Asset type uid.
         /// </summary>
-        [JsonPropertyName("_content_type_uid")]
+        [JsonProperty(propertyName: "_content_type_uid")]
         public string ContentTypeUid { get; set; }
 
         /// <summary>
         /// The size of the file in bytes.
         /// </summary>
-        [JsonPropertyName("file_size")]
+        [JsonProperty(PropertyName = "file_size")]
         public string FileSize { get; set; }
 
         /// <summary>
         /// The original name of the file.
         /// </summary>
-        [JsonPropertyName("filename")]
+        [JsonProperty(PropertyName = "filename")]
         public string FileName { get; set; }
 
         /// <summary>
@@ -127,50 +126,50 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// This content_type in asset.
         /// </summary>
-        [JsonPropertyName("content_type")]
+        [JsonProperty(propertyName: "content_type")]
         public string ContentType { get; set; }
 
         /// <summary>
         /// This for whether it is asset directory
         /// </summary>
-        [JsonPropertyName("is_dir")]
+        [JsonProperty(propertyName: "is_dir")]
         public Boolean IsDir { get; set; }
 
         /// <summary>
         /// Uid of user who updated the file
         /// </summary>
-        [JsonPropertyName("updated_by")]
+        [JsonProperty(PropertyName = "updated_by")]
         public string UpdatedBy { get; set; }
 
         /// <summary>
         /// Uid of user who updated the file
         /// </summary>
-        [JsonPropertyName("created_by")]
+        [JsonProperty(PropertyName = "created_by")]
         public string CreatedBy { get; set; }
 
 
         /// <summary>
         /// The Uid of folder in which the asset is present
         /// </summary>
-        [JsonPropertyName("parent_uid")]
+        [JsonProperty(PropertyName = "parent_uid")]
         public string ParentUid { get; set; }
 
         /// <summary>
         /// The Version of Asset
         /// </summary>
-        [JsonPropertyName("_version")]
+        [JsonProperty(PropertyName = "_version")]
         public string Version { get; set; }
 
         /// <summary>
         /// Dimension Object of the asset containing Height and width
         /// </summary>
-        [JsonPropertyName("dimension")]
+        [JsonProperty(PropertyName = "dimension")]
         public Dictionary<string, object> Dimension { get; set; }
 
         /// <summary>
         /// Dimension Object of the asset containing Height and width
         /// </summary>
-        [JsonPropertyName("publish_details")]
+        [JsonProperty(PropertyName = "publish_details")]
         public Dictionary<string, object> PublishDetails { get; set; }
 
         #region Internal Constructors
@@ -307,9 +306,9 @@ namespace Contentstack.Core.Models
 
         }
 
-        internal void ParseObject(JsonElement jsonObj)
+        internal void ParseObject(JObject jsonObj)
         {
-            this._ObjectAttributes = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonObj);
+            this._ObjectAttributes = jsonObj.ToObject<Dictionary<string, object>>();
         }
 
         public DateTime GetCreateAt()
@@ -420,9 +419,8 @@ namespace Contentstack.Core.Models
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.StackInstance.Config.Branch, timeout: this.StackInstance.Config.Timeout, proxy: this.StackInstance.Config.Proxy);
-                JsonObject obj = JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}")).AsObject();
-                // TODO: the serializer earlier taken was this.StackInstance.Serializer
-                return JsonSerializer.Deserialize<Asset>(obj["$.asset"].ToJsonString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                return obj.SelectToken("$.asset").ToObject<Asset>(this.StackInstance.Serializer);
             }
             catch (Exception ex)
             {
@@ -488,16 +486,21 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JsonObject data = JsonNode.Parse(errorMessage.Replace("\r\n", "")).AsObject();
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    //errorCode = ContentstackConvert.ToInt32(data.Property("error_code").Value);
+                    //errorMessage = ContentstackConvert.ToString(data.Property("error_message").Value);
 
-                    if (data.TryGetPropertyValue("error_code", out JsonNode token))
-                        errorCode = token.GetValue<int>();
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
 
-                    if (data.TryGetPropertyValue("error_message", out token))
-                        errorMessage = token.GetValue<string>();
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
 
-                    if (data.TryGetPropertyValue("errors", out token))
-                        errors = JsonSerializer.Deserialize<Dictionary<string, object>>(token.ToJsonString());
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)

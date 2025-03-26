@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Contentstack.Core.Configuration;
-using Contentstack.Core.Interfaces;
 using Contentstack.Core.Internals;
-using Contentstack.Core.Models;
+using Contentstack.Core.Configuration;
 using Microsoft.Extensions.Options;
+using Contentstack.Core.Models;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
+using System.IO;
+using System.Collections;
+using Contentstack.Utils;
+using Contentstack.Core.Interfaces;
 
 namespace Contentstack.Core
 {
@@ -23,16 +24,7 @@ namespace Contentstack.Core
         /// <summary>
         /// Gets or sets the settings that should be used for deserialization.
         /// </summary>
-        public JsonSerializerOptions SerializerSettings { get; set; } = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            Converters = {
-                new JsonStringEnumConverter(),
-                new CustomUtcDateTimeConverter(),
-                new CustomNullableUtcDateTimeConverter(),
-            }
-        };
+        public JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings();
 
         #region Internal Variables
 
@@ -43,6 +35,7 @@ namespace Contentstack.Core
         }
         private ContentstackOptions _options;
 
+        internal JsonSerializer Serializer => JsonSerializer.Create(SerializerSettings);
         internal string _SyncUrl
         {
             get
@@ -140,6 +133,10 @@ namespace Contentstack.Core
                     throw new InvalidOperationException("Add PreviewToken or ManagementToken in LivePreviewConfig");
                 }
             }
+            this.SerializerSettings.DateParseHandling = DateParseHandling.None;
+            this.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            this.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            this.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
 
             foreach (Type t in CSJsonConverterAttribute.GetCustomAttribute(typeof(CSJsonConverterAttribute)))
             {
@@ -212,18 +209,22 @@ namespace Contentstack.Core
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    var data = JsonSerializer.Deserialize<JsonElement>(errorMessage);
+                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
 
-                    if (data.TryGetProperty("error_code", out var token))
-                        errorCode = token.GetInt32();
+                    JToken token = data["error_code"];
+                    if (token != null)
+                        errorCode = token.Value<int>();
 
-                    if (data.TryGetProperty("error_message", out token))
-                        errorMessage = token.GetString();
+                    token = data["error_message"];
+                    if (token != null)
+                        errorMessage = token.Value<string>();
 
-                    if (data.TryGetProperty("errors", out token))
-                        errors = JsonSerializer.Deserialize<Dictionary<string, object>>(token.GetRawText());
+                    token = data["errors"];
+                    if (token != null)
+                        errors = token.ToObject<Dictionary<string, object>>();
 
-                    if (exResp is HttpWebResponse response)
+                    var response = exResp as HttpWebResponse;
+                    if (response != null)
                         statusCode = response.StatusCode;
                 }
             }
@@ -325,8 +326,8 @@ namespace Contentstack.Core
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
-                var data = JsonSerializer.Deserialize<JsonElement>(outputResult);
-                var contentTypes = data.GetProperty("content_types").EnumerateArray().ToList();
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
+                IList contentTypes = (IList)data["content_types"];
                 return contentTypes;
             }
             catch (Exception ex)
@@ -335,7 +336,7 @@ namespace Contentstack.Core
             }
         }
 
-        private async Task<JsonElement> GetLivePreviewData()
+        private async Task<JObject> GetLivePreviewData()
         {
   
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -367,8 +368,8 @@ namespace Contentstack.Core
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
                 var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
-                var data = JsonSerializer.Deserialize<JsonElement>(outputResult);
-                return data.GetProperty("entry");
+                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
+                return (JObject)data["entry"];
             }
             catch (Exception ex)
             {
@@ -785,7 +786,7 @@ namespace Contentstack.Core
             {
                 HttpRequestHandler requestHandler = new HttpRequestHandler(this);
                 string js = await requestHandler.ProcessRequest(_SyncUrl, _LocalHeaders, mainJson, Branch: this.Config.Branch, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
-                SyncStack stackSyncOutput = JsonSerializer.Deserialize<SyncStack>(js);
+                SyncStack stackSyncOutput = JsonConvert.DeserializeObject<SyncStack>(js);
                 return stackSyncOutput;
             }
             catch (Exception ex)
