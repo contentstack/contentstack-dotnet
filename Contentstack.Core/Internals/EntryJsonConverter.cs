@@ -1,25 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Contentstack.Core.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
     [CSJsonConverter("EntryJsonConverter")]
     public class EntryJsonConverter : JsonConverter<Entry>
     {
-        public override Entry ReadJson(JsonReader reader, Type objectType, Entry existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override Entry Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            JObject jObject = JObject.Load(reader);
-            JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
-            JsonSerializer Serializer = JsonSerializer.Create(SerializerSettings);
-            Entry entry = jObject.ToObject<Entry>(Serializer);
-            entry.ParseObject(jObject);
-            return entry;
+            using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+            {
+                JsonElement root = document.RootElement;
+                Entry entry = JsonSerializer.Deserialize<Entry>(root.GetRawText(), options);
+                entry.ParseObject(root);
+                return entry;
+            }
         }
 
-        public override void WriteJson(JsonWriter writer, Entry value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, Entry value, JsonSerializerOptions options)
         {
 
         }

@@ -1,11 +1,11 @@
 ﻿using Markdig;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
@@ -24,7 +24,7 @@ namespace Contentstack.Core.Models
         private CachePolicy _CachePolicy;
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private bool _IsCachePolicySet;
-        private JObject jObject;
+        private JsonObject jsonObject;
         private string _Url
         {
             get
@@ -169,7 +169,7 @@ namespace Contentstack.Core.Models
         #region Internal Functions
         internal static ContentstackException GetContentstackError(Exception ex)
         {
-            Int32 errorCode = 0;
+            int errorCode = 0;
             string errorMessage = string.Empty;
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             ContentstackException contentstackError = new ContentstackException(ex);
@@ -177,30 +177,29 @@ namespace Contentstack.Core.Models
 
             try
             {
-                System.Net.WebException webEx = (System.Net.WebException)ex;
+                WebException webEx = (WebException)ex;
 
                 using (var exResp = webEx.Response)
                 using (var stream = exResp.GetResponseStream())
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    JsonObject data = JsonNode.Parse(errorMessage.Replace("\r\n", ""))?.AsObject();
 
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
+                    if (data != null)
+                    {
+                        if (data.TryGetPropertyValue("error_code", out var token))
+                            errorCode = token.GetValue<int>();
 
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
+                        if (data.TryGetPropertyValue("error_message", out token))
+                            errorMessage = token.GetValue<string>();
 
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                        if (data.TryGetPropertyValue("errors", out token))
+                            errors = JsonSerializer.Deserialize<Dictionary<string, object>>(token.ToJsonString());
 
-                    var response = exResp as HttpWebResponse;
-                    if (response != null)
-                        statusCode = response.StatusCode;
+                        if (exResp is HttpWebResponse response)
+                            statusCode = response.StatusCode;
+                    }
                 }
             }
             catch
@@ -887,7 +886,7 @@ namespace Contentstack.Core.Models
         private Asset GetAsset(String key)
         {
 
-            JObject assetObject = (JObject)jObject.GetValue(key);
+            JsonElement assetObject = (JObject)jObject.GetValue(key);
             var asset = ContentTypeInstance.StackInstance.Asset();
             asset.ParseObject(assetObject);
             return asset;
