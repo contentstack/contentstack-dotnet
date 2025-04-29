@@ -1,5 +1,4 @@
 ﻿using Markdig;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
+using Newtonsoft.Json;
 
 namespace Contentstack.Core.Models
 {
@@ -109,6 +109,12 @@ namespace Contentstack.Core.Models
         /// </code>
         /// </example>
         public Dictionary<string, object> Metadata { get; set; }
+
+        /// <summary>
+        /// Dimension Object of the entries publish details
+        /// </summary>
+        [JsonProperty(PropertyName = "publish_details")]
+        public Dictionary<string, object> PublishDetails { get; set; }
 
         /// <summary>
         /// Set key/value attributes of an current entry instance.
@@ -1402,6 +1408,15 @@ namespace Contentstack.Core.Models
                     throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
                 }
 
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
+                {
+                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId;
+                }
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp))
+                {
+                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp;
+                }
+
                 isLivePreview = true;
             }
             
@@ -1418,7 +1433,7 @@ namespace Contentstack.Core.Models
                 {
                     cachePolicy = _CachePolicy;
                 }
-
+                
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout, proxy: this.ContentTypeInstance.StackInstance.Config.Proxy);
                 JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
@@ -1484,7 +1499,12 @@ namespace Contentstack.Core.Models
             this._ObjectAttributes = jsonObj.ToObject<Dictionary<string, object>>();
             if (_ObjectAttributes != null && _ObjectAttributes.ContainsKey("_metadata"))
             {
-                Dictionary<string, object> _metadataJSON = (Dictionary<string, object>)_ObjectAttributes["_metadata"];
+                var jObject = (Newtonsoft.Json.Linq.JObject)_ObjectAttributes["_metadata"];
+                var _metadataJSON = new Dictionary<string, object>();
+                foreach (var property in jObject.Properties())
+                {
+                    _metadataJSON[property.Name] = property.Value.ToObject<object>();
+                }
                 List<string> iterator = _metadataJSON.Keys.ToList();
                 Metadata = new Dictionary<string, object>();
                 foreach (var key in iterator)

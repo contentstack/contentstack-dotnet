@@ -1,14 +1,8 @@
 using System;
 using Xunit;
-using Contentstack.Core;
-using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Linq;
-using Contentstack.Core.Tests.Models;
-using Newtonsoft.Json.Linq;
-using System.Reflection.PortableExecutable;
 
 namespace Contentstack.Core.Tests
 {
@@ -39,7 +33,7 @@ namespace Contentstack.Core.Tests
                 bool IsTrue = false;
                 foreach (Entry data in result.Items)
                 {
-                    IsTrue = data.GetContentType() != null;
+                    IsTrue = data.Get("_content_type_uid") != null;
                     if (!IsTrue)
                     {
                         break;
@@ -69,7 +63,7 @@ namespace Contentstack.Core.Tests
                 bool IsTrue = false;
                 foreach (Entry data in result.Items)
                 {
-                    IsTrue = data.GetContentType() != null;
+                    IsTrue = data.Get("_content_type_uid") != null;
                     if (!IsTrue)
                     {
                         break;
@@ -99,7 +93,7 @@ namespace Contentstack.Core.Tests
                 bool IsTrue = false;
                 foreach (Entry data in result.Items)
                 {
-                    IsTrue = data.GetContentType() != null;
+                    IsTrue = data.Get("_content_type_uid") != null;
                     if (!IsTrue)
                     {
                         break;
@@ -118,7 +112,7 @@ namespace Contentstack.Core.Tests
         {
             // Description: Taxonomy EqualAndAbove - Get Entries With Taxonomy Terms and Also Matching Its Parent Term ($eq_above, level)
             Taxonomy query = client.Taxonomies();
-            query.EqualAndAbove("taxonomies.one", "term_one");
+            query.EqualAndAbove("taxonomies.one", "term_one_child");
             var result = await query.Find<Entry>();
             if (result == null && result.Items.Count() == 0)
             {
@@ -129,7 +123,7 @@ namespace Contentstack.Core.Tests
                 bool IsTrue = false;
                 foreach (Entry data in result.Items)
                 {
-                    IsTrue = data.GetContentType() != null;
+                    IsTrue = data.Get("_content_type_uid") != null;
                     if (!IsTrue)
                     {
                         break;
@@ -148,7 +142,7 @@ namespace Contentstack.Core.Tests
         {
             // Description: Taxonomy Above - Get Entries With Taxonomy Terms Parent and Excluding the term itself ($above, level)
             Taxonomy query = client.Taxonomies();
-            query.Above("taxonomies.one", "term_one");
+            query = query.Above("taxonomies.one", "term_one_child");
             var result = await query.Find<Entry>();
             if (result == null && result.Items.Count() == 0)
             {
@@ -157,9 +151,9 @@ namespace Contentstack.Core.Tests
             else if (result != null)
             {
                 bool IsTrue = false;
-                foreach (Entry data in result.Items)
+                foreach (var data in result.Items)
                 {
-                    IsTrue = data.GetContentType() != null;
+                    IsTrue = data.Get("_content_type_uid") != null;
                     if (!IsTrue)
                     {
                         break;

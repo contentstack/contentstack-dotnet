@@ -1,7 +1,5 @@
 using System;
 using Xunit;
-using Contentstack.Core;
-using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
