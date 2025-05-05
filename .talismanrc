@@ -1,4 +1,7 @@
 fileignoreconfig:
+- filename: .github/workflows/secrets-scan.yml
+  ignore_detectors:
+    - filecontent
 - filename: Contentstack.Core/Internals/HttpRequestHandler.cs
   checksum: 93c1659f3bc7527956f0fd12db46441297fac3a4366d273bcbb3425d2351300e
 - filename: Contentstack.Core/Models/Entry.cs
