@@ -82,11 +82,12 @@ namespace Contentstack.Core
             if (_options.AccessToken != null)
             {
                 this.SetHeader("access_token", _options.AccessToken);
-            } else if (_options.DeliveryToken != null)
+            }
+            else if (_options.DeliveryToken != null)
             {
                 this.SetHeader("access_token", _options.DeliveryToken);
             }
-            if(_options.EarlyAccessHeader !=null)
+            if (_options.EarlyAccessHeader != null)
             {
                 this.SetHeader("x-header-ea", string.Join(",", _options.EarlyAccessHeader));
             }
@@ -128,7 +129,9 @@ namespace Contentstack.Core
                 else if (this.LivePreviewConfig.PreviewToken != null)
                 {
                     this.LivePreviewConfig.Host = "rest-preview.contentstack.com";
-                } else {
+                }
+                else
+                {
                     throw new InvalidOperationException("Add PreviewToken or ManagementToken in LivePreviewConfig");
                 }
             }
@@ -337,7 +340,7 @@ namespace Contentstack.Core
 
         private async Task<JObject> GetLivePreviewData()
         {
-  
+
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
             Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
@@ -354,12 +357,17 @@ namespace Contentstack.Core
                 }
             }
             mainJson.Add("live_preview", this.LivePreviewConfig.LivePreview ?? "init");
-            
-            if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken)) {
+
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken))
+            {
                 headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
-            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken)) {
+            }
+            else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken))
+            {
                 headerAll["preview_token"] = this.LivePreviewConfig.PreviewToken;
-            } else {
+            }
+            else
+            {
                 throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
             }
 
@@ -403,6 +411,21 @@ namespace Contentstack.Core
             contentType.SetStackInstance(this);
 
             return contentType;
+        }
+
+
+        public GlobalField GlobalField(String globalFieldName)
+        {
+            GlobalField globalField = new GlobalField(globalFieldName);
+            globalField.SetStackInstance(this);
+            return globalField;
+        }
+
+        public GlobalFieldQuery GlobalFieldQuery()
+        {
+            GlobalFieldQuery globalField = new GlobalFieldQuery();
+            globalField.SetStackInstance(this);
+            return globalField;
         }
 
         /// <summary>
@@ -592,13 +615,15 @@ namespace Contentstack.Core
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
-            } 
-            if (query.Keys.Contains("release_id")) {
+            }
+            if (query.Keys.Contains("release_id"))
+            {
                 string ReleaseId = null;
                 query.TryGetValue("release_id", out ReleaseId);
                 this.LivePreviewConfig.ReleaseId = ReleaseId;
             }
-            if (query.Keys.Contains("preview_timestamp")) {
+            if (query.Keys.Contains("preview_timestamp"))
+            {
                 string PreviewTimestamp = null;
                 query.TryGetValue("preview_timestamp", out PreviewTimestamp);
                 this.LivePreviewConfig.PreviewTimestamp = PreviewTimestamp;
