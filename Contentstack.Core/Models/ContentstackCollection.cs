@@ -23,9 +23,9 @@ namespace Contentstack.Core.Models
         public int Count { get; set; }
 
         /// <summary>
-        /// The System.Collections.Generic.IEnumerable&lt;T&gt; of items to be serialized from the API response.
+        /// The System.Collections.Generic.IEnumerable<T> of items to be serialized from the API response.
         /// </summary>
-        /// <value>System.Collections.Generic.IEnumerable&lt;T&gt;</value>
+        /// <value>System.Collections.Generic.IEnumerable<T></value>
         public IEnumerable<T> Items { get; set; }
 
         /// <summary>

@@ -55,9 +55,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Title;
         ///     });
@@ -70,9 +70,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Uid;
         ///     });
@@ -85,9 +85,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Tags;
         ///     });
@@ -100,9 +100,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Metadata;
         ///     });
@@ -121,9 +121,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Object;
         ///     });
@@ -137,9 +137,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.Object;
         ///     });
@@ -238,9 +238,9 @@ namespace Contentstack.Core.Models
         /// <returns>Array of tags.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetTags();
         ///     });
@@ -290,10 +290,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.SetCachePolicy(CachePolicy.NetworkElseCache);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -311,9 +311,9 @@ namespace Contentstack.Core.Models
         /// <returns>title</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetTitle();
         ///     });
@@ -330,8 +330,8 @@ namespace Contentstack.Core.Models
         /// <returns>contentType name</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.GetContentType()
         /// </code>
         /// </example>
@@ -346,9 +346,9 @@ namespace Contentstack.Core.Models
         /// <returns>Uid</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetUid();
         ///     });
@@ -366,9 +366,9 @@ namespace Contentstack.Core.Models
         /// <param name="value">custom_header_value</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.SetHeader("custom_key", "custom_value");
         /// </code>
         /// </example>
         public void SetHeader(string key, string value)
@@ -388,9 +388,9 @@ namespace Contentstack.Core.Models
         /// <param name="key">custom_header_key</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.RemoveHeader(&quot;custom_key&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.RemoveHeader("custom_key");
         /// </code>
         /// </example>
         public void RemoveHeader(string key)
@@ -409,11 +409,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry csEntry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry csEntry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     
         ///     csEntry.Variant("variant_entry_1");
-        ///     csEntry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     csEntry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
@@ -434,11 +434,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry csEntry = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry csEntry = stack.ContentType("contentType_id").Query();
         ///     
         ///     csEntry.Variant(new List<string> { "variant_entry_1", "variant_entry_2", "variant_entry_3" });
-        ///     csEntry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     csEntry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
@@ -456,9 +456,9 @@ namespace Contentstack.Core.Models
         /// <returns>key/value attributes of metadata</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
@@ -476,10 +476,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.SetLanguage(Language.ENGLISH_UNITED_STATES);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
@@ -524,10 +524,10 @@ namespace Contentstack.Core.Models
         /// <param name="Locale">Locale.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.SetLocale("en-us");
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetMetadata();
         ///     });
@@ -554,11 +554,11 @@ namespace Contentstack.Core.Models
         /// <returns>html text in string format.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetHTMLText(&quot;markdownKey&quot;)
+        ///         //var result = entryResult.Result.GetHTMLText("markdownKey")
         ///     });
         /// </code>
         /// </example>
@@ -586,11 +586,11 @@ namespace Contentstack.Core.Models
         /// <returns>html text in string format.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetMultipleHTMLText(&quot;markdownKey&quot;)
+        ///         //var result = entryResult.Result.GetMultipleHTMLText("markdownKey")
         ///     });
         /// </code>
         /// </example>
@@ -625,11 +625,11 @@ namespace Contentstack.Core.Models
         /// <returns>object value</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
-        ///         //var result = entryResult.Result.Get(&quot;key&quot;);
+        ///         //var result = entryResult.Result.Get("key");
         ///     });
         /// </code>
         /// </example>
@@ -658,9 +658,9 @@ namespace Contentstack.Core.Models
         /// <returns>created date time in datetime format</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetCreateAt();
         ///     });
@@ -687,9 +687,9 @@ namespace Contentstack.Core.Models
         /// <returns>uid who created this entry</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetCreatedBy();
         ///     });
@@ -735,9 +735,9 @@ namespace Contentstack.Core.Models
         /// <returns>updated date time in datetime format</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetUpdateAt();
         ///     });
@@ -764,9 +764,9 @@ namespace Contentstack.Core.Models
         /// <returns>uid who updated this entry</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetUpdatedBy();
         ///     });
@@ -812,9 +812,9 @@ namespace Contentstack.Core.Models
         /// <returns>deleted date time in datetime format</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetDeletedAt();
         ///     });
@@ -840,9 +840,9 @@ namespace Contentstack.Core.Models
         /// <returns>uid who deleted this entry</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.GetDeletedBy();
         ///     });
@@ -860,9 +860,9 @@ namespace Contentstack.Core.Models
         /// <returns>json in string format</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///         //var result = entryResult.Result.ToJson();
         ///     });
@@ -882,11 +882,11 @@ namespace Contentstack.Core.Models
         /// <returns>Asset instance</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetAsset(&quot;field_uid&quot;);
+        ///         //var result = entryResult.Result.GetAsset("field_uid");
         ///     });
         /// </code>
         /// </example>
@@ -906,11 +906,11 @@ namespace Contentstack.Core.Models
         /// <returns>List of Asset instance</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
-        ///         //var result = entryResult.Result.GetAssets(&quot;field_uid&quot;);
+        ///         //var result = entryResult.Result.GetAssets("field_uid");
         ///     });
         /// </code>
         /// </example>
@@ -940,10 +940,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Except(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Except(new String[]{"name", "description"});
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -979,10 +979,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.IncludeReference(&quot;name&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.IncludeReference("name");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1011,10 +1011,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.IncludeReference(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.IncludeReference(new String[]{"name", "description"});
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1045,10 +1045,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.IncludeOnlyReference(new String[]{&quot;name&quot;, &quot;description&quot;}, &quot;referenceUid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.IncludeOnlyReference(new String[]{"name", "description"}, "referenceUid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1078,10 +1078,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.IncludeReferenceContentTypeUID();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1105,10 +1105,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.IncludeFallback();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1133,10 +1133,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.IncludeMetadata();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your Metadata code.
         ///     });
         /// </code>
@@ -1161,10 +1161,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.AddParam("include_branch", "true");
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((assetResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1188,10 +1188,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.IncludeBranch();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1215,10 +1215,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.includeEmbeddedItems();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1242,10 +1242,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.IncludeSchema();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1270,10 +1270,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.IncludeOwner();
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1300,10 +1300,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.IncludeExceptReference(new String[]{&quot;name&quot;, &quot;description&quot;},&quot;referenceUid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.IncludeExceptReference(new String[]{"name", "description"},"referenceUid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1334,10 +1334,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Only(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Only(new String[]{"name", "description"});
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1367,9 +1367,9 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((entryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
+        ///     entry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
