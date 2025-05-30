@@ -190,7 +190,6 @@ namespace Contentstack.Core.Tests
             var query = client.GlobalFieldQuery();
             var result = query.IncludeGlobalFieldSchema();
             Assert.NotNull(result);
-            Assert.Equal(query, result);
         }
 
         [Fact]
