@@ -1,3 +1,9 @@
+### Version: 2.22.0
+#### Date: March-03-2025
+
+##### Feat: 
+- Added Support for Global Fields
+
 ### Version: 2.21.0
 #### Date: March-03-2025
 

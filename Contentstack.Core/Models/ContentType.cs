@@ -130,9 +130,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        /// ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        /// ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         /// ContentType contenttype = stack.ContentType("contentType_name");
-        /// var param = new Dictionary&lt;string, object&gt;();
+        /// var param = new Dictionary<string, object>();
         /// param.Add("include_global_field_schema",true);
         /// var result = await contenttype.Fetch(param);        
         /// </code>
@@ -187,9 +187,9 @@ namespace Contentstack.Core.Models
         /// <param name="value">header value against given header name.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
-        ///     contentType.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentType = stack.ContentType("contentType_name");
+        ///     contentType.SetHeader("custom_key", "custom_value");
         /// </code>
         /// </example>
         public void SetHeader(string key, string value)
@@ -209,9 +209,9 @@ namespace Contentstack.Core.Models
         /// <param name="key">custom_header_key</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
-        ///     contentType.RemoveHeader(&quot;custom_header_key&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentType = stack.ContentType("contentType_name");
+        ///     contentType.RemoveHeader("custom_header_key");
         /// </code>
         /// </example>
         public void RemoveHeader(string key)
@@ -229,9 +229,9 @@ namespace Contentstack.Core.Models
         /// <returns>Entry Instance</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
-        ///     Entry entry = contentType.Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentType = stack.ContentType("contentType_name");
+        ///     Entry entry = contentType.Entry("entry_uid");
         /// </code>
         /// </example>
         public Entry Entry(String entryUid)
@@ -250,8 +250,8 @@ namespace Contentstack.Core.Models
         /// <returns>Query Instance.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentType = stack.ContentType("contentType_name");
         ///     Query csQuery = contentType.Query();
         /// </code>
         /// </example>
