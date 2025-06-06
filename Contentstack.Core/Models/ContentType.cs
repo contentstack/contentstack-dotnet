@@ -236,6 +236,10 @@ namespace Contentstack.Core.Models
         /// </example>
         public Entry Entry(String entryUid)
         {
+            if(!String.IsNullOrEmpty(entryUid))
+            {
+                this.StackInstance.SetEntryUid(entryUid);
+            }
             Entry entry = new Entry(ContentTypeId);
             entry._FormHeaders = GetHeader(_Headers);
             entry.SetContentTypeInstance(this);

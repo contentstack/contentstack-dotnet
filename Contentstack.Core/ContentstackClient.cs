@@ -56,6 +56,10 @@ namespace Contentstack.Core
             }
         }
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
+
+        // This is used to store the last content type UID for live preview
+        private string lastContentTypeUid = null;
+        private string lastEntryUid = null;
         public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
@@ -394,6 +398,13 @@ namespace Contentstack.Core
             }
         }
 
+        public void SetEntryUid(string entryUid)
+        {
+            if (!string.IsNullOrEmpty(entryUid))
+            {
+                lastEntryUid = entryUid;
+            }
+        }
         /// <summary>
         /// Represents a ContentType. Creates ContenntType Instance.
         /// </summary>
@@ -407,6 +418,10 @@ namespace Contentstack.Core
         /// </example>
         public ContentType ContentType(String contentTypeName)
         {
+            if (!string.IsNullOrEmpty(contentTypeName))
+            {
+                lastContentTypeUid = contentTypeName;
+            }
             ContentType contentType = new ContentType(contentTypeName);
             contentType.SetStackInstance(this);
 
@@ -488,7 +503,7 @@ namespace Contentstack.Core
         /// </example>
         public string GetVersion()
         {
-            return Version;
+            return this.Config.Version;
         }
 
         /// <summary>
@@ -604,12 +619,24 @@ namespace Contentstack.Core
                 query.TryGetValue("content_type_uid", out contentTypeUID);
                 this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
             }
+            else if (lastContentTypeUid != null)
+            {
+                this.LivePreviewConfig.ContentTypeUID = lastContentTypeUid;
+            }
+
+            
             if (query.Keys.Contains("entry_uid"))
             {
-                string contentTypeUID = null;
-                query.TryGetValue("entry_uid", out contentTypeUID);
-                this.LivePreviewConfig.EntryUID = contentTypeUID;
+                string entryUID = null;
+                query.TryGetValue("entry_uid", out entryUID);
+                this.LivePreviewConfig.EntryUID = entryUID;
             }
+            else if (lastEntryUid != null)
+            {
+                this.LivePreviewConfig.EntryUID = lastEntryUid;
+            }
+
+
             if (query.Keys.Contains("live_preview"))
             {
                 string hash = null;
