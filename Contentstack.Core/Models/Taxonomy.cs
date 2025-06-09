@@ -55,11 +55,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.LessThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.LessThan("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -92,11 +92,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.LessThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.LessThan("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -131,11 +131,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.LessThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.LessThan("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -170,11 +170,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.LessThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.LessThan("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
