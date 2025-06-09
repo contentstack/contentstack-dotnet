@@ -46,9 +46,9 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///         var result = queryResult.Result.ContentTypeId;
         ///     });
@@ -150,10 +150,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     csQuery.SetLanguage(Language.ENGLISH_UNITED_STATES);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -197,10 +197,10 @@ namespace Contentstack.Core.Models
         /// <param name="Locale">Locale.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     csQuery.SetLocale("en-us");
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -226,9 +226,9 @@ namespace Contentstack.Core.Models
         /// <param name="value">header value against given header name.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.SetHeader("custom_key", "custom_value");
         /// </code>
         /// </example>
         public void SetHeader(String key, String value)
@@ -245,9 +245,9 @@ namespace Contentstack.Core.Models
         /// <param name="key">header name.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.RemoveHeader(&quot;custom_key&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.RemoveHeader("custom_key");
         /// </code>
         /// </example>
         public void RemoveHeader(String key)
@@ -266,10 +266,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.Where(&quot;uid&quot;, &quot;entry_uid&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.Where("uid", "entry_uid");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -349,10 +349,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.AddQuery(&quot;query_param_key&quot;, &quot;query_param_value&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.AddQuery("query_param_key", "query_param_value");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -384,10 +384,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.RemoveQuery(&quot;Query_Key&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.RemoveQuery("Query_Key");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -415,22 +415,22 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentTypeObj = stack.ContentType(&quot;contentType_id&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentTypeObj = stack.ContentType("contentType_id");
         ///     Query csQuery = contentTypeObj.Query();
         ///     
         ///     Query query1 = contentTypeObj.Query();
-        ///     query1.Where(&quot;username&quot;,&quot;content&quot;);
+        ///     query1.Where("username","content");
         ///     
         ///     Query query2 = contentTypeObj.Query();
-        ///     query2.Where(&quot;email_address&quot;,&quot;content@email.com&quot;);
+        ///     query2.Where("email_address","content@email.com");
         ///     
-        ///     List&lt;Query&gt; queryList = new List&lt;Query&gt;();
+        ///     List<Query> queryList = new List<Query>();
         ///     queryList.Add(query1);
         ///     queryList.Add(query2);
         ///     
         ///     csQuery.And(queryList);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -479,22 +479,22 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentTypeObj = stack.ContentType(&quot;contentType_id&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentTypeObj = stack.ContentType("contentType_id");
         ///     Query csQuery = contentTypeObj.Query();
         ///     
         ///     Query query1 = contentTypeObj.Query();
-        ///     query1.Where(&quot;username",&quot;content&quot;);
+        ///     query1.Where("username","content");
         ///     
         ///     Query query2 = contentTypeObj.Query();
-        ///     query2.Where(&quot;email_address&quot;,&quot;content@email.com&quot;);
+        ///     query2.Where("email_address","content@email.com");
         ///     
-        ///     List&lt;Query&gt; queryList = new List&lt;Query&gt;();
+        ///     List<Query> queryList = new List<Query>();
         ///     queryList.Add(query1);
         ///     queryList.Add(query2);
         ///     
         ///     csQuery.Or(queryList);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -546,11 +546,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.LessThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.LessThan("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -590,11 +590,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.LessThanOrEqualTo(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.LessThanOrEqualTo("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -633,11 +633,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.GreaterThan(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.GreaterThan("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -677,11 +677,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.GreaterThanOrEqualTo(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.GreaterThanOrEqualTo("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -721,11 +721,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.NotEqualTo(&quot;due_date&quot;, &quot;2013-06-25T00:00:00+05:30&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.NotEqualTo("due_date", "2013-06-25T00:00:00+05:30");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -767,11 +767,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.ContainedIn(&quot;severity&quot;, new Object[]{&quot;Show Stopper&quot;, &quot;Critical&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.ContainedIn("severity", new Object[]{"Show Stopper", "Critical"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -816,11 +816,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.NotContainedIn(&quot;severity&quot;, new Object[]{&quot;Show Stopper&quot;, &quot;Critical&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.NotContainedIn("severity", new Object[]{"Show Stopper", "Critical"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -864,11 +864,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Exists(&quot;severity&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Exists("severity");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -905,11 +905,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.NotExists(&quot;severity&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.NotExists("severity");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -945,11 +945,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///      ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///      ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.IncludeReferenceContentTypeUID();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -974,11 +974,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.IncludeReference(&quot;for_bug&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.IncludeReference("for_bug");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1001,11 +1001,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.IncludeReference(new String[]{&quot;for_bug&quot;, &quot;assignee&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.IncludeReference(new String[]{"for_bug", "assignee"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1027,11 +1027,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Tags(new String[]{&quot;tag1&quot;, &quot;tag2&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Tags(new String[]{"tag1", "tag2"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1070,11 +1070,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Ascending(&quot;name&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Ascending("name");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1106,11 +1106,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Descending(&quot;name&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Descending("name");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1141,11 +1141,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.IncludeCount();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1171,10 +1171,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     csQuery.IncludeMetadata();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your metadata code.
         ///     });
         /// </code>
@@ -1198,11 +1198,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.IncludeOwner();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1227,11 +1227,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Only(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Only(new String[]{"name", "description"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1261,11 +1261,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.IncludeOnlyReference(new String[]{&quot;name&quot;, &quot;description&quot;}, &quot;referenceUid&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.IncludeOnlyReference(new String[]{"name", "description"}, "referenceUid");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1294,11 +1294,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Except(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Except(new String[]{"name", "description"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1329,10 +1329,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
-        ///     csQuery.IncludeExceptReference(new String[]{&quot;name&quot;, &quot;description&quot;},&quot;referenceUid&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
+        ///     csQuery.IncludeExceptReference(new String[]{"name", "description"},"referenceUid");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1361,11 +1361,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.IncludeFallback();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1389,11 +1389,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.IncludeBranch();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1418,10 +1418,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Entry entry = stack.ContentType(&quot;contentType_id&quot;).Entry(&quot;entry_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Entry entry = stack.ContentType("contentType_id").Entry("entry_uid");
         ///     entry.AddParam("include_branch", "true");
-        ///     entry.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///     entry.Fetch<Product>().ContinueWith((assetResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1445,11 +1445,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.includeEmbeddedItems();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1473,11 +1473,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.IncludeSchema();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1503,11 +1503,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.Skip(2);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1532,11 +1532,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.Limit(2);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1562,11 +1562,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Regex(&quot;name&quot;, &quot;^browser&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Regex("name", "^browser");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1601,17 +1601,17 @@ namespace Contentstack.Core.Models
         /// <param name="key">The key to be constrained.</param>
         /// <param name="regex">The regular expression pattern to match.</param>
         /// <param name="modifiers">Any of the following supported Regular expression modifiers.
-        /// 				&lt;li&gt;use&lt;b&gt; i &lt;/b&gt; for case-insensitive matching.&lt;/li&gt;
-        ///					&lt;li&gt;use&lt;b&gt; m &lt;/b&gt; for making dot match newlines.&lt;/li&gt;
-        ///					&lt;li&gt;use&lt;b&gt; x &lt;/b&gt; for ignoring whitespace in regex&lt;/li&gt;</param>
+        /// 				<li>use<b> i </b> for case-insensitive matching.</li>
+        ///					<li>use<b> m </b> for making dot match newlines.</li>
+        ///					<li>use<b> x </b> for ignoring whitespace in regex</li></param>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Regex(&quot;name&quot;, &quot;^browser&quot;, &quot;i&quot;);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Regex("name", "^browser", "i");
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1651,11 +1651,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.WhereTags(new String[]{&quot;tag1&quot;, &quot;tag2&quot;});
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.WhereTags(new String[]{"tag1", "tag2"});
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1680,11 +1680,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.SetCachePolicy(CachePolicy.CacheElseNetwork);
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1704,11 +1704,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.Variant("variant_entry_1");
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1728,11 +1728,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.Variant(new List<string> { "variant_entry_1", "variant_entry_2", "variant_entry_3" });
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1749,10 +1749,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1769,11 +1769,11 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
         ///     csQuery.Count();
-        ///     csQuery.Find&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -1798,10 +1798,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Query csQuery = stack.ContentType(&quot;contentType_id&quot;).Query();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Query csQuery = stack.ContentType("contentType_id").Query();
         ///     
-        ///     csQuery.FindOne&lt;Product&gt;().ContinueWith((queryResult) =&gt; {
+        ///     csQuery.FindOne<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>

@@ -65,12 +65,12 @@ namespace Contentstack.Core
         /// <code>
         ///     var options = new ContentstackOptions()
         ///     {
-        ///        ApiKey = &quot;api_key&quot;,
-        ///        DeliveryToken = &quot;delivery_token&quot;
-        ///        Environment = &quot;environment&quot;
+        ///        ApiKey = "api_key",
+        ///        DeliveryToken = "delivery_token"
+        ///        Environment = "environment"
         ///      }
         ///     ContentstackClient stack = new ContentstackClient(options);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
+        ///     ContentType contentType = stack.ContentType("contentType_name");
         /// </code>
         /// </example>
         public ContentstackClient(IOptions<ContentstackOptions> options)
@@ -82,11 +82,12 @@ namespace Contentstack.Core
             if (_options.AccessToken != null)
             {
                 this.SetHeader("access_token", _options.AccessToken);
-            } else if (_options.DeliveryToken != null)
+            }
+            else if (_options.DeliveryToken != null)
             {
                 this.SetHeader("access_token", _options.DeliveryToken);
             }
-            if(_options.EarlyAccessHeader !=null)
+            if (_options.EarlyAccessHeader != null)
             {
                 this.SetHeader("x-header-ea", string.Join(",", _options.EarlyAccessHeader));
             }
@@ -128,7 +129,9 @@ namespace Contentstack.Core
                 else if (this.LivePreviewConfig.PreviewToken != null)
                 {
                     this.LivePreviewConfig.Host = "rest-preview.contentstack.com";
-                } else {
+                }
+                else
+                {
                     throw new InvalidOperationException("Add PreviewToken or ManagementToken in LivePreviewConfig");
                 }
             }
@@ -158,8 +161,8 @@ namespace Contentstack.Core
         /// <param name="environment">Environment name</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClient(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
+        ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///     ContentType contentType = stack.ContentType("contentType_name");
         /// </code>
         /// </example>
         public ContentstackClient(string apiKey, string deliveryToken, string environment, string host = null, ContentstackRegion region = ContentstackRegion.US, string version = null, int? timeout = null, WebProxy proxy = null) :
@@ -264,7 +267,7 @@ namespace Contentstack.Core
         /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     Asset asset  = stack.Asset();
         /// </code>
         /// </example>
@@ -282,8 +285,8 @@ namespace Contentstack.Core
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     var param = new Dictionary&lt;string, object&gt;();
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     var param = new Dictionary<string, object>();
         ///     param.Add("include_global_field_schema",true);
         ///     param.Add("limit", 10);
         ///     param.Add("skip", 10);
@@ -337,7 +340,7 @@ namespace Contentstack.Core
 
         private async Task<JObject> GetLivePreviewData()
         {
-  
+
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
             Dictionary<String, Object> headers = GetHeader(_LocalHeaders);
@@ -354,12 +357,17 @@ namespace Contentstack.Core
                 }
             }
             mainJson.Add("live_preview", this.LivePreviewConfig.LivePreview ?? "init");
-            
-            if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken)) {
+
+            if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken))
+            {
                 headerAll["authorization"] = this.LivePreviewConfig.ManagementToken;
-            } else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken)) {
+            }
+            else if (!string.IsNullOrEmpty(this.LivePreviewConfig.PreviewToken))
+            {
                 headerAll["preview_token"] = this.LivePreviewConfig.PreviewToken;
-            } else {
+            }
+            else
+            {
                 throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
             }
 
@@ -393,8 +401,8 @@ namespace Contentstack.Core
         /// <returns>Current instance of ContentType, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     ContentType contentType = stack.ContentType(&quot;contentType_name&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     ContentType contentType = stack.ContentType("contentType_name");
         /// </code>
         /// </example>
         public ContentType ContentType(String contentTypeName)
@@ -405,14 +413,29 @@ namespace Contentstack.Core
             return contentType;
         }
 
+
+        public GlobalField GlobalField(String globalFieldName)
+        {
+            GlobalField globalField = new GlobalField(globalFieldName);
+            globalField.SetStackInstance(this);
+            return globalField;
+        }
+
+        public GlobalFieldQuery GlobalFieldQuery()
+        {
+            GlobalFieldQuery globalField = new GlobalFieldQuery();
+            globalField.SetStackInstance(this);
+            return globalField;
+        }
+
         /// <summary>
         /// Represents a Asset. Creates Asset Instance.
         /// </summary>
         /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Asset asset  = stack.Asset(&quot;asset_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Asset asset  = stack.Asset("asset_uid");
         /// </code>
         /// </example>
         public Asset Asset(String Uid)
@@ -427,7 +450,7 @@ namespace Contentstack.Core
         /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         /// </code>
         /// </example>
@@ -443,7 +466,7 @@ namespace Contentstack.Core
         /// <returns>Current instance of Taxonomy, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     Taxonomy taxonomy = stack.Taxonomy();
         /// </code>
         /// </example>
@@ -459,7 +482,7 @@ namespace Contentstack.Core
         /// <returns>Version</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     String url = stack.GetVersion();
         /// </code>
         /// </example>
@@ -474,7 +497,7 @@ namespace Contentstack.Core
         /// <returns>stack application key</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     String url = stack.GetApplicationKey();
         /// </code>
         /// </example>
@@ -496,7 +519,7 @@ namespace Contentstack.Core
         /// <returns>access token</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     String accessToken = stack.GetAccessToken();
         /// </code>
         /// </example>
@@ -511,7 +534,7 @@ namespace Contentstack.Core
         /// <returns>stack environment</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     String environment = stack.GetEnvironment();
         /// </code>
         /// </example>
@@ -526,8 +549,8 @@ namespace Contentstack.Core
         /// <param name="key">key to be remove from header</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     stack.RemoveHeader(&quot;custom_header_key&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     stack.RemoveHeader("custom_header_key");
         /// </code>
         /// </example>
         public void RemoveHeader(string key)
@@ -544,8 +567,8 @@ namespace Contentstack.Core
         /// <param name="value">header value against given header name.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     stack.SetHeader(&quot;custom_key&quot;, &quot;custom_value&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     stack.SetHeader("custom_key", "custom_value");
         /// </code>
         /// </example>
         public void SetHeader(string key, string value)
@@ -565,7 +588,7 @@ namespace Contentstack.Core
         /// <param name="query">Query parameter containing hash and content type UID </param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     stack.LivePreviewQuery(query);
         /// </code>
         /// </example>
@@ -592,13 +615,15 @@ namespace Contentstack.Core
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
-            } 
-            if (query.Keys.Contains("release_id")) {
+            }
+            if (query.Keys.Contains("release_id"))
+            {
                 string ReleaseId = null;
                 query.TryGetValue("release_id", out ReleaseId);
                 this.LivePreviewConfig.ReleaseId = ReleaseId;
             }
-            if (query.Keys.Contains("preview_timestamp")) {
+            if (query.Keys.Contains("preview_timestamp"))
+            {
                 string PreviewTimestamp = null;
                 query.TryGetValue("preview_timestamp", out PreviewTimestamp);
                 this.LivePreviewConfig.PreviewTimestamp = PreviewTimestamp;
@@ -616,8 +641,8 @@ namespace Contentstack.Core
         /// <param name="StartFrom">Start from.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     stack.SyncRecursiveLanguage(&quot;SyncType&quot;, &quot;Locale&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     stack.SyncRecursiveLanguage("SyncType", "Locale");
         /// </code>
         /// </example>
         public async Task<SyncStack> SyncRecursive(String Locale = null, SyncType SyncType = SyncType.All, string ContentTypeUid = null, DateTime? StartFrom = null)
@@ -634,8 +659,8 @@ namespace Contentstack.Core
         /// <param name="paginationToken">Pagination token.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     stack.SyncPaginationTokenn(&quot;pagination_token&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     stack.SyncPaginationTokenn("pagination_token");
         /// </code>
         /// </example>
 
@@ -651,8 +676,8 @@ namespace Contentstack.Core
         /// <param name="SyncToken">Sync token.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     stack.SyncToken(&quot;sync_token&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     stack.SyncToken("sync_token");
         /// </code>
         /// </example>
         public async Task<SyncStack> SyncToken(string SyncToken)

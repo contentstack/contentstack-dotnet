@@ -57,10 +57,10 @@ namespace Contentstack.Core.Models
         /// <param name="order">Order.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     assetLibrary.SortWithKeyAndOrderBy(&quot;custom_key&quot;, &quot;custom_value&quot;);
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     assetLibrary.SortWithKeyAndOrderBy("custom_key", "custom_value");
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public void SortWithKeyAndOrderBy(String key, OrderBy order)
@@ -81,7 +81,7 @@ namespace Contentstack.Core.Models
         /// <code>
 
 
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     JObject jObject = await assetLibrary.Count();
         /// </code>
@@ -110,10 +110,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeFallback();
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary IncludeFallback()
@@ -135,10 +135,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeBranch();
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary IncludeBranch()
@@ -161,10 +161,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.AddParam("include_branch", "true");
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         /// Where function 
@@ -182,10 +182,10 @@ namespace Contentstack.Core.Models
         /// <param name="Locale">Locale.</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.SetLocale("en-us");
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary SetLocale(String Locale)
@@ -207,10 +207,10 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeCount();
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public void IncludeCount()
@@ -227,10 +227,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeMetadata();
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary IncludeMetadata()
@@ -253,10 +253,10 @@ namespace Contentstack.Core.Models
         /// </summary>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.IncludeRelativeUrls();
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public void IncludeRelativeUrls()
@@ -271,10 +271,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.Skip(2);
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Skip(int number)
@@ -297,10 +297,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     assetLibrary.Limit(20);
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Limit(int number)
@@ -323,10 +323,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     assetLibrary.Only(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     assetLibrary.Only(new String[]{"name", "description"});
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Only(String[] fieldUid)
@@ -353,10 +353,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     assetLibrary.Except(new String[]{&quot;name&quot;, &quot;description&quot;});
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     assetLibrary.Except(new String[]{"name", "description"});
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary Except(String[] fieldUids)
@@ -384,10 +384,10 @@ namespace Contentstack.Core.Models
         /// <param name="value">custom_header_value</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     assetLibrary.SetHeaderForKey(&quot;custom_header_key&quot;, &quot;custom_header_value&quot;);
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     assetLibrary.SetHeaderForKey("custom_header_key", "custom_header_value");
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary SetHeaderForKey(String key, String value)
@@ -407,10 +407,10 @@ namespace Contentstack.Core.Models
         /// <param name="key">custom_header_key</param>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     assetLibrary.RemoveHeader(&quot;custom_key&quot;);
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     assetLibrary.RemoveHeader("custom_key");
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public AssetLibrary RemoveHeader(string key)
@@ -428,9 +428,9 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     ContentstackCollection&gt;Asset&lt; contentstackCollection = await assetLibrary.FetchAll();
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
         public async Task<ContentstackCollection<Asset>> FetchAll()

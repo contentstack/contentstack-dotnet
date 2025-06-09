@@ -214,10 +214,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Asset asset = stack.Asset("asset_uid");
         ///     asset.IncludeFallback();
-        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///     asset.Fetch<Product>().ContinueWith((assetResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -236,10 +236,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Asset asset = stack.Asset("asset_uid");
         ///     asset.IncludeMetadata();
-        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///     asset.Fetch<Product>().ContinueWith((assetResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -264,10 +264,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Asset asset = stack.Asset("asset_uid");
         ///     asset.IncludeBranch();
-        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///     asset.Fetch<Product>().ContinueWith((assetResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
@@ -285,10 +285,10 @@ namespace Contentstack.Core.Models
         /// <returns>Current instance of Asset, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
-        ///     ContentstackClient stack = new ContentstackClinet(&quot;api_key&quot;, &quot;delivery_token&quot;, &quot;environment&quot;);
-        ///     Asset asset = stack.Asset(&quot;asset_uid&quot;);
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     Asset asset = stack.Asset("asset_uid");
         ///     asset.AddParam("include_branch", "true");
-        ///     asset.Fetch&lt;Product&gt;().ContinueWith((assetResult) =&gt; {
+        ///     asset.Fetch<Product>().ContinueWith((assetResult) => {
         ///         //Your callback code.
         ///     });
         /// </code>
