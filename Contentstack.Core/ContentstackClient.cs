@@ -360,7 +360,7 @@ namespace Contentstack.Core
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("live_preview", this.LivePreviewConfig.LivePreview ?? "init");
+            mainJson.Add("live_preview", string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview) ? "init": this.LivePreviewConfig.LivePreview);
 
             if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken))
             {
@@ -402,7 +402,7 @@ namespace Contentstack.Core
         {
             if (!string.IsNullOrEmpty(entryUid))
             {
-                lastEntryUid = entryUid;
+                this.lastEntryUid = entryUid;
             }
         }
         /// <summary>
@@ -420,7 +420,7 @@ namespace Contentstack.Core
         {
             if (!string.IsNullOrEmpty(contentTypeName))
             {
-                lastContentTypeUid = contentTypeName;
+                this.lastContentTypeUid = contentTypeName;
             }
             ContentType contentType = new ContentType(contentTypeName);
             contentType.SetStackInstance(this);
@@ -610,8 +610,6 @@ namespace Contentstack.Core
         public async Task LivePreviewQueryAsync(Dictionary<string, string> query)
         {
             this.LivePreviewConfig.LivePreview = null;
-            this.LivePreviewConfig.ContentTypeUID = null;
-            this.LivePreviewConfig.EntryUID = null;
 
             if (query.Keys.Contains("content_type_uid"))
             {
@@ -619,9 +617,9 @@ namespace Contentstack.Core
                 query.TryGetValue("content_type_uid", out contentTypeUID);
                 this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
             }
-            else if (lastContentTypeUid != null)
+            else if (!string.IsNullOrEmpty(this.lastContentTypeUid))
             {
-                this.LivePreviewConfig.ContentTypeUID = lastContentTypeUid;
+                this.LivePreviewConfig.ContentTypeUID = this.lastContentTypeUid;
             }
 
             
@@ -631,9 +629,9 @@ namespace Contentstack.Core
                 query.TryGetValue("entry_uid", out entryUID);
                 this.LivePreviewConfig.EntryUID = entryUID;
             }
-            else if (lastEntryUid != null)
+            else if (!string.IsNullOrEmpty(this.lastEntryUid))
             {
-                this.LivePreviewConfig.EntryUID = lastEntryUid;
+                this.LivePreviewConfig.EntryUID = this.lastEntryUid;
             }
 
 
