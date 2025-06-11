@@ -203,10 +203,10 @@ namespace Contentstack.Core.Tests
             };
 
             // Patch GetLivePreviewData to return a dummy JObject
-      
+
             // Since GetLivePreviewData is private and does a real HTTP call, 
             // we only test the config fields are set correctly before the call
-            await Assert.ThrowsAnyAsync<Exception>(() => client.LivePreviewQueryAsync(query));
+            await client.LivePreviewQueryAsync(query);
             var v = client.GetLivePreviewConfig();
             Assert.Equal("ctuid", GetPrivateField(client, "lastContentTypeUid"));
             Assert.Equal("euid", GetPrivateField(client, "lastEntryUid"));
