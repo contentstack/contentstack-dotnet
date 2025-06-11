@@ -42,7 +42,7 @@ namespace Contentstack.Core.Tests
         {
             var client = CreateClient();
             client.SetEntryUid("entry123");
-            Assert.Equal("entry123", GetPrivateField(client, "lastEntryUid"));
+            Assert.Equal("entry123", GetPrivateField(client, "currentEntryUid"));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace Contentstack.Core.Tests
             var client = CreateClient();
             client.SetEntryUid("entry123");
             client.SetEntryUid("");
-            Assert.Equal("entry123", GetPrivateField(client, "lastEntryUid"));
+            Assert.Equal("entry123", GetPrivateField(client, "currentEntryUid"));
         }
 
         [Fact]
@@ -60,15 +60,15 @@ namespace Contentstack.Core.Tests
             var client = CreateClient();
             client.SetEntryUid("entry123");
             client.SetEntryUid(null);
-            Assert.Equal("entry123", GetPrivateField(client, "lastEntryUid"));
+            Assert.Equal("entry123", GetPrivateField(client, "currentEntryUid"));
         }
 
         [Fact]
-        public void ContentType_SetsLastContentTypeUid_WhenNonEmpty()
+        public void ContentType_SetscurrentContenttypeUid_WhenNonEmpty()
         {
             var client = CreateClient();
             client.ContentType("blog");
-            Assert.Equal("blog", GetPrivateField(client, "lastContentTypeUid"));
+            Assert.Equal("blog", GetPrivateField(client, "currentContenttypeUid"));
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Contentstack.Core.Tests
             var client = CreateClient();
             client.ContentType("blog");
             client.ContentType("");
-            Assert.Equal("blog", GetPrivateField(client, "lastContentTypeUid"));
+            Assert.Equal("blog", GetPrivateField(client, "currentContenttypeUid"));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Contentstack.Core.Tests
             var client = CreateClient();
             client.ContentType("blog");
             client.ContentType(null);
-            Assert.Equal("blog", GetPrivateField(client, "lastContentTypeUid"));
+            Assert.Equal("blog", GetPrivateField(client, "currentContenttypeUid"));
         }
 
         [Fact]
@@ -208,8 +208,8 @@ namespace Contentstack.Core.Tests
             // we only test the config fields are set correctly before the call
             await client.LivePreviewQueryAsync(query);
             var v = client.GetLivePreviewConfig();
-            Assert.Equal("ctuid", GetPrivateField(client, "lastContentTypeUid"));
-            Assert.Equal("euid", GetPrivateField(client, "lastEntryUid"));
+            Assert.Equal("ctuid", GetPrivateField(client, "currentContenttypeUid"));
+            Assert.Equal("euid", GetPrivateField(client, "currentEntryUid"));
             Assert.Equal(true, v.Enable );
             Assert.Equal("rid", v.ReleaseId);
             Assert.Equal("ts", v.PreviewTimestamp);

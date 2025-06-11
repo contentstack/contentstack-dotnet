@@ -58,8 +58,8 @@ namespace Contentstack.Core
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
 
         // This is used to store the last content type UID for live preview
-        private string lastContentTypeUid = null;
-        private string lastEntryUid = null;
+        private string currentContenttypeUid = null;
+        private string currentEntryUid = null;
         public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
@@ -403,7 +403,7 @@ namespace Contentstack.Core
         {
             if (!string.IsNullOrEmpty(entryUid))
             {
-                this.lastEntryUid = entryUid;
+                this.currentEntryUid = entryUid;
             }
         }
         /// <summary>
@@ -421,7 +421,7 @@ namespace Contentstack.Core
         {
             if (!string.IsNullOrEmpty(contentTypeName))
             {
-                this.lastContentTypeUid = contentTypeName;
+                this.currentContenttypeUid = contentTypeName;
             }
             ContentType contentType = new ContentType(contentTypeName);
             contentType.SetStackInstance(this);
@@ -619,9 +619,9 @@ namespace Contentstack.Core
                 query.TryGetValue("content_type_uid", out contentTypeUID);
                 this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
             }
-            else if (!string.IsNullOrEmpty(this.lastContentTypeUid))
+            else if (!string.IsNullOrEmpty(this.currentContenttypeUid))
             {
-                this.LivePreviewConfig.ContentTypeUID = this.lastContentTypeUid;
+                this.LivePreviewConfig.ContentTypeUID = this.currentContenttypeUid;
             }
 
 
@@ -631,9 +631,9 @@ namespace Contentstack.Core
                 query.TryGetValue("entry_uid", out entryUID);
                 this.LivePreviewConfig.EntryUID = entryUID;
             }
-            else if (!string.IsNullOrEmpty(this.lastEntryUid))
+            else if (!string.IsNullOrEmpty(this.currentEntryUid))
             {
-                this.LivePreviewConfig.EntryUID = this.lastEntryUid;
+                this.LivePreviewConfig.EntryUID = this.currentEntryUid;
             }
 
 
