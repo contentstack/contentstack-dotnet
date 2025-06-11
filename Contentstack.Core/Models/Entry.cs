@@ -1388,7 +1388,7 @@ namespace Contentstack.Core.Models
                 {
                     if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
                         && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
-                        && header.Key == "access_token")
+                        && header.Key == "access_token" && !string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }

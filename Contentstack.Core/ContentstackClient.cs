@@ -353,14 +353,14 @@ namespace Contentstack.Core
                 foreach (var header in headers)
                 {
                     if (this.LivePreviewConfig.Enable == true
-                        && header.Key == "access_token")
+                        && header.Key == "access_token" && !string.IsNullOrEmpty(LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("live_preview", string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview) ? "init": this.LivePreviewConfig.LivePreview);
+            mainJson.Add("live_preview", string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview) ? "init" : this.LivePreviewConfig.LivePreview);
 
             if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken))
             {
@@ -388,7 +388,8 @@ namespace Contentstack.Core
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
                 //string branch =  this.Config.Branch ? this.Config.Branch : "main";
-                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
+                string URL = String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getBaseUrl(this.LivePreviewConfig, this.LivePreviewConfig.ContentTypeUID), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID);
+                var outputResult = await RequestHandler.ProcessRequest(URL, headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 return (JObject)data["entry"];
             }
@@ -610,7 +611,8 @@ namespace Contentstack.Core
         public async Task LivePreviewQueryAsync(Dictionary<string, string> query)
         {
             this.LivePreviewConfig.LivePreview = null;
-
+            this.LivePreviewConfig.PreviewTimestamp = null;
+            this.LivePreviewConfig.ReleaseId = null;
             if (query.Keys.Contains("content_type_uid"))
             {
                 string contentTypeUID = null;
@@ -622,7 +624,7 @@ namespace Contentstack.Core
                 this.LivePreviewConfig.ContentTypeUID = this.lastContentTypeUid;
             }
 
-            
+
             if (query.Keys.Contains("entry_uid"))
             {
                 string entryUID = null;
@@ -641,6 +643,7 @@ namespace Contentstack.Core
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
             }
+
             if (query.Keys.Contains("release_id"))
             {
                 string ReleaseId = null;
@@ -653,7 +656,10 @@ namespace Contentstack.Core
                 query.TryGetValue("preview_timestamp", out PreviewTimestamp);
                 this.LivePreviewConfig.PreviewTimestamp = PreviewTimestamp;
             }
-            this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
+            //if (!string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview))
+            //{
+            //    this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
+            //}
         }
 
         /// <summary>
