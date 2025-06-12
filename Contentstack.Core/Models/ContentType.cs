@@ -240,6 +240,7 @@ namespace Contentstack.Core.Models
             entry._FormHeaders = GetHeader(_Headers);
             entry.SetContentTypeInstance(this);
             entry.SetUid(entryUid);
+            this.StackInstance.SetEntryUid(entryUid);
             return entry;
         }
 

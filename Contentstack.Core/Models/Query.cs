@@ -1857,7 +1857,7 @@ namespace Contentstack.Core.Models
             if (this.ContentTypeInstance!=null && this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
                 && this.ContentTypeInstance.StackInstance?.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
-                mainJson.Add("live_preview", this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview ?? "init");
+                mainJson.Add("live_preview", string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview) ? "init" : this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview);
 
                 if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken)) {
                     headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
