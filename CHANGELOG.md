@@ -1,3 +1,9 @@
+### Version: 2.22.1
+#### Date: June-13-2025
+
+##### Fix: 
+- Fixed Timeline issue of Entry not getting updated
+
 ### Version: 2.22.0
 #### Date: March-03-2025
 

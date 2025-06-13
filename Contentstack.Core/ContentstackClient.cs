@@ -56,6 +56,10 @@ namespace Contentstack.Core
             }
         }
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
+
+        // This is used to store the last content type UID for live preview
+        private string currentContenttypeUid = null;
+        private string currentEntryUid = null;
         public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
@@ -349,14 +353,14 @@ namespace Contentstack.Core
                 foreach (var header in headers)
                 {
                     if (this.LivePreviewConfig.Enable == true
-                        && header.Key == "access_token")
+                        && header.Key == "access_token" && !string.IsNullOrEmpty(LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }
                     headerAll.Add(header.Key, (String)header.Value);
                 }
             }
-            mainJson.Add("live_preview", this.LivePreviewConfig.LivePreview ?? "init");
+            mainJson.Add("live_preview", string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview) ? "init" : this.LivePreviewConfig.LivePreview);
 
             if (!string.IsNullOrEmpty(this.LivePreviewConfig.ManagementToken))
             {
@@ -384,7 +388,8 @@ namespace Contentstack.Core
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
                 //string branch =  this.Config.Branch ? this.Config.Branch : "main";
-                var outputResult = await RequestHandler.ProcessRequest(String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getLivePreviewUrl(this.LivePreviewConfig), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID), headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
+                string URL = String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getBaseUrl(this.LivePreviewConfig, this.LivePreviewConfig.ContentTypeUID), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID);
+                var outputResult = await RequestHandler.ProcessRequest(URL, headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
                 JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
                 return (JObject)data["entry"];
             }
@@ -394,6 +399,13 @@ namespace Contentstack.Core
             }
         }
 
+        public void SetEntryUid(string entryUid)
+        {
+            if (!string.IsNullOrEmpty(entryUid))
+            {
+                this.currentEntryUid = entryUid;
+            }
+        }
         /// <summary>
         /// Represents a ContentType. Creates ContenntType Instance.
         /// </summary>
@@ -407,6 +419,10 @@ namespace Contentstack.Core
         /// </example>
         public ContentType ContentType(String contentTypeName)
         {
+            if (!string.IsNullOrEmpty(contentTypeName))
+            {
+                this.currentContenttypeUid = contentTypeName;
+            }
             ContentType contentType = new ContentType(contentTypeName);
             contentType.SetStackInstance(this);
 
@@ -488,7 +504,7 @@ namespace Contentstack.Core
         /// </example>
         public string GetVersion()
         {
-            return Version;
+            return this.Config.Version;
         }
 
         /// <summary>
@@ -595,27 +611,39 @@ namespace Contentstack.Core
         public async Task LivePreviewQueryAsync(Dictionary<string, string> query)
         {
             this.LivePreviewConfig.LivePreview = null;
-            this.LivePreviewConfig.ContentTypeUID = null;
-            this.LivePreviewConfig.EntryUID = null;
-
+            this.LivePreviewConfig.PreviewTimestamp = null;
+            this.LivePreviewConfig.ReleaseId = null;
             if (query.Keys.Contains("content_type_uid"))
             {
                 string contentTypeUID = null;
                 query.TryGetValue("content_type_uid", out contentTypeUID);
                 this.LivePreviewConfig.ContentTypeUID = contentTypeUID;
             }
+            else if (!string.IsNullOrEmpty(this.currentContenttypeUid))
+            {
+                this.LivePreviewConfig.ContentTypeUID = this.currentContenttypeUid;
+            }
+
+
             if (query.Keys.Contains("entry_uid"))
             {
-                string contentTypeUID = null;
-                query.TryGetValue("entry_uid", out contentTypeUID);
-                this.LivePreviewConfig.EntryUID = contentTypeUID;
+                string entryUID = null;
+                query.TryGetValue("entry_uid", out entryUID);
+                this.LivePreviewConfig.EntryUID = entryUID;
             }
+            else if (!string.IsNullOrEmpty(this.currentEntryUid))
+            {
+                this.LivePreviewConfig.EntryUID = this.currentEntryUid;
+            }
+
+
             if (query.Keys.Contains("live_preview"))
             {
                 string hash = null;
                 query.TryGetValue("live_preview", out hash);
                 this.LivePreviewConfig.LivePreview = hash;
             }
+
             if (query.Keys.Contains("release_id"))
             {
                 string ReleaseId = null;
@@ -628,7 +656,10 @@ namespace Contentstack.Core
                 query.TryGetValue("preview_timestamp", out PreviewTimestamp);
                 this.LivePreviewConfig.PreviewTimestamp = PreviewTimestamp;
             }
-            this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
+            //if (!string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview))
+            //{
+            //    this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
+            //}
         }
 
         /// <summary>

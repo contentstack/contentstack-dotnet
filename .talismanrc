@@ -3,11 +3,11 @@ fileignoreconfig:
   ignore_detectors:
     - filecontent
 - filename: Contentstack.Core/Internals/HttpRequestHandler.cs
-  checksum: 93c1659f3bc7527956f0fd12db46441297fac3a4366d273bcbb3425d2351300e
+  checksum: 94288e483056f41ff3a4c2ab652c3ce9ecb53dc0b9d4029456b34baed4f34891
 - filename: Contentstack.Core/Models/Entry.cs
-  checksum: a6226f755dde69be62c21737ca75569ba6ea7cb4b7a125dc460c047dbe741b9e
+  checksum: 78a09b03b9fd6aefd0251353b2d8c70962bdfced16a6e1e28d10dc9af43da244
 - filename: Contentstack.Core/ContentstackClient.cs
-  checksum: 761a5d65bfa12d16641aa66e5431b2eb52b0909eff904dca5c2f607ee439cba0
+  checksum: 687dc0a5f20037509731cfe540dcec9c3cc2b6cf50373cd183ece4f3249dc88e
 - filename: Contentstack.Core/Models/AssetLibrary.cs
   checksum: 92ff3feaf730b57c50bb8429f08dd4cddedb42cd89f2507e9746f8237b65fb11
 - filename: Contentstack.Core/Models/Asset.cs
@@ -18,11 +18,5 @@ fileignoreconfig:
   checksum: 751a725d94eff7d845bb22a5ce80a5529bb62971373de39288149fff3d024930
 - filename: .github/workflows/nuget-publish.yml
   checksum: 53ba4ce874c4d2362ad00deb23f5a6ec219318860352f997b945e9161a580651
-- filename: Contentstack.Core/Models/ContentType.cs
-  checksum: 53e3b8330183445d100b32c545073f281b869ee238514c7ab8c9a4500a140166
-- filename: Contentstack.Core.Tests/ContentTypeTest.cs
-  checksum: a2549638af21492d5a299dce35a2994ec4721b211af6956b955602d7065c47dc
-- filename: Contentstack.Core/Models/GlobalFieldQuery.cs
-  checksum: 16fb3c5fb4de2b686f338b0666c7c86c3d37f2a276f85698a59a1ac1a02d359d
-- filename: Contentstack.Core/Models/GlobalField.cs
-  checksum: 49cc6ec8b55408a3e71ba19551dbe01709ec70bc673fae21c280a1f74968e395
+- filename: Contentstack.Core.Tests/ContentstackClientTest.cs
+  checksum: b63897181a8cb5993d1305248cfc3e711c4039b5677b6c1e4e2a639e4ecb391b
