@@ -1886,11 +1886,11 @@ namespace Contentstack.Core.Models
                     if (this.ContentTypeInstance!=null && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.Enable == true
                         && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance?.ContentTypeId
                         && header.Key == "access_token"
-                        && isLivePreview)
+                        && !string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }
-                    headerAll.Add(header.Key, (string)header.Value);
+                    headerAll.Add(header.Key, (String)header.Value);
                 }
             }
 
@@ -1941,7 +1941,25 @@ namespace Contentstack.Core.Models
                 }
                 else
                 {
+                    // console.WriteLine url, mainjson and headerAll
+                    Console.WriteLine("==========================");
+                    Console.WriteLine(this._Url);
+                    
+                    foreach (var kvp in mainJson)
+                    {
+                        if (kvp.Key == "live_preview")
+                        {
+                            Console.WriteLine("mainjson==================");
+                            Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+                        }
+                    }
+                    Console.WriteLine("headerAll==================");
+                    foreach (var kvp in headerAll)
+                    {
+                        Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+                    }
                     HttpRequestHandler requestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
+                    Console.WriteLine(_Url);
                     var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout);
                     return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
                 }
