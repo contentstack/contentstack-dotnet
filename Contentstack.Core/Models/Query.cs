@@ -1886,11 +1886,11 @@ namespace Contentstack.Core.Models
                     if (this.ContentTypeInstance!=null && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.Enable == true
                         && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance?.ContentTypeId
                         && header.Key == "access_token"
-                        && isLivePreview)
+                        && !string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }
-                    headerAll.Add(header.Key, (string)header.Value);
+                    headerAll.Add(header.Key, (String)header.Value);
                 }
             }
 
