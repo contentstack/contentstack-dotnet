@@ -115,7 +115,7 @@ namespace Contentstack.Core
             this.SetConfig(cnfig);
             if (_options.LivePreview != null)
             {
-                this.LivePreviewConfig = _options.LivePreview;
+                this.LivePreviewConfig = _options.LivePreview.Clone();
             }
             else
             {

@@ -14,5 +14,25 @@ namespace Contentstack.Core.Configuration
         internal JObject PreviewResponse { get; set; }
         public string ReleaseId {get; set;}
         public string PreviewTimestamp {get; set;}
+
+        /// <summary>
+        /// Creates a deep clone of the LivePreviewConfig for request isolation
+        /// </summary>
+        public LivePreviewConfig Clone()
+        {
+            return new LivePreviewConfig
+            {
+                ManagementToken = this.ManagementToken,
+                PreviewToken = this.PreviewToken,
+                Enable = this.Enable,
+                Host = this.Host,
+                LivePreview = this.LivePreview,
+                ContentTypeUID = this.ContentTypeUID,
+                EntryUID = this.EntryUID,
+                PreviewResponse = this.PreviewResponse?.DeepClone() as JObject,
+                ReleaseId = this.ReleaseId,
+                PreviewTimestamp = this.PreviewTimestamp
+            };
+        }
     }
 }

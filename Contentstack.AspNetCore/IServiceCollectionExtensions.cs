@@ -25,7 +25,7 @@ namespace Contentstack.AspNetCore
         {
             services.AddOptions();
             services.Configure<ContentstackOptions>(configuration.GetSection("ContentstackOptions"));
-            services.TryAddTransient<ContentstackClient>();
+            services.AddScoped<ContentstackClient>();
             return services;
         }
 
@@ -39,7 +39,7 @@ namespace Contentstack.AspNetCore
         {
             services.AddOptions();
             services.Configure<ContentstackOptions>(configuration.GetSection("ContentstackOptions"));
-            services.TryAddTransient<ContentstackClient>();
+            services.AddScoped<ContentstackClient>();
             return services;
         }
     }
