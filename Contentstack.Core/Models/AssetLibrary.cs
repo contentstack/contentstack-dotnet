@@ -317,6 +317,35 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Filter assets that have specific tags.
+        /// </summary>
+        /// <param name="tags">Array of tags to filter assets by.</param>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.Tags(new string[] {"image", "banner"});
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public AssetLibrary Tags(string[] tags)
+        {
+            try
+            {
+                if (tags != null && tags.Length > 0)
+                {
+                    UrlQueries["tags"] = tags;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Specifies an array of &#39;only&#39; keys in BASE object that would be &#39;included&#39; in the response.
         /// </summary>
         /// <param name="fieldUid">Array of the &#39;only&#39; keys to be included in response.</param>
