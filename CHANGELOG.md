@@ -4,6 +4,11 @@
 ##### Feat: 
 - Fetch Assets using tags
 
+### Version: 2.22.2
+#### Date: July-14-2025
+
+##### Fix: 
+- Fixed token issue for Live Preview
 
 ### Version: 2.22.1
 #### Date: June-13-2025
