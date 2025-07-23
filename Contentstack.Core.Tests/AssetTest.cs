@@ -167,7 +167,6 @@ namespace Contentstack.Core.Tests
             else if (jObject != null)
             {
                 Assert.Equal(5, jObject.GetValue("assets"));
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
             else
             {
@@ -273,7 +272,6 @@ namespace Contentstack.Core.Tests
             ContentstackCollection<Asset> allAssets = await assetLibrary.FetchAll();
             
             int totalAssetsCount = allAssets.Count();
-            Console.WriteLine($"Total assets in stack: {totalAssetsCount}");
             Assert.True(totalAssetsCount >= 0, "Total assets count should be non-negative");
             
             if (totalAssetsCount > 0)
@@ -313,10 +311,6 @@ namespace Contentstack.Core.Tests
                     }
                     
                     Assert.True(foundOriginalAsset, $"Asset with UID {assetWithTags.Uid} should be found when filtering by tag '{firstTag}'");
-                }
-                else
-                {
-                    Console.WriteLine("No assets with tags found - skipping tag filtering test");
                 }
             }
         }
@@ -435,10 +429,6 @@ namespace Contentstack.Core.Tests
                 Assert.Contains("asset2", tags);
                 
             }
-            else
-            {
-                Console.WriteLine("Could not access UrlQueries field via reflection - test skipped");
-            }
         }
 
         [Fact]
@@ -505,20 +495,15 @@ namespace Contentstack.Core.Tests
             Assert.NotNull(allAssets);
             Assert.NotNull(filteredAssets);
             
-            // Get counts for comparison
             int allAssetsCount = allAssets.Count();
             int filteredAssetsCount = filteredAssets.Count();
             
             Assert.True(filteredAssetsCount <= allAssetsCount, 
                 $"Filtered assets ({filteredAssetsCount}) should be <= all assets ({allAssetsCount})");
             
-            // Since we're using a tag that probably doesn't exist, count should be 0
             Assert.Equal(0, filteredAssetsCount);
             
-            // All assets count should be greater than 0 (assuming there are assets in the stack)
             Assert.True(allAssetsCount >= 0, "All assets count should be non-negative");
-            
-            // Verify that filtering actually works by checking the difference
             if (allAssetsCount > 0)
             {
                 Assert.True(filteredAssetsCount < allAssetsCount, 
@@ -616,7 +601,6 @@ namespace Contentstack.Core.Tests
             ContentstackCollection<Asset> allAssets = await assetLibrary.FetchAll();
             
             int totalAssetsCount = allAssets.Count();
-            Console.WriteLine($"Total assets available: {totalAssetsCount}");
             Assert.True(totalAssetsCount >= 0, "Total assets count should be non-negative");
             
             Asset assetWithTags = null;
@@ -673,17 +657,8 @@ namespace Contentstack.Core.Tests
                     {
                         Assert.Equal(originalCount, upperCount);
                         Assert.Equal(originalCount, lowerCount);
-                        Console.WriteLine("Verified: Tag search is case-insensitive");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Note: Tag search appears to be case-sensitive");
                     }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Skipping case sensitivity test - no assets with tags found");
             }
         }
     }
