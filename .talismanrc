@@ -9,7 +9,7 @@ fileignoreconfig:
 - filename: Contentstack.Core/ContentstackClient.cs
   checksum: 687dc0a5f20037509731cfe540dcec9c3cc2b6cf50373cd183ece4f3249dc88e
 - filename: Contentstack.Core/Models/AssetLibrary.cs
-  checksum: 92ff3feaf730b57c50bb8429f08dd4cddedb42cd89f2507e9746f8237b65fb11
+  checksum: 7e05fd0bbb43b15e6b7f387d746cc64d709e17e0e8e26a7495a99025077ff507
 - filename: Contentstack.Core/Models/Asset.cs
   checksum: d192718723e6cb2aa8f08f873d3a7ea7268c89cc15da3bdeea4c16fd304c410e
 - filename: Contentstack.Core/Models/Query.cs
@@ -20,3 +20,5 @@ fileignoreconfig:
   checksum: 53ba4ce874c4d2362ad00deb23f5a6ec219318860352f997b945e9161a580651
 - filename: Contentstack.Core.Tests/ContentstackClientTest.cs
   checksum: b63897181a8cb5993d1305248cfc3e711c4039b5677b6c1e4e2a639e4ecb391b
+- filename: Contentstack.Core.Tests/AssetTest.cs
+  checksum: 3e7bf50c7223c458561f0217484d5e70cf3770490c569e0a7083b0a12af9ab86
