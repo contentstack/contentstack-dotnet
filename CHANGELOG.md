@@ -1,3 +1,9 @@
+### Version: 2.23.0
+#### Date: Aug-05-2025
+
+##### Feat: 
+- Fetch Assets using tags
+
 ### Version: 2.22.2
 #### Date: July-14-2025
 
