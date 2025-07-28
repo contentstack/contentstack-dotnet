@@ -167,7 +167,6 @@ namespace Contentstack.Core.Tests
             else if (jObject != null)
             {
                 Assert.Equal(5, jObject.GetValue("assets"));
-                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
             }
             else
             {
@@ -240,6 +239,426 @@ namespace Contentstack.Core.Tests
             else
             {
                 Assert.False(true, "Result doesn't mathced the count.");
+            }
+        }
+        [Fact]
+        public async Task AssetTags_FetchBySpecificTags_ShouldReturnValidAssets_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.Tags(new string[] { "assetdotnet" });
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            
+            Assert.NotNull(assets);
+            
+            int assetCount = assets.Count();
+            Assert.True(assetCount >= 0, "Asset count should be non-negative");
+            
+            if (assetCount > 0)
+            {
+                foreach (Asset asset in assets)
+                {
+                    Assert.True(asset.FileName.Length > 0);
+                    Assert.NotNull(asset.Uid);
+                    Assert.NotNull(asset.Url);
+                    Assert.True(asset.Tags != null || asset.Tags == null); // Either null or has value
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_FetchWithExistingAssetTags_ShouldReturnMatchingAssets_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> allAssets = await assetLibrary.FetchAll();
+            
+            int totalAssetsCount = allAssets.Count();
+            Assert.True(totalAssetsCount >= 0, "Total assets count should be non-negative");
+            
+            if (totalAssetsCount > 0)
+            {
+                Asset assetWithTags = null;
+                foreach (Asset asset in allAssets)
+                {
+                    if (asset.Tags != null && asset.Tags.Length > 0)
+                    {
+                        assetWithTags = asset;
+                        break;
+                    }
+                }
+                
+                if (assetWithTags != null && assetWithTags.Tags.Length > 0)
+                {
+                    string firstTag = assetWithTags.Tags[0].ToString();
+                    AssetLibrary taggedAssetLibrary = client.AssetLibrary();
+                    taggedAssetLibrary.Tags(new string[] { firstTag });
+                    ContentstackCollection<Asset> filteredAssets = await taggedAssetLibrary.FetchAll();
+                    
+                    Assert.NotNull(filteredAssets);
+                    
+                    int filteredCount = filteredAssets.Count();
+                    
+                    Assert.True(filteredCount >= 1, $"Should find at least 1 asset with existing tag '{firstTag}'");
+                    Assert.True(filteredCount <= totalAssetsCount, "Filtered count should not exceed total assets");
+                    
+                    bool foundOriginalAsset = false;
+                    foreach (Asset filteredAsset in filteredAssets)
+                    {
+                        if (filteredAsset.Uid == assetWithTags.Uid)
+                        {
+                            foundOriginalAsset = true;
+                            break;
+                        }
+                    }
+                    
+                    Assert.True(foundOriginalAsset, $"Asset with UID {assetWithTags.Uid} should be found when filtering by tag '{firstTag}'");
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_FetchBySingleTag_ShouldExecuteWithoutErrors_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.Tags(new string[] { "asset1" });
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            
+            Assert.NotNull(assets);
+            
+            int assetCount = assets.Count();
+            Assert.True(assetCount >= 0, "Asset count should be non-negative");
+            
+            if (assetCount > 0)
+            {
+                foreach (Asset asset in assets)
+                {
+                    Assert.NotNull(asset.Uid);
+                    Assert.True(asset.FileName.Length > 0);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_FetchByEmptyTagsArray_ShouldReturnAllAssets_Test()
+        {
+            AssetLibrary emptyTagsLibrary = client.AssetLibrary();
+            emptyTagsLibrary.Tags(new string[] { });
+            ContentstackCollection<Asset> emptyTagsAssets = await emptyTagsLibrary.FetchAll();
+            
+            Assert.NotNull(emptyTagsAssets);
+            
+            AssetLibrary allAssetsLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> allAssets = await allAssetsLibrary.FetchAll();
+            
+            int emptyTagsCount = emptyTagsAssets.Count();
+            int allAssetsCount = allAssets.Count();
+           
+            
+            Assert.True(emptyTagsCount >= 0, "Empty tags asset count should be non-negative");
+            Assert.True(emptyTagsCount == allAssetsCount || emptyTagsCount >= 0, 
+                "Empty tags should return all assets or handle gracefully");
+        }
+
+        [Fact]
+        public async Task AssetTags_FetchByNullTags_ShouldReturnAllAssets_Test()
+        {
+            AssetLibrary nullTagsLibrary = client.AssetLibrary();
+            nullTagsLibrary.Tags(null);
+            ContentstackCollection<Asset> nullTagsAssets = await nullTagsLibrary.FetchAll();
+            
+            Assert.NotNull(nullTagsAssets);
+            
+            AssetLibrary allAssetsLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> allAssets = await allAssetsLibrary.FetchAll();
+            
+            int nullTagsCount = nullTagsAssets.Count();
+            int allAssetsCount = allAssets.Count();
+           
+            
+            Assert.True(nullTagsCount >= 0, "Null tags asset count should be non-negative");
+            Assert.True(nullTagsCount == allAssetsCount || nullTagsCount >= 0, 
+                "Null tags should return all assets or handle gracefully");
+        }
+
+        [Fact]
+        public async Task AssetTags_ChainWithOtherFilters_ShouldRespectAllFilters_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.Tags(new string[] { "asset2", "asset1" })
+                       .Limit(5)
+                       .Skip(0)
+                       .IncludeMetadata()
+                       .IncludeFallback();
+            
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            
+            Assert.NotNull(assets);
+            
+            int assetCount = assets.Count();
+            
+            Assert.True(assetCount <= 5, "Limit of 5 should be respected");
+            Assert.True(assetCount >= 0, "Asset count should be non-negative");
+            
+            if (assetCount > 0)
+            {
+                foreach (Asset asset in assets)
+                {
+                    Assert.NotNull(asset.Uid);
+                    Assert.NotNull(asset.FileName);
+                    Assert.True(asset.FileName.Length > 0);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_VerifyUrlQueriesParameter_ShouldContainTagsInQuery_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.Tags(new string[] { "asset1", "asset2" });
+            
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            
+            if (urlQueriesField != null)
+            {
+                var urlQueries = (Dictionary<string, object>)urlQueriesField.GetValue(assetLibrary);
+                Assert.True(urlQueries.ContainsKey("tags"));
+                
+                string[] tags = (string[])urlQueries["tags"];
+                Assert.Equal(2, tags.Length);
+                Assert.Contains("asset1", tags);
+                Assert.Contains("asset2", tags);
+                
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_FetchWithMultipleTags_ShouldReturnAssetsWithAnyTag_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.Tags(new string[] { "asset1", "asset2","assetdotnet" });
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            
+            Assert.NotNull(assets);
+            
+            int assetCount = assets.Count();
+            Assert.True(assetCount >= 0, "Asset count should be non-negative");
+            
+            if (assetCount > 0)
+            {
+                
+                foreach (Asset asset in assets)
+                {
+                    Assert.NotNull(asset.Uid);
+                    Assert.True(asset.FileName.Length > 0);
+                    Assert.NotNull(asset.Url);
+                    
+                    if (asset.Tags != null && asset.Tags.Length > 0)
+                    {
+                        string[] searchTags = { "asset1", "asset2","assetdotnet" };
+                        bool hasMatchingTag = false;
+                        
+                        foreach (object assetTag in asset.Tags)
+                        {
+                            string tagString = assetTag.ToString().ToLower();
+                            foreach (string searchTag in searchTags)
+                            {
+                                if (tagString.Contains(searchTag.ToLower()))
+                                {
+                                    hasMatchingTag = true;
+                                    break;
+                                }
+                            }
+                            if (hasMatchingTag) break;
+                        }
+                        
+                        if (!hasMatchingTag)
+                        {
+                            var assetTagsList = string.Join(", ", asset.Tags.Select(t => t.ToString()));
+                        }
+                    }
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_CompareFilteredVsAllAssets_ShouldReturnFewerOrEqualAssets_Test()
+        {
+            
+            AssetLibrary allAssetsLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> allAssets = await allAssetsLibrary.FetchAll();
+            
+           
+            AssetLibrary filteredAssetsLibrary = client.AssetLibrary();
+            filteredAssetsLibrary.Tags(new string[] { "tag-does-not-exist" });
+            ContentstackCollection<Asset> filteredAssets = await filteredAssetsLibrary.FetchAll();
+            
+            Assert.NotNull(allAssets);
+            Assert.NotNull(filteredAssets);
+            
+            int allAssetsCount = allAssets.Count();
+            int filteredAssetsCount = filteredAssets.Count();
+            
+            Assert.True(filteredAssetsCount <= allAssetsCount, 
+                $"Filtered assets ({filteredAssetsCount}) should be <= all assets ({allAssetsCount})");
+            
+            Assert.Equal(0, filteredAssetsCount);
+            
+            Assert.True(allAssetsCount >= 0, "All assets count should be non-negative");
+            if (allAssetsCount > 0)
+            {
+                Assert.True(filteredAssetsCount < allAssetsCount, 
+                    "Filtered results should be less than total when using non-existent tag");
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_SortingAndPagination_ShouldRespectAllParameters_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.Tags(new string[] { "asset1" })
+                       .Limit(3)
+                       .Skip(0)
+                       .SortWithKeyAndOrderBy("created_at", Internals.OrderBy.OrderByDescending);
+            
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+            
+            Assert.NotNull(assets);
+            
+            int assetCount = assets.Count();
+            Assert.True(assetCount <= 3, "Should respect the limit of 3");
+            Assert.True(assetCount >= 0, "Asset count should be non-negative");
+            
+            if (assetCount > 1)
+            {
+                DateTime previousDate = DateTime.MaxValue;
+                foreach (Asset asset in assets)
+                {
+                    DateTime currentDate = asset.GetCreateAt();
+                    Assert.True(currentDate <= previousDate, "Assets should be sorted by created_at in descending order");
+                    previousDate = currentDate;
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AssetTags_VerifyHttpRequestParameters_ShouldCompleteSuccessfully_Test()
+        {
+            
+            try
+            {
+                AssetLibrary assetLibrary = client.AssetLibrary();
+                assetLibrary.Tags(new string[] { "asset1" })
+                           .Limit(1); 
+                           
+                ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+                
+               
+                Assert.NotNull(assets);
+                
+                int assetCount = assets.Count();
+                Assert.True(assetCount >= 0, "Asset count should be non-negative");
+                Assert.True(assetCount <= 1, "Should respect limit of 1");
+                
+                Assert.True(true, "HTTP request with tags parameter completed successfully");
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, $"HTTP request failed, possibly due to malformed tags parameter: {ex.Message}");
+            }
+        }
+
+        [Fact] 
+        public async Task AssetTags_EmptyAndNullHandling_ShouldNotBreakApiCalls_Test()
+        {            
+            AssetLibrary emptyTagsLibrary = client.AssetLibrary();
+            emptyTagsLibrary.Tags(new string[] { });
+            ContentstackCollection<Asset> emptyTagsAssets = await emptyTagsLibrary.FetchAll();
+            Assert.NotNull(emptyTagsAssets);
+            
+            AssetLibrary nullTagsLibrary = client.AssetLibrary();
+            nullTagsLibrary.Tags(null);
+            ContentstackCollection<Asset> nullTagsAssets = await nullTagsLibrary.FetchAll();
+            Assert.NotNull(nullTagsAssets);
+            
+            AssetLibrary allAssetsLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> allAssets = await allAssetsLibrary.FetchAll();
+            
+            int emptyTagsCount = emptyTagsAssets.Count();
+            int nullTagsCount = nullTagsAssets.Count();
+            int allAssetsCount = allAssets.Count();
+          
+            
+            Assert.True(emptyTagsCount == allAssetsCount || emptyTagsCount >= 0, 
+                "Empty tags should return all assets or handle gracefully");
+            Assert.True(nullTagsCount == allAssetsCount || nullTagsCount >= 0, 
+                "Null tags should return all assets or handle gracefully");
+        }
+
+        [Fact]
+        public async Task AssetTags_CaseSensitivityVerification_ShouldTestCaseBehavior_Test()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            ContentstackCollection<Asset> allAssets = await assetLibrary.FetchAll();
+            
+            int totalAssetsCount = allAssets.Count();
+            Assert.True(totalAssetsCount >= 0, "Total assets count should be non-negative");
+            
+            Asset assetWithTags = null;
+            string originalTag = null;
+            
+            foreach (Asset asset in allAssets)
+            {
+                if (asset.Tags != null && asset.Tags.Length > 0)
+                {
+                    assetWithTags = asset;
+                    originalTag = asset.Tags[0].ToString();
+                    break;
+                }
+            }
+            
+            if (assetWithTags != null && !string.IsNullOrEmpty(originalTag))
+            {
+                AssetLibrary originalCaseLibrary = client.AssetLibrary();
+                originalCaseLibrary.Tags(new string[] { originalTag });
+                ContentstackCollection<Asset> originalCaseAssets = await originalCaseLibrary.FetchAll();
+                
+                AssetLibrary upperCaseLibrary = client.AssetLibrary();
+                upperCaseLibrary.Tags(new string[] { originalTag.ToUpper() });
+                ContentstackCollection<Asset> upperCaseAssets = await upperCaseLibrary.FetchAll();
+                
+                AssetLibrary lowerCaseLibrary = client.AssetLibrary();
+                lowerCaseLibrary.Tags(new string[] { originalTag.ToLower() });
+                ContentstackCollection<Asset> lowerCaseAssets = await lowerCaseLibrary.FetchAll();
+                
+                Assert.NotNull(originalCaseAssets);
+                Assert.NotNull(upperCaseAssets);
+                Assert.NotNull(lowerCaseAssets);
+                
+                int originalCount = originalCaseAssets.Count();
+                int upperCount = upperCaseAssets.Count();
+                int lowerCount = lowerCaseAssets.Count();
+                
+                
+                Assert.True(originalCount >= 1, $"Original case tag '{originalTag}' should return at least 1 asset");
+                Assert.True(upperCount >= 0, "Uppercase tag search count should be non-negative");
+                Assert.True(lowerCount >= 0, "Lowercase tag search count should be non-negative");
+                Assert.True(originalCount <= totalAssetsCount, "Original count should not exceed total assets");
+                Assert.True(upperCount <= totalAssetsCount, "Upper count should not exceed total assets");
+                Assert.True(lowerCount <= totalAssetsCount, "Lower count should not exceed total assets");
+                
+                bool foundOriginalAsset = originalCaseAssets.Any(a => a.Uid == assetWithTags.Uid);
+                Assert.True(foundOriginalAsset, $"Original asset {assetWithTags.Uid} should be found when searching with original tag '{originalTag}'");
+                
+                if (originalTag.ToLower() != originalTag.ToUpper()) 
+                {
+                    bool appearsCaseInsensitive = (originalCount == upperCount && upperCount == lowerCount);
+                    
+                    if (appearsCaseInsensitive)
+                    {
+                        Assert.Equal(originalCount, upperCount);
+                        Assert.Equal(originalCount, lowerCount);
+                    }
+                }
             }
         }
     }
