@@ -20,7 +20,7 @@ namespace Contentstack.Core.Internals
 
         public override void WriteJson(JsonWriter writer, Asset value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Failed to convert asset JSON. Please check the asset format and data integrity.");
         }
     }
 }

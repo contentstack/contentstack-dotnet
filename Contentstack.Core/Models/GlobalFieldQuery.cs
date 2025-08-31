@@ -157,7 +157,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException("Global field query failed. Check your query syntax and field schema before retrying.", ex);
             }
         }
 

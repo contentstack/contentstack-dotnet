@@ -369,7 +369,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine("IOException source: {0}", e.Source);
+                Console.WriteLine($"Exception in {e.GetType().Name}: {e.Message}\nStackTrace: {e.StackTrace}");
             }
 
             return this;
@@ -401,7 +401,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine("IOException source: {0}", e.Source);
+                Console.WriteLine($"Exception in {e.GetType().Name}: {e.Message}\nStackTrace: {e.StackTrace}");
             }
             return this;
         }
@@ -508,7 +508,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException($"Exception in {ex.GetType().Name}: {ex.Message}\nStackTrace: {ex.StackTrace}");
             }
         }
         #endregion

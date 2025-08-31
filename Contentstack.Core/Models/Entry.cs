@@ -1405,7 +1405,7 @@ namespace Contentstack.Core.Models
                 } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
                     headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
                 } else {
-                    throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+                    throw new InvalidOperationException("Live Preview token missing. Add either a PreviewToken or a ManagementToken in the LivePreviewConfig.");
                 }
 
                 if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
@@ -1446,7 +1446,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException("An error occurred while processing the entry "+ $"Exception: {ex.Message}\nSource: {ex.Source ?? "Unknown"}\nStackTrace: {ex.StackTrace ?? "No stack trace available"}");
             }
         }
 

@@ -305,7 +305,7 @@ namespace Contentstack.Core.Internals
     //        }
     //        catch (Exception ex)
     //        {
-    //            throw new ContentstackError(ex);
+    //            throw new ContentstackError($"Failed to generate stack output: {ex.Message}\nStackTrace: {ex.StackTrace}");
     //        }
     //    }
     //    public Dictionary<string, object> GetObjectDict(JContainer container)

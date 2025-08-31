@@ -1247,7 +1247,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine("IOException source: {0}", e.Source);
+                Console.WriteLine($"Exception in {e.GetType().Name}: {e.Message}\nStackTrace: {e.StackTrace}");
             }
 
             return this;
@@ -1316,7 +1316,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine("IOException source: {0}", e.Source);
+                Console.WriteLine($"Exception in {e.GetType().Name}: {e.Message}\nStackTrace: {e.StackTrace}");
             }
             return this;
         }
@@ -1864,7 +1864,7 @@ namespace Contentstack.Core.Models
                 } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
                     headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
                 } else {
-                    throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+                    throw new InvalidOperationException("Live Preview token missing. Add either a PreviewToken or a ManagementToken in the LivePreviewConfig.");
                 }
 
                 if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
@@ -1948,7 +1948,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException("Query failed to execute. Review your syntax and filters, then try again.", ex);
             }
         }
 

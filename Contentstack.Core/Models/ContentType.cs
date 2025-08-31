@@ -176,7 +176,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException("Content type processing failed. Verify the schema and ensure all required fields are configured.", ex);
             }
         }
 

@@ -64,7 +64,7 @@ namespace Contentstack.Core.Models
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine("IOException source: {0}", e.Source);
+                        Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
                     }
                 }
             }
@@ -322,7 +322,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine("IOException source: {0}", e.Source);
+                    Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
             }
             return DateTime.MinValue;
         }
@@ -362,7 +362,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine("IOException source: {0}", e.Source);
+                    Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
             }
             return DateTime.MinValue;
         }
@@ -384,7 +384,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine("IOException source: {0}", e.Source);
+                    Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
             }
             return DateTime.MinValue;
         }
@@ -424,7 +424,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException("Unable to process asset. Ensure the file format, size, and encoding meet the required standards.", ex);
             }
         }
 

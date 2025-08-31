@@ -33,7 +33,7 @@ namespace Contentstack.Core.Models
             set
             {
                 if (String.IsNullOrEmpty(value))
-                    throw new ArgumentNullException("GlobalFieldId cannot be null or empty.");
+                    throw new ArgumentNullException("GlobalFieldId required. This value cannot be null or empty, define it in your configuration.");
                 this.Uid = value;
             }
         }
@@ -189,7 +189,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw new ContentstackException("An error occurred while processing the globalField. "+$"Exception: {ex.Message}\nSource: {ex.Source ?? "Unknown"}\nStackTrace: {ex.StackTrace ?? "No stack trace available"}");
             }
         }
 
