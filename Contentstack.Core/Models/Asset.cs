@@ -64,7 +64,7 @@ namespace Contentstack.Core.Models
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
+                        Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                     }
                 }
             }
@@ -424,7 +424,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw new ContentstackException("Unable to process asset. Ensure the file format, size, and encoding meet the required standards.", ex);
+                throw new ContentstackException(string.Format(ErrorMessages.AssetProcessingError, ErrorMessages.FormatExceptionDetails(ex)));
             }
         }
 

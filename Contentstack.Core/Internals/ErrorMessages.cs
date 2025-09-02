@@ -1,0 +1,39 @@
+using System;
+
+namespace Contentstack.Core.Internals
+{
+    /// <summary>
+    /// Contains all error message constants used throughout the SDK
+    /// </summary>
+    internal static class ErrorMessages
+    {
+        // Query and Filter related errors
+        public const string QueryFilterError = "Please provide valid params.";
+        public const string InvalidParamsError = "Invalid parameters provided. {0}";
+
+        // Asset related errors
+        public const string AssetJsonConversionError = "Failed to convert asset JSON. Please check the asset format and data integrity.";
+        public const string AssetProcessingError = "An error occurred while processing the asset. {0}";
+        public const string AssetLibraryRequestError = "Exception in {0}: {1}\nStackTrace: {2}";
+
+        // Entry related errors
+        public const string EntryProcessingError = "An error occurred while processing the entry. {0}";
+
+        // Global Field related errors
+        public const string GlobalFieldIdNullError = "GlobalFieldId required. This value cannot be null or empty, define it in your configuration.";
+        public const string GlobalFieldProcessingError = "An error occurred while processing the globalField. {0}";
+        public const string GlobalFieldQueryError = "Global field query failed. Check your query syntax and field schema before retrying.";
+
+        // Live Preview related errors
+        public const string LivePreviewTokenMissing = "Live Preview token missing. Add either a PreviewToken or a ManagementToken in the LivePreviewConfig.";
+
+        // Helper method to format exception details
+        public static string FormatExceptionDetails(Exception ex)
+        {
+            return string.Format("Exception: {0}\nSource: {1}\nStackTrace: {2}",
+                ex.Message,
+                ex.Source ?? "Unknown",
+                ex.StackTrace ?? "No stack trace available");
+        }
+    }
+}

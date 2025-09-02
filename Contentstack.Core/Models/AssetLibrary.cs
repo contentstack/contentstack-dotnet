@@ -508,7 +508,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw new ContentstackException($"Exception in {ex.GetType().Name}: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw AssetException.CreateForProcessingError(ex);
             }
         }
         #endregion
