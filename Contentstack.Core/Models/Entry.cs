@@ -510,7 +510,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
 
 
@@ -724,7 +724,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -801,7 +801,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1094,7 +1094,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1121,7 +1121,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1149,7 +1149,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1177,7 +1177,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1204,7 +1204,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1231,7 +1231,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1259,7 +1259,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -1286,7 +1286,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw EntryException.CreateForProcessingError(e);
             }
             return this;
         }

@@ -136,7 +136,7 @@ namespace Contentstack.Core
                 }
                 else
                 {
-                    throw new InvalidOperationException("Live Preview token missing. Add either a PreviewToken or a ManagementToken in the LivePreviewConfig.");
+                    throw new InvalidOperationException(ErrorMessages.LivePreviewTokenMissing);
                 }
             }
             this.SerializerSettings.DateParseHandling = DateParseHandling.None;
@@ -338,7 +338,7 @@ namespace Contentstack.Core
             }
             catch (Exception ex)
             {
-                throw new GetContentstackError("Contentstack client request failed. Check your network settings or request parameters and try again: " + ex.Message, ex);
+                throw new GetContentstackError(string.Format(ErrorMessages.ContentstackClientRequestError, ex.Message), ex);
             }
         }
 
@@ -372,7 +372,7 @@ namespace Contentstack.Core
             }
             else
             {
-                throw new InvalidOperationException("Live Preview token missing. Add either a PreviewToken or a ManagementToken in the LivePreviewConfig.");
+                throw new InvalidOperationException(ErrorMessages.LivePreviewTokenMissing);
             }
 
             if (!string.IsNullOrEmpty(this.LivePreviewConfig.ReleaseId))
@@ -873,7 +873,7 @@ namespace Contentstack.Core
             }
             catch (Exception ex)
             {
-                throw new GetContentstackError("An error occurred while processing the Contentstack client request: " + ex.Message, ex);
+                throw new GetContentstackError(string.Format(ErrorMessages.ContentstackSyncRequestError, ex.Message), ex);
             }
         }
         #endregion

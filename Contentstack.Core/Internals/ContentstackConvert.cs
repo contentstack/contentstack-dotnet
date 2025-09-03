@@ -19,7 +19,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -38,7 +38,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -57,7 +57,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -76,7 +76,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null) 
                 { 
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -95,7 +95,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -114,7 +114,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -132,7 +132,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
             return now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'sszzz");
@@ -186,7 +186,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine("Exception in {0}: {1}\nStackTrace: {2}", e.GetType().Name, e.Message, e.StackTrace);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 

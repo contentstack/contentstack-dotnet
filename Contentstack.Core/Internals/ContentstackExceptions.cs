@@ -149,4 +149,47 @@ namespace Contentstack.Core.Internals
                 innerException);
         }
     }
+
+    /// <summary>
+    /// Exception thrown when there are taxonomy-related errors
+    /// </summary>
+    public class TaxonomyException : ContentstackException
+    {
+        public TaxonomyException(string message) : base(message)
+        {
+        }
+
+        public TaxonomyException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        public static TaxonomyException CreateForProcessingError(Exception innerException)
+        {
+            return new TaxonomyException(
+                string.Format(ErrorMessages.TaxonomyProcessingError, 
+                ErrorMessages.FormatExceptionDetails(innerException)),
+                innerException);
+        }
+    }
+
+    /// <summary>
+    /// Exception thrown when there are content type-related errors
+    /// </summary>
+    public class ContentTypeException : ContentstackException
+    {
+        public ContentTypeException(string message) : base(message)
+        {
+        }
+
+        public ContentTypeException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        public static ContentTypeException CreateForProcessingError(Exception innerException)
+        {
+            return new ContentTypeException(
+                ErrorMessages.ContentTypeProcessingError,
+                innerException);
+        }
+    }
 }

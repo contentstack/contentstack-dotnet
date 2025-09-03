@@ -252,7 +252,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -322,7 +322,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -362,7 +362,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -384,7 +384,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine($"Exception: {e.Message}\nSource: {e.Source ?? "Unknown"}\nStackTrace: {e.StackTrace ?? "No stack trace available"}");
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -424,7 +424,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw new ContentstackException(string.Format(ErrorMessages.AssetProcessingError, ErrorMessages.FormatExceptionDetails(ex)));
+                throw AssetException.CreateForProcessingError(ex);
             }
         }
 

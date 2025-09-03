@@ -100,7 +100,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -124,7 +124,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -149,7 +149,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -241,7 +241,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -285,7 +285,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -311,7 +311,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -340,7 +340,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -369,7 +369,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Exception in {e.GetType().Name}: {e.Message}\nStackTrace: {e.StackTrace}");
+                throw AssetException.CreateForProcessingError(e);
             }
 
             return this;
@@ -401,7 +401,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Exception in {e.GetType().Name}: {e.Message}\nStackTrace: {e.StackTrace}");
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
