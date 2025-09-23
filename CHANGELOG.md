@@ -1,3 +1,9 @@
+### Version: 2.24.0
+#### Date: Sep-29-2025
+
+##### Feat: 
+- Added Support For AWS-AU Region
+
 ### Version: 2.23.0
 #### Date: Aug-05-2025
 
