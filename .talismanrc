@@ -22,3 +22,5 @@ fileignoreconfig:
   checksum: b63897181a8cb5993d1305248cfc3e711c4039b5677b6c1e4e2a639e4ecb391b
 - filename: Contentstack.Core.Tests/AssetTest.cs
   checksum: 3e7bf50c7223c458561f0217484d5e70cf3770490c569e0a7083b0a12af9ab86
+- filename: Contentstack.Core.Tests/RegionHandlerTest.cs
+  checksum: 69899138754908e156aa477d775d12fd6b3fefc1a6c2afec22cb409bd6e6446c

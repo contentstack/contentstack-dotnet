@@ -120,7 +120,7 @@ namespace Contentstack.Core.Configuration
         {
             get
             {
-                if (Region == ContentstackRegion.EU || Region == ContentstackRegion.AZURE_EU || Region == ContentstackRegion.AZURE_NA || Region == ContentstackRegion.GCP_NA)
+                if (Region == ContentstackRegion.EU || Region == ContentstackRegion.AZURE_EU || Region == ContentstackRegion.AZURE_NA || Region == ContentstackRegion.GCP_NA || Region==ContentstackRegion.AU)
                     return "cdn.contentstack.com";
                 return "cdn.contentstack.io";
             }
