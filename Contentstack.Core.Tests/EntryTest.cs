@@ -339,7 +339,7 @@ namespace Contentstack.Core.Tests
         {
             ContentType contenttype = client.ContentType(source);
 
-            string uid = await GetUID("source");
+            string uid = await GetUID("source1");
             Entry sourceEntry = contenttype.Entry(uid);
 
             var result = await sourceEntry.Fetch<SourceModel>();

@@ -174,7 +174,7 @@ namespace Contentstack.Core.Tests
         public async Task GreaterThanForDate()
         {
             Query query = client.ContentType(source).Query();
-            query.GreaterThan("date", "2018-05-04");
+            query.GreaterThan("date", "2015-05-03");
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
@@ -188,7 +188,7 @@ namespace Contentstack.Core.Tests
                     bool IsTrue = false;
                     foreach (var data in result.Items)
                     {
-                        IsTrue = DateTime.Compare(DateTime.Parse(Convert.ToString(data.Date)), DateTime.Parse("2018-05-04")) > 0;
+                        IsTrue = DateTime.Compare(DateTime.Parse(Convert.ToString(data.Date)), DateTime.Parse("2015-05-03")) > 0;
                         if (!IsTrue)
                             break;
 
@@ -291,14 +291,14 @@ namespace Contentstack.Core.Tests
         {
 
             Query query = client.ContentType(source).Query();
-            query.LessThan("date", "2018-05-04");
+            query.LessThan("date", "2025-05-04");
             var result = await query.Find<SourceModel>();
             if (result.Items != null)
             {
                 bool IsTrue = false;
                 foreach (var data in result.Items)
                 {
-                    DateTime dateToCompareWith = DateTime.Parse("2018-05-04");
+                    DateTime dateToCompareWith = DateTime.Parse("2025-05-04");
                     DateTime dateToCompare = DateTime.Parse(Convert.ToString(data.Date));
                     IsTrue = DateTime.Compare(dateToCompare, dateToCompareWith) < 0;
                     if (!IsTrue)
@@ -596,7 +596,7 @@ namespace Contentstack.Core.Tests
         public async Task NotEqualToForBoolean()
         {
             Query query = client.ContentType(source).Query();
-            query.NotEqualTo("boolean", true);
+            query.NotEqualTo("boolean", false);
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
@@ -611,7 +611,7 @@ namespace Contentstack.Core.Tests
                     bool IsTrue = false;
                     foreach (var data in result.Items)
                     {
-                            IsTrue = data.Boolean.Equals(false);
+                            IsTrue = data.Boolean.Equals(true);
                         if (!IsTrue)
                             break;
                     }
@@ -772,7 +772,7 @@ namespace Contentstack.Core.Tests
         public async Task ContainedInForNumber()
         {
             Query query = client.ContentType(source).Query();
-            query.ContainedIn("number", new object[] { 12, 3 });
+            query.ContainedIn("number", new object[] { 4 });
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
@@ -789,7 +789,7 @@ namespace Contentstack.Core.Tests
                     foreach (var data in result.Items)
                     {
 
-                        IsTrue = data.Number == 12 || data.Number == 3;
+                        IsTrue = data.Number == 4 || data.Number == 3;
                         if (!IsTrue)
                             break;
                     }
@@ -840,7 +840,7 @@ namespace Contentstack.Core.Tests
         public async Task ContainedInForGroup()
         {
             Query query = client.ContentType(source).Query();
-            query.ContainedIn("group.name", new object[] { "First", "third" });
+            query.ContainedIn("group.name", new object[] { "Forth" });
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
@@ -861,7 +861,7 @@ namespace Contentstack.Core.Tests
                             {
                                 if (item.Key.Equals("name"))
                                 {
-                                    IsTrue = Convert.ToString(item.Value).Equals("First") || Convert.ToString(item.Value).Equals("third");
+                                    IsTrue = Convert.ToString(item.Value).Equals("Forth") || Convert.ToString(item.Value).Equals("third");
                                 }
                             }
                         }
