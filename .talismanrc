@@ -3,7 +3,7 @@ fileignoreconfig:
   ignore_detectors:
     - filecontent
 - filename: Contentstack.Core/Internals/HttpRequestHandler.cs
-  checksum: 94288e483056f41ff3a4c2ab652c3ce9ecb53dc0b9d4029456b34baed4f34891
+  checksum: 62053e1b8772f44db054efc504d5d57f28fb7962c81021325854d478f570de09
 - filename: Contentstack.Core/Models/Entry.cs
   checksum: 78a09b03b9fd6aefd0251353b2d8c70962bdfced16a6e1e28d10dc9af43da244
 - filename: Contentstack.Core/ContentstackClient.cs
