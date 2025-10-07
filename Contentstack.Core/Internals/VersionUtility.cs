@@ -18,15 +18,20 @@ namespace Contentstack.Core.Internals
             {
                 var assembly = Assembly.GetExecutingAssembly();
                 var version = assembly.GetName().Version;
-                
+
                 // Check if version is valid (not 0.0.0.0 which is default for unversioned assemblies)
-                if (version != null && (version.Major > 0 || version.Minor > 0 || version.Build > 0))
+                if (
+                    version != null
+                    && (version.Major > 0 || version.Minor > 0 || version.Build > 0)
+                )
                 {
                     return $"contentstack-delivery-dotnet/{version.Major}.{version.Minor}.{version.Build}";
                 }
-                
+
                 // Try to get version from assembly file version as fallback
-                var fileVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
+                var fileVersion = assembly
+                    .GetCustomAttribute<AssemblyFileVersionAttribute>()
+                    ?.Version;
                 if (!string.IsNullOrEmpty(fileVersion))
                 {
                     // Parse file version and extract only Major.Minor.Build (first 3 parts)
@@ -37,9 +42,11 @@ namespace Contentstack.Core.Internals
                     }
                     return $"contentstack-delivery-dotnet/{fileVersion}";
                 }
-                
+
                 // Try to get version from assembly informational version
-                var infoVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+                var infoVersion = assembly
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    ?.InformationalVersion;
                 if (!string.IsNullOrEmpty(infoVersion))
                 {
                     // Extract semantic version (Major.Minor.Patch) from informational version
@@ -56,7 +63,7 @@ namespace Contentstack.Core.Internals
             {
                 // Ignore exceptions and continue to fallback
             }
-            
+
             // Final fallback - use a generic identifier that doesn't imply a specific version
             return "contentstack-delivery-dotnet/dev";
         }
@@ -70,19 +77,44 @@ namespace Contentstack.Core.Internals
         {
             try
             {
+                // Handle null or empty input
+                if (string.IsNullOrWhiteSpace(informationalVersion))
+                {
+                    return null;
+                }
+
                 // Remove build metadata (everything after +)
                 var versionWithoutMetadata = informationalVersion.Split('+')[0];
-                
+
+                // Handle case where version ends with + (e.g., "1.2.3+")
+                if (string.IsNullOrWhiteSpace(versionWithoutMetadata))
+                {
+                    return null;
+                }
+
                 // Split by dots to get version parts
                 var parts = versionWithoutMetadata.Split('.');
-                
+
                 // Ensure we have at least 3 parts (Major.Minor.Patch)
                 if (parts.Length >= 3)
                 {
-                    // Take only the first 3 parts (Major.Minor.Patch)
-                    return $"{parts[0]}.{parts[1]}.{parts[2]}";
+                    // Validate that all parts are numeric or contain valid version identifiers
+                    var major = parts[0].Trim();
+                    var minor = parts[1].Trim();
+                    var patch = parts[2].Trim();
+
+                    // Check if we have valid version components
+                    if (
+                        !string.IsNullOrEmpty(major)
+                        && !string.IsNullOrEmpty(minor)
+                        && !string.IsNullOrEmpty(patch)
+                    )
+                    {
+                        // Take only the first 3 parts (Major.Minor.Patch)
+                        return $"{major}.{minor}.{patch}";
+                    }
                 }
-                
+
                 return null;
             }
             catch
