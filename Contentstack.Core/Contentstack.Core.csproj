@@ -8,7 +8,7 @@
     <PackageVersion>$(Version)</PackageVersion>
     <Owners>Contentstack</Owners>
     <PackageReleaseNotes>Reference in entry Live preview support added</PackageReleaseNotes>
-    <Copyright>Copyright © 2012-2024 Contentstack. All Rights Reserved</Copyright>
+    <Copyright>Copyright © 2012-2025 Contentstack. All Rights Reserved</Copyright>
     <PackOnBuild>true</PackOnBuild>
     <PackageTags>v$(Version)</PackageTags>
     <PackageProjectUrl>https://github.com/contentstack/contentstack-dotnet</PackageProjectUrl>
@@ -53,5 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Contentstack.Core.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
