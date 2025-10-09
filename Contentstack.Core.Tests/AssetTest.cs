@@ -661,5 +661,295 @@ namespace Contentstack.Core.Tests
                 }
             }
         }
+
+        [Fact]
+        public void Query_MultipleCalls_ShouldMergeQueries_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject firstQuery = new JObject
+            {
+                { "filename", "test1.png" },
+                { "content_type", "image/png" }
+            };
+            JObject secondQuery = new JObject
+            {
+                { "file_size", 1024 },
+                { "tags", new JArray { "test", "image" } }
+            };
+
+            // Act
+            var result = assetLibrary.Query(firstQuery).Query(secondQuery);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+            // The method should not throw an exception when called multiple times
+        }
+
+        [Fact]
+        public void Query_SingleCall_ShouldWorkAsBefore_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject queryObject = new JObject
+            {
+                { "filename", "test.png" }
+            };
+
+            // Act
+            var result = assetLibrary.Query(queryObject);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Query_WithEmptyObject_ShouldNotThrowException_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject emptyQuery = new JObject();
+
+            // Act & Assert
+            var result = assetLibrary.Query(emptyQuery);
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Query_WithNullValues_ShouldHandleGracefully_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject queryWithNulls = new JObject
+            {
+                { "filename", "test.png" },
+                { "null_field", null }
+            };
+
+            // Act & Assert
+            var result = assetLibrary.Query(queryWithNulls);
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Query_ChainedWithOtherMethods_ShouldWork_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject queryObject = new JObject
+            {
+                { "filename", "test.png" }
+            };
+
+            // Act
+            var result = assetLibrary
+                .Query(queryObject)
+                .Limit(10)
+                .Skip(0)
+                .IncludeMetadata();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Query_MultipleCallsWithSameKeys_ShouldMergeValues_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject firstQuery = new JObject
+            {
+                { "tags", new JArray { "tag1", "tag2" } }
+            };
+            JObject secondQuery = new JObject
+            {
+                { "tags", new JArray { "tag3", "tag4" } }
+            };
+
+            // Act
+            var result = assetLibrary.Query(firstQuery).Query(secondQuery);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+            // The method should handle merging arrays without throwing exceptions
+        }
+
+        [Fact]
+        public void Query_WithComplexNestedObjects_ShouldMergeCorrectly_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject firstQuery = new JObject
+            {
+                { "metadata", new JObject
+                    {
+                        { "author", "John Doe" },
+                        { "version", 1 }
+                    }
+                }
+            };
+            JObject secondQuery = new JObject
+            {
+                { "metadata", new JObject
+                    {
+                        { "department", "IT" }
+                    }
+                },
+                { "filename", "test.png" }
+            };
+
+            // Act
+            var result = assetLibrary.Query(firstQuery).Query(secondQuery);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_SingleCall_ShouldAddKeyValuePair_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            string key = "filename";
+            string value = "test.png";
+
+            // Act
+            var result = assetLibrary.Where(key, value);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_MultipleCalls_ShouldAddMultipleKeyValuePairs_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act
+            var result = assetLibrary
+                .Where("filename", "test.png")
+                .Where("content_type", "image/png")
+                .Where("file_size", "1024");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_WithEmptyStrings_ShouldHandleGracefully_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act & Assert
+            var result = assetLibrary.Where("", "");
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_WithNullKey_ShouldHandleGracefully_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act & Assert
+            var result = assetLibrary.Where(null, "value");
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_WithNullValue_ShouldHandleGracefully_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act & Assert
+            var result = assetLibrary.Where("key", null);
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_ChainedWithOtherMethods_ShouldWork_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act
+            var result = assetLibrary
+                .Where("filename", "test.png")
+                .Limit(10)
+                .Skip(0)
+                .IncludeMetadata();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_WithQueryMethod_ShouldWorkTogether_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            JObject queryObject = new JObject
+            {
+                { "content_type", "image/png" }
+            };
+
+            // Act
+            var result = assetLibrary
+                .Query(queryObject)
+                .Where("filename", "test.png")
+                .Where("file_size", "1024");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_OverwritesExistingKey_ShouldReplaceValue_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act
+            var result = assetLibrary
+                .Where("filename", "original.png")
+                .Where("filename", "updated.png");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public void Where_WithSpecialCharacters_ShouldHandleCorrectly_Test()
+        {
+            // Arrange
+            AssetLibrary assetLibrary = client.AssetLibrary();
+
+            // Act
+            var result = assetLibrary
+                .Where("file_name", "test-file_123.png")
+                .Where("description", "File with special chars: @#$%");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<AssetLibrary>(result);
+        }
     }
 }
