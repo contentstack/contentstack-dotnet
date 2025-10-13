@@ -12,43 +12,56 @@ namespace Contentstack.Core.Internals
 {
     internal class HttpRequestHandler
     {
-        ContentstackClient client
-        {
-            get; set;
-        }
+        ContentstackClient client { get; set; }
+
         internal HttpRequestHandler(ContentstackClient contentstackClient)
         {
             client = contentstackClient;
         }
-        public async Task<string> ProcessRequest(string Url, Dictionary<string, object> Headers, Dictionary<string, object> BodyJson, string FileName = null, string Branch = null, bool isLivePreview = false, int timeout = 30000, WebProxy proxy = null)
+
+        public async Task<string> ProcessRequest(
+            string Url,
+            Dictionary<string, object> Headers,
+            Dictionary<string, object> BodyJson,
+            string FileName = null,
+            string Branch = null,
+            bool isLivePreview = false,
+            int timeout = 30000,
+            WebProxy proxy = null
+        )
         {
-
-            String queryParam = String.Join("&", BodyJson.Select(kvp => {
-                var value = "";
-                if (kvp.Value is string[])
+            String queryParam = String.Join(
+                "&",
+                BodyJson.Select(kvp =>
                 {
-                    string[] vals = (string[])kvp.Value;
-                    value = String.Join("&", vals.Select(item =>
+                    var value = "";
+                    if (kvp.Value is string[])
                     {
-                        return String.Format("{0}={1}", kvp.Key, item);
-                    }));
-                    return value;
-                }
-                else if (kvp.Value is Dictionary<string, object>)
-                    value = JsonConvert.SerializeObject(kvp.Value);
-                else
-                    return String.Format("{0}={1}", kvp.Key, kvp.Value);
+                        string[] vals = (string[])kvp.Value;
+                        value = String.Join(
+                            "&",
+                            vals.Select(item =>
+                            {
+                                return String.Format("{0}={1}", kvp.Key, item);
+                            })
+                        );
+                        return value;
+                    }
+                    else if (kvp.Value is Dictionary<string, object>)
+                        value = JsonConvert.SerializeObject(kvp.Value);
+                    else
+                        return String.Format("{0}={1}", kvp.Key, kvp.Value);
 
-                return String.Format("{0}={1}", kvp.Key, value);
+                    return String.Format("{0}={1}", kvp.Key, value);
+                })
+            );
 
-            }));
-
-            var uri = new Uri(Url+"?"+queryParam);
+            var uri = new Uri(Url + "?" + queryParam);
 
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "GET";
             request.ContentType = "application/json";
-            request.Headers["x-user-agent"]="contentstack-delivery-dotnet/2.24.0";
+            request.Headers["x-user-agent"] = VersionUtility.GetSdkVersion();
             request.Timeout = timeout;
 
             if (proxy != null)
@@ -60,52 +73,68 @@ namespace Contentstack.Core.Internals
             {
                 request.Headers["branch"] = Branch;
             }
-            if (Headers != default(IDictionary<string, string>)) {
-                foreach (var header in Headers) {
-                    try {
+            if (Headers != default(IDictionary<string, string>))
+            {
+                foreach (var header in Headers)
+                {
+                    try
+                    {
                         request.Headers[header.Key] = header.Value.ToString();
-                    } catch {
-                        
                     }
+                    catch { }
                 }
             }
 
             foreach (var plugin in client.Plugins)
             {
                 request = await plugin.OnRequest(client, request);
-            };
+            }
+            ;
 
             var serializedresult = JsonConvert.SerializeObject(BodyJson);
             byte[] requestBody = Encoding.UTF8.GetBytes(serializedresult);
             StreamReader reader = null;
             HttpWebResponse response = null;
 
-            try {
+            try
+            {
                 response = (HttpWebResponse)await request.GetResponseAsync();
-                if (response != null) {
+                if (response != null)
+                {
                     reader = new StreamReader(response.GetResponseStream());
 
                     string responseString = await reader.ReadToEndAsync();
                     foreach (var plugin in client.Plugins)
                     {
-                        responseString = await plugin.OnResponse(client, request, response, responseString);
+                        responseString = await plugin.OnResponse(
+                            client,
+                            request,
+                            response,
+                            responseString
+                        );
                     }
                     return responseString;
-                } else {
+                }
+                else
+                {
                     return null;
                 }
-            } catch (Exception we) {
+            }
+            catch (Exception we)
+            {
                 throw we;
-            } finally {
-                if (reader != null) {
+            }
+            finally
+            {
+                if (reader != null)
+                {
                     reader.Dispose();
                 }
                 if (response != null)
                 {
-                     response.Dispose();
+                    response.Dispose();
                 }
             }
-
         }
 
         //internal void updateLivePreviewContent(JObject response)

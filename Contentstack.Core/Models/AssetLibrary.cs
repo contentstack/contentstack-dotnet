@@ -12,8 +12,6 @@ namespace Contentstack.Core.Models
 {
     public class AssetLibrary
     {
-
-
         #region Internal Variables
         private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
@@ -30,17 +28,12 @@ namespace Contentstack.Core.Models
         }
         #endregion
 
-        public ContentstackClient Stack
-        {
-            get;
-            set;
-        }
+        public ContentstackClient Stack { get; set; }
 
         #region Internal Constructors
 
-        internal AssetLibrary()
-        {
-        }
+        internal AssetLibrary() { }
+
         internal AssetLibrary(ContentstackClient stack)
         {
             this.Stack = stack;
@@ -74,13 +67,12 @@ namespace Contentstack.Core.Models
                 UrlQueries.Add("desc", key);
             }
         }
+
         /// <summary>
         ///  Provides only the number of assets.
         /// </summary>
         /// <example>
         /// <code>
-
-
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
         ///     JObject jObject = await assetLibrary.Count();
@@ -96,7 +88,30 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                UrlQueries.Add("query", QueryObject);
+                if (UrlQueries.ContainsKey("query"))
+                {
+                    // If query already exists, append/merge the new query object
+                    JObject existingQuery = UrlQueries["query"] as JObject;
+                    if (existingQuery != null)
+                    {
+                        // Merge the new query object with the existing one
+                        existingQuery.Merge(QueryObject, new JsonMergeSettings
+                        {
+                            MergeArrayHandling = MergeArrayHandling.Union
+                        });
+                        UrlQueries["query"] = existingQuery;
+                    }
+                    else
+                    {
+                        // If existing query is not a JObject, replace it
+                        UrlQueries["query"] = QueryObject;
+                    }
+                }
+                else
+                {
+                    // If query doesn't exist, add it
+                    UrlQueries.Add("query", QueryObject);
+                }
             }
             catch (Exception e)
             {
@@ -104,6 +119,63 @@ namespace Contentstack.Core.Models
             }
             return this;
         }
+
+        /// <summary>
+        /// Adds a key-value pair to the query object in UrlQueries.
+        /// </summary>
+        /// <param name="key">The key to add to the query object.</param>
+        /// <param name="value">The value to add to the query object.</param>
+        /// <returns>Current instance of AssetLibrary, this will be useful for a chaining calls.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
+        ///     AssetLibrary assetLibrary = stack.AssetLibrary();
+        ///     assetLibrary.Where("filename", "image.png");
+        ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
+        /// </code>
+        /// </example>
+        public AssetLibrary Where(string key, string value)
+        {
+            try
+            {
+                // Handle null or empty key gracefully
+                if (string.IsNullOrEmpty(key))
+                {
+                    return this;
+                }
+
+                if (UrlQueries.ContainsKey("query"))
+                {
+                    // If query already exists, get it and add the key-value pair
+                    JObject existingQuery = UrlQueries["query"] as JObject;
+                    if (existingQuery != null)
+                    {
+                        existingQuery[key] = value;
+                        UrlQueries["query"] = existingQuery;
+                    }
+                    else
+                    {
+                        // If existing query is not a JObject, create a new one
+                        JObject newQuery = new JObject();
+                        newQuery[key] = value;
+                        UrlQueries["query"] = newQuery;
+                    }
+                }
+                else
+                {
+                    // If query doesn't exist, create a new one with the key-value pair
+                    JObject newQuery = new JObject();
+                    newQuery[key] = value;
+                    UrlQueries.Add("query", newQuery);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+            }
+            return this;
+        }
+
         /// <summary>
         /// Include fallback locale publish content, if specified locale content is not publish.
         /// </summary>
@@ -154,7 +226,6 @@ namespace Contentstack.Core.Models
             return this;
         }
 
-
         /// <summary>
         /// Add param in URL query.
         /// </summary>
@@ -167,7 +238,6 @@ namespace Contentstack.Core.Models
         ///     ContentstackCollection<Asset> contentstackCollection = await assetLibrary.FetchAll();
         /// </code>
         /// </example>
-        /// Where function 
         public AssetLibrary AddParam(string key, string value)
         {
             UrlQueries.Add(key, value);
@@ -218,9 +288,6 @@ namespace Contentstack.Core.Models
             UrlQueries.Add("include_count", "true");
         }
 
-
-
-
         /// <summary>
         /// This call includes metadata in the response.
         /// </summary>
@@ -245,8 +312,6 @@ namespace Contentstack.Core.Models
             }
             return this;
         }
-
-
 
         /// <summary>
         ///  This method includes the relative url of assets.
@@ -465,7 +530,8 @@ namespace Contentstack.Core.Models
         public async Task<ContentstackCollection<Asset>> FetchAll()
         {
             JObject json = await Exec();
-            var assets = json.SelectToken("$.assets").ToObject<IEnumerable<Asset>>(this.Stack.Serializer);
+            var assets = json.SelectToken("$.assets")
+                .ToObject<IEnumerable<Asset>>(this.Stack.Serializer);
             var collection = json.ToObject<ContentstackCollection<Asset>>(this.Stack.Serializer);
             foreach (var entry in assets)
             {
@@ -502,9 +568,15 @@ namespace Contentstack.Core.Models
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.Stack);
-                var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.Stack.Config.Branch, timeout: this.Stack.Config.Timeout, proxy: this.Stack.Config.Proxy);
+                var outputResult = await RequestHandler.ProcessRequest(
+                    _Url,
+                    headers,
+                    mainJson,
+                    Branch: this.Stack.Config.Branch,
+                    timeout: this.Stack.Config.Timeout,
+                    proxy: this.Stack.Config.Proxy
+                );
                 return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
-               
             }
             catch (Exception ex)
             {
@@ -540,19 +612,18 @@ namespace Contentstack.Core.Models
                     }
 
                     return classHeaders;
-
                 }
                 else
                 {
                     return localHeader;
                 }
-
             }
             else
             {
                 return _StackHeaders;
             }
         }
+
         internal static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
@@ -599,7 +670,7 @@ namespace Contentstack.Core.Models
                 ErrorCode = errorCode,
                 ErrorMessage = errorMessage,
                 StatusCode = statusCode,
-                Errors = errors
+                Errors = errors,
             };
 
             return contentstackError;
