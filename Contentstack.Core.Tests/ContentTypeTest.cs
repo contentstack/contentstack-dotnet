@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using Contentstack.Core.Models;
+using Contentstack.Core.Internals;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
@@ -143,7 +144,7 @@ namespace Contentstack.Core.Tests
         [Fact]
         public void GlobalField_EmptyUid_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => {
+            Assert.Throws<GlobalFieldException>(() => {
                 GlobalField globalField = client.GlobalField("");
             });
         }

@@ -517,10 +517,9 @@ namespace Contentstack.Core.Models
                 }
             }
 
-            ContentstackException contentstackError = new ContentstackException()
+            ContentstackException contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };

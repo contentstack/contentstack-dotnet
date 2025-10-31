@@ -239,10 +239,9 @@ namespace Contentstack.Core
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackException()
+            contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };
@@ -338,7 +337,7 @@ namespace Contentstack.Core
             }
             catch (Exception ex)
             {
-                throw new GetContentstackError(string.Format(ErrorMessages.ContentstackClientRequestError, ex.Message), ex);
+                throw GetContentstackError(ex);
             }
         }
 
@@ -873,7 +872,7 @@ namespace Contentstack.Core
             }
             catch (Exception ex)
             {
-                throw new GetContentstackError(string.Format(ErrorMessages.ContentstackSyncRequestError, ex.Message), ex);
+                throw GetContentstackError(ex);
             }
         }
         #endregion
