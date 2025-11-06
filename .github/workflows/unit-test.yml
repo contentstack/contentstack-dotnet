@@ -1,0 +1,24 @@
+name: Unit Test & Reports
+on:
+  pull_request:
+  push:
+
+jobs:
+  unit-test:  
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+      - name: Setup .NET Core @ Latest
+        uses: actions/setup-dotnet@v4.3.0
+      - name: Build solution and run unit test
+        run: sh ./Scripts/run-unit-test-case.sh
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: DotNet unit Tests
+          path: ./Contentstack.Core.Unit.Tests/TestResults/Report-Contentstack-Delivery-DotNet-Unit-Test-Case.trx
+          reporter: dotnet-trx
+          fail-on-error: true
+
