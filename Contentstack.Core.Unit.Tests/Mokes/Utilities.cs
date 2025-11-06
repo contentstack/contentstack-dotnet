@@ -14,7 +14,12 @@ namespace Contentstack.Core.Unit.Tests.Mokes
     {
         public static string GetResourceText(string resourceName)
         {
-            using (StreamReader reader = new StreamReader(GetResourceStream(resourceName)))
+            var stream = GetResourceStream(resourceName);
+            if (stream == null)
+            {
+                throw new FileNotFoundException($"Resource stream for '{resourceName}' is null");
+            }
+            using (StreamReader reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
             }
@@ -34,6 +39,13 @@ namespace Contentstack.Core.Unit.Tests.Mokes
                 {
                     return new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 }
+                // Try alternative path (for test execution)
+                var altPath = Path.Combine(baseDirectory, "Mokes", "Response", resourceName);
+                if (File.Exists(altPath))
+                {
+                    return new FileStream(altPath, FileMode.Open, FileAccess.Read);
+                }
+                throw new FileNotFoundException($"Resource '{resourceName}' not found. Searched for: {resource}");
             }
             return stream;
         }
