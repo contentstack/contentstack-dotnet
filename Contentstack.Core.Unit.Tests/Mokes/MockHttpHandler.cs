@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Interfaces;
 
-namespace Contentstack.Core.Tests.Mocks
+namespace Contentstack.Core.Unit.Tests.Mokes
 {
     /// <summary>
-    /// Mock HTTP handler for testing - intercepts WebRequest calls
-    /// Note: This is a simplified version for the Delivery SDK which uses HttpWebRequest
-    /// For actual mocking, we'll use test plugins or direct object creation
+    /// Mock HTTP handler for testing - matches Management SDK pattern
+    /// Adapts plugin system to intercept HttpWebRequest responses
     /// </summary>
-    public class MockHttpHandler
+    public class MockHttpHandler : IContentstackPlugin
     {
         private readonly string _mockResponse;
         private readonly Dictionary<string, string> _mockResponses;
@@ -29,34 +27,10 @@ namespace Contentstack.Core.Tests.Mocks
             _mockResponses = mockResponses ?? new Dictionary<string, string>();
         }
 
-        public string GetMockResponse(string url = null)
+        public MockHttpHandler(ContentstackResponse response)
         {
-            if (url != null && _mockResponses.ContainsKey(url))
-            {
-                return _mockResponses[url];
-            }
-            return _mockResponse;
-        }
-    }
-
-    /// <summary>
-    /// Test plugin that intercepts HTTP responses and returns mock data
-    /// </summary>
-    public class MockResponsePlugin : IContentstackPlugin
-    {
-        private readonly string _mockResponse;
-        private readonly Dictionary<string, string> _mockResponses;
-
-        public MockResponsePlugin(string mockResponse)
-        {
-            _mockResponse = mockResponse;
+            _mockResponse = response?.OpenResponse();
             _mockResponses = new Dictionary<string, string>();
-        }
-
-        public MockResponsePlugin(Dictionary<string, string> mockResponses)
-        {
-            _mockResponse = null;
-            _mockResponses = mockResponses ?? new Dictionary<string, string>();
         }
 
         public async Task<HttpWebRequest> OnRequest(Contentstack.Core.ContentstackClient stack, HttpWebRequest request)
@@ -65,7 +39,11 @@ namespace Contentstack.Core.Tests.Mocks
             return await Task.FromResult(request);
         }
 
-        public async Task<string> OnResponse(Contentstack.Core.ContentstackClient stack, HttpWebRequest request, HttpWebResponse response, string responseString)
+        public async Task<string> OnResponse(
+            Contentstack.Core.ContentstackClient stack, 
+            HttpWebRequest request, 
+            HttpWebResponse response, 
+            string responseString)
         {
             // Return mock response instead of actual response
             var url = request.RequestUri?.ToString() ?? "";
@@ -84,7 +62,28 @@ namespace Contentstack.Core.Tests.Mocks
             return await Task.FromResult(responseString);
         }
     }
+
+    /// <summary>
+    /// Wrapper for mock response - matches Management SDK ContentstackResponse pattern
+    /// </summary>
+    public class ContentstackResponse
+    {
+        private readonly string _response;
+
+        public ContentstackResponse(string response)
+        {
+            _response = response;
+        }
+
+        public string OpenResponse()
+        {
+            return _response;
+        }
+
+        public Newtonsoft.Json.Linq.JObject OpenJObjectResponse()
+        {
+            return Newtonsoft.Json.Linq.JObject.Parse(_response ?? "{}");
+        }
+    }
 }
-
-
 

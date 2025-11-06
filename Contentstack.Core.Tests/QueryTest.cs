@@ -1501,6 +1501,124 @@ namespace Contentstack.Core.Tests
                 Assert.True(IsTrue);
             }
         }
+
+        [Fact(Skip = "Requires branch to be configured in Contentstack stack - set branch name in config")]
+        public async Task IncludeBranch()
+        {
+            // This test requires a branch to be set up in your Contentstack stack
+            // Update StackConfig to include branch name if needed
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.IncludeBranch();
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null || result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Branch information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
+
+        [Fact]
+        public async Task IncludeOwner()
+        {
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.IncludeOwner();
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null || result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                bool IsTrue = false;
+                foreach (var data in result.Items)
+                {
+                    // Owner information should be available - verify created_by or updated_by fields
+                    IsTrue = data.created_by != null && data.created_by.Length > 0;
+                    if (!IsTrue)
+                        break;
+                }
+                Assert.True(IsTrue);
+            }
+        }
+
+        [Fact(Skip = "Requires variant entries to be created in Contentstack - create variant entries first")]
+        public async Task Variant()
+        {
+            // This test requires variant entries to be created in your Contentstack stack
+            // Create variant entries with variant UIDs before running this test
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.Variant("variant1");
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Variant information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
+
+        [Fact(Skip = "Requires variant entries to be created in Contentstack - create variant entries first")]
+        public async Task VariantList()
+        {
+            // This test requires variant entries to be created in your Contentstack stack
+            // Create variant entries with variant UIDs before running this test
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.Variant(new List<string> { "variant1", "variant2" });
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Variant information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
+
+        [Fact(Skip = "Requires schema to be available in Contentstack - verify schema is enabled")]
+        public async Task IncludeSchema()
+        {
+            // This test requires schema to be available in your Contentstack stack
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.IncludeSchema();
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Schema information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
     }
 }
 

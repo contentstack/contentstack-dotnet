@@ -7,16 +7,15 @@
 #  Copyright © 2025 Contentstack. All rights reserved.
 
 echo "Removing old test results..."
-rm -rf "./Contentstack.Core.Tests/TestResults"
+rm -rf "./Contentstack.Core.Unit.Tests/TestResults"
 
 FILE_NAME="Contentstack-Delivery-DotNet-Unit-Test-Case"
 
 echo "Running unit tests with coverage..."
-dotnet test "Contentstack.Core.Tests/Contentstack.Core.Tests.csproj" \
-  --filter "FullyQualifiedName~UnitTests" \
+dotnet test "Contentstack.Core.Unit.Tests/Contentstack.Core.Unit.Tests.csproj" \
   --logger "trx;LogFileName=Report-$FILE_NAME.trx" \
   --collect:"XPlat code coverage" \
-  --settings "Contentstack.Core.Tests/runsettings.xml" \
+  --settings "Contentstack.Core.Unit.Tests/runsettings.xml" \
   --verbosity minimal
 
 echo "Test case Completed..."   

@@ -8,7 +8,7 @@
 
 echo "Removing old test results..."
 
-TEST_TARGETS=('Contentstack.Core.Tests')
+TEST_TARGETS=('Contentstack.Core.Unit.Tests' 'Contentstack.Core.Tests')
 
 for i in "${TEST_TARGETS[@]}"
 do
@@ -19,11 +19,10 @@ DATE=$(date +'%d-%b-%Y')
 
 FILE_NAME="Contentstack-Delivery-DotNet-Test-Case-$DATE"
 
-echo "Running all test cases with coverage..."
-dotnet test "Contentstack.Core.Tests/Contentstack.Core.Tests.csproj" \
+echo "Running all test cases (unit + integration) with coverage..."
+dotnet test Contentstack.Net.sln \
   --logger "trx;LogFileName=Report-$FILE_NAME.trx" \
   --collect:"XPlat code coverage" \
-  --settings "Contentstack.Core.Tests/runsettings.xml" \
   --verbosity minimal
 
 echo "Test case Completed..."
