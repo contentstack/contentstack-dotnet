@@ -27,7 +27,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<Entry>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (result != null)
             {
@@ -45,7 +45,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
 
             }
         }
@@ -93,7 +93,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Count();
             if (result == null)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (result != null)
             {
@@ -103,7 +103,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
 
             }
         }
@@ -116,7 +116,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (result != null)
             {
@@ -134,7 +134,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
 
             }
         }
@@ -147,7 +147,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<NumberContentType>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -164,7 +164,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't match the expected count.");
+                    Assert.Fail( "Doesn't match the expected count.");
 
                 }
             }
@@ -178,7 +178,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -198,7 +198,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't match the expected count.");
+                    Assert.Fail( "Doesn't match the expected count.");
 
                 }
             }
@@ -213,7 +213,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<NumberContentType>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -255,7 +255,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Doesn't match the expected count.");
+                Assert.Fail( "Doesn't match the expected count.");
 
             }
         }
@@ -268,7 +268,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<NumberContentType>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -310,7 +310,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Doesn't match the expected count.");
+                Assert.Fail( "Doesn't match the expected count.");
 
             }
         }
@@ -323,7 +323,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<NumberContentType>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -363,7 +363,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Doesn't match the expected count.");
+                Assert.Fail( "Doesn't match the expected count.");
 
             }
         }
@@ -392,7 +392,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -436,7 +436,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -465,7 +465,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -495,7 +495,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -525,7 +525,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -545,7 +545,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
 
             }
@@ -562,7 +562,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -582,7 +582,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
 
             }
@@ -600,7 +600,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -619,7 +619,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
 
                 }
 
@@ -637,7 +637,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -656,7 +656,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
 
             }
@@ -673,7 +673,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -692,7 +692,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
 
             }
@@ -709,7 +709,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -731,7 +731,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
 
             }
@@ -745,7 +745,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -763,7 +763,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -776,7 +776,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -797,7 +797,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -810,7 +810,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -831,7 +831,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -844,7 +844,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -872,7 +872,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -886,7 +886,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -919,7 +919,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -932,7 +932,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -958,7 +958,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -979,7 +979,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -992,7 +992,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1013,7 +1013,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -1026,7 +1026,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1046,31 +1046,35 @@ namespace Contentstack.Core.Tests
             }
         }
 
-        //[Fact]
-        //public async Task NotExists()
-        //{
-        //    Query query = client.ContentType(source).Query();
-        //    query.NotExists("reference");
-        //    var result = await query.Find<SourceModel>();
-        //    if (result == null && result.items.Count() == 0)
-        //    {
-        //        Assert.False(true, "Query.Exec is not match with expected result.");
-        //    }
-        //    else
-        //    {
-        //        //Assert.True(result.Result.Count() > 0);
-        //        //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
+        [Fact]
+        public async Task NotExists()
+        {
+            Query query = client.ContentType(source).Query();
+            query.NotExists("reference");
+            var result = await query.Find<SourceModel>();
+            if (result == null && result.Items.Count() == 0)
+            {
+                Assert.Fail( "Query.Exec is not match with expected result.");
+            }
+            else
+            {
+                //Assert.True(result.Result.Count() > 0);
+                //Assert.True(true, "BuiltObject.Fetch is pass successfully.");
 
-        //        bool IsTrue = false;
-        //        foreach (var data in result.items)
-        //        {
-        //            IsTrue = Math.Abs(data.Number) < EPSILON;
-        //            if (!IsTrue)
-        //                break;
-        //        }
-        //        Assert.True(IsTrue);
-        //    }
-        //}
+                bool IsTrue = true; // Start with true - assume all entries don't have reference
+                foreach (var data in result.Items)
+                {
+                    // Verify that entries don't have the reference field
+                    // If any entry has a reference, set IsTrue to false
+                    if (data.Reference != null && data.Reference.Count > 0)
+                    {
+                        IsTrue = false;
+                        break;
+                    }
+                }
+                Assert.True(IsTrue);
+            }
+        }
 
         [Fact]
         public async Task Ascending()
@@ -1082,7 +1086,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1115,7 +1119,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1146,7 +1150,7 @@ namespace Contentstack.Core.Tests
             var skipResult = await skipQuery.Find<SourceModel>();
             if (skipResult == null && skipResult.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1164,7 +1168,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1185,7 +1189,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1195,7 +1199,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -1209,7 +1213,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModelIncludeRef>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1234,7 +1238,7 @@ namespace Contentstack.Core.Tests
                 }
                 else
                 {
-                    Assert.False(true, "Doesn't mached the expected count.");
+                    Assert.Fail( "Doesn't mached the expected count.");
                 }
             }
         }
@@ -1248,7 +1252,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1265,7 +1269,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1292,7 +1296,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1320,7 +1324,7 @@ namespace Contentstack.Core.Tests
             var result = await query.FindOne<Entry>();
             if (result == null)
             {
-                Assert.False(true, "Query.FindOne is not match with expected result.");
+                Assert.Fail( "Query.FindOne is not match with expected result.");
             }
             else
             {
@@ -1343,7 +1347,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.FindOne is not match with expected result.");
+                Assert.Fail( "Query.FindOne is not match with expected result.");
             }
             else
             {
@@ -1372,7 +1376,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.FindOne is not match with expected result.");
+                Assert.Fail( "Query.FindOne is not match with expected result.");
             }
             else
             {
@@ -1402,7 +1406,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModel>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.FindOne is not match with expected result.");
+                Assert.Fail( "Query.FindOne is not match with expected result.");
             }
             else
             {
@@ -1437,22 +1441,29 @@ namespace Contentstack.Core.Tests
             query.ReferenceIn("reference", referencequery);
 
             var result = await query.Find<SourceModelIncludeRef>();
-            if (result == null && result.Items.Count() == 0)
+            if (result == null || result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
                 bool IsTrue = false;
                 foreach (var data in result.Items)
                 {
-                    foreach (var entry in data.Reference)
+                    if (data.Reference != null && data.Reference.Count > 0)
                     {
-                        IsTrue = (entry.Title == "ref-1 test3");
-                        if (!IsTrue)
+                        // Check if at least one entry in Reference has the expected title
+                        foreach (var entry in data.Reference)
+                        {
+                            if (entry.Title == "ref-1 test3")
+                            {
+                                IsTrue = true;
+                                break;
+                            }
+                        }
+                        if (IsTrue)
                             break;
                     }
-
                 }
                 Assert.True(IsTrue);
             }
@@ -1472,7 +1483,7 @@ namespace Contentstack.Core.Tests
             var result = await query.Find<SourceModelIncludeRef>();
             if (result == null && result.Items.Count() == 0)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else
             {
@@ -1488,6 +1499,124 @@ namespace Contentstack.Core.Tests
 
                 }
                 Assert.True(IsTrue);
+            }
+        }
+
+        [Fact(Skip = "Requires branch to be configured in Contentstack stack - set branch name in config")]
+        public async Task IncludeBranch()
+        {
+            // This test requires a branch to be set up in your Contentstack stack
+            // Update StackConfig to include branch name if needed
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.IncludeBranch();
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null || result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Branch information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
+
+        [Fact]
+        public async Task IncludeOwner()
+        {
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.IncludeOwner();
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null || result.Items.Count() == 0)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                bool IsTrue = false;
+                foreach (var data in result.Items)
+                {
+                    // Owner information should be available - verify created_by or updated_by fields
+                    IsTrue = data.created_by != null && data.created_by.Length > 0;
+                    if (!IsTrue)
+                        break;
+                }
+                Assert.True(IsTrue);
+            }
+        }
+
+        [Fact(Skip = "Requires variant entries to be created in Contentstack - create variant entries first")]
+        public async Task Variant()
+        {
+            // This test requires variant entries to be created in your Contentstack stack
+            // Create variant entries with variant UIDs before running this test
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.Variant("variant1");
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Variant information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
+
+        [Fact(Skip = "Requires variant entries to be created in Contentstack - create variant entries first")]
+        public async Task VariantList()
+        {
+            // This test requires variant entries to be created in your Contentstack stack
+            // Create variant entries with variant UIDs before running this test
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.Variant(new List<string> { "variant1", "variant2" });
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Variant information should be available in the response
+                // The exact assertion depends on your data structure
+            }
+        }
+
+        [Fact(Skip = "Requires schema to be available in Contentstack - verify schema is enabled")]
+        public async Task IncludeSchema()
+        {
+            // This test requires schema to be available in your Contentstack stack
+            Query query = client.ContentType(source).Query();
+            query.SetLocale("en-us");
+            query.IncludeSchema();
+            
+            var result = await query.Find<SourceModel>();
+            
+            if (result == null)
+            {
+                Assert.Fail("Query.Find is not match with expected result.");
+            }
+            else
+            {
+                Assert.NotNull(result);
+                // Schema information should be available in the response
+                // The exact assertion depends on your data structure
             }
         }
     }

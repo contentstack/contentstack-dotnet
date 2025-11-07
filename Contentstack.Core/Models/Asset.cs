@@ -64,7 +64,7 @@ namespace Contentstack.Core.Models
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine("IOException source: {0}", e.Source);
+                        Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                     }
                 }
             }
@@ -252,7 +252,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw AssetException.CreateForProcessingError(e);
             }
             return this;
         }
@@ -322,7 +322,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine("IOException source: {0}", e.Source);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -362,7 +362,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine("IOException source: {0}", e.Source);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -384,7 +384,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine("IOException source: {0}", e.Source);
+                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -424,7 +424,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw AssetException.CreateForProcessingError(ex);
             }
         }
 
@@ -517,10 +517,9 @@ namespace Contentstack.Core.Models
                 }
             }
 
-            ContentstackException contentstackError = new ContentstackException()
+            ContentstackException contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };

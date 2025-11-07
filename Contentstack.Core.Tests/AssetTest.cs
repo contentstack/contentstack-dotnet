@@ -31,7 +31,7 @@ namespace Contentstack.Core.Tests
                 Asset result = t.Result;
                 if (result == null)
                 {
-                    Assert.False(true, "Entry.Fetch is not match with expected result.");
+                    Assert.Fail( "Entry.Fetch is not match with expected result.");
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace Contentstack.Core.Tests
                 {
                     if (dateTime.CompareTo(asset.GetCreateAt()) != -1 && dateTime.CompareTo(asset.GetCreateAt()) != 0)
                     {
-                        Assert.False(true);
+                        Assert.Fail();
                     }
                 }
                 dateTime = asset.GetCreateAt();
@@ -162,7 +162,7 @@ namespace Contentstack.Core.Tests
             JObject jObject = await assetLibrary.Count();
             if (jObject == null)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (jObject != null)
             {
@@ -170,7 +170,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
             }
         }
 
@@ -181,7 +181,7 @@ namespace Contentstack.Core.Tests
             ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             if (assets == null)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (assets != null)
             {
@@ -189,7 +189,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
             }
         }
 
@@ -200,7 +200,7 @@ namespace Contentstack.Core.Tests
             ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             if (assets == null)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (assets != null)
             {
@@ -215,7 +215,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
             }
         }
 
@@ -226,7 +226,7 @@ namespace Contentstack.Core.Tests
             ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
             if (assets == null)
             {
-                Assert.False(true, "Query.Exec is not match with expected result.");
+                Assert.Fail( "Query.Exec is not match with expected result.");
             }
             else if (assets != null)
             {
@@ -238,7 +238,7 @@ namespace Contentstack.Core.Tests
             }
             else
             {
-                Assert.False(true, "Result doesn't mathced the count.");
+                Assert.Fail( "Result doesn't mathced the count.");
             }
         }
         [Fact]
