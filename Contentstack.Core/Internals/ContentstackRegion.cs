@@ -26,7 +26,12 @@
         /// <summary>
         /// To specify GCP_NA region.
         /// </summary>
-        GCP_NA
+        GCP_NA,
+
+        /// <summary>
+        /// To specify AWS_AU region.
+        /// </summary>
+        AU
     }
 
 
@@ -40,7 +45,9 @@
 
         azure_na,
 
-        gcp_na
+        gcp_na,
+
+        au,
         
     }
 }

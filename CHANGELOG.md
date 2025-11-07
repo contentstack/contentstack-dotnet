@@ -1,8 +1,17 @@
-### Version: 2.23.1
-#### Date: Nov-10-2025
+### Version: 2.25.0
+#### Date: Jan-07-2025
 
-##### Enh: 
-- Improved Error messages
+##### Feat: 
+- AssetLibrary
+  - Added new `Where` method for simple key-value pair queries
+  - Enhanced `Query` method to support multiple calls with intelligent merging
+- Improved query handling with better null safety and error handling
+
+### Version: 2.24.0
+#### Date: Sep-29-2025
+
+##### Feat: 
+- Added Support For AWS-AU Region
 
 ### Version: 2.23.0
 #### Date: Aug-05-2025
