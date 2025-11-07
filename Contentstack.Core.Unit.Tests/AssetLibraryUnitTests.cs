@@ -546,7 +546,7 @@ namespace Contentstack.Core.Unit.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("Test error", result.ErrorMessage);
+            Assert.Equal("Test error", result.Message);
         }
 
         [Fact]

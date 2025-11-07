@@ -93,7 +93,7 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void WriteJson_WithAsset_ThrowsNotImplementedException()
+        public void WriteJson_WithAsset_ThrowsAssetException()
         {
             // Arrange
             var converter = new AssetJsonConverter();
@@ -102,7 +102,7 @@ namespace Contentstack.Core.Unit.Tests
             var writer = new JsonTextWriter(new StringWriter());
 
             // Act & Assert
-            Assert.Throws<NotImplementedException>(() => 
+            Assert.Throws<AssetException>(() => 
                 converter.WriteJson(writer, asset, JsonSerializer.CreateDefault()));
         }
     }

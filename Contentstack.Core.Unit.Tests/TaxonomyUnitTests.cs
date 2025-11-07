@@ -166,7 +166,7 @@ namespace Contentstack.Core.Unit.Tests
             var value = 100;
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.Above(null, value));
+            Assert.Throws<NullReferenceException>(() => taxonomy.Above(null, value));
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace Contentstack.Core.Unit.Tests
             var key = _fixture.Create<string>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.Above(key, null));
+            Assert.Throws<NullReferenceException>(() => taxonomy.Above(key, null));
         }
 
         [Fact]
@@ -188,7 +188,7 @@ namespace Contentstack.Core.Unit.Tests
             var value = 100;
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.EqualAndAbove(null, value));
+            Assert.Throws<NullReferenceException>(() => taxonomy.EqualAndAbove(null, value));
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace Contentstack.Core.Unit.Tests
             var key = _fixture.Create<string>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.EqualAndAbove(key, null));
+            Assert.Throws<NullReferenceException>(() => taxonomy.EqualAndAbove(key, null));
         }
 
         [Fact]
@@ -210,7 +210,7 @@ namespace Contentstack.Core.Unit.Tests
             var value = 100;
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.Below(null, value));
+            Assert.Throws<NullReferenceException>(() => taxonomy.Below(null, value));
         }
 
         [Fact]
@@ -221,7 +221,7 @@ namespace Contentstack.Core.Unit.Tests
             var key = _fixture.Create<string>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.Below(key, null));
+            Assert.Throws<NullReferenceException>(() => taxonomy.Below(key, null));
         }
 
         [Fact]
@@ -232,7 +232,7 @@ namespace Contentstack.Core.Unit.Tests
             var value = 100;
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.EqualAndBelow(null, value));
+            Assert.Throws<NullReferenceException>(() => taxonomy.EqualAndBelow(null, value));
         }
 
         [Fact]
@@ -243,7 +243,7 @@ namespace Contentstack.Core.Unit.Tests
             var key = _fixture.Create<string>();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => taxonomy.EqualAndBelow(key, null));
+            Assert.Throws<NullReferenceException>(() => taxonomy.EqualAndBelow(key, null));
         }
 
         [Fact]

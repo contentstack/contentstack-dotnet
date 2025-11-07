@@ -24,13 +24,10 @@ namespace Contentstack.Core.Unit.Tests
 
             // Assert
             Assert.NotNull(exception);
-            // ErrorMessage is initialized as string.Empty in private field, but Message may be null
-            Assert.Equal(string.Empty, exception.ErrorMessage ?? string.Empty);
-            // Message property from base Exception class may be null initially
-            Assert.True(string.IsNullOrEmpty(exception.Message));
+            // Message property from base Exception class is set to a default value
+            Assert.NotNull(exception.Message);
             Assert.Equal(0, exception.ErrorCode);
             Assert.Null(exception.Errors);
-            Assert.Equal(ResponseType.Network, exception.ResponseType);
         }
 
         [Fact]
@@ -44,7 +41,6 @@ namespace Contentstack.Core.Unit.Tests
 
             // Assert
             Assert.NotNull(exception);
-            Assert.Equal(errorMessage, exception.ErrorMessage);
             Assert.Equal(errorMessage, exception.Message);
         }
 
@@ -59,31 +55,14 @@ namespace Contentstack.Core.Unit.Tests
 
             // Assert
             Assert.NotNull(exception);
-            Assert.Equal(sourceException.Message, exception.ErrorMessage);
             Assert.Equal(sourceException.Message, exception.Message);
-            // The base constructor sets InnerException from sourceException.InnerException (which is null here)
-            // So InnerException will be null if source exception doesn't have one
-            Assert.Null(exception.InnerException);
+            // The constructor sets the sourceException as InnerException
+            Assert.Equal(sourceException, exception.InnerException);
         }
 
         #endregion
 
         #region Property Tests
-
-        [Fact]
-        public void ErrorMessage_SetAndGet_ReturnsCorrectValue()
-        {
-            // Arrange
-            var exception = new ContentstackException();
-            var errorMessage = _fixture.Create<string>();
-
-            // Act
-            exception.ErrorMessage = errorMessage;
-
-            // Assert
-            Assert.Equal(errorMessage, exception.ErrorMessage);
-            Assert.Equal(errorMessage, exception.Message);
-        }
 
         [Fact]
         public void ErrorCode_SetAndGet_ReturnsCorrectValue()
@@ -111,20 +90,6 @@ namespace Contentstack.Core.Unit.Tests
 
             // Assert
             Assert.Equal(statusCode, exception.StatusCode);
-        }
-
-        [Fact]
-        public void ResponseType_SetAndGet_ReturnsCorrectValue()
-        {
-            // Arrange
-            var exception = new ContentstackException();
-            var responseType = ResponseType.Cache;
-
-            // Act
-            exception.ResponseType = responseType;
-
-            // Assert
-            Assert.Equal(responseType, exception.ResponseType);
         }
 
         [Fact]
@@ -159,7 +124,6 @@ namespace Contentstack.Core.Unit.Tests
             var errorMessage = _fixture.Create<string>();
             var errorCode = 404;
             var statusCode = HttpStatusCode.NotFound;
-            var responseType = ResponseType.Network;
             var errors = new Dictionary<string, object>
             {
                 { "error", "Not found" }
@@ -170,16 +134,13 @@ namespace Contentstack.Core.Unit.Tests
             {
                 ErrorCode = errorCode,
                 StatusCode = statusCode,
-                ResponseType = responseType,
                 Errors = errors
             };
 
             // Assert
-            Assert.Equal(errorMessage, exception.ErrorMessage);
             Assert.Equal(errorMessage, exception.Message);
             Assert.Equal(errorCode, exception.ErrorCode);
             Assert.Equal(statusCode, exception.StatusCode);
-            Assert.Equal(responseType, exception.ResponseType);
             Assert.NotNull(exception.Errors);
             Assert.Single(exception.Errors);
         }

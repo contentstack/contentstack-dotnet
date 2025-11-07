@@ -76,7 +76,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.NotExists(null));
+            Assert.Throws<QueryFilterException>(() => query.NotExists(null));
         }
 
         #endregion
@@ -817,7 +817,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.And(null));
+            Assert.Throws<QueryFilterException>(() => query.And(null));
         }
 
         [Fact]
@@ -827,7 +827,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.And(new List<Query>()));
+            Assert.Throws<QueryFilterException>(() => query.And(new List<Query>()));
         }
 
         #endregion
@@ -868,7 +868,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.Or(null));
+            Assert.Throws<QueryFilterException>(() => query.Or(null));
         }
 
         #endregion
@@ -1322,7 +1322,7 @@ namespace Contentstack.Core.Unit.Tests
             var subQuery = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.ReferenceIn(null, subQuery));
+            Assert.Throws<QueryFilterException>(() => query.ReferenceIn(null, subQuery));
         }
 
         [Fact]
@@ -1332,7 +1332,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.ReferenceIn("key", null));
+            Assert.Throws<QueryFilterException>(() => query.ReferenceIn("key", null));
         }
 
         [Fact]
@@ -1364,7 +1364,7 @@ namespace Contentstack.Core.Unit.Tests
             var subQuery = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.ReferenceNotIn(null, subQuery));
+            Assert.Throws<QueryFilterException>(() => query.ReferenceNotIn(null, subQuery));
         }
 
         [Fact]
@@ -1374,7 +1374,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.ReferenceNotIn("key", null));
+            Assert.Throws<QueryFilterException>(() => query.ReferenceNotIn("key", null));
         }
 
         [Fact]
@@ -1530,7 +1530,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.Where(null, "value"));
+            Assert.Throws<QueryFilterException>(() => query.Where(null, "value"));
         }
 
         [Fact]
@@ -1540,7 +1540,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.Where("key", null));
+            Assert.Throws<QueryFilterException>(() => query.Where("key", null));
         }
 
         [Fact]
@@ -1550,7 +1550,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.LessThan(null, 100));
+            Assert.Throws<QueryFilterException>(() => query.LessThan(null, 100));
         }
 
         [Fact]
@@ -1560,7 +1560,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.LessThan("key", null));
+            Assert.Throws<QueryFilterException>(() => query.LessThan("key", null));
         }
 
         [Fact]
@@ -1570,7 +1570,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.LessThanOrEqualTo(null, 100));
+            Assert.Throws<QueryFilterException>(() => query.LessThanOrEqualTo(null, 100));
         }
 
         [Fact]
@@ -1580,7 +1580,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.LessThanOrEqualTo("key", null));
+            Assert.Throws<QueryFilterException>(() => query.LessThanOrEqualTo("key", null));
         }
 
         [Fact]
@@ -1590,7 +1590,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.GreaterThan(null, 100));
+            Assert.Throws<QueryFilterException>(() => query.GreaterThan(null, 100));
         }
 
         [Fact]
@@ -1600,7 +1600,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.GreaterThan("key", null));
+            Assert.Throws<QueryFilterException>(() => query.GreaterThan("key", null));
         }
 
         [Fact]
@@ -1610,7 +1610,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.GreaterThanOrEqualTo(null, 100));
+            Assert.Throws<QueryFilterException>(() => query.GreaterThanOrEqualTo(null, 100));
         }
 
         [Fact]
@@ -1620,7 +1620,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.GreaterThanOrEqualTo("key", null));
+            Assert.Throws<QueryFilterException>(() => query.GreaterThanOrEqualTo("key", null));
         }
 
         [Fact]
@@ -1630,7 +1630,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.NotEqualTo(null, "value"));
+            Assert.Throws<QueryFilterException>(() => query.NotEqualTo(null, "value"));
         }
 
         [Fact]
@@ -1640,7 +1640,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.NotEqualTo("key", null));
+            Assert.Throws<QueryFilterException>(() => query.NotEqualTo("key", null));
         }
 
         [Fact]
@@ -1650,7 +1650,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.ContainedIn(null, new[] { "value1", "value2" }));
+            Assert.Throws<QueryFilterException>(() => query.ContainedIn(null, new[] { "value1", "value2" }));
         }
 
         [Fact]
@@ -1660,7 +1660,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.ContainedIn("key", null));
+            Assert.Throws<QueryFilterException>(() => query.ContainedIn("key", null));
         }
 
         [Fact]
@@ -1670,7 +1670,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.NotContainedIn(null, new[] { "value1", "value2" }));
+            Assert.Throws<QueryFilterException>(() => query.NotContainedIn(null, new[] { "value1", "value2" }));
         }
 
         [Fact]
@@ -1680,7 +1680,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.NotContainedIn("key", null));
+            Assert.Throws<QueryFilterException>(() => query.NotContainedIn("key", null));
         }
 
         [Fact]
@@ -1690,7 +1690,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.Exists(null));
+            Assert.Throws<QueryFilterException>(() => query.Exists(null));
         }
 
         [Fact]
@@ -1700,7 +1700,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.Regex(null, "pattern"));
+            Assert.Throws<QueryFilterException>(() => query.Regex(null, "pattern"));
         }
 
         [Fact]
@@ -1710,7 +1710,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act & Assert
-            Assert.Throws<Exception>(() => query.Regex("key", null));
+            Assert.Throws<QueryFilterException>(() => query.Regex("key", null));
         }
 
         [Fact]
@@ -1969,7 +1969,7 @@ namespace Contentstack.Core.Unit.Tests
             // Act & Assert
             // Dictionary.Add throws ArgumentNullException, but AddParam wraps it in Exception
             // The test expects Exception (the outer exception), not ArgumentNullException
-            var exception = Assert.Throws<Exception>(() => query.AddParam(null, "value"));
+            var exception = Assert.Throws<QueryFilterException>(() => query.AddParam(null, "value"));
             Assert.NotNull(exception);
             Assert.IsAssignableFrom<ArgumentNullException>(exception.InnerException);
         }
