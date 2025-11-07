@@ -19,7 +19,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
+                Assert.Fail( "Entry.Fetch is not match with expected result.");
             }
             else
             {
@@ -35,7 +35,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
+                Assert.Fail( "Entry.Fetch is not match with expected result.");
             }
             else
             {
@@ -50,7 +50,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
+                Assert.Fail( "Entry.Fetch is not match with expected result.");
             }
             else
             {
@@ -65,7 +65,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
+                Assert.Fail( "Entry.Fetch is not match with expected result.");
             }
             else
             {
@@ -80,7 +80,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
+                Assert.Fail( "Entry.Fetch is not match with expected result.");
             }
             else
             {
@@ -95,7 +95,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "Entry.Fetch is not match with expected result.");
+                Assert.Fail( "Entry.Fetch is not match with expected result.");
             }
             else
             {

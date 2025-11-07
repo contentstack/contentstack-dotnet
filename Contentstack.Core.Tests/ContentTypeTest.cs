@@ -22,7 +22,7 @@ namespace Contentstack.Core.Tests
             var result = await contenttype.Fetch();
             if (result == null)
             {
-                Assert.False(true, "contenttype.FetchSchema() is not match with expected result.");
+                Assert.Fail( "contenttype.FetchSchema() is not match with expected result.");
             }
             else
             {
@@ -39,7 +39,7 @@ namespace Contentstack.Core.Tests
             var result = await contenttype.Fetch(param);
             if (result == null)
             {
-                Assert.False(true, "contenttype.FetchSchema() is not match with expected result.");
+                Assert.Fail( "contenttype.FetchSchema() is not match with expected result.");
             }
             else
             {
@@ -54,7 +54,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "client.getContentTypes is not match with expected result.");
+                Assert.Fail( "client.getContentTypes is not match with expected result.");
             }
             else
             {
@@ -73,7 +73,7 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
             {
-                Assert.False(true, "client.getContentTypes is not match with expected result.");
+                Assert.Fail( "client.getContentTypes is not match with expected result.");
             }
             else
             {
