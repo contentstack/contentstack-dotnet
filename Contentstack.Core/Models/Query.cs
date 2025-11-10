@@ -117,10 +117,9 @@ namespace Contentstack.Core.Models
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackException()
+            contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };
@@ -183,7 +182,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
 
 
@@ -284,12 +283,12 @@ namespace Contentstack.Core.Models
                 }
                 else
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                    throw QueryFilterException.Create();
                 }
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
 
             return this;
@@ -307,12 +306,12 @@ namespace Contentstack.Core.Models
                 }
                 else
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                    throw QueryFilterException.Create();
                 }
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
 
             return this;
@@ -330,12 +329,12 @@ namespace Contentstack.Core.Models
                 }
                 else
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                    throw QueryFilterException.Create();
                 }
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
 
             return this;
@@ -367,12 +366,12 @@ namespace Contentstack.Core.Models
                 }
                 else
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                    throw QueryFilterException.Create();
                 }
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -403,7 +402,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -461,12 +460,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -527,12 +526,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -571,12 +570,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -615,12 +614,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
             return this;
         }
@@ -658,12 +657,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -702,12 +701,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -747,13 +746,13 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
 
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
             return this;
 
@@ -797,12 +796,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -845,12 +844,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -887,12 +886,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -928,12 +927,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
 
             return this;
@@ -962,7 +961,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1053,12 +1052,12 @@ namespace Contentstack.Core.Models
                 }
                 else
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                    throw QueryFilterException.Create();
                 }
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1089,12 +1088,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
             return this;
         }
@@ -1125,12 +1124,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
             return this;
         }
@@ -1158,7 +1157,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1187,7 +1186,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1215,7 +1214,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1247,7 +1246,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine("IOException source: {0}", e.Source);
+                Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
 
             return this;
@@ -1316,7 +1315,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine("IOException source: {0}", e.Source);
+                Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return this;
         }
@@ -1378,7 +1377,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1406,7 +1405,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1434,7 +1433,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1462,7 +1461,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1491,7 +1490,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1520,7 +1519,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1549,7 +1548,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return this;
         }
@@ -1585,12 +1584,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
             return this;
         }
@@ -1634,12 +1633,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw QueryFilterException.Create(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw QueryFilterException.Create();
             }
             return this;
         }
@@ -1786,7 +1785,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                throw QueryFilterException.Create(e);
             }
             return await Exec();
         }
@@ -1864,7 +1863,7 @@ namespace Contentstack.Core.Models
                 } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
                     headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
                 } else {
-                    throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+                    throw new LivePreviewException();
                 }
 
                 if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
@@ -1948,7 +1947,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw QueryFilterException.Create(ex);
             }
         }
 
