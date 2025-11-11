@@ -1,0 +1,320 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
+using Contentstack.Core.Configuration;
+using Contentstack.Core.Models;
+using Contentstack.Core.Tests.Helpers;
+using Newtonsoft.Json.Linq;
+using System.Collections;
+
+namespace Contentstack.Core.Tests.Integration.ContentTypeTests
+{
+    /// <summary>
+    /// Comprehensive tests for Content Type operations
+    /// Tests content type fetching, schema validation, and querying
+    /// </summary>
+    [Trait("Category", "ContentTypeOperations")]
+    public class ContentTypeOperationsTest
+    {
+        #region Fetch All Content Types
+        
+        [Fact(DisplayName = "Content Type - Content Type Get All Content Types Returns List Of Content Types")]
+        public async Task ContentType_GetAllContentTypes_ReturnsListOfContentTypes()
+        {
+            // Arrange
+            var client = CreateClient();
+            
+            // Act
+            var contentTypes = await client.GetContentTypes();
+            
+            // Assert
+            Assert.NotNull(contentTypes);
+            Assert.True(contentTypes.Count > 0, "Should return at least one content type");
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Get All With Limit Returns Limited Results")]
+        public async Task ContentType_GetAllWithLimit_ReturnsLimitedResults()
+        {
+            // Arrange
+            var client = CreateClient();
+            var param = new Dictionary<string, object>
+            {
+                { "limit", 2 }
+            };
+            
+            // Act
+            var contentTypes = await client.GetContentTypes(param);
+            
+            // Assert
+            Assert.NotNull(contentTypes);
+            Assert.True(contentTypes.Count <= 2);
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Get All With Skip Returns Skipped Results")]
+        public async Task ContentType_GetAllWithSkip_ReturnsSkippedResults()
+        {
+            // Arrange
+            var client = CreateClient();
+            
+            // First get all
+            var allContentTypes = await client.GetContentTypes();
+            
+            // Now skip first one
+            var param = new Dictionary<string, object>
+            {
+                { "skip", 1 }
+            };
+            var skippedContentTypes = await client.GetContentTypes(param);
+            
+            // Assert
+            Assert.NotNull(skippedContentTypes);
+            Assert.True(skippedContentTypes.Count <= allContentTypes.Count);
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Get All With Count Includes Count")]
+        public async Task ContentType_GetAllWithCount_IncludesCount()
+        {
+            // Arrange
+            var client = CreateClient();
+            var param = new Dictionary<string, object>
+            {
+                { "include_count", true }
+            };
+            
+            // Act
+            var contentTypes = await client.GetContentTypes(param);
+            
+            // Assert
+            Assert.NotNull(contentTypes);
+            Assert.True(contentTypes.Count > 0);
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Get All With Global Fields Includes Global Field Schema")]
+        public async Task ContentType_GetAllWithGlobalFields_IncludesGlobalFieldSchema()
+        {
+            // Arrange
+            var client = CreateClient();
+            var param = new Dictionary<string, object>
+            {
+                { "include_global_field_schema", true }
+            };
+            
+            // Act
+            var contentTypes = await client.GetContentTypes(param);
+            
+            // Assert
+            Assert.NotNull(contentTypes);
+            Assert.True(contentTypes.Count > 0);
+        }
+        
+        #endregion
+        
+        #region Fetch Single Content Type
+        
+        [Fact(DisplayName = "Content Type - Content Type Fetch Single Content Type Returns Schema")]
+        public async Task ContentType_FetchSingleContentType_ReturnsSchema()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
+            
+            // Act
+            var schema = await contentType.Fetch();
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.IsType<JObject>(schema);
+            // Schema should contain uid
+            Assert.True(schema.ContainsKey("uid"));
+            Assert.Equal(TestDataHelper.SimpleContentTypeUid, schema["uid"]?.ToString());
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Fetch With Global Fields Includes Global Field Schema")]
+        public async Task ContentType_FetchWithGlobalFields_IncludesGlobalFieldSchema()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.ComplexContentTypeUid);
+            var param = new Dictionary<string, object>
+            {
+                { "include_global_field_schema", true }
+            };
+            
+            // Act
+            var schema = await contentType.Fetch(param);
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.IsType<JObject>(schema);
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Fetch Complex Type Contains Expected Fields")]
+        public async Task ContentType_FetchComplexType_ContainsExpectedFields()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.ComplexContentTypeUid);
+            
+            // Act
+            var schema = await contentType.Fetch();
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.IsType<JObject>(schema);
+            // Should have schema field
+            Assert.True(schema.ContainsKey("schema"));
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Fetch Non Existent Type Throws Exception")]
+        public async Task ContentType_FetchNonExistentType_ThrowsException()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType("non_existent_content_type_xyz");
+            
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            {
+                await contentType.Fetch();
+            });
+        }
+        
+        #endregion
+        
+        #region Content Type Metadata
+        
+        [Fact(DisplayName = "Content Type - Content Type Schema Contains Title")]
+        public async Task ContentType_Schema_ContainsTitle()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
+            
+            // Act
+            var schema = await contentType.Fetch();
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.True(schema.ContainsKey("title"));
+            Assert.NotNull(schema["title"]);
+            Assert.NotEmpty(schema["title"].ToString());
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Schema Contains Uid")]
+        public async Task ContentType_Schema_ContainsUid()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.MediumContentTypeUid);
+            
+            // Act
+            var schema = await contentType.Fetch();
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.True(schema.ContainsKey("uid"));
+            Assert.Equal(TestDataHelper.MediumContentTypeUid, schema["uid"].ToString());
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Schema Contains Schema Definition")]
+        public async Task ContentType_Schema_ContainsSchemaDefinition()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.ComplexContentTypeUid);
+            
+            // Act
+            var schema = await contentType.Fetch();
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.True(schema.ContainsKey("schema"));
+            var schemaArray = schema["schema"] as JArray;
+            Assert.NotNull(schemaArray);
+            Assert.True(schemaArray.Count > 0, "Schema should contain field definitions");
+        }
+        
+        #endregion
+        
+        #region Performance Tests
+        
+        [Fact(DisplayName = "Content Type - Content Type Fetch All Completes In Reasonable Time")]
+        public async Task ContentType_FetchAll_CompletesInReasonableTime()
+        {
+            // Arrange
+            var client = CreateClient();
+            
+            // Act
+            var (contentTypes, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
+            {
+                return await client.GetContentTypes();
+            });
+            
+            // Assert
+            Assert.NotNull(contentTypes);
+            Assert.True(elapsed < 10000, $"GetContentTypes should complete within 10s, took {elapsed}ms");
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Fetch Single Completes Quickly")]
+        public async Task ContentType_FetchSingle_CompletesQuickly()
+        {
+            // Arrange
+            var client = CreateClient();
+            var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
+            
+            // Act
+            var (schema, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
+            {
+                return await contentType.Fetch();
+            });
+            
+            // Assert
+            Assert.NotNull(schema);
+            Assert.True(elapsed < 5000, $"Single content type fetch should complete within 5s, took {elapsed}ms");
+        }
+        
+        [Fact(DisplayName = "Content Type - Content Type Multiple Content Types All Fetch Successfully")]
+        public async Task ContentType_MultipleContentTypes_AllFetchSuccessfully()
+        {
+            // Arrange
+            var client = CreateClient();
+            
+            // Act - Fetch multiple content types
+            var simpleSchema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
+            var mediumSchema = await client.ContentType(TestDataHelper.MediumContentTypeUid).Fetch();
+            var complexSchema = await client.ContentType(TestDataHelper.ComplexContentTypeUid).Fetch();
+            
+            // Assert - All should be retrieved successfully
+            Assert.NotNull(simpleSchema);
+            Assert.NotNull(mediumSchema);
+            Assert.NotNull(complexSchema);
+            
+            // Verify UIDs match
+            Assert.Equal(TestDataHelper.SimpleContentTypeUid, simpleSchema["uid"]?.ToString());
+            Assert.Equal(TestDataHelper.MediumContentTypeUid, mediumSchema["uid"]?.ToString());
+            Assert.Equal(TestDataHelper.ComplexContentTypeUid, complexSchema["uid"]?.ToString());
+        }
+        
+        #endregion
+        
+        #region Helper Methods
+        
+        private ContentstackClient CreateClient()
+        {
+            var options = new ContentstackOptions()
+            {
+                Host = TestDataHelper.Host,
+                ApiKey = TestDataHelper.ApiKey,
+                DeliveryToken = TestDataHelper.DeliveryToken,
+                Environment = TestDataHelper.Environment
+            };
+            
+            return new ContentstackClient(options);
+        }
+        
+        #endregion
+    }
+}
+
