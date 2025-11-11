@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Contentstack.Core.Configuration;
+using Contentstack.Core.Internals;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
 
@@ -207,6 +208,131 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
                 // Also valid if SDK throws exception
                 Assert.True(true, "SDK correctly throws exception for null host");
             }
+        }
+        
+        #endregion
+        
+        #region Region Enum and Options Tests (Merged from RegionHandlerTest.cs)
+        
+        [Theory(DisplayName = "Region Configuration - Region Enum Values Are Correct")]
+        [InlineData(ContentstackRegion.US, 0)]
+        [InlineData(ContentstackRegion.EU, 1)]
+        [InlineData(ContentstackRegion.AZURE_EU, 2)]
+        [InlineData(ContentstackRegion.AZURE_NA, 3)]
+        [InlineData(ContentstackRegion.GCP_NA, 4)]
+        [InlineData(ContentstackRegion.AU, 5)]
+        public void Region_EnumValues_AreCorrect(ContentstackRegion region, int expectedValue)
+        {
+            Assert.Equal(expectedValue, (int)region);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region All Values Are Defined")]
+        public void Region_AllValues_AreDefined()
+        {
+            var regions = Enum.GetValues<ContentstackRegion>();
+            Assert.Equal(6, regions.Length);
+            Assert.Contains(ContentstackRegion.US, regions);
+            Assert.Contains(ContentstackRegion.EU, regions);
+            Assert.Contains(ContentstackRegion.AZURE_EU, regions);
+            Assert.Contains(ContentstackRegion.AZURE_NA, regions);
+            Assert.Contains(ContentstackRegion.GCP_NA, regions);
+            Assert.Contains(ContentstackRegion.AU, regions);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region Options Default Value Is US")]
+        public void Region_OptionsDefaultValue_IsUS()
+        {
+            var options = new ContentstackOptions();
+            Assert.Equal(ContentstackRegion.US, options.Region);
+        }
+        
+        [Theory(DisplayName = "Region Configuration - Region Options Can Be Set")]
+        [InlineData(ContentstackRegion.US)]
+        [InlineData(ContentstackRegion.EU)]
+        [InlineData(ContentstackRegion.AZURE_EU)]
+        [InlineData(ContentstackRegion.AZURE_NA)]
+        [InlineData(ContentstackRegion.GCP_NA)]
+        [InlineData(ContentstackRegion.AU)]
+        public void Region_OptionsCanBeSet(ContentstackRegion region)
+        {
+            var options = new ContentstackOptions();
+            options.Region = region;
+            Assert.Equal(region, options.Region);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region Enum Can Be Parsed From String")]
+        public void Region_EnumCanBeParsedFromString()
+        {
+            Assert.True(Enum.TryParse<ContentstackRegion>("US", out var usRegion));
+            Assert.Equal(ContentstackRegion.US, usRegion);
+
+            Assert.True(Enum.TryParse<ContentstackRegion>("EU", out var euRegion));
+            Assert.Equal(ContentstackRegion.EU, euRegion);
+
+            Assert.True(Enum.TryParse<ContentstackRegion>("AU", out var auRegion));
+            Assert.Equal(ContentstackRegion.AU, auRegion);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region Enum Case Insensitive Parse Works")]
+        public void Region_EnumCaseInsensitiveParse_Works()
+        {
+            Assert.True(Enum.TryParse<ContentstackRegion>("us", true, out var usRegion));
+            Assert.Equal(ContentstackRegion.US, usRegion);
+
+            Assert.True(Enum.TryParse<ContentstackRegion>("eu", true, out var euRegion));
+            Assert.Equal(ContentstackRegion.EU, euRegion);
+
+            Assert.True(Enum.TryParse<ContentstackRegion>("au", true, out var auRegion));
+            Assert.Equal(ContentstackRegion.AU, auRegion);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region Enum Invalid String Returns False")]
+        public void Region_EnumInvalidString_ReturnsFalse()
+        {
+            Assert.False(Enum.TryParse<ContentstackRegion>("INVALID", out var invalidRegion));
+            Assert.Equal(default(ContentstackRegion), invalidRegion);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region Options Can Be Changed After Creation")]
+        public void Region_OptionsCanBeChangedAfterCreation()
+        {
+            var options = new ContentstackOptions
+            {
+                Region = ContentstackRegion.US
+            };
+
+            Assert.Equal(ContentstackRegion.US, options.Region);
+
+            options.Region = ContentstackRegion.AU;
+            Assert.Equal(ContentstackRegion.AU, options.Region);
+        }
+        
+        [Fact(DisplayName = "Region Configuration - Region Different Clients Have Different Regions")]
+        public void Region_DifferentClients_HaveDifferentRegions()
+        {
+            var usOptions = new ContentstackOptions
+            {
+                ApiKey = TestDataHelper.ApiKey,
+                DeliveryToken = TestDataHelper.DeliveryToken,
+                Environment = TestDataHelper.Environment,
+                Region = ContentstackRegion.US
+            };
+
+            var auOptions = new ContentstackOptions
+            {
+                ApiKey = TestDataHelper.ApiKey,
+                DeliveryToken = TestDataHelper.DeliveryToken,
+                Environment = TestDataHelper.Environment,
+                Region = ContentstackRegion.AU
+            };
+
+            var usClient = new ContentstackClient(usOptions);
+            var auClient = new ContentstackClient(auOptions);
+
+            // Both clients should be valid and different
+            Assert.NotNull(usClient);
+            Assert.NotNull(auClient);
+            Assert.NotEqual(usClient, auClient);
         }
         
         #endregion

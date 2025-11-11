@@ -3,13 +3,14 @@ using System.Reflection;
 using Contentstack.Core.Internals;
 using Xunit;
 
-namespace Contentstack.Core.Tests
+namespace Contentstack.Core.Tests.Integration.UtilityTests
 {
+    [Trait("Category", "Utility")]
     public class VersionUtilityTest
     {
         #region GetSdkVersion Tests
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Returns Valid Format")]
         public void GetSdkVersion_ReturnsValidFormat()
         {
             // Act
@@ -21,7 +22,7 @@ namespace Contentstack.Core.Tests
             Assert.True(version.Length > "contentstack-delivery-dotnet/".Length);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Returns Consistent Result")]
         public void GetSdkVersion_ReturnsConsistentResult()
         {
             // Act
@@ -32,7 +33,7 @@ namespace Contentstack.Core.Tests
             Assert.Equal(version1, version2);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Does Not Return Null")]
         public void GetSdkVersion_DoesNotReturnNull()
         {
             // Act
@@ -43,7 +44,7 @@ namespace Contentstack.Core.Tests
             Assert.NotEmpty(version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Does Not Return Empty String")]
         public void GetSdkVersion_DoesNotReturnEmptyString()
         {
             // Act
@@ -53,7 +54,7 @@ namespace Contentstack.Core.Tests
             Assert.NotEmpty(version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Contains Expected Prefix")]
         public void GetSdkVersion_ContainsExpectedPrefix()
         {
             // Act
@@ -63,7 +64,7 @@ namespace Contentstack.Core.Tests
             Assert.StartsWith("contentstack-delivery-dotnet/", version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Does Not Contain Spaces")]
         public void GetSdkVersion_DoesNotContainSpaces()
         {
             // Act
@@ -73,7 +74,7 @@ namespace Contentstack.Core.Tests
             Assert.DoesNotContain(" ", version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Does Not Contain Newlines")]
         public void GetSdkVersion_DoesNotContainNewlines()
         {
             // Act
@@ -132,7 +133,7 @@ namespace Contentstack.Core.Tests
             Assert.Null(result);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Extract Semantic Version Null Input Returns Null")]
         public void ExtractSemanticVersion_NullInput_ReturnsNull()
         {
             // Arrange
@@ -215,7 +216,7 @@ namespace Contentstack.Core.Tests
 
         #region Edge Cases and Error Scenarios
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Handles Exceptions Gracefully")]
         public void GetSdkVersion_HandlesExceptions_Gracefully()
         {
             // This test ensures that GetSdkVersion doesn't throw exceptions
@@ -227,7 +228,7 @@ namespace Contentstack.Core.Tests
             Assert.NotEmpty(version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Returns Fallback When Assembly Version Is Invalid")]
         public void GetSdkVersion_ReturnsFallbackWhenAssemblyVersionIsInvalid()
         {
             // This test verifies that when assembly version is 0.0.0.0 or invalid,
@@ -285,7 +286,7 @@ namespace Contentstack.Core.Tests
             }
         }
 
-        [Fact]
+        [Fact(DisplayName = "Extract Semantic Version Handles Exceptions Gracefully")]
         public void ExtractSemanticVersion_HandlesExceptions_Gracefully()
         {
             // This test ensures that ExtractSemanticVersion doesn't throw exceptions
@@ -303,7 +304,7 @@ namespace Contentstack.Core.Tests
 
         #region Integration Tests
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Integration Returns Valid User Agent Format")]
         public void GetSdkVersion_Integration_ReturnsValidUserAgentFormat()
         {
             // Act
@@ -320,7 +321,7 @@ namespace Contentstack.Core.Tests
             Assert.DoesNotContain("\t", version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Integration Can Be Used In Http Headers")]
         public void GetSdkVersion_Integration_CanBeUsedInHttpHeaders()
         {
             // Act
@@ -342,7 +343,7 @@ namespace Contentstack.Core.Tests
 
         #region Performance Tests
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Performance Returns Quickly")]
         public void GetSdkVersion_Performance_ReturnsQuickly()
         {
             // Act & Assert
@@ -356,7 +357,7 @@ namespace Contentstack.Core.Tests
             Assert.NotNull(version);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Get Sdk Version Performance Multiple Calls Consistent")]
         public void GetSdkVersion_Performance_MultipleCalls_Consistent()
         {
             // Act

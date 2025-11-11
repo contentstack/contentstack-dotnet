@@ -1,9 +1,6 @@
-# Talisman configuration file
-# This file lists intentional patterns that Talisman should ignore
-# All entries below are FALSE POSITIVES verified by security audit
-
 fileignoreconfig:
-# Test files with TestDataHelper.ApiKey (loads from config, not hardcoded)
+- filename: Contentstack.Core.Tests/Integration/ConfigurationTests/RegionSupportTest.cs
+  checksum: fd424a7595c59a0d5b48d317f70d9be2646e5b246bcae865c5de391701e8b1dd
 - filename: Contentstack.Core.Tests/Integration/ModularBlocksTests/ModularBlocksComprehensiveTest.cs
   checksum: 17a32d5d99819b4d00a6ab786484322640accc619936564e2fa5de060b2304d2
 - filename: Contentstack.Core.Tests/Integration/PaginationTests/PaginationComprehensiveTest.cs
@@ -80,15 +77,10 @@ fileignoreconfig:
   checksum: 43aa302af75031f4621de1287dbcdaa63151659230f20a0a785cc0dd5be0e1c4
 - filename: Contentstack.Core.Tests/Integration/LivePreview/LivePreviewBasicTest.cs
   checksum: 01517f2224fbb2956d79292e6d3d23d1cc970dbfc190623496bcac1335bcd683
-
-# Helper files (TestDataHelper loads from config, AssertionHelper has word "key" in comments)
 - filename: Contentstack.Core.Tests/Helpers/AssertionHelper.cs
   checksum: 17efa53b38647d0f0d98771a50ee6d44f17650745a60a5e8fdff086ac8ab7596
 - filename: Contentstack.Core.Tests/Helpers/TestDataHelper.cs
   checksum: 67c8afb436287676e0db3a62a9213d800239cf5bb543cc4d81f438655abf0e1f
-
-# HTML report generator (Python script with variable names like "passed")
 - filename: Contentstack.Core.Tests/generate_html_report.py
   checksum: b4bec9ef853703e989b3d8077edc5c3ec6ea13a23826699d8beca5e87323e128
-
 version: "1.0"
