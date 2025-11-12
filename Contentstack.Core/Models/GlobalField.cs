@@ -33,7 +33,7 @@ namespace Contentstack.Core.Models
             set
             {
                 if (String.IsNullOrEmpty(value))
-                    throw new ArgumentNullException("GlobalFieldId cannot be null or empty.");
+                    throw GlobalFieldException.CreateForIdNull();
                 this.Uid = value;
             }
         }
@@ -120,10 +120,9 @@ namespace Contentstack.Core.Models
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackException()
+            contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };
@@ -189,7 +188,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw GetContentstackError(ex);
+                throw GlobalFieldException.CreateForProcessingError(ex);
             }
         }
 

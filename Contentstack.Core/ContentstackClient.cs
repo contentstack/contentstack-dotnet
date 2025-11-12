@@ -136,7 +136,7 @@ namespace Contentstack.Core
                 }
                 else
                 {
-                    throw new InvalidOperationException("Add PreviewToken or ManagementToken in LivePreviewConfig");
+                    throw new InvalidOperationException(ErrorMessages.LivePreviewTokenMissing);
                 }
             }
             this.SerializerSettings.DateParseHandling = DateParseHandling.None;
@@ -239,10 +239,9 @@ namespace Contentstack.Core
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackException()
+            contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };
@@ -372,7 +371,7 @@ namespace Contentstack.Core
             }
             else
             {
-                throw new InvalidOperationException("Either ManagementToken or PreviewToken is required in LivePreviewConfig");
+                throw new InvalidOperationException(ErrorMessages.LivePreviewTokenMissing);
             }
 
             if (!string.IsNullOrEmpty(this.LivePreviewConfig.ReleaseId))

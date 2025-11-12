@@ -73,12 +73,12 @@ namespace Contentstack.Core.Models
                     Dictionary<string, object> queryValue = new Dictionary<string, object>{ { "$above", value } };
                     QueryValueJson.Add(key, queryValue);
                 } catch (Exception e) {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw TaxonomyException.CreateForProcessingError(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw TaxonomyException.CreateForProcessingError(null);
             }
 
             return this;
@@ -112,12 +112,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw TaxonomyException.CreateForProcessingError(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw TaxonomyException.CreateForProcessingError(null);
             }
 
             return this;
@@ -151,12 +151,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw TaxonomyException.CreateForProcessingError(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw TaxonomyException.CreateForProcessingError(null);
             }
 
             return this;
@@ -190,12 +190,12 @@ namespace Contentstack.Core.Models
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(StackConstants.ErrorMessage_QueryFilterException, e);
+                    throw TaxonomyException.CreateForProcessingError(e);
                 }
             }
             else
             {
-                throw new Exception(StackConstants.ErrorMessage_QueryFilterException, null);
+                throw TaxonomyException.CreateForProcessingError(null);
             }
 
             return this;
@@ -283,10 +283,9 @@ namespace Contentstack.Core.Models
                 errorMessage = ex.Message;
             }
 
-            contentstackError = new ContentstackException()
+            contentstackError = new ContentstackException(errorMessage)
             {
                 ErrorCode = errorCode,
-                ErrorMessage = errorMessage,
                 StatusCode = statusCode,
                 Errors = errors
             };

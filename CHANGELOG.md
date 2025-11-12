@@ -1,3 +1,9 @@
+### Version: 2.25.1
+#### Date: Nov-10-2025
+
+##### Enh: 
+- Improved Error messages
+
 ### Version: 2.25.0
 #### Date: Jan-07-2025
 
