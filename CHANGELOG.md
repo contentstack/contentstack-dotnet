@@ -1,20 +1,19 @@
 ### Version: 2.25.2
 #### Date: Nov-13-2025
 
-##### Fix: 
-- Taxonomy
-  - Fixed NullReferenceException in `_Url` property when Stack is null
-  - Fixed NullReferenceException in constructor when ContentstackClient parameter is null
-  - Fixed InvalidCastException in `GetContentstackError` when exception is not a WebException
-  - Fixed NullReferenceException in `GetContentstackError` when WebException.Response is null
-  - Fixed JsonReaderException in `GetContentstackError` when response is not valid JSON
-  - All exceptions now properly throw TaxonomyException (extends ContentstackException) with descriptive error messages
+
 
 ### Version: 2.25.1
 #### Date: Nov-10-2025
 
 ##### Enh: 
 - Improved Error messages
+##### Fix: 
+- Taxonomy
+  - Fixed NullReferenceExceptions 
+  - Fixed InvalidCastException in `GetContentstackError` when exception is not a WebException
+  - Fixed JsonReaderException in `GetContentstackError` when response is not valid JSON
+  - All exceptions now properly throw TaxonomyException (extends ContentstackException) with descriptive error messages
 
 ### Version: 2.25.0
 #### Date: Jan-07-2025
