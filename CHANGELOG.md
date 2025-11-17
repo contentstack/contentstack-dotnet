@@ -1,8 +1,19 @@
+### Version: 2.25.2
+#### Date: Nov-13-2025
+
+
+
 ### Version: 2.25.1
 #### Date: Nov-10-2025
 
 ##### Enh: 
 - Improved Error messages
+##### Fix: 
+- Taxonomy
+  - Fixed NullReferenceExceptions 
+  - Fixed InvalidCastException in `GetContentstackError` when exception is not a WebException
+  - Fixed JsonReaderException in `GetContentstackError` when response is not valid JSON
+  - All exceptions now properly throw TaxonomyException (extends ContentstackException) with descriptive error messages
 
 ### Version: 2.25.0
 #### Date: Jan-07-2025
