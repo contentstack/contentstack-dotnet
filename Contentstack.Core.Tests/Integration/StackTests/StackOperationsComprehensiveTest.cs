@@ -308,9 +308,10 @@ namespace Contentstack.Core.Tests.Integration.StackTests
         [Fact(DisplayName = "Stack Operations - Stack Branches Support Can Query With Branch")]
         public async Task Stack_Branches_Support_CanQueryWithBranch()
         {
-            // Arrange
+            // Arrange - Include Host for custom regions like dev11
             var options = new ContentstackOptions()
             {
+                Host = TestDataHelper.Host,
                 ApiKey = TestDataHelper.ApiKey,
                 DeliveryToken = TestDataHelper.DeliveryToken,
                 Environment = TestDataHelper.Environment,
@@ -408,6 +409,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Arrange
             var options = new ContentstackOptions()
             {
+                Host = TestDataHelper.Host,  // Use configured host for custom regions
                 ApiKey = TestDataHelper.ApiKey,
                 DeliveryToken = TestDataHelper.DeliveryToken,
                 Environment = TestDataHelper.Environment,

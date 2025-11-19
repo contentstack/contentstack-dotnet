@@ -41,8 +41,9 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Standard CDN Works Correctly")]
         public async Task Region_StandardCDN_WorksCorrectly()
         {
-            // Arrange
-            var client = CreateClient("cdn.contentstack.io");
+            // Arrange - Use configured host instead of hardcoded cdn.contentstack.io
+            // This allows the test to work with custom regions like dev11
+            var client = CreateClient(TestDataHelper.Host);
             
             // Act
             var entry = await client
