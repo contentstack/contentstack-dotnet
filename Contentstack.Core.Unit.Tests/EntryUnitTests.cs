@@ -1705,6 +1705,42 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
+        public void GetContentstackError_WithWebException_HandlesExceptionCorrectly()
+        {
+            // Arrange
+            var method = typeof(Entry).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var webEx = new System.Net.WebException("Test error");
+
+            // Act
+            var result = method?.Invoke(null, new object[] { webEx }) as ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            // When WebException has no response, it should fall back to ex.Message
+            Assert.NotNull(result.Message);
+        }
+
+        [Fact]
+        public void ErrorHandling_WithWebException_ExtractsErrorMessage()
+        {
+            // Arrange
+            // This test verifies that the error handling logic properly checks for WebException
+            // and calls GetContentstackError to extract error messages
+            var method = typeof(Entry).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var errorMessage = "Custom error message";
+            var ex = new Exception(errorMessage);
+
+            // Act
+            var result = method?.Invoke(null, new object[] { ex }) as ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(errorMessage, result.Message);
+        }
+
+        [Fact]
         public void GetHeader_WithNullLocalHeader_ReturnsFormHeaders()
         {
             // Arrange

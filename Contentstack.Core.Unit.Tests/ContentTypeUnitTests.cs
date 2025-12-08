@@ -312,6 +312,36 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
+        public void GetContentstackError_WithGenericException_ReturnsExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var errorMessage = "Content type error";
+            var exception = new Exception(errorMessage);
+
+            // Act
+            var result = ContentType.GetContentstackError(exception);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(errorMessage, result.Message);
+        }
+
+        [Fact]
+        public void GetContentstackError_WithWebException_HandlesExceptionCorrectly()
+        {
+            // Arrange
+            var webEx = new System.Net.WebException("Test error");
+
+            // Act
+            var result = ContentType.GetContentstackError(webEx);
+
+            // Assert
+            Assert.NotNull(result);
+            // When WebException has no response, it should fall back to ex.Message
+            Assert.NotNull(result.Message);
+        }
+
+        [Fact]
         public void Fetch_WithIncludeBranch_VerifiesQueryParameters()
         {
             // Arrange

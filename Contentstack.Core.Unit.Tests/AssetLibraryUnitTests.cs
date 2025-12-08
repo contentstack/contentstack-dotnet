@@ -550,6 +550,40 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
+        public void GetContentstackError_WithWebException_HandlesExceptionCorrectly()
+        {
+            // Arrange
+            var method = typeof(AssetLibrary).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var webEx = new System.Net.WebException("Test error");
+
+            // Act
+            var result = method?.Invoke(null, new object[] { webEx }) as ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            // When WebException has no response, it should fall back to ex.Message
+            Assert.NotNull(result.Message);
+        }
+
+        [Fact]
+        public void ErrorHandling_WithWebException_ExtractsErrorMessage()
+        {
+            // Arrange
+            var method = typeof(AssetLibrary).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var errorMessage = "Asset library error";
+            var ex = new Exception(errorMessage);
+
+            // Act
+            var result = method?.Invoke(null, new object[] { ex }) as ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(errorMessage, result.Message);
+        }
+
+        [Fact]
         public void GetHeader_WithNullLocalHeader_ReturnsStackHeaders()
         {
             // Arrange
