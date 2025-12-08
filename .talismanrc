@@ -24,3 +24,5 @@ fileignoreconfig:
   checksum: b63897181a8cb5993d1305248cfc3e711c4039b5677b6c1e4e2a639e4ecb391b
 - filename: Contentstack.Core.Tests/RegionHandlerTest.cs
   checksum: 69899138754908e156aa477d775d12fd6b3fefc1a6c2afec22cb409bd6e6446c
+- filename: CHANGELOG.md
+  checksum: bc17fd4cf564e524c686a8271033f8e6e7f5f69de8137007d1c72d5f563fe92a

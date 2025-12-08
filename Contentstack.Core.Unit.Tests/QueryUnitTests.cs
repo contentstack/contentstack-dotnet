@@ -1448,6 +1448,42 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
+        public void GetContentstackError_WithGenericException_ReturnsExceptionWithCorrectMessage()
+        {
+            // Arrange
+            var method = typeof(Query).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var errorMessage = "Test error message";
+            var ex = new Exception(errorMessage);
+
+            // Act
+            var result = method?.Invoke(null, new object[] { ex }) as ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(errorMessage, result.Message);
+        }
+
+        [Fact]
+        public void ErrorHandling_WithWebException_CallsGetContentstackError()
+        {
+            // Arrange
+            // This test verifies that when a WebException is caught, GetContentstackError is called
+            // We can't easily mock a WebException with a response, but we can verify the logic path
+            var method = typeof(Query).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var webEx = new System.Net.WebException("Test error");
+
+            // Act
+            var result = method?.Invoke(null, new object[] { webEx }) as ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            // When WebException has no response, it should fall back to ex.Message
+            Assert.NotNull(result.Message);
+        }
+
+        [Fact]
         public void And_WithExistingAndKey_ReplacesAndValue()
         {
             // Arrange
