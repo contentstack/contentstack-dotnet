@@ -156,6 +156,16 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
+                if (ex is System.Net.WebException)
+                {
+                    var contentstackError = GetContentstackError(ex);
+                    throw new ContentstackException(contentstackError.Message, ex)
+                    {
+                        ErrorCode = contentstackError.ErrorCode,
+                        StatusCode = contentstackError.StatusCode,
+                        Errors = contentstackError.Errors
+                    };
+                }
                 throw new ContentstackException(ErrorMessages.GlobalFieldQueryError, ex);
             }
         }

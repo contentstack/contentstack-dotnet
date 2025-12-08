@@ -138,6 +138,75 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         #endregion
+
+        #region GetContentstackError Tests
+
+        [Fact]
+        public void GetContentstackError_WithWebException_ReturnsContentstackException()
+        {
+            // Arrange
+            var method = typeof(GlobalField).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var webEx = new System.Net.WebException("Test error");
+
+            // Act
+            var result = method?.Invoke(null, new object[] { webEx }) as Contentstack.Core.Internals.ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void GetContentstackError_WithGenericException_ReturnsContentstackException()
+        {
+            // Arrange
+            var method = typeof(GlobalField).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var ex = new Exception("Test error");
+
+            // Act
+            var result = method?.Invoke(null, new object[] { ex }) as Contentstack.Core.Internals.ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Test error", result.Message);
+        }
+
+        [Fact]
+        public void GetContentstackError_WithWebException_HandlesExceptionCorrectly()
+        {
+            // Arrange
+            var method = typeof(GlobalField).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var webEx = new System.Net.WebException("Test error");
+
+            // Act
+            var result = method?.Invoke(null, new object[] { webEx }) as Contentstack.Core.Internals.ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            // When WebException has no response, it should fall back to ex.Message
+            Assert.NotNull(result.Message);
+        }
+
+        [Fact]
+        public void ErrorHandling_WithWebException_ExtractsErrorMessage()
+        {
+            // Arrange
+            var method = typeof(GlobalField).GetMethod("GetContentstackError", 
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var errorMessage = "Global field error";
+            var ex = new Exception(errorMessage);
+
+            // Act
+            var result = method?.Invoke(null, new object[] { ex }) as Contentstack.Core.Internals.ContentstackException;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(errorMessage, result.Message);
+        }
+
+        #endregion
     }
 }
 
