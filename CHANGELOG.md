@@ -1,7 +1,13 @@
 ### Version: 2.25.2
 #### Date: Nov-13-2025
 
-
+##### Fix:
+- Error Handling
+  - Fixed error message extraction from Contentstack API responses across all model classes
+  - HTTP request errors now properly extract and display actual API error messages instead of generic exception messages
+  - Improved error handling in Query, Entry, Asset, GlobalField, ContentType, AssetLibrary, GlobalFieldQuery, and Taxonomy classes
+  - Users will now see meaningful error messages (e.g., "Invalid API key", "Entry not found") instead of generic "Exception of type 'ContentstackException' was thrown" messages
+  - ErrorCode, StatusCode, and Errors dictionary are now properly populated from API responses
 
 ### Version: 2.25.1
 #### Date: Nov-10-2025

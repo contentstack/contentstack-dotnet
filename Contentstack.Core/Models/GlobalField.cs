@@ -188,6 +188,16 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
+                if (ex is System.Net.WebException)
+                {
+                    var contentstackError = GetContentstackError(ex);
+                    throw new GlobalFieldException(contentstackError.Message, ex)
+                    {
+                        ErrorCode = contentstackError.ErrorCode,
+                        StatusCode = contentstackError.StatusCode,
+                        Errors = contentstackError.Errors
+                    };
+                }
                 throw GlobalFieldException.CreateForProcessingError(ex);
             }
         }
