@@ -7,6 +7,7 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.ConfigurationTests
 {
@@ -15,23 +16,36 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
     /// Tests US, EU, and custom region configurations
     /// </summary>
     [Trait("Category", "RegionSupport")]
-    public class RegionSupportTest
+    public class RegionSupportTest : IntegrationTestBase
     {
+        public RegionSupportTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Default Region
         
         [Fact(DisplayName = "Region Configuration - Region Default Host Connects Successfully")]
         public async Task Region_DefaultHost_ConnectsSuccessfully()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient(TestDataHelper.Host);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -46,12 +60,17 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             var client = CreateClient(TestDataHelper.Host);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -66,14 +85,22 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         public async Task Region_CustomHost_ConfiguredCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient(TestDataHelper.Host);
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -81,9 +108,17 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         public async Task Region_ConfiguredHost_AllOperationsWork()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+            LogContext("AssetUid", TestDataHelper.ImageAssetUid);
+
             var client = CreateClient(TestDataHelper.Host);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -92,6 +127,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(asset);
         }
@@ -104,6 +141,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         public async Task Region_HostConfiguration_ValidFormat()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -115,6 +154,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             var client = new ContentstackClient(options);
             
             // Act & Assert
+            LogAct("Performing test action");
+
             Assert.NotNull(client);
             // Client should be created successfully
         }
@@ -123,15 +164,24 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         public async Task Region_DifferentEnvironments_SameHost()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient(TestDataHelper.Host);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -146,9 +196,16 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         public async Task Region_Performance_StandardFetch()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient(TestDataHelper.Host);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -158,6 +215,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.True(elapsed < 10000, $"Fetch should complete within 10s, took {elapsed}ms");
         }
@@ -166,10 +225,16 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         public async Task Region_Performance_QueryOperation()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient(TestDataHelper.Host);
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 query.Limit(5);
@@ -177,6 +242,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 10000, $"Query should complete within 10s, took {elapsed}ms");
         }
@@ -188,6 +255,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Null Host Throws Error")]
         public void Region_NullHost_ThrowsError()
         {
+            LogArrange("Setting up test");
+
             // Arrange & Act & Assert
             // ✅ SDK may not throw exception for null host during ContentstackOptions creation
             // It only throws during client initialization or API calls
@@ -230,6 +299,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region All Values Are Defined")]
         public void Region_AllValues_AreDefined()
         {
+            LogArrange("Setting up test");
+
             var regions = Enum.GetValues<ContentstackRegion>();
             Assert.Equal(6, regions.Length);
             Assert.Contains(ContentstackRegion.US, regions);
@@ -243,6 +314,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Options Default Value Is US")]
         public void Region_OptionsDefaultValue_IsUS()
         {
+            LogArrange("Setting up test");
+
             var options = new ContentstackOptions();
             Assert.Equal(ContentstackRegion.US, options.Region);
         }
@@ -264,6 +337,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Enum Can Be Parsed From String")]
         public void Region_EnumCanBeParsedFromString()
         {
+            LogArrange("Setting up test");
+
             Assert.True(Enum.TryParse<ContentstackRegion>("US", out var usRegion));
             Assert.Equal(ContentstackRegion.US, usRegion);
 
@@ -277,6 +352,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Enum Case Insensitive Parse Works")]
         public void Region_EnumCaseInsensitiveParse_Works()
         {
+            LogArrange("Setting up test");
+
             Assert.True(Enum.TryParse<ContentstackRegion>("us", true, out var usRegion));
             Assert.Equal(ContentstackRegion.US, usRegion);
 
@@ -290,6 +367,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Enum Invalid String Returns False")]
         public void Region_EnumInvalidString_ReturnsFalse()
         {
+            LogArrange("Setting up test");
+
             Assert.False(Enum.TryParse<ContentstackRegion>("INVALID", out var invalidRegion));
             Assert.Equal(default(ContentstackRegion), invalidRegion);
         }
@@ -297,6 +376,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Options Can Be Changed After Creation")]
         public void Region_OptionsCanBeChangedAfterCreation()
         {
+            LogArrange("Setting up test");
+
             var options = new ContentstackOptions
             {
                 Region = ContentstackRegion.US
@@ -311,6 +392,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [Fact(DisplayName = "Region Configuration - Region Different Clients Have Different Regions")]
         public void Region_DifferentClients_HaveDifferentRegions()
         {
+            LogArrange("Setting up test");
+
             var usOptions = new ContentstackOptions
             {
                 ApiKey = TestDataHelper.ApiKey,

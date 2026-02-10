@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.LivePreview
 {
@@ -14,8 +15,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
     /// Tests preview token usage, live preview host, and preview mode operations
     /// </summary>
     [Trait("Category", "LivePreview")]
-    public class LivePreviewBasicTest
+    public class LivePreviewBasicTest : IntegrationTestBase
     {
+        public LivePreviewBasicTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Live Preview Configuration
         
         [Fact(DisplayName = "Live Preview - Live Preview Initialize With Preview Token Success")]
@@ -33,6 +38,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(client);
         }
         
@@ -51,6 +58,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(client);
             // Verify the host is set correctly
             Assert.Contains("preview", TestDataHelper.LivePreviewHost.ToLower());
@@ -64,6 +73,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_FetchEntry_WithPreviewToken()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -74,6 +87,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -82,6 +98,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Fetch<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(entry);
                 Assert.NotNull(entry.Uid);
             }
@@ -97,6 +115,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_FetchMultipleEntries_WithPreviewToken()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -107,6 +128,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             try
             {
                 var result = await client
@@ -116,6 +140,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
                 Assert.NotNull(result.Items);
             }
@@ -130,6 +156,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_FetchWithReferences_PreviewMode()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -140,6 +170,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             try
             {
                 var entry = await client
@@ -149,6 +182,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Fetch<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(entry);
                 Assert.NotNull(entry.Uid);
             }
@@ -167,6 +202,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_WithLivePreviewParam_Works()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -177,6 +216,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -186,6 +228,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Fetch<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(entry);
             }
             catch (Exception)
@@ -199,6 +243,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_WithContentTypeUid_Preview()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.MediumContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.MediumEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -209,6 +257,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.MediumContentTypeUid}/entries/{TestDataHelper.MediumEntryUid}");
+
             try
             {
                 var entry = await client
@@ -217,6 +268,8 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Fetch<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(entry);
             }
             catch (Exception)
@@ -234,6 +287,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_InvalidPreviewToken_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -244,6 +301,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client
@@ -257,6 +317,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_WithRegularToken_OnPreviewHost_MayFail()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.LivePreviewHost,
@@ -267,6 +331,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -288,6 +355,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
         public async Task LivePreview_PreviewTokenOnRegularHost_MayWork()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host, // Regular host
@@ -298,6 +369,9 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             var client = new ContentstackClient(options);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client

@@ -8,6 +8,7 @@ using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.ContentTypeTests
 {
@@ -16,20 +17,30 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
     /// Tests content type fetching, schema validation, and querying
     /// </summary>
     [Trait("Category", "ContentTypeOperations")]
-    public class ContentTypeOperationsTest
+    public class ContentTypeOperationsTest : IntegrationTestBase
     {
+        public ContentTypeOperationsTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Fetch All Content Types
         
         [Fact(DisplayName = "Content Type - Content Type Get All Content Types Returns List Of Content Types")]
         public async Task ContentType_GetAllContentTypes_ReturnsListOfContentTypes()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var contentTypes = await client.GetContentTypes();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(contentTypes);
             Assert.True(contentTypes.Count > 0, "Should return at least one content type");
         }
@@ -38,6 +49,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_GetAllWithLimit_ReturnsLimitedResults()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var param = new Dictionary<string, object>
             {
@@ -45,9 +58,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             };
             
             // Act
+            LogAct("Performing test action");
+
             var contentTypes = await client.GetContentTypes(param);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(contentTypes);
             Assert.True(contentTypes.Count <= 2);
         }
@@ -56,6 +73,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_GetAllWithSkip_ReturnsSkippedResults()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // First get all
@@ -69,6 +88,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             var skippedContentTypes = await client.GetContentTypes(param);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(skippedContentTypes);
             Assert.True(skippedContentTypes.Count <= allContentTypes.Count);
         }
@@ -77,6 +98,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_GetAllWithCount_IncludesCount()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var param = new Dictionary<string, object>
             {
@@ -84,9 +107,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             };
             
             // Act
+            LogAct("Performing test action");
+
             var contentTypes = await client.GetContentTypes(param);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(contentTypes);
             Assert.True(contentTypes.Count > 0);
         }
@@ -95,6 +122,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_GetAllWithGlobalFields_IncludesGlobalFieldSchema()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var param = new Dictionary<string, object>
             {
@@ -102,9 +131,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             };
             
             // Act
+            LogAct("Performing test action");
+
             var contentTypes = await client.GetContentTypes(param);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(contentTypes);
             Assert.True(contentTypes.Count > 0);
         }
@@ -117,13 +150,21 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_FetchSingleContentType_ReturnsSchema()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var schema = await contentType.Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.IsType<JObject>(schema);
             // Schema should contain uid
@@ -135,6 +176,9 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_FetchWithGlobalFields_IncludesGlobalFieldSchema()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.ComplexContentTypeUid);
             var param = new Dictionary<string, object>
@@ -143,9 +187,14 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             };
             
             // Act
+            LogAct("Performing test action");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var schema = await contentType.Fetch(param);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.IsType<JObject>(schema);
         }
@@ -154,13 +203,21 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_FetchComplexType_ContainsExpectedFields()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.ComplexContentTypeUid);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var schema = await contentType.Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.IsType<JObject>(schema);
             // Should have schema field
@@ -171,10 +228,15 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_FetchNonExistentType_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+
             var client = CreateClient();
             var contentType = client.ContentType("non_existent_content_type_xyz");
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{"non_existent_content_type_xyz"}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await contentType.Fetch();
@@ -189,13 +251,21 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_Schema_ContainsTitle()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var schema = await contentType.Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.True(schema.ContainsKey("title"));
             Assert.NotNull(schema["title"]);
@@ -206,13 +276,21 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_Schema_ContainsUid()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.MediumContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.MediumContentTypeUid);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.MediumContentTypeUid}/entries");
+
             var schema = await contentType.Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.True(schema.ContainsKey("uid"));
             Assert.Equal(TestDataHelper.MediumContentTypeUid, schema["uid"].ToString());
@@ -222,13 +300,21 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_Schema_ContainsSchemaDefinition()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.ComplexContentTypeUid);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var schema = await contentType.Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.True(schema.ContainsKey("schema"));
             var schemaArray = schema["schema"] as JArray;
@@ -244,15 +330,21 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_FetchAll_CompletesInReasonableTime()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var (contentTypes, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.GetContentTypes();
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(contentTypes);
             Assert.True(elapsed < 10000, $"GetContentTypes should complete within 10s, took {elapsed}ms");
         }
@@ -261,16 +353,24 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_FetchSingle_CompletesQuickly()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var (schema, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await contentType.Fetch();
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
             Assert.True(elapsed < 5000, $"Single content type fetch should complete within 5s, took {elapsed}ms");
         }
@@ -279,14 +379,24 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         public async Task ContentType_MultipleContentTypes_AllFetchSuccessfully()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("ContentType", TestDataHelper.MediumContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Fetch multiple content types
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var simpleSchema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             var mediumSchema = await client.ContentType(TestDataHelper.MediumContentTypeUid).Fetch();
             var complexSchema = await client.ContentType(TestDataHelper.ComplexContentTypeUid).Fetch();
             
             // Assert - All should be retrieved successfully
+            LogAssert("Verifying response");
+
             Assert.NotNull(simpleSchema);
             Assert.NotNull(mediumSchema);
             Assert.NotNull(complexSchema);

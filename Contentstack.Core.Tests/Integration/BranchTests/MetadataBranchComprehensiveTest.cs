@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.BranchTests
 {
@@ -14,23 +15,36 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
     /// Tests branch operations, metadata fields, and branch-specific queries
     /// </summary>
     [Trait("Category", "MetadataBranch")]
-    public class MetadataBranchComprehensiveTest
+    public class MetadataBranchComprehensiveTest : IntegrationTestBase
     {
+        public MetadataBranchComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Branch Operations
         
         [Fact(DisplayName = "Branch Client With Branch Uses Specified Branch")]
         public async Task Branch_ClientWithBranch_UsesSpecifiedBranch()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClientWithBranch();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             
@@ -44,14 +58,22 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Branch_QueryWithBranch_FetchesFromBranch()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClientWithBranch();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -59,12 +81,20 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Branch_AssetWithBranch_FetchesFromBranch()
         {
             // Arrange
+            LogArrange("Setting up fetch operation");
+            LogContext("AssetUid", TestDataHelper.ImageAssetUid);
+
             var client = CreateClientWithBranch();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
+
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(asset);
         }
         
@@ -76,15 +106,24 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Metadata_CreatedBy_AvailableInEntry()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             
@@ -98,9 +137,16 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Branch_DeepReferences_AllFromSameBranch()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClientWithBranch();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
@@ -108,6 +154,8 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             
@@ -125,15 +173,23 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Branch_QueryFilters_WorksWithBranch()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClientWithBranch();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Exists("title");
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -141,16 +197,24 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Branch_ComplexQuery_WorksWithBranch()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClientWithBranch();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
             query.And(new List<Query> { sub1, sub2 });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -162,9 +226,16 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Metadata_IncludeOwner_AddsOwnerInfo()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -172,6 +243,8 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             
@@ -185,15 +258,23 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Metadata_QueryWithOwner_IncludesOwnerForAll()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.IncludeOwner();
             query.Limit(3);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -205,14 +286,22 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Metadata_ContentTypeSchema_IncludesMetadata()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var schema = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
         }
         
@@ -220,14 +309,22 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Metadata_ContentTypeWithBranch_BranchSpecific()
         {
             // Arrange
+            LogArrange("Setting up content type operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClientWithBranch();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var schema = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(schema);
         }
         
@@ -239,9 +336,16 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Branch_Performance_WithBranch()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClientWithBranch();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -251,6 +355,8 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.True(elapsed < 10000, $"Branch fetch should complete within 10s, took {elapsed}ms");
         }
@@ -259,9 +365,16 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
         public async Task Metadata_Performance_WithOwner()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -272,6 +385,8 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.True(elapsed < 10000, $"Metadata fetch should complete within 10s, took {elapsed}ms");
         }

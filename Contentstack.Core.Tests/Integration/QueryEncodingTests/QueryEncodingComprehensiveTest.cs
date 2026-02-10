@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
 {
@@ -14,22 +15,34 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
     /// Tests URL encoding, special characters, and complex queries
     /// </summary>
     [Trait("Category", "QueryEncoding")]
-    public class QueryEncodingComprehensiveTest
+    public class QueryEncodingComprehensiveTest : IntegrationTestBase
     {
+        public QueryEncodingComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Encoding
         
         [Fact(DisplayName = "Query Operations - Encoding Standard Query Works")]
         public async Task Encoding_StandardQuery_Works()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "Test");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -37,14 +50,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Spaces_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "Test Entry");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -52,10 +73,16 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_SpecialCharacters_Ampersand()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
             {
@@ -63,6 +90,8 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             }
             catch (Exception ex) when (ex.Message.Contains("400") || ex.Message.Contains("Bad Request"))
@@ -77,10 +106,16 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_SpecialCharacters_Plus()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
             {
@@ -88,6 +123,8 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             }
             catch (Exception ex) when (ex.Message.Contains("400") || ex.Message.Contains("Bad Request"))
@@ -102,6 +139,9 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_SpecialCharacters_Hash()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             // ✅ Hash character may cause 400 Bad Request (API limitation)
             try
@@ -128,14 +168,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Unicode_ChineseCharacters()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "测试");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -143,14 +191,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Unicode_JapaneseCharacters()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "テスト");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -158,14 +214,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Unicode_ArabicCharacters()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "اختبار");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -173,14 +237,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Unicode_EmojiCharacters()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "Test 🚀 Entry");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -192,14 +264,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Percent_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "100% Complete");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -207,14 +287,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_QuestionMark_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "What?");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -222,14 +310,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Slash_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("url", "/test/path");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -237,14 +333,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Equals_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "A=B");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -256,14 +360,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_SingleQuote_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "It's Working");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -271,14 +383,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_DoubleQuote_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "\"Quoted\"");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -286,14 +406,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_SquareBrackets_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "[Test]");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -301,14 +429,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_CurlyBrackets_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "{Test}");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -320,14 +456,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Regex_WithSpecialChars()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Regex("title", "Test.*", "i");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -335,6 +479,9 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_ContainedIn_WithSpecialChars()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
@@ -342,10 +489,15 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
                 var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.ContainedIn("title", new object[] { "Test & Entry", "Test | Entry" });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             }
             catch (Exception)
@@ -360,6 +512,9 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_MultipleFields_WithSpecialChars()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
@@ -367,12 +522,17 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
                 var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("title", "Test & Entry");
             var sub2 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("url", "/test/path");
             query.Or(new List<Query> { sub1, sub2 });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             }
             catch (Exception)
@@ -391,9 +551,16 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_CustomParam_WithSpecialChars()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -401,6 +568,8 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -411,9 +580,16 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_HeaderValue_WithSpecialChars()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entryObj = client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid);
@@ -421,6 +597,8 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             var entry = await entryObj.Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
         }
@@ -433,15 +611,23 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_VeryLongString_HandlesCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             var longString = new string('A', 500);
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", longString);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -449,14 +635,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_EmptyString_HandlesCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -464,14 +658,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_Whitespace_OnlyString()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "   ");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -479,14 +681,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_NewlineCharacters_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "Line1\nLine2");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -494,14 +704,22 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_TabCharacters_EncodedCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "Column1\tColumn2");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -509,6 +727,9 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
         public async Task Encoding_MixedCharacterSet_AllTypesEncoded()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
@@ -516,10 +737,15 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
                 var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Mix of special chars, unicode, and regular text
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("title", "Test & Special: #C++ 测试 🚀!");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             }
             catch (Exception)

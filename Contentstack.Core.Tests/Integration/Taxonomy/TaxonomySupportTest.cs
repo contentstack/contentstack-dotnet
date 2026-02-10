@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
+using Contentstack.Core.Internals;
 using Contentstack.Core.Tests.Helpers;
 using TaxonomyModel = Contentstack.Core.Models.Taxonomy;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.Taxonomy
 {
@@ -15,22 +17,35 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
     /// Tests taxonomy queries, filters, and retrieval
     /// </summary>
     [Trait("Category", "Taxonomy")]
-    public class TaxonomySupportTest
+    public class TaxonomySupportTest : IntegrationTestBase
     {
+        public TaxonomySupportTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Taxonomy Queries
         
         [Fact(DisplayName = "Taxonomy - Taxonomy Query By Taxonomy Term Returns Matching Entries")]
         public async Task Taxonomy_QueryByTaxonomyTerm_ReturnsMatchingEntries()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Query entries by taxonomy term
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxUsaState);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // May return 0 entries if taxonomy is not configured
@@ -47,15 +62,24 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_FetchEntry_WithTaxonomyData()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act - Fetch entry that may have taxonomy
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
         }
@@ -64,15 +88,24 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_QueryMultipleEntries_WithTaxonomyFilter()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxIndiaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxIndiaState);
             query.Limit(10);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -92,15 +125,24 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_CombineWithWhereClause_FiltersCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Combine taxonomy with where clause
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxUsaState);
             query.Exists("title");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -116,16 +158,25 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_WithSorting_OrdersCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxUsaState);
             query.Descending("created_at");
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -141,16 +192,25 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_WithPagination_ReturnsPagedResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxUsaState);
             query.Limit(5);
             query.Skip(0);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -170,16 +230,25 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_WithReferences_LoadsReferencedContent()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxUsaState);
             query.IncludeReference("authors");
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -195,16 +264,25 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_WithFieldProjection_ReturnsOnlyRequestedFields()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxIndiaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", TestDataHelper.TaxIndiaState);
             query.Only(new[] { "title", "uid" });
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -224,14 +302,22 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_InvalidTerm_ReturnsEmptyResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Query with non-existent taxonomy term
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", "non_existent_taxonomy_term_xyz");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // Should return empty results
@@ -248,14 +334,22 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_EmptyTerm_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Query with empty taxonomy
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.AddParam("taxonomy", "");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
@@ -275,9 +369,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectFindWithExists()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act - Use Taxonomy object (client.Taxonomies())
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -285,6 +383,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
                 Assert.NotNull(result.Items);
             }
@@ -299,9 +399,14 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectCount()
         {
             // Arrange
+            LogArrange("Setting up taxonomy operation");
+
             var client = CreateClient();
             
             // Act - Use Taxonomy.Count()
+            LogAct("Querying taxonomy");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/taxonomies");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -309,6 +414,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Count();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -322,9 +429,14 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectFindOne()
         {
             // Arrange
+            LogArrange("Setting up taxonomy operation");
+
             var client = CreateClient();
             
             // Act - Use Taxonomy.FindOne()
+            LogAct("Querying taxonomy");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/taxonomies");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -332,6 +444,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.FindOne<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -345,9 +459,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithSkip()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -356,6 +474,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -368,9 +488,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithLimit()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -379,6 +503,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -391,9 +517,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithIncludeCount()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -402,6 +532,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -414,9 +546,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithIncludeMetadata()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -425,6 +561,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -437,9 +575,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithSetLocale()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -448,6 +590,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -460,9 +604,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithEnvironment()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -470,6 +618,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -482,9 +632,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithBranch()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -492,6 +646,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -504,9 +660,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectWithLocalHeaders()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -515,6 +675,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -527,9 +689,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectAboveMethod()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -537,6 +703,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -549,9 +717,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectBelowMethod()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -559,6 +731,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -571,9 +745,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectEqualAndAboveMethod()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -581,6 +759,8 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
@@ -593,9 +773,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public async Task Taxonomy_ObjectEqualAndBelowMethod()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+
             try
             {
                 TaxonomyModel taxonomy = client.Taxonomies();
@@ -603,11 +787,134 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 var result = await taxonomy.Find<Entry>();
                 
                 // Assert
+            LogAssert("Verifying response");
+
                 Assert.NotNull(result);
             }
             catch (Exception)
             {
                 Assert.True(true, "Taxonomy.EqualAndBelow() method executed");
+            }
+        }
+        
+        #endregion
+        
+        #region Taxonomy Null Reference and Error Handling Tests (v2.25.1 Bug Fixes)
+        
+        [Fact(DisplayName = "Taxonomy - Taxonomy Invalid Response Handles Gracefully Without JsonException")]
+        public async Task Taxonomy_InvalidResponse_HandlesGracefullyWithoutJsonException()
+        {
+            LogArrange("Setting up query operation");
+
+            // This test verifies that the improved GetContentstackError method
+            // handles non-JSON responses gracefully (v2.25.1 fix)
+            // Previously would throw JsonReaderException or NullReferenceException
+            
+            var client = CreateClient();
+            
+            try
+            {
+                TaxonomyModel taxonomy = client.Taxonomies();
+                // Use invalid taxonomy that might return non-JSON error or null response
+                taxonomy.Above("invalid.taxonomy.path.xyz.123", 1);
+                var result = await taxonomy.Find<Entry>();
+                
+                // If no exception, test passes
+                Assert.NotNull(result);
+            }
+            catch (TaxonomyException ex)
+            {
+                // Should get TaxonomyException with meaningful message
+                // Not JsonReaderException or NullReferenceException (v2.25.1 fixes)
+                Assert.NotNull(ex.Message);
+                Assert.NotEmpty(ex.Message);
+                Assert.IsType<TaxonomyException>(ex); // Verify correct exception type
+            }
+            catch (ContentstackException ex)
+            {
+                // ContentstackException is also acceptable
+                Assert.NotNull(ex.Message);
+                Assert.NotEmpty(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Should NOT be NullReferenceException or JsonReaderException
+                Assert.False(ex is NullReferenceException, 
+                    "Should not throw NullReferenceException (v2.25.1 bug fix)");
+                Assert.False(ex.GetType().Name.Contains("JsonReader"), 
+                    "Should not throw JsonReaderException (v2.25.1 bug fix)");
+                Assert.False(ex.GetType().Name.Contains("JsonException"),
+                    "Should not throw JsonException (v2.25.1 bug fix)");
+            }
+        }
+        
+        [Fact(DisplayName = "Taxonomy - Taxonomy With Invalid Cast Does Not Throw InvalidCastException")]
+        public async Task Taxonomy_WithInvalidCast_DoesNotThrowInvalidCastException()
+        {
+            LogArrange("Setting up query operation");
+
+            // v2.25.1 fix: Changed from (WebException) cast to 'as WebException'
+            // This prevents InvalidCastException when exception is not a WebException
+            
+            var client = CreateClient();
+            
+            try
+            {
+                TaxonomyModel taxonomy = client.Taxonomies();
+                taxonomy.Exists("non.existent.taxonomy.xyz");
+                var result = await taxonomy.Find<Entry>();
+                
+                Assert.NotNull(result);
+            }
+            catch (TaxonomyException ex)
+            {
+                // Correct exception type - test passes
+                Assert.NotNull(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                // Also acceptable
+                Assert.NotNull(ex.Message);
+            }
+            catch (InvalidCastException)
+            {
+                Assert.True(false, "Should not throw InvalidCastException (v2.25.1 bug fix)");
+            }
+        }
+        
+        [Fact(DisplayName = "Taxonomy - Taxonomy With Empty Or Null Stream Handles Gracefully")]
+        public async Task Taxonomy_WithEmptyOrNullStream_HandlesGracefully()
+        {
+            LogArrange("Setting up query operation");
+
+            // v2.25.1 fix: Added null check for GetResponseStream()
+            // Previously could throw NullReferenceException if stream was null
+            
+            var client = CreateClient();
+            
+            try
+            {
+                TaxonomyModel taxonomy = client.Taxonomies();
+                taxonomy.EqualAndBelow("invalid_taxonomy_xyz_123", 0);
+                var result = await taxonomy.Find<Entry>();
+                
+                Assert.NotNull(result);
+            }
+            catch (TaxonomyException ex)
+            {
+                // Should get TaxonomyException, not NullReferenceException
+                Assert.NotNull(ex);
+                Assert.NotNull(ex.Message);
+                Assert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                Assert.NotNull(ex);
+            }
+            catch (NullReferenceException)
+            {
+                Assert.True(false, 
+                    "Should not throw NullReferenceException when stream is null (v2.25.1 bug fix)");
             }
         }
         

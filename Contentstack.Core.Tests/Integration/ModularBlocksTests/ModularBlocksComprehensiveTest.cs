@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
 {
@@ -14,23 +15,36 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
     /// Tests block structures, nested blocks, references within blocks
     /// </summary>
     [Trait("Category", "ModularBlocks")]
-    public class ModularBlocksComprehensiveTest
+    public class ModularBlocksComprehensiveTest : IntegrationTestBase
     {
+        public ModularBlocksComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Modular Blocks
         
         [Fact(DisplayName = "Modular Blocks - Modular Blocks Basic Fetch Returns Entry")]
         public async Task ModularBlocks_BasicFetch_ReturnsEntry()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -51,14 +65,22 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_ExistsCheck_FindsBlocks()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("modular_blocks");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -71,15 +93,24 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_SingleBlock_FetchesCorrectly()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Single modular block should be accessible
         }
@@ -88,15 +119,24 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_MultipleBlocks_AllAccessible()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Multiple blocks in sequence should be accessible
         }
@@ -105,15 +145,24 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_DifferentBlockTypes_MixedStructure()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Different block types should coexist
         }
@@ -126,15 +175,24 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_NestedBlocks_DeepStructure()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Nested blocks should be resolved
         }
@@ -143,15 +201,24 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_BlocksWithGroups_ComplexNesting()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Blocks containing group fields should work
         }
@@ -164,9 +231,16 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_WithReferences_IncludesReferenced()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
@@ -174,6 +248,8 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // References within blocks should be included
         }
@@ -182,9 +258,16 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_WithEmbeddedItems_ResolvesEmbedded()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
@@ -192,6 +275,8 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Embedded items in blocks should be resolved
         }
@@ -204,15 +289,23 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_Query_FilterByBlockContent()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("modular_blocks");
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -221,15 +314,23 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_Query_WithProjection()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Only(new[] { "title", "modular_blocks" });
             query.Limit(3);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -242,9 +343,16 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_Performance_ComplexBlocks()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -254,6 +362,8 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.True(elapsed < 10000, $"Complex blocks fetch should complete within 10s, took {elapsed}ms");
         }
@@ -262,9 +372,16 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_Performance_WithReferences()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -275,6 +392,8 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.True(elapsed < 15000, $"Blocks with references should complete within 15s, took {elapsed}ms");
         }
@@ -287,15 +406,24 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         public async Task ModularBlocks_EmptyBlocks_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             // Should handle entries without modular blocks
         }

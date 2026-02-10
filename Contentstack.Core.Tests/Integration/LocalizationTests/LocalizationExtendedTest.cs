@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.LocalizationTests
 {
@@ -14,17 +15,28 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
     /// Tests comprehensive locale scenarios, combinations, and edge cases
     /// </summary>
     [Trait("Category", "LocalizationExtended")]
-    public class LocalizationExtendedTest
+    public class LocalizationExtendedTest : IntegrationTestBase
     {
+        public LocalizationExtendedTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Locale Operations
         
         [Fact(DisplayName = "Localization - Locale Extended Set Locale English")]
         public async Task LocaleExtended_SetLocale_English()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -32,6 +44,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -46,9 +60,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_LocaleWithEmbedded_Combines()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
@@ -57,6 +78,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
         }
         
@@ -68,15 +91,22 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_AssetLibraryWithLocale_FetchesLocalized()
         {
             // Arrange
+            LogArrange("Setting up fetch all operation");
+
             var client = CreateClient();
             var assetLibrary = client.AssetLibrary();
             
             // Act
+            LogAct("Fetching all items");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
+
             assetLibrary.SetLocale("en-us");
             assetLibrary.Limit(5);
             var result = await assetLibrary.FetchAll();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -85,15 +115,22 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_AssetQueryWithLocale_FiltersCorrectly()
         {
             // Arrange
+            LogArrange("Setting up fetch all operation");
+
             var client = CreateClient();
             var assetLibrary = client.AssetLibrary();
             
             // Act
+            LogAct("Fetching all items");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
+
             assetLibrary.SetLocale("en-us");
             assetLibrary.Limit(5);
             var result = await assetLibrary.FetchAll();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -106,9 +143,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_Performance_WithLocale()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -119,6 +163,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.True(elapsed < 10000, $"Locale fetch should complete within 10s, took {elapsed}ms");
         }
@@ -127,10 +173,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_Performance_ComplexLocaleQuery()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 query.SetLocale("en-us");
@@ -141,6 +193,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 15000, $"Complex locale query should complete within 15s, took {elapsed}ms");
         }
@@ -153,9 +207,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_EmptyLocale_FallsBackToDefault()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -163,6 +224,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
         }
         
@@ -170,9 +233,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task LocaleExtended_MultipleLocaleRequests_Independent()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry1 = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -185,6 +255,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
         }

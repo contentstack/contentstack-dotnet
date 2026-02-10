@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.QueryTests
 {
@@ -13,18 +14,28 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
     /// Tests for Complex Query Combinations (AND, OR, nested queries)
     /// </summary>
     [Trait("Category", "ComplexQueryCombinations")]
-    public class ComplexQueryCombinationsTest
+    public class ComplexQueryCombinationsTest : IntegrationTestBase
     {
+        public ComplexQueryCombinationsTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Triple AND Conditions
         
         [Fact(DisplayName = "Query Operations - Complex Query Triple And All Conditions Met")]
         public async Task ComplexQuery_TripleAnd_AllConditionsMet()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
             var sub3 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("url");
@@ -32,6 +43,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -39,16 +52,25 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_AndWithDifferentOperators_Combined()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Where("uid", TestDataHelper.ComplexEntryUid);
             query.And(new List<Query> { sub1, sub2 });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -60,10 +82,18 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_TripleOr_AnyConditionMet()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+            LogContext("EntryUid", TestDataHelper.MediumEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("uid", TestDataHelper.SimpleEntryUid);
             var sub2 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("uid", TestDataHelper.MediumEntryUid);
             var sub3 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Exists("title");
@@ -71,6 +101,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -78,16 +110,24 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_OrWithDifferentFields_Flexible()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("authors");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("related_content");
             query.Or(new List<Query> { sub1, sub2 });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -99,10 +139,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_AndInsideOr_NestedLogic()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - (A AND B) OR (C AND D)
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var and1Sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var and1Sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
             var and1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().And(new List<Query> { and1Sub1, and1Sub2 });
@@ -115,6 +161,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -122,10 +170,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_OrInsideAnd_NestedLogic()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - (A OR B) AND (C OR D)
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var or1Sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var or1Sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("url");
             var or1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Or(new List<Query> { or1Sub1, or1Sub2 });
@@ -138,6 +192,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -149,10 +205,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_AndWithReferences_FiltersAndIncludes()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("authors");
             query.And(new List<Query> { sub1, sub2 });
@@ -160,6 +222,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -167,10 +231,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_OrWithProjection_CombinesFeatures()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("url");
             query.Or(new List<Query> { sub1, sub2 });
@@ -178,6 +248,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -189,10 +261,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_AndWithPagination_LimitedResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
             query.And(new List<Query> { sub1, sub2 });
@@ -200,6 +278,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(result.Items.Count() <= 5);
         }
@@ -208,10 +288,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_OrWithSorting_OrderedResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("url");
             query.Or(new List<Query> { sub1, sub2 });
@@ -219,6 +305,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -230,10 +318,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexQuery_Performance_NestedCombinations()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
@@ -244,6 +338,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 15000, $"Complex nested query should complete within 15s, took {elapsed}ms");
         }

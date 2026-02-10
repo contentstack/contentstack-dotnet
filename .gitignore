@@ -33,7 +33,9 @@ Contentstack.Core.Tests/app.config
 # Test Results
 TestResults/
 test-report*.html
+test-report-enhanced*.html
 *.trx
+docs
 
 # Security Scan Reports
 SECURITY-SCAN-REPORT.txt

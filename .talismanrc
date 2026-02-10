@@ -40,7 +40,7 @@ fileignoreconfig:
 - filename: Contentstack.Core.Tests/Integration/ReferenceTests/MultiReferenceTest.cs
   checksum: 6b24eafdffb7fcb92d0e118b1092c151fed75505fc50bb138d706a51aed606d7
 - filename: Contentstack.Core.Tests/Integration/VariantsTests/EntryVariantsComprehensiveTest.cs
-  checksum: 7afa0f5d5f821f224c7e0df3e589d9138cd69cb4e7463501a33474be582150cf
+  checksum: 5c16d15ac80dfcec8b85b67c83bcd2e962b365a95f4a8553f52fc3bc22d15fee
 - filename: Contentstack.Core.Tests/Integration/StackTests/StackOperationsComprehensiveTest.cs
   checksum: 522fff363dad0bb89b2d1ab263c569037cf087227c4f420164168ec03788edd4
 - filename: Contentstack.Core.Tests/Integration/ContentTypeTests/ContentTypeOperationsTest.cs
@@ -83,4 +83,10 @@ fileignoreconfig:
   checksum: 67c8afb436287676e0db3a62a9213d800239cf5bb543cc4d81f438655abf0e1f
 - filename: Contentstack.Core.Tests/generate_html_report.py
   checksum: b4bec9ef853703e989b3d8077edc5c3ec6ea13a23826699d8beca5e87323e128
+- filename: Contentstack.Core.Tests/Helpers/IntegrationTestBase.cs
+  checksum: fe8a38f19e916767f6a016b33d4e8cd12316aaf70a8a46bcd6e44fedcbe921d7
+- filename: Contentstack.Core.Tests/Helpers/TestOutputHelper.cs
+  checksum: 70eec33b6a5b3d1adada6309837d88c12f677e99e87d8517cb7f9a23537e1a8c
+- filename: Scripts/generate_enhanced_html_report.py
+  checksum: e31c1372ea6e1cd1381c9533ba89b95edf746b36e4a1098d4aa51fba296ca928
 version: "1.0"

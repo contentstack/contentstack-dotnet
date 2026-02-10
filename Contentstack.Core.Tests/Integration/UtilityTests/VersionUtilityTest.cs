@@ -2,21 +2,31 @@ using System;
 using System.Reflection;
 using Contentstack.Core.Internals;
 using Xunit;
+using Xunit.Abstractions;
+using Contentstack.Core.Tests.Helpers;
 
 namespace Contentstack.Core.Tests.Integration.UtilityTests
 {
     [Trait("Category", "Utility")]
-    public class VersionUtilityTest
+    public class VersionUtilityTest : IntegrationTestBase
     {
+        public VersionUtilityTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region GetSdkVersion Tests
 
         [Fact(DisplayName = "Get Sdk Version Returns Valid Format")]
         public void GetSdkVersion_ReturnsValidFormat()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(version);
             Assert.StartsWith("contentstack-delivery-dotnet/", version);
             Assert.True(version.Length > "contentstack-delivery-dotnet/".Length);
@@ -26,10 +36,14 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_ReturnsConsistentResult()
         {
             // Act
+            LogAct("Performing test action");
+
             var version1 = VersionUtility.GetSdkVersion();
             var version2 = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.Equal(version1, version2);
         }
 
@@ -37,9 +51,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_DoesNotReturnNull()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(version);
             Assert.NotEmpty(version);
         }
@@ -48,9 +66,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_DoesNotReturnEmptyString()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotEmpty(version);
         }
 
@@ -58,9 +80,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_ContainsExpectedPrefix()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.StartsWith("contentstack-delivery-dotnet/", version);
         }
 
@@ -68,9 +94,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_DoesNotContainSpaces()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.DoesNotContain(" ", version);
         }
 
@@ -78,9 +108,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_DoesNotContainNewlines()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.DoesNotContain("\n", version);
             Assert.DoesNotContain("\r", version);
         }
@@ -137,12 +171,18 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void ExtractSemanticVersion_NullInput_ReturnsNull()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var method = typeof(VersionUtility).GetMethod("ExtractSemanticVersion", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act
+            LogAct("Performing test action");
+
             var result = method.Invoke(null, new object[] { null }) as string;
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.Null(result);
         }
 
@@ -223,6 +263,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // and returns a fallback value when assembly reflection fails
             
             // Act & Assert - should not throw
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
             Assert.NotNull(version);
             Assert.NotEmpty(version);
@@ -235,9 +277,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // the method falls back to other version sources or returns "dev"
             
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(version);
             Assert.True(version == "contentstack-delivery-dotnet/dev" || 
                        version.StartsWith("contentstack-delivery-dotnet/"));
@@ -293,9 +339,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // and returns null when parsing fails
             
             // Arrange
+            LogArrange("Setting up test");
+
             var method = typeof(VersionUtility).GetMethod("ExtractSemanticVersion", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Act & Assert - should not throw
+            LogAct("Performing test action");
+
             var result = method.Invoke(null, new object[] { "invalid-version-string" }) as string;
             Assert.Null(result);
         }
@@ -308,9 +358,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_Integration_ReturnsValidUserAgentFormat()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(version);
             Assert.StartsWith("contentstack-delivery-dotnet/", version);
             
@@ -325,9 +379,13 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_Integration_CanBeUsedInHttpHeaders()
         {
             // Act
+            LogAct("Performing test action");
+
             var version = VersionUtility.GetSdkVersion();
 
             // Assert
+            LogAssert("Verifying response");
+
             // Verify the version string is suitable for HTTP headers
             Assert.NotNull(version);
             Assert.NotEmpty(version);
@@ -347,6 +405,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_Performance_ReturnsQuickly()
         {
             // Act & Assert
+            LogAct("Performing test action");
+
             var startTime = DateTime.UtcNow;
             var version = VersionUtility.GetSdkVersion();
             var endTime = DateTime.UtcNow;
@@ -361,6 +421,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
         public void GetSdkVersion_Performance_MultipleCalls_Consistent()
         {
             // Act
+            LogAct("Performing test action");
+
             var versions = new string[100];
             for (int i = 0; i < 100; i++)
             {
@@ -368,6 +430,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             }
 
             // Assert
+            LogAssert("Verifying response");
+
             var firstVersion = versions[0];
             for (int i = 1; i < versions.Length; i++)
             {

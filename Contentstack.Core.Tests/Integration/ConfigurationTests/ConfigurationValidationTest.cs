@@ -6,6 +6,7 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
 using Contentstack.Core.Tests.Models;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration
 {
@@ -13,11 +14,23 @@ namespace Contentstack.Core.Tests.Integration
     /// Validates that the test infrastructure is properly set up
     /// This test should run first to ensure all dependencies are working
     /// </summary>
-    public class ConfigurationValidationTest
+    public class ConfigurationValidationTest : IntegrationTestBase
     {
+        public ConfigurationValidationTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         [Fact(DisplayName = "Test Data Helper All Required Configuration Present")]
         public void TestDataHelper_AllRequiredConfigurationPresent()
         {
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("ContentType", TestDataHelper.MediumContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+            LogContext("EntryUid", TestDataHelper.MediumEntryUid);
+
             // Arrange & Act & Assert
             // This will throw if any required configuration is missing
             Assert.NotNull(TestDataHelper.Host);
@@ -35,6 +48,8 @@ namespace Contentstack.Core.Tests.Integration
         [Fact(DisplayName = "Test Data Helper Validation Passes")]
         public void TestDataHelper_ValidationPasses()
         {
+            LogArrange("Setting up test");
+
             // Arrange & Act & Assert
             // Should not throw
             TestDataHelper.ValidateConfiguration();
@@ -48,6 +63,8 @@ namespace Contentstack.Core.Tests.Integration
             var livePreviewConfigured = TestDataHelper.IsLivePreviewConfigured();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(branchUid); // Should default to "main"
             // Live preview may or may not be configured
             Assert.True(livePreviewConfigured || !livePreviewConfigured); // Just checking it doesn't throw
@@ -57,6 +74,9 @@ namespace Contentstack.Core.Tests.Integration
         public async Task StackConnectivity_CanConnectToStack()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var config = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -67,11 +87,16 @@ namespace Contentstack.Core.Tests.Integration
             var client = new ContentstackClient(config);
             
             // Act
+            LogAct("Performing test action");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             var query = contentType.Query();
             var result = await query.FindOne<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() > 0, "Should fetch at least one entry from the stack");
@@ -81,6 +106,10 @@ namespace Contentstack.Core.Tests.Integration
         public async Task EntryFactory_CanFetchEntry()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var config = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -92,12 +121,16 @@ namespace Contentstack.Core.Tests.Integration
             var factory = new EntryFactory(client);
             
             // Act
+            LogAct("Performing test action");
+
             var entry = await factory.FetchEntryAsync<Entry>(
                 TestDataHelper.SimpleContentTypeUid,
                 TestDataHelper.SimpleEntryUid
             );
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
             Assert.NotNull(entry.Title);
@@ -112,6 +145,8 @@ namespace Contentstack.Core.Tests.Integration
             var simpleModel = new SimpleContentTypeModel();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(complexModel);
             Assert.NotNull(mediumModel);
             Assert.NotNull(simpleModel);
@@ -121,6 +156,10 @@ namespace Contentstack.Core.Tests.Integration
         public async Task GenericModels_CanBeUsedWithSDK()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var config = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -131,12 +170,17 @@ namespace Contentstack.Core.Tests.Integration
             var client = new ContentstackClient(config);
             
             // Act - Fetch using strongly-typed model
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<SimpleContentTypeModel>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.IsType<SimpleContentTypeModel>(entry);
             Assert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
@@ -147,6 +191,10 @@ namespace Contentstack.Core.Tests.Integration
         public async Task PerformanceHelper_CanMeasureOperations()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var config = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -157,6 +205,9 @@ namespace Contentstack.Core.Tests.Integration
             var client = new ContentstackClient(config);
             
             // Act - Measure a simple fetch operation
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -166,6 +217,8 @@ namespace Contentstack.Core.Tests.Integration
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed >= 0, $"Elapsed time should be non-negative, got {elapsed}ms");
             Assert.True(elapsed < 30000, $"Single fetch should complete within 30s, took {elapsed}ms");
@@ -175,6 +228,8 @@ namespace Contentstack.Core.Tests.Integration
         public void DirectoryStructure_AllDirectoriesExist()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var baseTestPath = System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetExecutingAssembly().Location
             );
@@ -182,6 +237,8 @@ namespace Contentstack.Core.Tests.Integration
             var projectRoot = System.IO.Directory.GetParent(baseTestPath)?.Parent?.Parent?.FullName;
             
             // Act & Assert - Check that key directories exist
+            LogAct("Performing test action");
+
             Assert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Integration")), 
                 "Integration directory should exist");
             Assert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Helpers")), 

@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.PaginationTests
 {
@@ -14,22 +15,34 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
     /// Tests limit, skip, multiple pages, and pagination edge cases
     /// </summary>
     [Trait("Category", "PaginationComprehensive")]
-    public class PaginationComprehensiveTest
+    public class PaginationComprehensiveTest : IntegrationTestBase
     {
+        public PaginationComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Pagination
         
         [Fact(DisplayName = "Pagination - Pagination Limit Returns Limited Results")]
         public async Task Pagination_Limit_ReturnsLimitedResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Limit(3);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // ✅ KEY TEST: Verify limit is applied
@@ -41,15 +54,23 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_Skip_SkipsResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Skip(2);
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // ✅ KEY TEST: Verify skip and limit applied
@@ -62,15 +83,23 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_LimitAndSkip_CombineCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Limit(3);
             query.Skip(1);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // ✅ KEY TEST: Verify both limit and skip applied
@@ -87,15 +116,23 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_FirstPage_ReturnsFirstSet()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Page 1
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Limit(3);
             query.Skip(0);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // ✅ KEY TEST: Verify pagination params for first page
@@ -111,9 +148,15 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_SortedPages_ConsistentOrder()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Page 1 sorted
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.Descending("created_at");
             query1.Limit(2);
@@ -127,6 +170,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             var page2 = await query2.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(page1);
             Assert.NotNull(page2);
         }
@@ -139,10 +184,16 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_Performance_SmallPage()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 query.Limit(5);
@@ -150,6 +201,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 5000, $"Small page should complete within 5s, took {elapsed}ms");
         }
@@ -158,10 +211,16 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_Performance_LargePage()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 query.Limit(50);
@@ -169,6 +228,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 10000, $"Large page should complete within 10s, took {elapsed}ms");
         }
@@ -181,13 +242,21 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_ZeroLimit_ReturnsDefault()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Default limit should apply
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -196,15 +265,23 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         public async Task Pagination_LargeSkip_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Skip beyond available results
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Skip(1000);
             query.Limit(5);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // Should return empty or remaining items

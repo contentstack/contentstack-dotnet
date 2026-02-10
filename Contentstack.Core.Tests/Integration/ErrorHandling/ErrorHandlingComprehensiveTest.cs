@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.ErrorHandling
 {
@@ -14,14 +15,21 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
     /// Tests various error scenarios: invalid credentials, missing resources, malformed requests
     /// </summary>
     [Trait("Category", "ErrorHandling")]
-    public class ErrorHandlingComprehensiveTest
+    public class ErrorHandlingComprehensiveTest : IntegrationTestBase
     {
+        public ErrorHandlingComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Invalid Credentials
         
         [Fact(DisplayName = "Error Handling - Error Invalid API Key Throws Exception")]
         public async Task Error_InvalidAPIKey_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -32,6 +40,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
             var client = new ContentstackClient(options);
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Find<Entry>();
@@ -42,6 +53,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidDeliveryToken_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -52,6 +66,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
             var client = new ContentstackClient(options);
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Find<Entry>();
@@ -62,6 +79,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidEnvironment_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
@@ -72,6 +92,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
             var client = new ContentstackClient(options);
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Find<Entry>();
@@ -86,9 +109,14 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidContentType_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateValidClient();
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{"invalid_content_type_xyz"}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType("invalid_content_type_xyz").Query().Find<Entry>();
@@ -99,9 +127,15 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidEntryUid_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateValidClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{"invalid_entry_uid_xyz_123"}");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client
@@ -115,9 +149,14 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidAssetUid_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up fetch operation");
+
             var client = CreateValidClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{"invalid_asset_uid_xyz_123"}");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.Asset("invalid_asset_uid_xyz_123").Fetch();
@@ -128,9 +167,16 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_NonExistentReference_DoesNotCrash()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateValidClient();
             
             // Act - Include non-existent reference (should not crash)
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -138,6 +184,8 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
                 .Fetch<Entry>();
             
             // Assert - Should return entry even if reference doesn't exist
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
         }
@@ -150,14 +198,22 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidQueryParameter_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateValidClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Query with non-existent field
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("non_existent_field_xyz_123", "some_value");
             var result = await query.Find<Entry>();
             
             // Assert - Should return empty results
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.Equal(0, result.Items.Count());
@@ -167,9 +223,16 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidLocale_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateValidClient();
             
             // Act & Assert - Should handle invalid locale
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -192,14 +255,22 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_ExtremelyLargeLimit_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateValidClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Very large limit (beyond API limits)
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Limit(10000);
             var result = await query.Find<Entry>();
             
             // Assert - Should handle gracefully (API will enforce its own limits)
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
         }
@@ -208,10 +279,16 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_NegativeSkip_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateValidClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Negative skip value
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             try
             {
                 query.Skip(-1);
@@ -235,6 +312,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_InvalidHost_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var options = new ContentstackOptions()
             {
                 Host = "invalid.host.xyz.contentstack.io",
@@ -246,6 +326,9 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
             var client = new ContentstackClient(options);
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Find<Entry>();
@@ -260,9 +343,14 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_EmptyContentTypeUid_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+
             var client = CreateValidClient();
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{""}/entries");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType("").Query().Find<Entry>();
@@ -273,9 +361,15 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public async Task Error_EmptyEntryUid_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateValidClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{""}");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client
@@ -289,6 +383,8 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
         public void Error_NullOptions_ThrowsException()
         {
             // Act & Assert - Should throw exception (ArgumentNullException or NullReferenceException)
+            LogAct("Performing test action");
+
             Assert.ThrowsAny<Exception>(() =>
             {
                 var client = new ContentstackClient((ContentstackOptions)null);

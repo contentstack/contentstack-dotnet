@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.CachingTests
 {
@@ -14,23 +15,36 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
     /// Note: The .NET SDK may use in-memory caching. These tests verify the API behavior.
     /// </summary>
     [Trait("Category", "CachePersistence")]
-    public class CachePersistenceTest
+    public class CachePersistenceTest : IntegrationTestBase
     {
+        public CachePersistenceTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Cache Behavior Tests
         
         [Fact(DisplayName = "Caching - Cache First Fetch Makes API Call")]
         public async Task Cache_FirstFetch_MakesAPICall()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -45,9 +59,16 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_SecondFetch_SameEntry()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act - Fetch same entry twice
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry1 = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -59,6 +80,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
             Assert.Equal(entry1.Uid, entry2.Uid);
@@ -68,9 +91,18 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_DifferentEntries_Independent()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("ContentType", TestDataHelper.MediumContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+            LogContext("EntryUid", TestDataHelper.MediumEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry1 = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -82,6 +114,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
             Assert.NotEqual(entry1.Uid, entry2.Uid);
@@ -95,9 +129,15 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_QueryResults_Consistent()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Same query twice
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.Limit(5);
             var result1 = await query1.Find<Entry>();
@@ -107,6 +147,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
             var result2 = await query2.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result1);
             Assert.NotNull(result2);
         }
@@ -115,9 +157,15 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_DifferentQueries_IndependentResults()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.Limit(3);
             var result1 = await query1.Find<Entry>();
@@ -127,6 +175,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
             var result2 = await query2.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result1);
             Assert.NotNull(result2);
         }
@@ -139,13 +189,21 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_AssetFetch_Consistent()
         {
             // Arrange
+            LogArrange("Setting up fetch operation");
+            LogContext("AssetUid", TestDataHelper.ImageAssetUid);
+
             var client = CreateClient();
             
             // Act - Fetch same asset twice
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
+
             var asset1 = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             var asset2 = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(asset1);
             Assert.NotNull(asset2);
             Assert.Equal(asset1.Uid, asset2.Uid);
@@ -155,9 +213,14 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_AssetQuery_Consistent()
         {
             // Arrange
+            LogArrange("Setting up fetch all operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching all items");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
+
             var assetLib1 = client.AssetLibrary();
             assetLib1.Limit(5);
             var result1 = await assetLib1.FetchAll();
@@ -167,6 +230,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
             var result2 = await assetLib2.FetchAll();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result1);
             Assert.NotNull(result2);
         }
@@ -179,9 +244,16 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_Performance_RepeatedFetch()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act - First fetch
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (entry1, elapsed1) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client
@@ -200,6 +272,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
             // Both should complete within reasonable time
@@ -211,10 +285,17 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_Performance_MultipleClients()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client1 = CreateClient();
             var client2 = CreateClient();
             
             // Act - Different clients, same entry
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var (entry1, elapsed1) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client1
@@ -232,6 +313,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
         }
@@ -244,10 +327,17 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_MultipleClients_IndependentCaches()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client1 = CreateClient();
             var client2 = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry1 = await client1
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -259,6 +349,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
                 .Fetch<Entry>();
             
             // Assert - Both should succeed independently
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
             Assert.Equal(entry1.Uid, entry2.Uid);
@@ -279,6 +371,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
         }
@@ -291,9 +385,16 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_WithReferences_CachesAll()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act - Fetch with references twice
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             var entry1 = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
@@ -307,6 +408,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
         }
@@ -315,9 +418,16 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
         public async Task Cache_DifferentProjections_IndependentCache()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act - Same entry, different projections
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry1 = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -331,6 +441,8 @@ namespace Contentstack.Core.Tests.Integration.CachingTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry1);
             Assert.NotNull(entry2);
         }

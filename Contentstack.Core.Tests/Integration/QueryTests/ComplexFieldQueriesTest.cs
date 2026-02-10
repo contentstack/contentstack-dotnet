@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.QueryTests
 {
@@ -13,22 +14,34 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
     /// Tests for Complex Field Queries (nested fields, groups, modular blocks)
     /// </summary>
     [Trait("Category", "ComplexFieldQueries")]
-    public class ComplexFieldQueriesTest
+    public class ComplexFieldQueriesTest : IntegrationTestBase
     {
+        public ComplexFieldQueriesTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Group Field Queries
         
         [Fact(DisplayName = "Complex Field Query Group Field By Dot Notation")]
         public async Task ComplexField_QueryGroupField_ByDotNotation()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("group.nested_field");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -36,14 +49,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryNestedGroup_DeepPath()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("group.nested_group.deep_field");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -51,14 +72,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_WhereOnGroupField_FiltersCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Where("group.title", "Test");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -70,14 +99,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryModularBlock_ExistsCheck()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("modular_blocks");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -85,14 +122,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryModularBlockField_DotNotation()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("modular_blocks.block_title");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -104,14 +149,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryJsonRte_ExistsCheck()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("json_rte");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -119,15 +172,23 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryJsonRteEmbedded_FindsEntries()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.includeEmbeddedItems();
             query.Exists("json_rte");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -139,14 +200,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryArrayField_ContainedIn()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.ContainedIn("multi_select", new object[] { "option1", "option2" });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -154,14 +223,23 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryMultiReference_ArrayContainment()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.ContainedIn("authors", new object[] { TestDataHelper.SimpleEntryUid });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -173,14 +251,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryFileField_Exists()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("file");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -188,16 +274,24 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryMultipleFileFields_AndCondition()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("file");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("image");
             query.And(new List<Query> { sub1, sub2 });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -209,14 +303,23 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryTaxonomy_ByTerm()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Where("taxonomy.usa_states", TestDataHelper.TaxUsaState);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -224,16 +327,26 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_QueryMultipleTaxonomies_OrCondition()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxUsaState);
+            LogContext("TaxonomyTerm", TestDataHelper.TaxIndiaState);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Where("taxonomy.usa_states", TestDataHelper.TaxUsaState);
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Where("taxonomy.india_states", TestDataHelper.TaxIndiaState);
             query.Or(new List<Query> { sub1, sub2 });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -245,10 +358,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task ComplexField_Performance_DeepNestedQuery()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 query.Exists("group.nested_group.deep_field");
@@ -256,6 +375,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 10000, $"Nested query should complete within 10s, took {elapsed}ms");
         }

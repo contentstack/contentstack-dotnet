@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.LocalizationTests
 {
@@ -14,17 +15,28 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
     /// Tests fallback behavior, locale inheritance, and multi-locale scenarios
     /// </summary>
     [Trait("Category", "LocaleFallback")]
-    public class LocaleFallbackChainTest
+    public class LocaleFallbackChainTest : IntegrationTestBase
     {
+        public LocaleFallbackChainTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Basic Fallback
         
         [Fact(DisplayName = "Fallback Basic Include Enables Fallback")]
         public async Task Fallback_BasicInclude_EnablesFallback()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -50,9 +62,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_WithoutFallback_ReturnsLocaleOnly()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
@@ -60,6 +79,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 .Fetch<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(entry);
             Assert.NotNull(entry.Uid);
             Assert.NotEmpty(entry.Uid);
@@ -78,9 +99,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_MissingLocale_FallsBackToDefault()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -103,9 +131,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_PartialTranslation_MixesLocales()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             try
             {
                 var entry = await client
@@ -132,10 +167,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_Query_WithFallback()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act & Assert
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             try
             {
                 query.SetLocale("en-us");
@@ -156,9 +197,15 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_Query_MultipleLocales()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Query same content in different locales
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.SetLocale("en-us");
             query1.IncludeFallback();
@@ -171,6 +218,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             var result2 = await query2.Limit(3).Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result1);
             Assert.NotNull(result2);
         }
@@ -183,9 +232,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_WithReferences_AppliesFallbackToRefs()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             try
             {
                 var entry = await client
@@ -209,9 +265,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_DeepReferencesWithFallback_Consistent()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
+
             try
             {
                 var entry = await client
@@ -241,9 +304,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_Performance_WithFallback()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
@@ -273,9 +343,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_InvalidLocale_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client
@@ -301,9 +378,16 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
         public async Task Fallback_NoTranslation_FallsBackCompletely()
         {
             // Arrange
+            LogArrange("Setting up entry fetch test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Fetching entry from API");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
+
             try
             {
                 var entry = await client

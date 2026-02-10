@@ -7,6 +7,7 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.SyncTests
 {
@@ -15,20 +16,30 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
     /// Tests sync initialization, pagination, delta sync, and content type filtering
     /// </summary>
     [Trait("Category", "SyncAPI")]
-    public class SyncApiComprehensiveTest
+    public class SyncApiComprehensiveTest : IntegrationTestBase
     {
+        public SyncApiComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Sync Initialization
         
         [Fact(DisplayName = "Sync API - Sync Initialize All Returns Initial Sync Data")]
         public async Task Sync_InitializeAll_ReturnsInitialSyncData()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.True(syncResult.TotalCount >= 0);
@@ -41,12 +52,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_InitializeWithSyncType_ReturnsFilteredData()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(SyncType: SyncType.EntryPublished);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.True(syncResult.TotalCount >= 0);
@@ -57,13 +74,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_InitializeWithStartDate_ReturnsSyncFromDate()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var startDate = DateTime.Now.AddDays(-30);
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(StartFrom: startDate);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.NotNull(syncResult.SyncToken);
@@ -78,12 +101,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_EntryPublished_ReturnsOnlyPublishedEntries()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(SyncType: SyncType.EntryPublished);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             // Verify items are entries (not assets)
@@ -95,12 +124,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_AssetPublished_ReturnsOnlyPublishedAssets()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(SyncType: SyncType.AssetPublished);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.True(syncResult.TotalCount >= 0);
@@ -111,12 +146,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_CombinedTypes_ReturnsMultipleTypes()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act - Combine EntryPublished and AssetPublished
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(SyncType: SyncType.EntryPublished | SyncType.AssetPublished);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.True(syncResult.TotalCount >= 0);
@@ -127,12 +168,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_DeletedContent_ReturnsDeletedItems()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(SyncType: SyncType.EntryDeleted | SyncType.AssetDeleted);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             // May return 0 if no deletions
@@ -148,12 +195,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_WithContentTypeFilter_ReturnsOnlySpecifiedContentType()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(ContentTypeUid: TestDataHelper.SimpleContentTypeUid);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.True(syncResult.TotalCount >= 0);
@@ -164,16 +218,23 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_ContentTypeWithDate_ReturnsCombinedFilter()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var startDate = DateTime.Now.AddDays(-7);
             
             // Act
+            LogAct("Performing test action");
+
             var syncResult = await client.SyncRecursive(
                 ContentTypeUid: TestDataHelper.ComplexContentTypeUid,
                 StartFrom: startDate
             );
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.NotNull(syncResult.SyncToken);
@@ -188,6 +249,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_DeltaWithToken_ReturnsIncrementalChanges()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // First sync to get initial token
@@ -195,9 +258,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             var syncToken = initialSync.SyncToken;
             
             // Act - Delta sync with token
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var deltaSync = await client.SyncToken(syncToken);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(deltaSync);
             Assert.NotNull(deltaSync.Items);
             Assert.NotNull(deltaSync.SyncToken);
@@ -210,6 +278,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_MultipleDeltaSyncs_MaintainsConsistency()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Initial sync
@@ -221,9 +291,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             var token2 = sync2.SyncToken;
             
             // Act - Second delta
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var sync3 = await client.SyncToken(token2);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(sync3);
             Assert.NotNull(sync3.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -239,12 +314,16 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_WithPagination_HandlesPaginationToken()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Get initial sync (may have pagination)
             var initialSync = await client.SyncRecursive();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(initialSync);
             Assert.NotNull(initialSync.Items);
             // If pagination_token exists, verify it's handled
@@ -259,15 +338,21 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_Recursive_AutoHandlesPagination()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act - SyncRecursive should handle all pagination automatically
+            LogAct("Performing test action");
+
             var (syncResult, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.SyncRecursive();
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(syncResult);
             Assert.NotNull(syncResult.Items);
             Assert.Null(syncResult.PaginationToken); // Should be null after recursive sync
@@ -285,9 +370,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_InvalidSyncToken_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.SyncToken("invalid_sync_token_xyz_123");
@@ -298,9 +388,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task Sync_InvalidPaginationToken_ThrowsException()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act & Assert
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.SyncPaginationToken("invalid_pagination_token_xyz");

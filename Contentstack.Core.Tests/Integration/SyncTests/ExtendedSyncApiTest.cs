@@ -7,6 +7,7 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.SyncTests
 {
@@ -15,20 +16,30 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
     /// Additional sync scenarios beyond the basic comprehensive tests
     /// </summary>
     [Trait("Category", "ExtendedSyncApi")]
-    public class ExtendedSyncApiTest
+    public class ExtendedSyncApiTest : IntegrationTestBase
     {
+        public ExtendedSyncApiTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Additional Sync Type Tests
         
         [Fact(DisplayName = "Sync API - Extended Sync Asset Published Syncs Only Published Assets")]
         public async Task ExtendedSync_AssetPublished_SyncsOnlyPublishedAssets()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(SyncType: SyncType.AssetPublished);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -38,12 +49,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_AssetDeleted_SyncsOnlyDeletedAssets()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(SyncType: SyncType.AssetDeleted);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -53,12 +70,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_AssetUnpublished_SyncsOnlyUnpublishedAssets()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(SyncType: SyncType.AssetUnpublished);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -68,12 +91,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_ContentTypeDeleted_SyncsDeletedContentTypes()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(SyncType: SyncType.ContentTypeDeleted);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -87,13 +116,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_StartFromDate_SyncsFromSpecificDate()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var startDate = DateTime.Now.AddDays(-7); // Last week
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(StartFrom: startDate);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -103,13 +138,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_RecentDate_LimitedResults()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var recentDate = DateTime.Now.AddHours(-1);
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(StartFrom: recentDate);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -119,13 +160,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_OldDate_ManyResults()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var oldDate = DateTime.Now.AddMonths(-1);
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(StartFrom: oldDate);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -139,9 +186,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_SaveAndReuseSyncToken_Consistent()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act - Initial sync
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var sync1 = await client.SyncRecursive();
             var savedToken = sync1.SyncToken;
             
@@ -149,6 +201,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             var sync2 = await client.SyncToken(savedToken);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(sync1);
             Assert.NotNull(sync2);
             Assert.NotEmpty(savedToken);
@@ -160,9 +214,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_MultipleDeltaSyncs_TokenProgression()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act - Chain of delta syncs
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var sync1 = await client.SyncRecursive();
             var token1 = sync1.SyncToken;
             
@@ -172,6 +231,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             var sync3 = await client.SyncToken(token2);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(sync1);
             Assert.NotNull(sync2);
             Assert.NotNull(sync3);
@@ -186,12 +247,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_SpecificContentType_FiltersCorrectly()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(ContentTypeUid: TestDataHelper.SimpleContentTypeUid);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -201,12 +269,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_ComplexContentType_HandlesLargeData()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive(ContentTypeUid: TestDataHelper.ComplexContentTypeUid);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -216,9 +291,15 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_DeltaForContentType_SpecificChanges()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Initial sync for content type
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var sync1 = await client.SyncRecursive(ContentTypeUid: TestDataHelper.SimpleContentTypeUid);
             var token = sync1.SyncToken;
             
@@ -226,6 +307,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             var sync2 = await client.SyncToken(token);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(sync2);
             Assert.NotNull(sync2.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -239,12 +322,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_PaginationToken_HandlesLargeSync()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act - Initial sync may return pagination token
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.SyncToken);
             // Token validation // Sync token must be present and non-empty
@@ -254,9 +343,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_FollowPaginationToken_CompleteSync()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var result = await client.SyncRecursive();
             
             // If pagination token exists, follow it
@@ -267,6 +361,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             }
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
         }
         
@@ -278,12 +374,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_ResultStructure_ValidFormat()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.NotNull(result.SyncToken);
@@ -295,12 +397,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_ItemsCollection_AccessibleAndValid()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var result = await client.SyncRecursive();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result.Items);
             Assert.IsAssignableFrom<IEnumerable<object>>(result.Items);
         }
@@ -313,15 +421,21 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_Performance_InitialSync()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.SyncRecursive();
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 30000, $"Initial sync should complete within 30s, took {elapsed}ms");
         }
@@ -330,17 +444,24 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_Performance_DeltaSync()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             var sync1 = await client.SyncRecursive();
             var token = sync1.SyncToken;
             
             // Act
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.SyncToken(token);
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 15000, $"Delta sync should complete within 15s, took {elapsed}ms");
         }
@@ -349,15 +470,22 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_Performance_ContentTypeSync()
         {
             // Arrange
+            LogArrange("Setting up test");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing test action");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.SyncRecursive(ContentTypeUid: TestDataHelper.SimpleContentTypeUid);
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 20000, $"Content type sync should complete within 20s, took {elapsed}ms");
         }
@@ -370,9 +498,14 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_FullSyncFlow_InitialToDelta()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act - Complete flow
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             // 1. Initial sync
             var initialSync = await client.SyncRecursive();
             Assert.NotNull(initialSync.SyncToken);
@@ -389,6 +522,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Token validation // Sync token must be present and non-empty
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(initialSync);
             Assert.NotNull(delta1);
             Assert.NotNull(delta2);
@@ -398,15 +533,22 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_TypedSyncFlow_EntryPublishedOnly()
         {
             // Arrange
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             
             // Act
+            LogAct("Performing sync operation");
+            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
+
             var sync1 = await client.SyncRecursive(SyncType: SyncType.EntryPublished);
             var token = sync1.SyncToken;
             
             var sync2 = await client.SyncToken(token);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(sync1);
             Assert.NotNull(sync2);
         }
@@ -415,13 +557,19 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
         public async Task ExtendedSync_DateBasedFlow_RecentChanges()
         {
             // Arrange
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var startDate = DateTime.Now.AddDays(-3);
             
             // Act
+            LogAct("Performing test action");
+
             var sync = await client.SyncRecursive(StartFrom: startDate);
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(sync);
             Assert.NotNull(sync.SyncToken);
             // Token validation // Sync token must be present and non-empty

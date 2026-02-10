@@ -5,12 +5,18 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 using Contentstack.Core.Configuration;
+using Xunit.Abstractions;
+using Contentstack.Core.Tests.Helpers;
 
 namespace Contentstack.Core.Tests.Integration.ClientTests
 {
     [Trait("Category", "ClientInternal")]
-    public class ContentstackClientTest
+    public class ContentstackClientTest : IntegrationTestBase
     {
+        public ContentstackClientTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         private ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
@@ -41,6 +47,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Set Entry Uid Sets Value When Non Empty")]
         public void SetEntryUid_SetsValue_WhenNonEmpty()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.SetEntryUid("entry123");
             Assert.Equal("entry123", GetPrivateField(client, "currentEntryUid"));
@@ -49,6 +57,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Set Entry Uid Does Not Set When Empty")]
         public void SetEntryUid_DoesNotSet_WhenEmpty()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.SetEntryUid("entry123");
             client.SetEntryUid("");
@@ -58,6 +68,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Set Entry Uid Does Not Set When Null")]
         public void SetEntryUid_DoesNotSet_WhenNull()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.SetEntryUid("entry123");
             client.SetEntryUid(null);
@@ -67,6 +79,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Content Type Setscurrent Contenttype Uid When Non Empty")]
         public void ContentType_SetscurrentContenttypeUid_WhenNonEmpty()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.ContentType("blog");
             Assert.Equal("blog", GetPrivateField(client, "currentContenttypeUid"));
@@ -75,6 +89,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Content Type Does Not Set When Empty")]
         public void ContentType_DoesNotSet_WhenEmpty()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.ContentType("blog");
             client.ContentType("");
@@ -84,6 +100,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Content Type Does Not Set When Null")]
         public void ContentType_DoesNotSet_WhenNull()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.ContentType("blog");
             client.ContentType(null);
@@ -93,6 +111,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Content Type Returns Content Type Instance")]
         public void ContentType_ReturnsContentTypeInstance()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var contentType = client.ContentType("blog");
             Assert.NotNull(contentType);
@@ -102,6 +122,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Global Field Returns Global Field Instance")]
         public void GlobalField_ReturnsGlobalFieldInstance()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var globalField = client.GlobalField("author");
             Assert.NotNull(globalField);
@@ -111,6 +133,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Asset Returns Asset Instance")]
         public void Asset_ReturnsAssetInstance()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var asset = client.Asset("asset_uid");
             Assert.NotNull(asset);
@@ -120,6 +144,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Asset Library Returns Asset Library Instance")]
         public void AssetLibrary_ReturnsAssetLibraryInstance()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var assetLibrary = client.AssetLibrary();
             Assert.NotNull(assetLibrary);
@@ -128,6 +154,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Taxonomies Returns Taxonomy Instance")]
         public void Taxonomies_ReturnsTaxonomyInstance()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var taxonomy = client.Taxonomies();
             Assert.NotNull(taxonomy);
@@ -136,6 +164,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Get Version Returns Version")]
         public void GetVersion_ReturnsVersion()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             var t = client.GetVersion();
             Assert.Equal("1.2.3", client.GetVersion());
@@ -144,6 +174,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Get Application Key Returns Api Key")]
         public void GetApplicationKey_ReturnsApiKey()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             Assert.Equal("api_key", client.GetApplicationKey());
         }
@@ -151,6 +183,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Get Access Token Returns Delivery Token")]
         public void GetAccessToken_ReturnsDeliveryToken()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             Assert.Equal("delivery_token", client.GetAccessToken());
         }
@@ -158,6 +192,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Get Live Preview Config Returns Config")]
         public void GetLivePreviewConfig_ReturnsConfig()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             Assert.NotNull(client.GetLivePreviewConfig());
         }
@@ -165,6 +201,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Remove Header Removes Header")]
         public void RemoveHeader_RemovesHeader()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.SetHeader("custom", "value");
             client.RemoveHeader("custom");
@@ -177,6 +215,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Set Header Adds Header")]
         public void SetHeader_AddsHeader()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.SetHeader("custom", "value");
             var localHeaders = typeof(ContentstackClient)
@@ -189,6 +229,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Live Preview Query Async Sets Live Preview Config Fields")]
         public async Task LivePreviewQueryAsync_SetsLivePreviewConfigFields()
         {
+            LogArrange("Setting up test");
+
             var client = CreateClient();
             client.ContentType("ctuid");
             client.ContentType("ctuid").Entry("euid");
@@ -222,6 +264,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Sync Recursive Throws Or Returns")]
         public async Task SyncRecursive_ThrowsOrReturns()
         {
+            LogArrange("Setting up error handling test");
+
             var client = CreateClient();
             await Assert.ThrowsAnyAsync<Exception>(() => client.SyncRecursive());
         }
@@ -229,6 +273,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Sync Pagination Token Throws Or Returns")]
         public async Task SyncPaginationToken_ThrowsOrReturns()
         {
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             await Assert.ThrowsAnyAsync<Exception>(() => client.SyncPaginationToken("pagetoken"));
         }
@@ -236,6 +282,8 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         [Fact(DisplayName = "Sync Token Throws Or Returns")]
         public async Task SyncToken_ThrowsOrReturns()
         {
+            LogArrange("Setting up sync operation");
+
             var client = CreateClient();
             await Assert.ThrowsAnyAsync<Exception>(() => client.SyncToken("synctoken"));
         }

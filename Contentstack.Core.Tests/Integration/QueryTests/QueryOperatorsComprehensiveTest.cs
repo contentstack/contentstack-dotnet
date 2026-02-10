@@ -6,6 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
+using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.QueryTests
 {
@@ -13,22 +14,34 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
     /// Comprehensive tests for advanced Query Operators
     /// Tests complex query combinations, nested queries, and advanced filtering
     /// </summary>
-    public class QueryOperatorsComprehensiveTest
+    public class QueryOperatorsComprehensiveTest : IntegrationTestBase
     {
+        public QueryOperatorsComprehensiveTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         #region Regex Operations
         
         [Fact(DisplayName = "Query Operations - Query Regex Complex Pattern Matches Correctly")]
         public async Task Query_Regex_ComplexPattern_MatchesCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Match UIDs that start with "blt" followed by alphanumeric characters
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Regex("uid", "^blt[a-zA-Z0-9]+$");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -45,14 +58,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_Regex_WithModifiers_CaseInsensitiveSearch()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Case insensitive search using "i" modifier
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Regex("title", ".*test.*", "i");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -70,10 +91,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_Regex_MultiplePatterns_CombinedWithAnd()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Multiple regex patterns
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var subQuery1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             subQuery1.Regex("uid", "^blt.*");
             
@@ -84,6 +111,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -104,10 +133,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ComplexAnd_ThreeConditions_FiltersCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Combine three conditions with AND
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var subQuery1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             subQuery1.Exists("title");
             
@@ -121,6 +156,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -137,10 +174,18 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ComplexOr_MultipleAlternatives_ReturnsAllMatches()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
+            LogContext("EntryUid", TestDataHelper.MediumEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - OR with multiple alternatives
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var queries = new List<Query>
             {
                 client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("uid", TestDataHelper.SimpleEntryUid),
@@ -152,6 +197,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() > 0);
@@ -161,10 +208,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_NestedAndOr_ComplexLogic_ExecutesCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - (A AND B) OR (C AND D)
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var andQuery1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
@@ -179,6 +232,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -195,10 +250,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_CombinedComparison_GreaterThanAndLessThan_RangeQuery()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Date range query
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var startDate = DateTime.Now.AddYears(-10).ToString("yyyy-MM-dd");
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             
@@ -211,6 +272,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -227,15 +290,23 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_NotOperator_WithContainedIn_ExcludesMultipleValues()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - NOT IN query
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var excludedUids = new[] { "uid1", "uid2", "uid3" };
             query.NotContainedIn("uid", excludedUids);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // None of the excluded UIDs should be in results
@@ -253,14 +324,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_NestedField_DotNotation_QueryCorrectly()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Query nested field using dot notation
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Where("seo.title", "test");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // Nested field query executed (may return 0 results if no match)
@@ -277,14 +356,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_GroupField_QueryByNestedProperty()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Query group field
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("group");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -301,14 +388,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ModularBlocks_ExistsCheck()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Check for modular blocks existence
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("modular_blocks");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -325,14 +420,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_JsonRte_FieldExists()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Check for JSON RTE field
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Exists("json_rte");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -353,15 +456,24 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_IncludeReference_SingleLevel_LoadsReferences()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             query.IncludeReference("authors");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() > 0);
@@ -371,15 +483,24 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_IncludeReference_MultipleFields_LoadsAllReferences()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Use array overload to include multiple references
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             query.IncludeReference(new[] { "authors", "related_content" });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() > 0);
@@ -389,16 +510,25 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_IncludeReferenceOnly_WithProjection_FiltersReferenceFields()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             query.IncludeReference("authors");
             query.IncludeReferenceContentTypeUID();
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() > 0);
@@ -408,15 +538,24 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ReferenceQuery_WithContentTypeFilter()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Include references and add filter
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.IncludeReference("authors");
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -437,14 +576,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_WhereTags_SingleTag_ReturnsMatchingEntries()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.WhereTags(new[] { "test" });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // May return 0 results if no entries have the tag
@@ -461,14 +608,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_WhereTags_MultipleTags_ReturnsEntriesWithAnyTag()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             query.WhereTags(new[] { "tag1", "tag2", "tag3" });
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Count >= 0, "Count should be non-negative");
@@ -489,10 +644,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ComplexQuery_CompletesInReasonableTime()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Complex query with multiple conditions
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
@@ -503,6 +664,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.True(elapsed < 10000, $"Complex query should complete within 10s, took {elapsed}ms");
         }
@@ -511,6 +674,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_WithPagination_PerformanceIsConsistent()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Measure first page
@@ -524,6 +690,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             });
             
             // Act - Measure second page
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var (result2, elapsed2) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -534,6 +703,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result1);
             Assert.NotNull(result2);
             // Both should complete in reasonable time
@@ -545,6 +716,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_CountOperation_IsFasterThanFetch()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             
             // Act - Measure count
@@ -554,12 +728,17 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             });
             
             // Act - Measure full fetch
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var (fetchResult, fetchElapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
                 return await client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Find<Entry>();
             });
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(countResult);
             Assert.NotNull(fetchResult);
             // Count should generally be faster (though not always guaranteed)
@@ -575,13 +754,21 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_EmptyQuery_ReturnsAllEntries()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - No filters applied
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() > 0, "Empty query should return all entries");
@@ -591,14 +778,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_InvalidFieldName_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Query non-existent field
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Where("non_existent_field_xyz_123", "some_value");
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // Should return empty results, not throw
@@ -609,14 +804,22 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ExtremeLimit_HandlesGracefully()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act - Very large limit
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
+
             query.Limit(1000);
             var result = await query.Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             // Should handle large limit without error
@@ -633,10 +836,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         public async Task Query_ChainedOperations_ExecutesInOrder()
         {
             // Arrange
+            LogArrange("Setting up query operation");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act - Chain multiple operations
+            LogAct("Executing query");
+            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
+
             var result = await query
                 .Exists("title")
                 .Descending("created_at")
@@ -645,6 +854,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 .Find<Entry>();
             
             // Assert
+            LogAssert("Verifying response");
+
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
             Assert.True(result.Items.Count() <= 5);
