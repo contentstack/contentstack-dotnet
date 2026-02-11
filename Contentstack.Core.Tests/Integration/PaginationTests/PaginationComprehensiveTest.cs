@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(3);
             var result = await query.Find<Entry>();
@@ -43,11 +42,11 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // ✅ KEY TEST: Verify limit is applied
-            Assert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
-            Assert.True(result.Items.Count() <= 3);
+            TestAssert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
+            TestAssert.True(result.Items.Count() <= 3);
         }
         
         [Fact(DisplayName = "Pagination - Pagination Skip Skips Results")]
@@ -62,7 +61,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Skip(2);
             query.Limit(5);
@@ -71,12 +69,12 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // ✅ KEY TEST: Verify skip and limit applied
-            Assert.True(result.Skip >= 0, "Skip should be >= 0");
-            Assert.True(result.Limit <= 5 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
-            Assert.True(result.Items.Count() <= 5);
+            TestAssert.True(result.Skip >= 0, "Skip should be >= 0");
+            TestAssert.True(result.Limit <= 5 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
+            TestAssert.True(result.Items.Count() <= 5);
         }
         
         [Fact(DisplayName = "Pagination - Pagination Limit And Skip Combine Correctly")]
@@ -91,7 +89,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(3);
             query.Skip(1);
@@ -100,12 +97,12 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // ✅ KEY TEST: Verify both limit and skip applied
-            Assert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
-            Assert.True(result.Skip >= 0, "Skip should be >= 0");
-            Assert.True(result.Items.Count() <= 3);
+            TestAssert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
+            TestAssert.True(result.Skip >= 0, "Skip should be >= 0");
+            TestAssert.True(result.Items.Count() <= 3);
         }
         
         #endregion
@@ -124,7 +121,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act - Page 1
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(3);
             query.Skip(0);
@@ -133,15 +129,15 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // ✅ KEY TEST: Verify pagination params for first page
-            Assert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
-            Assert.True(result.Skip >= 0, "Skip should be >= 0");
-            Assert.True(result.Items.Count() <= 3);
+            TestAssert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
+            TestAssert.True(result.Skip >= 0, "Skip should be >= 0");
+            TestAssert.True(result.Items.Count() <= 3);
             // ✅ KEY TEST: Verify limit is applied
-            Assert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
-            Assert.True(result.Items.Count() <= 3);
+            TestAssert.True(result.Limit <= 3 || result.Limit == 0, "Limit should be <= requested or 0 if not returned by API");
+            TestAssert.True(result.Items.Count() <= 3);
         }
         
         [Fact(DisplayName = "Pagination - Pagination Sorted Pages Consistent Order")]
@@ -155,7 +151,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act - Page 1 sorted
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.Descending("created_at");
@@ -172,8 +167,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(page1);
-            Assert.NotNull(page2);
+            TestAssert.NotNull(page1);
+            TestAssert.NotNull(page2);
         }
         
         #endregion
@@ -192,7 +187,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -203,8 +197,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 5000, $"Small page should complete within 5s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 5000, $"Small page should complete within 5s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Pagination - Pagination Performance Large Page")]
@@ -219,7 +213,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -230,8 +223,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 10000, $"Large page should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 10000, $"Large page should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -250,15 +243,14 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act - Default limit should apply
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var result = await query.Find<Entry>();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Pagination - Pagination Large Skip Handles Gracefully")]
@@ -273,7 +265,6 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             
             // Act - Skip beyond available results
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Skip(1000);
             query.Limit(5);
@@ -282,8 +273,8 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // Should return empty or remaining items
         }
         
@@ -301,7 +292,9 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

@@ -4,6 +4,7 @@ using System.Linq;
 using Xunit;
 using Contentstack.Core.Models;
 using Contentstack.Core.Internals;
+using Contentstack.Core.Tests.Helpers;
 
 namespace Contentstack.Core.Tests.Helpers
 {
@@ -20,17 +21,17 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertEntryBasicFields(Entry entry, string expectedUid = null)
         {
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
             
             if (!string.IsNullOrEmpty(expectedUid))
             {
-                Assert.Equal(expectedUid, entry.Uid);
+                TestAssert.Equal(expectedUid, entry.Uid);
             }
             
             // Title is usually required
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry.Title);
         }
         
         /// <summary>
@@ -38,13 +39,13 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertEntryMetadata(Entry entry)
         {
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             
             var metadata = entry.GetMetadata();
-            Assert.NotNull(metadata);
+            TestAssert.NotNull(metadata);
             
             // Metadata should be a dictionary (even if empty)
-            Assert.IsType<Dictionary<string, object>>(metadata);
+            TestAssert.IsType<Dictionary<string, object>>(metadata);
         }
         
         /// <summary>
@@ -52,19 +53,19 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertEntriesValid<T>(IEnumerable<T> entries, int? expectedMinCount = null) where T : Entry
         {
-            Assert.NotNull(entries);
+            TestAssert.NotNull(entries);
             
             var entriesList = entries.ToList();
-            Assert.NotEmpty(entriesList);
+            TestAssert.NotEmpty(entriesList);
             
             if (expectedMinCount.HasValue)
             {
-                Assert.True(entriesList.Count >= expectedMinCount.Value, 
+                TestAssert.True(entriesList.Count >= expectedMinCount.Value, 
                     $"Expected at least {expectedMinCount.Value} entries, but got {entriesList.Count}");
             }
             
             // All entries should have UIDs
-            Assert.All(entriesList, entry => Assert.NotNull(entry.Uid));
+            TestAssert.All(entriesList, entry => TestAssert.NotNull(entry.Uid));
         }
         
         #endregion
@@ -76,25 +77,25 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertReferencesPopulated(Entry entry, string referenceFieldName, int expectedMinCount = 1)
         {
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             
             var referenceField = entry.Get(referenceFieldName);
-            Assert.NotNull(referenceField);
+            TestAssert.NotNull(referenceField);
             
             if (referenceField is List<Entry> refList)
             {
-                Assert.NotEmpty(refList);
-                Assert.True(refList.Count >= expectedMinCount, 
+                TestAssert.NotEmpty(refList);
+                TestAssert.True(refList.Count >= expectedMinCount, 
                     $"Expected at least {expectedMinCount} references in '{referenceFieldName}', but got {refList.Count}");
-                Assert.All(refList, refEntry => Assert.NotNull(refEntry.Uid));
+                TestAssert.All(refList, refEntry => TestAssert.NotNull(refEntry.Uid));
             }
             else if (referenceField is Entry singleRef)
             {
-                Assert.NotNull(singleRef.Uid);
+                TestAssert.NotNull(singleRef.Uid);
             }
             else
             {
-                Assert.Fail($"Reference field '{referenceFieldName}' is not of expected type (Entry or List<Entry>)");
+                TestAssert.Fail($"Reference field '{referenceFieldName}' is not of expected type (Entry or List<Entry>)");
             }
         }
         
@@ -103,8 +104,8 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertReferenceChainDepth(Entry entry, string[] referenceFieldPath)
         {
-            Assert.NotNull(entry);
-            Assert.NotEmpty(referenceFieldPath);
+            TestAssert.NotNull(entry);
+            TestAssert.NotEmpty(referenceFieldPath);
             
             object current = entry;
             
@@ -113,20 +114,20 @@ namespace Contentstack.Core.Tests.Helpers
                 if (current is Entry currentEntry)
                 {
                     var field = currentEntry.Get(fieldName);
-                    Assert.NotNull(field);
+                    TestAssert.NotNull(field);
                     current = field;
                 }
                 else if (current is List<Entry> entryList)
                 {
-                    Assert.NotEmpty(entryList);
+                    TestAssert.NotEmpty(entryList);
                     current = entryList.First();
                     var field = ((Entry)current).Get(fieldName);
-                    Assert.NotNull(field);
+                    TestAssert.NotNull(field);
                     current = field;
                 }
                 else
                 {
-                    Assert.Fail($"Unexpected type in reference chain: {current.GetType().Name}");
+                    TestAssert.Fail($"Unexpected type in reference chain: {current.GetType().Name}");
                 }
             }
         }
@@ -140,17 +141,17 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertAssetValid(Asset asset, string expectedUid = null)
         {
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Uid);
-            Assert.NotEmpty(asset.Uid);
-            Assert.NotNull(asset.Url);
-            Assert.NotEmpty(asset.Url);
-            Assert.NotNull(asset.FileName);
-            Assert.NotEmpty(asset.FileName);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Uid);
+            TestAssert.NotEmpty(asset.Uid);
+            TestAssert.NotNull(asset.Url);
+            TestAssert.NotEmpty(asset.Url);
+            TestAssert.NotNull(asset.FileName);
+            TestAssert.NotEmpty(asset.FileName);
             
             if (!string.IsNullOrEmpty(expectedUid))
             {
-                Assert.Equal(expectedUid, asset.Uid);
+                TestAssert.Equal(expectedUid, asset.Uid);
             }
         }
         
@@ -159,18 +160,18 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertAssetsValid(IEnumerable<Asset> assets, int? expectedMinCount = null)
         {
-            Assert.NotNull(assets);
+            TestAssert.NotNull(assets);
             
             var assetsList = assets.ToList();
-            Assert.NotEmpty(assetsList);
+            TestAssert.NotEmpty(assetsList);
             
             if (expectedMinCount.HasValue)
             {
-                Assert.True(assetsList.Count >= expectedMinCount.Value, 
+                TestAssert.True(assetsList.Count >= expectedMinCount.Value, 
                     $"Expected at least {expectedMinCount.Value} assets, but got {assetsList.Count}");
             }
             
-            Assert.All(assetsList, asset => AssertAssetValid(asset));
+            TestAssert.All(assetsList, asset => AssertAssetValid(asset));
         }
         
         #endregion
@@ -182,14 +183,14 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertQueryResultValid<T>(ContentstackCollection<T> result, int? expectedMinCount = null) where T : Entry
         {
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             
             var items = result.Items.ToList();
             
             if (expectedMinCount.HasValue)
             {
-                Assert.True(items.Count >= expectedMinCount.Value, 
+                TestAssert.True(items.Count >= expectedMinCount.Value, 
                     $"Expected at least {expectedMinCount.Value} items, but got {items.Count}");
             }
         }
@@ -200,14 +201,14 @@ namespace Contentstack.Core.Tests.Helpers
         public static void AssertSortedAscending<T, TKey>(IEnumerable<T> items, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
             var itemsList = items.ToList();
-            Assert.True(itemsList.Count >= 2, "Need at least 2 items to verify sorting");
+            TestAssert.True(itemsList.Count >= 2, "Need at least 2 items to verify sorting");
             
             for (int i = 0; i < itemsList.Count - 1; i++)
             {
                 var current = keySelector(itemsList[i]);
                 var next = keySelector(itemsList[i + 1]);
                 
-                Assert.True(current.CompareTo(next) <= 0, 
+                TestAssert.True(current.CompareTo(next) <= 0, 
                     $"Items are not sorted ascending at index {i}. Current: {current}, Next: {next}");
             }
         }
@@ -218,14 +219,14 @@ namespace Contentstack.Core.Tests.Helpers
         public static void AssertSortedDescending<T, TKey>(IEnumerable<T> items, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
             var itemsList = items.ToList();
-            Assert.True(itemsList.Count >= 2, "Need at least 2 items to verify sorting");
+            TestAssert.True(itemsList.Count >= 2, "Need at least 2 items to verify sorting");
             
             for (int i = 0; i < itemsList.Count - 1; i++)
             {
                 var current = keySelector(itemsList[i]);
                 var next = keySelector(itemsList[i + 1]);
                 
-                Assert.True(current.CompareTo(next) >= 0, 
+                TestAssert.True(current.CompareTo(next) >= 0, 
                     $"Items are not sorted descending at index {i}. Current: {current}, Next: {next}");
             }
         }
@@ -239,8 +240,8 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertOnlyFieldsPresent(Entry entry, string[] expectedFields)
         {
-            Assert.NotNull(entry);
-            Assert.NotNull(expectedFields);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(expectedFields);
             
             // UID is always present
             var allowedFields = new List<string>(expectedFields) { "uid" };
@@ -251,7 +252,7 @@ namespace Contentstack.Core.Tests.Helpers
                 if (key.StartsWith("_"))
                     continue;
                     
-                Assert.Contains(key, allowedFields);
+                TestAssert.Contains(key, allowedFields);
             }
         }
         
@@ -260,12 +261,12 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertFieldsExcluded(Entry entry, string[] excludedFields)
         {
-            Assert.NotNull(entry);
-            Assert.NotNull(excludedFields);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(excludedFields);
             
             foreach (var field in excludedFields)
             {
-                Assert.Null(entry.Get(field));
+                TestAssert.Null(entry.Get(field));
             }
         }
         
@@ -278,9 +279,9 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertValidDate(string dateString)
         {
-            Assert.NotNull(dateString);
-            Assert.NotEmpty(dateString);
-            Assert.True(DateTime.TryParse(dateString, out _), 
+            TestAssert.NotNull(dateString);
+            TestAssert.NotEmpty(dateString);
+            TestAssert.True(DateTime.TryParse(dateString, out _), 
                 $"'{dateString}' is not a valid date");
         }
         
@@ -289,7 +290,7 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertDateInRange(DateTime date, DateTime minDate, DateTime maxDate)
         {
-            Assert.True(date >= minDate && date <= maxDate, 
+            TestAssert.True(date >= minDate && date <= maxDate, 
                 $"Date {date} is not between {minDate} and {maxDate}");
         }
         
@@ -302,11 +303,11 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertContentstackException(Action action, int? expectedErrorCode = null)
         {
-            var exception = Assert.Throws<ContentstackException>(action);
+            var exception = TestAssert.Throws<ContentstackException>(action);
             
             if (expectedErrorCode.HasValue)
             {
-                Assert.Equal(expectedErrorCode.Value, exception.ErrorCode);
+                TestAssert.Equal(expectedErrorCode.Value, exception.ErrorCode);
             }
         }
         
@@ -317,11 +318,11 @@ namespace Contentstack.Core.Tests.Helpers
             Func<System.Threading.Tasks.Task> action, 
             int? expectedErrorCode = null)
         {
-            var exception = await Assert.ThrowsAsync<ContentstackException>(action);
+            var exception = await TestAssert.ThrowsAsync<ContentstackException>(action);
             
             if (expectedErrorCode.HasValue)
             {
-                Assert.Equal(expectedErrorCode.Value, exception.ErrorCode);
+                TestAssert.Equal(expectedErrorCode.Value, exception.ErrorCode);
             }
         }
         
@@ -334,20 +335,20 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertAssetBasicFields(Asset asset, string expectedUid = null)
         {
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Uid);
-            Assert.NotEmpty(asset.Uid);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Uid);
+            TestAssert.NotEmpty(asset.Uid);
             
             if (!string.IsNullOrEmpty(expectedUid))
             {
-                Assert.Equal(expectedUid, asset.Uid);
+                TestAssert.Equal(expectedUid, asset.Uid);
             }
             
             // Required fields for assets
-            Assert.NotNull(asset.Url);
-            Assert.NotEmpty(asset.Url);
-            Assert.NotNull(asset.FileName);
-            Assert.NotEmpty(asset.FileName);
+            TestAssert.NotNull(asset.Url);
+            TestAssert.NotEmpty(asset.Url);
+            TestAssert.NotNull(asset.FileName);
+            TestAssert.NotEmpty(asset.FileName);
         }
         
         /// <summary>
@@ -355,14 +356,14 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         public static void AssertAssetUrl(Asset asset)
         {
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
-            Assert.NotEmpty(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
+            TestAssert.NotEmpty(asset.Url);
             
             // Verify it's a valid URL
-            Assert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri),
+            TestAssert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri),
                 $"Asset URL should be a valid absolute URL: {asset.Url}");
-            Assert.True(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps,
+            TestAssert.True(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps,
                 $"Asset URL should use HTTP or HTTPS: {asset.Url}");
         }
         
@@ -377,17 +378,17 @@ namespace Contentstack.Core.Tests.Helpers
             ContentstackClient client, 
             Configuration.ContentstackOptions options)
         {
-            Assert.NotNull(client);
-            Assert.NotNull(options);
+            TestAssert.NotNull(client);
+            TestAssert.NotNull(options);
             
             // Verify core configuration
-            Assert.Equal(options.ApiKey, client.GetApplicationKey());
-            Assert.Equal(options.DeliveryToken, client.GetAccessToken());
+            TestAssert.Equal(options.ApiKey, client.GetApplicationKey());
+            TestAssert.Equal(options.DeliveryToken, client.GetAccessToken());
             
             // Version should always be available
             var version = client.GetVersion();
-            Assert.NotNull(version);
-            Assert.NotEmpty(version);
+            TestAssert.NotNull(version);
+            TestAssert.NotEmpty(version);
         }
         
         #endregion

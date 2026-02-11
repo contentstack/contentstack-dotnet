@@ -36,7 +36,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -47,14 +46,14 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ CRITICAL TEST: Verify reference was actually fetched
             var authors = entry.Get("authors");
-            Assert.NotNull(authors); // ← If NULL, IncludeReference() FAILED
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(authors); // ← If NULL, IncludeReference() FAILED
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "References - Deep Ref Level1 Multiple References")]
@@ -69,7 +68,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -80,15 +78,15 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ CRITICAL TEST: Verify BOTH references were actually fetched
             var authors = entry.Get("authors");
-            Assert.NotNull(authors); // ← If NULL, IncludeReference("authors") FAILED
+            TestAssert.NotNull(authors); // ← If NULL, IncludeReference("authors") FAILED
             
             var relatedContent = entry.Get("related_content");
-            Assert.NotNull(relatedContent); // ← If NULL, IncludeReference("related_content") FAILED
+            TestAssert.NotNull(relatedContent); // ← If NULL, IncludeReference("related_content") FAILED
         }
         
         #endregion
@@ -107,7 +105,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - Include references at 2 levels
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -119,12 +116,12 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ CRITICAL TEST: Verify Level 1 reference was fetched
             var authors = entry.Get("authors");
-            Assert.NotNull(authors); // ← Level 1: authors must be present
+            TestAssert.NotNull(authors); // ← Level 1: authors must be present
             
             // ✅ CRITICAL TEST: Verify Level 2 nested reference exists
             // (Checking structure - nested references would be in the authors data)
@@ -142,7 +139,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -158,10 +154,10 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -180,7 +176,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - 3 level deep reference
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -195,10 +190,10 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "References - Deep Ref Level3 Multiple Branches")]
@@ -213,7 +208,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - Multiple 3-level branches
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -231,10 +225,10 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -253,7 +247,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - Include only specific fields from references
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -264,10 +257,10 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "References - Deep Ref Filtering Except Level1")]
@@ -282,7 +275,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - Exclude specific fields from references
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -293,10 +285,10 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "References - Deep Ref Combine Only And Except Different References")]
@@ -311,7 +303,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - Different filtering for different references
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -323,10 +314,10 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -345,7 +336,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeReference("authors");
             query.Limit(5);
@@ -354,8 +344,8 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "References - Deep Ref Query Multi Level References")]
@@ -370,7 +360,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - Multi-level in query
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeReference(new[] {
                 "authors",
@@ -382,8 +371,8 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "References - Deep Ref Query With Projection")]
@@ -398,7 +387,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act - References + field projection
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeReference("authors");
             query.Only(new[] { "title", "authors" });
@@ -408,8 +396,8 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -428,7 +416,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -442,8 +429,8 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Single level reference should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Single level reference should complete within 10s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "References - Deep Ref Performance Multi Level")]
@@ -458,7 +445,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -475,8 +461,8 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 15000, $"Multi-level reference should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 15000, $"Multi-level reference should complete within 15s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "References - Deep Ref Reference Content Type UID Includes Content Type Info")]
@@ -491,7 +477,6 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -503,14 +488,14 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ CRITICAL TEST: Verify reference was actually fetched
             var authors = entry.Get("authors");
-            Assert.NotNull(authors); // ← If NULL, IncludeReference() FAILED
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(authors); // ← If NULL, IncludeReference() FAILED
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -527,7 +512,9 @@ namespace Contentstack.Core.Tests.Integration.ReferenceTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

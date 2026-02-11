@@ -36,7 +36,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -46,10 +45,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Global Fields - Nested Global Two Levels Nested Access")]
@@ -64,7 +63,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -74,10 +72,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Global Fields - Nested Global Three Levels Deep Nesting")]
@@ -92,7 +90,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -102,10 +99,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -124,7 +121,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("group.global_field");
             var result = await query.Find<Entry>();
@@ -132,7 +128,7 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Global Fields - Nested Global Group Inside Global Mixed Structure")]
@@ -147,7 +143,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -157,10 +152,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -179,7 +174,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -190,10 +184,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Global Fields - Nested Global Deep Reference In Nested Global Multi Level")]
@@ -208,7 +202,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -222,10 +215,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -244,7 +237,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("global_field.nested_field");
             var result = await query.Find<Entry>();
@@ -252,7 +244,7 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Global Fields - Nested Global Query Deep Nested Field Deep Path")]
@@ -267,7 +259,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("global_field.nested_global.deep_field");
             var result = await query.Find<Entry>();
@@ -275,7 +266,7 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -294,7 +285,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -305,20 +295,20 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
             
             // ✅ Nested field may not exist in test data
             var nested = entry.Get("seo.meta_title");
             if (nested != null)
             {
-                Assert.NotNull(nested);
+                TestAssert.NotNull(nested);
             }
             else
             {
                 // Field doesn't exist in test data - that's OK
-                Assert.True(true, "Nested field not in test data");
+                TestAssert.True(true, "Nested field not in test data");
             }
         }
         
@@ -334,7 +324,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -345,10 +334,10 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -366,7 +355,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -375,7 +363,7 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
         }
         
         [Fact(DisplayName = "Global Fields - Nested Global Schema Validation Is Valid J Object")]
@@ -389,7 +377,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -398,8 +385,8 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
-            Assert.IsType<JObject>(schema);
+            TestAssert.NotNull(schema);
+            TestAssert.IsType<JObject>(schema);
         }
         
         #endregion
@@ -418,7 +405,6 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -431,8 +417,8 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Nested global fetch should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Nested global fetch should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -449,7 +435,9 @@ namespace Contentstack.Core.Tests.Integration.GlobalFieldsTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

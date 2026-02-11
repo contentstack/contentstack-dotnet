@@ -36,11 +36,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
         }
         
         [Fact(DisplayName = "Live Preview - Live Preview Configure Preview Host Uses Correct Endpoint")]
@@ -56,13 +57,14 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
             // Verify the host is set correctly
-            Assert.Contains("preview", TestDataHelper.LivePreviewHost.ToLower());
+            TestAssert.Contains("preview", TestDataHelper.LivePreviewHost.ToLower());
         }
         
         #endregion
@@ -85,10 +87,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -100,14 +102,14 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 // Assert
             LogAssert("Verifying response");
 
-                Assert.NotNull(entry);
-                Assert.NotNull(entry.Uid);
+                TestAssert.NotNull(entry);
+                TestAssert.NotNull(entry.Uid);
             }
             catch (Exception)
             {
                 // If preview token or configuration is not fully set up, test passes
                 // as it verifies the API can be called
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -126,10 +128,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             try
             {
@@ -142,13 +144,13 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 // Assert
             LogAssert("Verifying response");
 
-                Assert.NotNull(result);
-                Assert.NotNull(result.Items);
+                TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
             }
             catch (Exception)
             {
                 // If preview token or configuration is not fully set up, test passes
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -168,10 +170,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             try
             {
@@ -184,13 +186,13 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 // Assert
             LogAssert("Verifying response");
 
-                Assert.NotNull(entry);
-                Assert.NotNull(entry.Uid);
+                TestAssert.NotNull(entry);
+                TestAssert.NotNull(entry.Uid);
             }
             catch (Exception)
             {
                 // If preview token or configuration is not fully set up, test passes
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -214,10 +216,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -230,12 +232,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 // Assert
             LogAssert("Verifying response");
 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
             catch (Exception)
             {
                 // If preview is not configured, test still passes
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -255,10 +257,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.MediumContentTypeUid}/entries/{TestDataHelper.MediumEntryUid}");
 
             try
             {
@@ -270,12 +272,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 // Assert
             LogAssert("Verifying response");
 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
             catch (Exception)
             {
                 // If preview is not configured, test still passes
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -299,12 +301,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client
                     .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -329,10 +331,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -342,12 +344,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Fetch<Entry>();
                 
                 // If it works, that's fine
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
             catch (Exception)
             {
                 // If it fails, that's also expected behavior
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -367,10 +369,10 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -380,12 +382,12 @@ namespace Contentstack.Core.Tests.Integration.LivePreview
                     .Fetch<Entry>();
                 
                 // If it works, that's acceptable
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
             catch (Exception)
             {
                 // If it fails, that's also acceptable
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         

@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -45,13 +44,13 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ NOTE: Metadata fields (created_by, updated_by, etc.) are in entry data
             // Access via entry.Get("created_by"), entry.Get("updated_by"), etc.
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Branch Query With Branch Fetches From Branch")]
@@ -66,7 +65,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(5);
             var result = await query.Find<Entry>();
@@ -74,7 +72,7 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Branch Asset With Branch Fetches From Branch")]
@@ -88,14 +86,13 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
+            TestAssert.NotNull(asset);
         }
         
         #endregion
@@ -114,7 +111,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -124,13 +120,13 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ NOTE: Metadata fields (created_by, updated_by, etc.) are in entry data
             // Access via entry.Get("created_by"), entry.Get("updated_by"), etc.
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Branch Deep References All From Same Branch")]
@@ -145,7 +141,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -156,13 +151,13 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ NOTE: Metadata fields (created_by, updated_by, etc.) are in entry data
             // Access via entry.Get("created_by"), entry.Get("updated_by"), etc.
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -181,7 +176,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Exists("title");
             query.Limit(5);
@@ -190,7 +184,7 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Branch Complex Query Works With Branch")]
@@ -205,7 +199,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
@@ -215,7 +208,7 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -234,7 +227,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -245,13 +237,13 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
             
             // ✅ NOTE: Metadata fields (created_by, updated_by, etc.) are in entry data
             // Access via entry.Get("created_by"), entry.Get("updated_by"), etc.
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Metadata Query With Owner Includes Owner For All")]
@@ -266,7 +258,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.IncludeOwner();
             query.Limit(3);
@@ -275,7 +266,7 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -293,7 +284,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -302,7 +292,7 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
         }
         
         [Fact(DisplayName = "Metadata Content Type With Branch Branch Specific")]
@@ -316,7 +306,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -325,7 +314,7 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
         }
         
         #endregion
@@ -344,7 +333,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -357,8 +345,8 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Branch fetch should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Branch fetch should complete within 10s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Metadata Performance With Owner")]
@@ -373,7 +361,6 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -387,8 +374,8 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Metadata fetch should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Metadata fetch should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -405,7 +392,9 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         private ContentstackClient CreateClientWithBranch()
@@ -419,7 +408,9 @@ namespace Contentstack.Core.Tests.Integration.BranchTests
                 Branch = TestDataHelper.BranchUid
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

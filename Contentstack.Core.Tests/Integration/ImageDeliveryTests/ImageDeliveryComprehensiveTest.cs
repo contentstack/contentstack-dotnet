@@ -34,7 +34,6 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
@@ -56,15 +55,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset.Url);
-            Assert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out _));
+            TestAssert.NotNull(asset.Url);
+            TestAssert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out _));
         }
         
         #endregion
@@ -82,15 +80,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert - URL should be valid
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
             // Transformation params can be appended to URL
         }
         
@@ -105,15 +102,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
         }
         
         [Fact(DisplayName = "Image Delivery - Image Delivery Quality Transform Applies Correctly")]
@@ -127,15 +123,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
         }
         
         [Fact(DisplayName = "Image Delivery - Image Delivery Format Transform Converts Format")]
@@ -149,15 +144,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
         }
         
         #endregion
@@ -175,15 +169,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert - Can apply width + height + quality
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
         }
         
         [Fact(DisplayName = "Image Delivery - Image Delivery Crop Transform Applies Correctly")]
@@ -197,15 +190,14 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
         }
         
         #endregion
@@ -224,7 +216,6 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -234,7 +225,7 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // Image fields in entry should be accessible
         }
         
@@ -250,7 +241,6 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -260,7 +250,7 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // All image fields should be accessible
         }
         
@@ -279,7 +269,6 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var (asset, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -289,8 +278,8 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.True(elapsed < 5000, $"Image fetch should complete within 5s, took {elapsed}ms");
+            TestAssert.NotNull(asset);
+            TestAssert.True(elapsed < 5000, $"Image fetch should complete within 5s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Image Delivery - Image Delivery Performance Multiple Assets")]
@@ -304,7 +293,6 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -315,8 +303,8 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 10000, $"Multiple assets should fetch within 10s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 10000, $"Multiple assets should fetch within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -333,7 +321,9 @@ namespace Contentstack.Core.Tests.Integration.ImageDeliveryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

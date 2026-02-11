@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.IncludeCount();
             query.Limit(5);
@@ -44,7 +43,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include Owner Includes Owner For All")]
@@ -59,7 +58,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.IncludeOwner();
             query.Limit(3);
@@ -68,7 +66,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include Embedded Items Includes For All")]
@@ -83,7 +81,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.includeEmbeddedItems();
             query.Limit(3);
@@ -92,7 +89,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -111,7 +108,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.IncludeCount();
             query.IncludeOwner();
@@ -121,7 +117,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include All Includes Combined")]
@@ -136,7 +132,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeCount();
             query.IncludeOwner();
@@ -147,7 +142,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include With References Combines With Includes")]
@@ -162,7 +157,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeReference("authors");
             query.IncludeCount();
@@ -173,7 +167,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -192,7 +186,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Exists("title");
             query.IncludeOwner();
@@ -202,7 +195,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include With Complex Query Includes Correctly")]
@@ -217,7 +210,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("uid");
@@ -228,7 +220,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -247,7 +239,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.IncludeOwner();
             query.Only(new[] { "title", "uid" });
@@ -257,7 +248,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include With Except Combines Correctly")]
@@ -272,7 +263,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeCount();
             query.Except(new[] { "large_field" });
@@ -282,7 +272,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -301,7 +291,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.SetLocale("en-us");
             query.IncludeOwner();
@@ -311,7 +300,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Query Include With Fallback Combines Correctly")]
@@ -326,7 +315,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act & Assert
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             try
             {
@@ -336,11 +324,11 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 query.Limit(3);
                 var result = await query.Find<Entry>();
                 
-                Assert.NotNull(result);
+                TestAssert.NotNull(result);
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -360,7 +348,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Descending("created_at");
             query.IncludeOwner();
@@ -370,7 +357,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -389,7 +376,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -403,8 +389,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 15000, $"Query with multiple includes should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 15000, $"Query with multiple includes should complete within 15s, took {elapsed}ms");
         }
         
         #endregion
@@ -421,7 +407,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

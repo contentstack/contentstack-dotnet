@@ -36,7 +36,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -46,10 +45,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Standard CDN Works Correctly")]
@@ -61,7 +60,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -71,10 +69,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -92,7 +90,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query.Limit(5);
@@ -101,7 +98,7 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Configured Host All Operations Work")]
@@ -117,7 +114,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -129,8 +125,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(asset);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(asset);
         }
         
         #endregion
@@ -152,11 +148,12 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act & Assert
             LogAct("Performing test action");
 
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
             // Client should be created successfully
         }
         
@@ -172,7 +169,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -182,10 +178,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -204,7 +200,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -217,8 +212,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Fetch should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Fetch should complete within 10s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Region Configuration - Region Performance Query Operation")]
@@ -233,7 +228,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -244,8 +238,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 10000, $"Query should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 10000, $"Query should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -271,12 +265,12 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
                 };
                 
                 // SDK allows null host in options - test passes
-                Assert.True(true, "SDK allows null host in ContentstackOptions");
+                TestAssert.True(true, "SDK allows null host in ContentstackOptions");
             }
             catch (ArgumentNullException)
             {
                 // Also valid if SDK throws exception
-                Assert.True(true, "SDK correctly throws exception for null host");
+                TestAssert.True(true, "SDK correctly throws exception for null host");
             }
         }
         
@@ -293,7 +287,7 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         [InlineData(ContentstackRegion.AU, 5)]
         public void Region_EnumValues_AreCorrect(ContentstackRegion region, int expectedValue)
         {
-            Assert.Equal(expectedValue, (int)region);
+            TestAssert.Equal(expectedValue, (int)region);
         }
         
         [Fact(DisplayName = "Region Configuration - Region All Values Are Defined")]
@@ -302,13 +296,13 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             LogArrange("Setting up test");
 
             var regions = Enum.GetValues<ContentstackRegion>();
-            Assert.Equal(6, regions.Length);
-            Assert.Contains(ContentstackRegion.US, regions);
-            Assert.Contains(ContentstackRegion.EU, regions);
-            Assert.Contains(ContentstackRegion.AZURE_EU, regions);
-            Assert.Contains(ContentstackRegion.AZURE_NA, regions);
-            Assert.Contains(ContentstackRegion.GCP_NA, regions);
-            Assert.Contains(ContentstackRegion.AU, regions);
+            TestAssert.Equal(6, regions.Length);
+            TestAssert.Contains(ContentstackRegion.US, regions);
+            TestAssert.Contains(ContentstackRegion.EU, regions);
+            TestAssert.Contains(ContentstackRegion.AZURE_EU, regions);
+            TestAssert.Contains(ContentstackRegion.AZURE_NA, regions);
+            TestAssert.Contains(ContentstackRegion.GCP_NA, regions);
+            TestAssert.Contains(ContentstackRegion.AU, regions);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Options Default Value Is US")]
@@ -317,7 +311,7 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             LogArrange("Setting up test");
 
             var options = new ContentstackOptions();
-            Assert.Equal(ContentstackRegion.US, options.Region);
+            TestAssert.Equal(ContentstackRegion.US, options.Region);
         }
         
         [Theory(DisplayName = "Region Configuration - Region Options Can Be Set")]
@@ -331,7 +325,7 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         {
             var options = new ContentstackOptions();
             options.Region = region;
-            Assert.Equal(region, options.Region);
+            TestAssert.Equal(region, options.Region);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Enum Can Be Parsed From String")]
@@ -339,14 +333,14 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         {
             LogArrange("Setting up test");
 
-            Assert.True(Enum.TryParse<ContentstackRegion>("US", out var usRegion));
-            Assert.Equal(ContentstackRegion.US, usRegion);
+            TestAssert.True(Enum.TryParse<ContentstackRegion>("US", out var usRegion));
+            TestAssert.Equal(ContentstackRegion.US, usRegion);
 
-            Assert.True(Enum.TryParse<ContentstackRegion>("EU", out var euRegion));
-            Assert.Equal(ContentstackRegion.EU, euRegion);
+            TestAssert.True(Enum.TryParse<ContentstackRegion>("EU", out var euRegion));
+            TestAssert.Equal(ContentstackRegion.EU, euRegion);
 
-            Assert.True(Enum.TryParse<ContentstackRegion>("AU", out var auRegion));
-            Assert.Equal(ContentstackRegion.AU, auRegion);
+            TestAssert.True(Enum.TryParse<ContentstackRegion>("AU", out var auRegion));
+            TestAssert.Equal(ContentstackRegion.AU, auRegion);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Enum Case Insensitive Parse Works")]
@@ -354,14 +348,14 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         {
             LogArrange("Setting up test");
 
-            Assert.True(Enum.TryParse<ContentstackRegion>("us", true, out var usRegion));
-            Assert.Equal(ContentstackRegion.US, usRegion);
+            TestAssert.True(Enum.TryParse<ContentstackRegion>("us", true, out var usRegion));
+            TestAssert.Equal(ContentstackRegion.US, usRegion);
 
-            Assert.True(Enum.TryParse<ContentstackRegion>("eu", true, out var euRegion));
-            Assert.Equal(ContentstackRegion.EU, euRegion);
+            TestAssert.True(Enum.TryParse<ContentstackRegion>("eu", true, out var euRegion));
+            TestAssert.Equal(ContentstackRegion.EU, euRegion);
 
-            Assert.True(Enum.TryParse<ContentstackRegion>("au", true, out var auRegion));
-            Assert.Equal(ContentstackRegion.AU, auRegion);
+            TestAssert.True(Enum.TryParse<ContentstackRegion>("au", true, out var auRegion));
+            TestAssert.Equal(ContentstackRegion.AU, auRegion);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Enum Invalid String Returns False")]
@@ -369,8 +363,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
         {
             LogArrange("Setting up test");
 
-            Assert.False(Enum.TryParse<ContentstackRegion>("INVALID", out var invalidRegion));
-            Assert.Equal(default(ContentstackRegion), invalidRegion);
+            TestAssert.False(Enum.TryParse<ContentstackRegion>("INVALID", out var invalidRegion));
+            TestAssert.Equal(default(ContentstackRegion), invalidRegion);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Options Can Be Changed After Creation")]
@@ -383,10 +377,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
                 Region = ContentstackRegion.US
             };
 
-            Assert.Equal(ContentstackRegion.US, options.Region);
+            TestAssert.Equal(ContentstackRegion.US, options.Region);
 
             options.Region = ContentstackRegion.AU;
-            Assert.Equal(ContentstackRegion.AU, options.Region);
+            TestAssert.Equal(ContentstackRegion.AU, options.Region);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Different Clients Have Different Regions")]
@@ -414,9 +408,9 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             var auClient = new ContentstackClient(auOptions);
 
             // Both clients should be valid and different
-            Assert.NotNull(usClient);
-            Assert.NotNull(auClient);
-            Assert.NotEqual(usClient, auClient);
+            TestAssert.NotNull(usClient);
+            TestAssert.NotNull(auClient);
+            TestAssert.NotEqual(usClient, auClient);
         }
         
         #endregion
@@ -433,7 +427,9 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

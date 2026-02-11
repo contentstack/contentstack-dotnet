@@ -1,4 +1,20 @@
 fileignoreconfig:
+- filename: Contentstack.Core.Tests/Helpers/RequestLoggingPlugin.cs
+  checksum: 8814a9c304834162cf27c214ef9d13dce4d9b458dd55a9c68d7bb48607cd87c4
+- filename: Contentstack.Core.Tests/Helpers/TestAssert.cs
+  checksum: 90f457e5ae4c6955022ea60c4a577099e78d3c6fded31dbdd0817a004c3941d8
+- filename: Contentstack.Core.Tests/Helpers/AssertionHelper.cs
+  checksum: 449fd092f0f5229653ec8d5c7c0c4bb74df96ef14a71183aa78f35f988fad64a
+- filename: Contentstack.Core.Tests/Helpers/IntegrationTestBase.cs
+  checksum: fe8a38f19e916767f6a016b33d4e8cd12316aaf70a8a46bcd6e44fedcbe921d7
+- filename: Contentstack.Core.Tests/Helpers/TestOutputHelper.cs
+  checksum: fa038ae6aa535d6684bc545c1a1ea174a572128f1ea40c08ef81637920a2007a
+- filename: Contentstack.Core.Tests/Helpers/TestDataHelper.cs
+  checksum: 67c8afb436287676e0db3a62a9213d800239cf5bb543cc4d81f438655abf0e1f
+- filename: Contentstack.Core.Tests/Integration/ClientTests/ContentstackClientTest.cs
+  checksum: 05fa29ba19d2eadb8090dec72f768a5d9edcc3a26cb746817f502093dee89987
+- filename: Contentstack.Core.Tests/Integration/StackTests/StackOperationsComprehensiveTest.cs
+  checksum: bb169d53e19f32fd08b731749ad161366af68d0618fd025ac571b2acfc730966
 - filename: Contentstack.Core.Tests/Integration/ConfigurationTests/RegionSupportTest.cs
   checksum: fd424a7595c59a0d5b48d317f70d9be2646e5b246bcae865c5de391701e8b1dd
 - filename: Contentstack.Core.Tests/Integration/ModularBlocksTests/ModularBlocksComprehensiveTest.cs
@@ -25,8 +41,6 @@ fileignoreconfig:
   checksum: 9ef81b199971e8b92a2a3703ba4760169ff578d536bd9e21441b9941e5564894
 - filename: Contentstack.Core.Tests/Integration/QueryEncodingTests/QueryEncodingComprehensiveTest.cs
   checksum: 007ffe1e5582f4bbc5443ec4b2866ebaf8add8cda3d531e0bafb25220fe558f1
-- filename: Contentstack.Core.Tests/Integration/ConfigurationTests/RegionSupportTest.cs
-  checksum: a81f6437da3944af102729c1e7884d2a19fbc48fee2677359cc984feabe4ff8b
 - filename: Contentstack.Core.Tests/Integration/QueryTests/EntryQueryablesComprehensiveTest.cs
   checksum: bb1a1fe53b751e7b6f5cd595685b0688592932ce857cec56b69dcd7b36531354
 - filename: Contentstack.Core.Tests/Integration/QueryTests/QueryIncludeExtendedTest.cs
@@ -41,8 +55,6 @@ fileignoreconfig:
   checksum: 6b24eafdffb7fcb92d0e118b1092c151fed75505fc50bb138d706a51aed606d7
 - filename: Contentstack.Core.Tests/Integration/VariantsTests/EntryVariantsComprehensiveTest.cs
   checksum: 5c16d15ac80dfcec8b85b67c83bcd2e962b365a95f4a8553f52fc3bc22d15fee
-- filename: Contentstack.Core.Tests/Integration/StackTests/StackOperationsComprehensiveTest.cs
-  checksum: 522fff363dad0bb89b2d1ab263c569037cf087227c4f420164168ec03788edd4
 - filename: Contentstack.Core.Tests/Integration/ContentTypeTests/ContentTypeOperationsTest.cs
   checksum: dcda4e54f4532a3c24c67cbb22030e8a565cd62fa8ed1f7fdc84d59f48354e51
 - filename: Contentstack.Core.Tests/Integration/Taxonomy/TaxonomySupportTest.cs
@@ -77,16 +89,8 @@ fileignoreconfig:
   checksum: 43aa302af75031f4621de1287dbcdaa63151659230f20a0a785cc0dd5be0e1c4
 - filename: Contentstack.Core.Tests/Integration/LivePreview/LivePreviewBasicTest.cs
   checksum: 01517f2224fbb2956d79292e6d3d23d1cc970dbfc190623496bcac1335bcd683
-- filename: Contentstack.Core.Tests/Helpers/AssertionHelper.cs
-  checksum: 17efa53b38647d0f0d98771a50ee6d44f17650745a60a5e8fdff086ac8ab7596
-- filename: Contentstack.Core.Tests/Helpers/TestDataHelper.cs
-  checksum: 67c8afb436287676e0db3a62a9213d800239cf5bb543cc4d81f438655abf0e1f
 - filename: Contentstack.Core.Tests/generate_html_report.py
   checksum: b4bec9ef853703e989b3d8077edc5c3ec6ea13a23826699d8beca5e87323e128
-- filename: Contentstack.Core.Tests/Helpers/IntegrationTestBase.cs
-  checksum: fe8a38f19e916767f6a016b33d4e8cd12316aaf70a8a46bcd6e44fedcbe921d7
-- filename: Contentstack.Core.Tests/Helpers/TestOutputHelper.cs
-  checksum: 70eec33b6a5b3d1adada6309837d88c12f677e99e87d8517cb7f9a23537e1a8c
 - filename: Scripts/generate_enhanced_html_report.py
   checksum: e31c1372ea6e1cd1381c9533ba89b95edf746b36e4a1098d4aa51fba296ca928
 version: "1.0"

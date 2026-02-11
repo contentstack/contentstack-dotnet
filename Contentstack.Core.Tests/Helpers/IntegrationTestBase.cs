@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Xunit.Abstractions;
 using Contentstack.Core.Configuration;
-using Contentstack.Core.Models;
 
 namespace Contentstack.Core.Tests.Helpers
 {
@@ -19,6 +17,7 @@ namespace Contentstack.Core.Tests.Helpers
         {
             Output = output;
             TestOutput = new TestOutputHelper(output, GetType().Name);
+            TestAssert.SetHelper(TestOutput);
         }
 
         /// <summary>
@@ -54,47 +53,6 @@ namespace Contentstack.Core.Tests.Helpers
         }
 
         /// <summary>
-        /// Log HTTP GET request with standard Contentstack headers
-        /// </summary>
-        protected void LogGetRequest(string url, string variantUid = null, Dictionary<string, string> additionalHeaders = null)
-        {
-            var headers = new Dictionary<string, string>
-            {
-                { "api_key", TestDataHelper.ApiKey },
-                { "access_token", TestDataHelper.DeliveryToken },
-                { "Content-Type", "application/json" }
-            };
-
-            if (!string.IsNullOrEmpty(variantUid))
-            {
-                headers["x-cs-variant-uid"] = variantUid;
-            }
-
-            if (additionalHeaders != null)
-            {
-                foreach (var header in additionalHeaders)
-                {
-                    headers[header.Key] = header.Value;
-                }
-            }
-
-            TestOutput.LogRequest("GET", url, headers);
-        }
-
-        /// <summary>
-        /// Log successful HTTP response
-        /// </summary>
-        protected void LogSuccessResponse(int statusCode = 200, string statusText = "OK", Dictionary<string, string> headers = null)
-        {
-            var responseHeaders = headers ?? new Dictionary<string, string>
-            {
-                { "content-type", "application/json" }
-            };
-
-            TestOutput.LogResponse(statusCode, statusText, responseHeaders);
-        }
-
-        /// <summary>
         /// Log assertion with expected and actual values
         /// </summary>
         protected void LogAssertion(string name, object expected, object actual)
@@ -122,7 +80,8 @@ namespace Contentstack.Core.Tests.Helpers
         }
 
         /// <summary>
-        /// Create Contentstack client with standard configuration
+        /// Create Contentstack client with standard configuration.
+        /// Automatically registers RequestLoggingPlugin to capture actual HTTP requests/responses.
         /// </summary>
         protected ContentstackClient CreateClient()
         {
@@ -135,41 +94,10 @@ namespace Contentstack.Core.Tests.Helpers
                 Branch = TestDataHelper.BranchUid
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
 
-        /// <summary>
-        /// Build API URL for entry fetch
-        /// </summary>
-        protected string BuildEntryUrl(string contentType, string entryUid, Dictionary<string, string> queryParams = null)
-        {
-            var url = $"https://{TestDataHelper.Host}/v3/content_types/{contentType}/entries/{entryUid}";
-            
-            if (queryParams != null && queryParams.Count > 0)
-            {
-                var queryString = string.Join("&", 
-                    System.Linq.Enumerable.Select(queryParams, kvp => $"{kvp.Key}={kvp.Value}"));
-                url += "?" + queryString;
-            }
-            
-            return url;
-        }
-
-        /// <summary>
-        /// Build API URL for query
-        /// </summary>
-        protected string BuildQueryUrl(string contentType, Dictionary<string, string> queryParams = null)
-        {
-            var url = $"https://{TestDataHelper.Host}/v3/content_types/{contentType}/entries";
-            
-            if (queryParams != null && queryParams.Count > 0)
-            {
-                var queryString = string.Join("&", 
-                    System.Linq.Enumerable.Select(queryParams, kvp => $"{kvp.Key}={kvp.Value}"));
-                url += "?" + queryString;
-            }
-            
-            return url;
-        }
     }
 }

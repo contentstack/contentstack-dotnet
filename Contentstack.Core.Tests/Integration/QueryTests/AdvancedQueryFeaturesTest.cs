@@ -36,7 +36,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Combine multiple filters with sorting
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("title");
             query.GreaterThan("created_at", DateTime.Now.AddYears(-5).ToString("yyyy-MM-dd"));
@@ -48,9 +47,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() <= 10);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() <= 10);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Combine Projection With References Returns Correct Data")]
@@ -66,7 +65,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Combine Only with IncludeReference
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             query.Only(new[] { "title", "authors" });
@@ -77,9 +75,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Nested Logical Operations Executes Correctly")]
@@ -95,7 +93,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Create complex nested query: (A OR B) AND C
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var orQuery1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query()
                 .Where("uid", TestDataHelper.ComplexEntryUid);
@@ -110,8 +107,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Multiple Reference Fields With Projection Works Correctly")]
@@ -126,7 +123,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeReference(new[] { "authors", "related_content" });
             query.Limit(5);
@@ -135,8 +131,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -155,7 +151,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Empty string value
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "");
             var result = await query.Find<Entry>();
@@ -163,14 +158,14 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // May return entries with empty title or no results
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -191,13 +186,13 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 var result = await query.Find<Entry>();
                 
                 // If API accepts it, result should be valid
-                Assert.NotNull(result);
+                TestAssert.NotNull(result);
             }
             catch (Exception)
             {
                 // ✅ EXPECTED: API doesn't support all special characters
                 // This is documented in CDA API documentation
-                Assert.True(true, "API correctly rejects unsupported special characters");
+                TestAssert.True(true, "API correctly rejects unsupported special characters");
             }
         }
         
@@ -213,7 +208,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Very long string
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var longString = new string('a', 1000);
             query.Where("title", longString);
@@ -222,14 +216,14 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -245,7 +239,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Create separate queries to test limit behavior
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.Limit(5);
@@ -258,10 +251,10 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result1);
-            Assert.NotNull(result2);
-            Assert.True(result1.Items.Count() <= 5);
-            Assert.True(result2.Items.Count() <= 10);
+            TestAssert.NotNull(result1);
+            TestAssert.NotNull(result2);
+            TestAssert.True(result1.Items.Count() <= 5);
+            TestAssert.True(result2.Items.Count() <= 10);
         }
         
         #endregion
@@ -280,7 +273,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act & Assert - Test self-referencing capability
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SelfRefContentTypeUid}/entries/{TestDataHelper.SelfRefEntryUid}");
 
             try
             {
@@ -290,13 +282,13 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                     .IncludeReference("self_reference")
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
-                Assert.NotNull(entry.Uid);
+                TestAssert.NotNull(entry);
+                TestAssert.NotNull(entry.Uid);
             }
             catch (Exception)
             {
                 // If self-referencing entry doesn't exist, test SDK's ability to handle the request
-                Assert.True(true, "SDK handles self-referencing request without crashing");
+                TestAssert.True(true, "SDK handles self-referencing request without crashing");
             }
         }
         
@@ -311,7 +303,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act & Assert
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SelfRefContentTypeUid}/entries");
 
             try
             {
@@ -320,21 +311,21 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 query.Limit(5);
                 var result = await query.Find<Entry>();
                 
-                Assert.NotNull(result);
-                Assert.NotNull(result.Items);
+                TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
                 // Should handle self-references without infinite loops
-                Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
             }
             catch (Exception)
             {
                 // If self-referencing content type doesn't exist, verify SDK handles gracefully
-                Assert.True(true, "SDK handles self-referencing query request without crashing");
+                TestAssert.True(true, "SDK handles self-referencing query request without crashing");
             }
         }
         
@@ -355,7 +346,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexBlocksEntryUid}");
 
             try
             {
@@ -364,8 +354,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                     .Entry(TestDataHelper.ComplexBlocksEntryUid)
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
-                Assert.NotNull(entry.Uid);
+                TestAssert.NotNull(entry);
+                TestAssert.NotNull(entry.Uid);
             }
             catch (Exception)
             {
@@ -375,7 +365,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                     .Entry(TestDataHelper.ComplexEntryUid)
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
         }
         
@@ -392,7 +382,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexBlocksEntryUid}");
 
             try
             {
@@ -402,8 +391,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                     .includeEmbeddedItems()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
-                Assert.NotNull(entry.Uid);
+                TestAssert.NotNull(entry);
+                TestAssert.NotNull(entry.Uid);
             }
             catch (Exception)
             {
@@ -414,7 +403,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                     .includeEmbeddedItems()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
         }
         
@@ -434,7 +423,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - First query
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query1.Limit(5);
             var result1 = await query1.Find<Entry>();
@@ -447,10 +435,10 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result1);
-            Assert.NotNull(result2);
-            Assert.True(result1.Items.Count() <= 5);
-            Assert.True(result2.Items.Count() <= 10);
+            TestAssert.NotNull(result1);
+            TestAssert.NotNull(result2);
+            TestAssert.True(result1.Items.Count() <= 5);
+            TestAssert.True(result2.Items.Count() <= 10);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Chained Method Calls Maintains State")]
@@ -464,7 +452,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Fluent chaining
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var result = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -477,9 +464,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() <= 5);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() <= 5);
         }
         
         #endregion
@@ -498,7 +485,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Add custom parameter
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.AddParam("custom_param", "custom_value");
             query.Limit(5);
@@ -507,8 +493,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert - Should not break the query
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Multiple Custom Params All Applied")]
@@ -523,7 +509,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.AddParam("param1", "value1");
             query.AddParam("param2", "value2");
@@ -533,8 +518,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -557,19 +542,19 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 Branch = TestDataHelper.BranchUid
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             var query = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var result = await query.Limit(5).Find<Entry>();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Branch With Complex Query Works Together")]
@@ -588,11 +573,11 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 Branch = TestDataHelper.BranchUid
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("title");
             query.IncludeReference("authors");
@@ -602,8 +587,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -622,7 +607,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.IncludeCount();
             query.Limit(5);
@@ -631,8 +615,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Mixed Operators All Work Together")]
@@ -647,7 +631,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("title");
             query.NotExists("non_existent_field");
@@ -658,8 +641,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Query Operations - Advanced Query Query Result Structure Is Valid")]
@@ -674,7 +657,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(3);
             var result = await query.Find<Entry>();
@@ -682,15 +664,15 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert - Verify result structure
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry);
-                Assert.NotNull(entry.Uid);
+                TestAssert.NotNull(entry);
+                TestAssert.NotNull(entry.Uid);
             }
         }
         
@@ -708,7 +690,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -46,10 +45,10 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include Basic Fetch Returns Entry")]
@@ -64,7 +63,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -74,7 +72,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include Owner Includes Owner Info")]
@@ -89,7 +87,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -100,7 +97,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include Metadata Includes Metadata Fields")]
@@ -115,7 +112,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -125,11 +121,11 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include Embedded Items Includes Embedded")]
@@ -144,7 +140,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -155,7 +150,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         #endregion
@@ -174,7 +169,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -185,7 +179,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include All Includes Combined Correctly")]
@@ -200,7 +194,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -212,7 +205,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include With References Includes Combined")]
@@ -227,7 +220,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -239,7 +231,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         #endregion
@@ -258,7 +250,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -270,7 +261,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include With Except Combines Correctly")]
@@ -285,7 +276,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -296,7 +286,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         #endregion
@@ -315,7 +305,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -327,7 +316,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include With Fallback Combines Correctly")]
@@ -342,7 +331,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -353,11 +341,11 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -377,7 +365,6 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -392,8 +379,8 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 15000, $"Multiple includes should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 15000, $"Multiple includes should complete within 15s, took {elapsed}ms");
         }
         
         #endregion
@@ -410,7 +397,9 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

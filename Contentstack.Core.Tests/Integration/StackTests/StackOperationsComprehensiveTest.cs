@@ -38,11 +38,12 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
             AssertionHelper.AssertStackConfiguration(client, options);
         }
         
@@ -58,13 +59,14 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(client);
-            Assert.Equal(TestDataHelper.ApiKey, client.GetApplicationKey());
-            Assert.Equal(TestDataHelper.DeliveryToken, client.GetAccessToken());
+            TestAssert.NotNull(client);
+            TestAssert.Equal(TestDataHelper.ApiKey, client.GetApplicationKey());
+            TestAssert.Equal(TestDataHelper.DeliveryToken, client.GetAccessToken());
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Initialization With Live Preview Should Configure Correctly")]
@@ -97,15 +99,16 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
             var livePreviewConfig = client.GetLivePreviewConfig();
-            Assert.NotNull(livePreviewConfig);
-            Assert.True(livePreviewConfig.Enable);
-            Assert.Equal(TestDataHelper.PreviewToken, livePreviewConfig.PreviewToken);
+            TestAssert.NotNull(livePreviewConfig);
+            TestAssert.True(livePreviewConfig.Enable);
+            TestAssert.Equal(TestDataHelper.PreviewToken, livePreviewConfig.PreviewToken);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Live Preview Enabled By Default False")]
@@ -120,12 +123,13 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             };
             
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Assert
             LogAssert("Verifying response");
 
             var livePreviewConfig = client.GetLivePreviewConfig();
-            Assert.False(livePreviewConfig?.Enable ?? false);
+            TestAssert.False(livePreviewConfig?.Enable ?? false);
         }
         
         #endregion
@@ -148,7 +152,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.Equal(TestDataHelper.ApiKey, apiKey);
+            TestAssert.Equal(TestDataHelper.ApiKey, apiKey);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Get Access Token Returns Correct Value")]
@@ -167,7 +171,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.Equal(TestDataHelper.DeliveryToken, deliveryToken);
+            TestAssert.Equal(TestDataHelper.DeliveryToken, deliveryToken);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Get Version Returns Non Empty String")]
@@ -186,10 +190,10 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(version);
-            Assert.NotEmpty(version);
+            TestAssert.NotNull(version);
+            TestAssert.NotEmpty(version);
             // Version can be either semantic (1.0.0) or simple (v3)
-            Assert.True(version.Length > 0, $"Version should not be empty, got: {version}");
+            TestAssert.True(version.Length > 0, $"Version should not be empty, got: {version}");
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Set Header Custom Headers Are Applied")]
@@ -212,7 +216,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
 
             // Note: We can't directly verify headers without making a request,
             // but we can verify the method doesn't throw
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Remove Header Removes Custom Header")]
@@ -235,7 +239,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             LogAssert("Verifying response");
 
             // Verify method executes without error
-            Assert.NotNull(client);
+            TestAssert.NotNull(client);
         }
         
         #endregion
@@ -253,7 +257,6 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             var result = await contentType.Fetch();
@@ -261,10 +264,10 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(contentType);
-            Assert.NotNull(result);
+            TestAssert.NotNull(contentType);
+            TestAssert.NotNull(result);
             // ContentType.Fetch returns JObject, verify it has data
-            Assert.True(result.Count > 0, "Content type should have schema fields");
+            TestAssert.True(result.Count > 0, "Content type should have schema fields");
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Content Type Query Returns Entries")]
@@ -278,7 +281,6 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             var query = contentType.Query();
@@ -287,9 +289,9 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Entry Can Be Accessed")]
@@ -304,7 +306,6 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = client.ContentType(TestDataHelper.SimpleContentTypeUid)
                               .Entry(TestDataHelper.SimpleEntryUid);
@@ -313,9 +314,9 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(result);
-            Assert.Equal(TestDataHelper.SimpleEntryUid, result.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(result);
+            TestAssert.Equal(TestDataHelper.SimpleEntryUid, result.Uid);
         }
         
         #endregion
@@ -333,7 +334,6 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = client.Asset(TestDataHelper.ImageAssetUid);
             var result = await asset.Fetch();
@@ -341,9 +341,9 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(result);
-            Assert.Equal(TestDataHelper.ImageAssetUid, result.Uid);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(result);
+            TestAssert.Equal(TestDataHelper.ImageAssetUid, result.Uid);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Asset Library Can Be Accessed")]
@@ -356,7 +356,6 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assetLibrary = client.AssetLibrary();
             var result = await assetLibrary.FetchAll();
@@ -364,10 +363,10 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assetLibrary);
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(assetLibrary);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Image Delivery Asset Url Is Accessible")]
@@ -381,19 +380,18 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
-            Assert.NotEmpty(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
+            TestAssert.NotEmpty(asset.Url);
             // Verify URL is a valid HTTP/HTTPS URL
-            Assert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri));
-            Assert.True(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+            TestAssert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri));
+            TestAssert.True(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
         
         #endregion
@@ -413,10 +411,10 @@ namespace Contentstack.Core.Tests.Integration.StackTests
                 Branch = TestDataHelper.BranchUid
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client.ContentType(TestDataHelper.SimpleContentTypeUid)
                                     .Entry(TestDataHelper.SimpleEntryUid)
@@ -425,8 +423,8 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
         }
         
         #endregion
@@ -448,12 +446,12 @@ namespace Contentstack.Core.Tests.Integration.StackTests
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
-            var exception = await Assert.ThrowsAnyAsync<Exception>(async () =>
+            var exception = await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType(TestDataHelper.SimpleContentTypeUid)
                            .Entry(TestDataHelper.SimpleEntryUid)
@@ -461,7 +459,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             });
             
             // Verify it's an error response (can be EntryException, AssetException, or similar)
-            Assert.NotNull(exception);
+            TestAssert.NotNull(exception);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Invalid Delivery Token Throws Error")]
@@ -479,12 +477,12 @@ namespace Contentstack.Core.Tests.Integration.StackTests
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
-            var exception = await Assert.ThrowsAnyAsync<Exception>(async () =>
+            var exception = await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType(TestDataHelper.SimpleContentTypeUid)
                            .Entry(TestDataHelper.SimpleEntryUid)
@@ -492,7 +490,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             });
             
             // Verify it's an error response (can be EntryException, AssetException, or similar)
-            Assert.NotNull(exception);
+            TestAssert.NotNull(exception);
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Invalid Content Type UID Throws Error")]
@@ -505,9 +503,8 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{"invalid_content_type_uid_12345"}/entries/{"invalid_entry_uid_12345"}");
 
-            var exception = await Assert.ThrowsAnyAsync<Exception>(async () =>
+            var exception = await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType("invalid_content_type_uid_12345")
                            .Entry("invalid_entry_uid_12345")
@@ -515,7 +512,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             });
             
             // Verify it's an error response
-            Assert.NotNull(exception);
+            TestAssert.NotNull(exception);
         }
         
         #endregion
@@ -539,10 +536,10 @@ namespace Contentstack.Core.Tests.Integration.StackTests
                 Timeout = 30000 // 30 seconds
             };
             var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -554,8 +551,8 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 30000, $"Request should complete within timeout, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 30000, $"Request should complete within timeout, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Stack Operations - Stack Concurrent Requests Handled Correctly")]
@@ -571,7 +568,6 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             
             // Act - Make 5 concurrent requests
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             for (int i = 0; i < 5; i++)
             {
@@ -585,11 +581,11 @@ namespace Contentstack.Core.Tests.Integration.StackTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.Equal(5, results.Length);
-            Assert.All(results, result =>
+            TestAssert.Equal(5, results.Length);
+            TestAssert.All(results, result =>
             {
-                Assert.NotNull(result);
-                Assert.Equal(TestDataHelper.SimpleEntryUid, result.Uid);
+                TestAssert.NotNull(result);
+                TestAssert.Equal(TestDataHelper.SimpleEntryUid, result.Uid);
             });
         }
         
@@ -607,7 +603,9 @@ namespace Contentstack.Core.Tests.Integration.StackTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

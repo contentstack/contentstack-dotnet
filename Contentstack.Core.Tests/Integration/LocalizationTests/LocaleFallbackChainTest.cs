@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -46,15 +45,15 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+                TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
             catch (Exception)
             {
                 // If locale not configured, method should still work
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -70,7 +69,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -81,10 +79,10 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
             
             // ✅ KEY TEST: Locale parameter was applied
             // Entry should contain locale-specific content
@@ -107,7 +105,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -118,12 +115,12 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
                 // Should fallback to default locale if de-de missing
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -139,7 +136,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             try
             {
@@ -150,12 +146,12 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
                 // Some fields from en-us, some from fallback
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -175,7 +171,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             try
             {
@@ -184,12 +179,12 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 query.Limit(5);
                 var result = await query.Find<Entry>();
                 
-                Assert.NotNull(result);
-                Assert.NotNull(result.Items);
+                TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -204,7 +199,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act - Query same content in different locales
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var query1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             query1.SetLocale("en-us");
@@ -220,8 +214,8 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result1);
-            Assert.NotNull(result2);
+            TestAssert.NotNull(result1);
+            TestAssert.NotNull(result2);
         }
         
         #endregion
@@ -240,7 +234,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             try
             {
@@ -252,12 +245,12 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeReference("authors")
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
                 // Fallback should apply to referenced entries too
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -273,7 +266,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             try
             {
@@ -285,14 +277,14 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeReference(new[] { "authors", "authors.reference" })
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+                TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -312,7 +304,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -326,12 +317,12 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                         .Fetch<Entry>();
                 });
                 
-                Assert.NotNull(entry);
-                Assert.True(elapsed < 10000, $"Fallback fetch should complete within 10s, took {elapsed}ms");
+                TestAssert.NotNull(entry);
+                TestAssert.True(elapsed < 10000, $"Fallback fetch should complete within 10s, took {elapsed}ms");
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -351,7 +342,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -362,15 +352,15 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+                TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
             catch (Exception)
             {
                 // Invalid locale may throw, which is acceptable
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -386,7 +376,6 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             try
             {
@@ -397,12 +386,12 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
                 // Should use all default locale content
             }
             catch (Exception)
             {
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -420,7 +409,9 @@ namespace Contentstack.Core.Tests.Integration.LocalizationTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

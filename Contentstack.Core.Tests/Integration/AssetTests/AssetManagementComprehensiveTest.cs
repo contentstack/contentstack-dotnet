@@ -34,15 +34,14 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.Equal(TestDataHelper.ImageAssetUid, asset.Uid);
+            TestAssert.NotNull(asset);
+            TestAssert.Equal(TestDataHelper.ImageAssetUid, asset.Uid);
             AssertionHelper.AssertAssetBasicFields(asset);
         }
         
@@ -57,7 +56,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid)
                 .AddParam("include_dimension", "true")
@@ -66,9 +64,9 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
-            Assert.NotEmpty(asset.FileName);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
+            TestAssert.NotEmpty(asset.FileName);
             // Dimension data should be included for image assets
         }
         
@@ -82,16 +80,15 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assets = await client.AssetLibrary().FetchAll();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
-            Assert.True(assets.Items.Count() > 0, "Asset library should contain at least one asset");
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
+            TestAssert.True(assets.Items.Count() > 0, "Asset library should contain at least one asset");
             
             // Verify each asset has required fields
             foreach (var asset in assets.Items)
@@ -110,7 +107,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assets = await client.AssetLibrary()
                 .SetLocale("en-us")
@@ -119,13 +115,13 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
-            Assert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
             foreach (var asset in assets.Items)
             {
-                Assert.NotNull(asset.Uid);
-                Assert.NotEmpty(asset.Uid);
+                TestAssert.NotNull(asset.Uid);
+                TestAssert.NotEmpty(asset.Uid);
             }
         }
         
@@ -141,7 +137,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             {
                 // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
                 var assets = await client.AssetLibrary()
                     .SetLocale("en-us")
@@ -151,21 +146,21 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
                 // Assert
             LogAssert("Verifying response");
 
-                Assert.NotNull(assets);
-                Assert.NotNull(assets.Items);
+                TestAssert.NotNull(assets);
+                TestAssert.NotNull(assets.Items);
                 // Should return assets with fallback to default locale
-                Assert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
             foreach (var asset in assets.Items)
             {
-                Assert.NotNull(asset.Uid);
-                Assert.NotEmpty(asset.Uid);
+                TestAssert.NotNull(asset.Uid);
+                TestAssert.NotEmpty(asset.Uid);
             }
             }
             catch (Exception)
             {
                 // If fallback fails for the locale, the test passes as we're testing
                 // that the method exists and can be called
-                Assert.True(true, "IncludeFallback method is available");
+                TestAssert.True(true, "IncludeFallback method is available");
             }
         }
         
@@ -184,26 +179,25 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
+            TestAssert.NotNull(asset);
             
             // Required fields
-            Assert.NotNull(asset.Uid);
-            Assert.NotEmpty(asset.Uid);
-            Assert.NotNull(asset.Url);
-            Assert.NotEmpty(asset.Url);
-            Assert.NotNull(asset.FileName);
-            Assert.NotEmpty(asset.FileName);
-            Assert.NotNull(asset.ContentType);
-            Assert.NotEmpty(asset.ContentType);
-            Assert.NotNull(asset.FileSize);
-            Assert.NotEmpty(asset.FileSize);
+            TestAssert.NotNull(asset.Uid);
+            TestAssert.NotEmpty(asset.Uid);
+            TestAssert.NotNull(asset.Url);
+            TestAssert.NotEmpty(asset.Url);
+            TestAssert.NotNull(asset.FileName);
+            TestAssert.NotEmpty(asset.FileName);
+            TestAssert.NotNull(asset.ContentType);
+            TestAssert.NotEmpty(asset.ContentType);
+            TestAssert.NotNull(asset.FileSize);
+            TestAssert.NotEmpty(asset.FileSize);
         }
         
         [Fact(DisplayName = "Asset Management - Asset Url Is Valid Http Url")]
@@ -217,19 +211,18 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Url);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Url);
             
             // Verify it's a valid URL
-            Assert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri));
-            Assert.True(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+            TestAssert.True(Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri));
+            TestAssert.True(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
         
         [Fact(DisplayName = "Asset Management - Asset Content Type Matches File Type")]
@@ -243,18 +236,17 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.ContentType);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.ContentType);
             
             // For an image asset, content type should be image/*
-            Assert.Contains("image", asset.ContentType.ToLower());
+            TestAssert.Contains("image", asset.ContentType.ToLower());
         }
         
         [Fact(DisplayName = "Asset Management - Asset Publish Details Available")]
@@ -268,17 +260,16 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.PublishDetails);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.PublishDetails);
             // Publish details should be a valid object
-            Assert.True(asset.PublishDetails is object);
+            TestAssert.True(asset.PublishDetails is object);
         }
         
         #endregion
@@ -296,7 +287,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             assetLibrary.SortWithKeyAndOrderBy("created_at", OrderBy.OrderByAscending);
             var assets = await assetLibrary.FetchAll();
@@ -304,13 +294,13 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
-            Assert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
             foreach (var asset in assets.Items)
             {
-                Assert.NotNull(asset.Uid);
-                Assert.NotEmpty(asset.Uid);
+                TestAssert.NotNull(asset.Uid);
+                TestAssert.NotEmpty(asset.Uid);
             }
             // Ordering is handled by API
         }
@@ -326,7 +316,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             assetLibrary.SortWithKeyAndOrderBy("created_at", OrderBy.OrderByDescending);
             var assets = await assetLibrary.FetchAll();
@@ -334,13 +323,13 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
-            Assert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
             foreach (var asset in assets.Items)
             {
-                Assert.NotNull(asset.Uid);
-                Assert.NotEmpty(asset.Uid);
+                TestAssert.NotNull(asset.Uid);
+                TestAssert.NotEmpty(asset.Uid);
             }
         }
         
@@ -354,7 +343,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assets = await client.AssetLibrary()
                 .Limit(5)
@@ -364,9 +352,9 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
-            Assert.True(assets.Items.Count() <= 5, "Limit should restrict results to 5 or fewer");
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
+            TestAssert.True(assets.Items.Count() <= 5, "Limit should restrict results to 5 or fewer");
         }
         
         [Fact(DisplayName = "Asset Management - Asset Library Search By Filename Returns Matching Assets")]
@@ -379,7 +367,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assets = await client.AssetLibrary()
                 .Where("filename", "*.png") // Search for PNG files
@@ -388,14 +375,14 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
             // Results may be empty if no PNG files exist
-            Assert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
             foreach (var asset in assets.Items)
             {
-                Assert.NotNull(asset.Uid);
-                Assert.NotEmpty(asset.Uid);
+                TestAssert.NotNull(asset.Uid);
+                TestAssert.NotEmpty(asset.Uid);
             }
         }
         
@@ -415,9 +402,9 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(countResult);
+            TestAssert.NotNull(countResult);
             // Count returns a JObject
-            Assert.True(countResult.Count > 0, "Count result should contain data");
+            TestAssert.True(countResult.Count > 0, "Count result should contain data");
         }
         
         [Fact(DisplayName = "Asset Management - Asset Library With Params Returns Assets")]
@@ -430,7 +417,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assets = await client.AssetLibrary()
                 .AddParam("include_dimension", "true")
@@ -439,13 +425,13 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
-            Assert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Asset>>(assets.Items);
             foreach (var asset in assets.Items)
             {
-                Assert.NotNull(asset.Uid);
-                Assert.NotEmpty(asset.Uid);
+                TestAssert.NotNull(asset.Uid);
+                TestAssert.NotEmpty(asset.Uid);
             }
         }
         
@@ -464,7 +450,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var (asset, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -474,8 +459,8 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.True(elapsed < 5000, $"Single asset fetch should complete within 5s, took {elapsed}ms");
+            TestAssert.NotNull(asset);
+            TestAssert.True(elapsed < 5000, $"Single asset fetch should complete within 5s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Asset Management - Asset Library Fetch All Completes In Reasonable Time")]
@@ -488,7 +473,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var (assets, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -498,8 +482,8 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.True(elapsed < 10000, $"Asset library fetch all should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(assets);
+            TestAssert.True(elapsed < 10000, $"Asset library fetch all should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -516,14 +500,13 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{"invalid_asset_uid_12345"}");
 
-            var exception = await Assert.ThrowsAnyAsync<Exception>(async () =>
+            var exception = await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.Asset("invalid_asset_uid_12345").Fetch();
             });
             
-            Assert.NotNull(exception);
+            TestAssert.NotNull(exception);
         }
         
         [Fact(DisplayName = "Asset Management - Asset Library Empty Result Handles Gracefully")]
@@ -536,7 +519,6 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act - Query for assets that don't exist
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var assets = await client.AssetLibrary()
                 .Where("filename", "non_existent_file_xyz_12345.fake")
@@ -545,10 +527,10 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(assets);
-            Assert.NotNull(assets.Items);
+            TestAssert.NotNull(assets);
+            TestAssert.NotNull(assets.Items);
             // Should return empty collection, not null
-            Assert.Equal(0, assets.Items.Count());
+            TestAssert.Equal(0, assets.Items.Count());
         }
         
         [Fact(DisplayName = "Asset Management - Asset Tags Available")]
@@ -562,17 +544,16 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
+            TestAssert.NotNull(asset);
             // Asset object should be successfully fetched
             // Tags are accessible via the Tags property or Get method
-            Assert.NotNull(asset.Uid);
+            TestAssert.NotNull(asset.Uid);
         }
         
         #endregion
@@ -589,7 +570,9 @@ namespace Contentstack.Core.Tests.Integration.AssetTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

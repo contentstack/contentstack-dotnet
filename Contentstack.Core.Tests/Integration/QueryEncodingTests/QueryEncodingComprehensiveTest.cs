@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "Test");
             var result = await query.Find<Entry>();
@@ -43,7 +42,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Spaces Encoded Correctly")]
@@ -58,7 +57,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "Test Entry");
             var result = await query.Find<Entry>();
@@ -66,7 +64,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Special Characters Ampersand")]
@@ -81,7 +79,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
@@ -92,12 +89,12 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
             }
             catch (Exception ex) when (ex.Message.Contains("400") || ex.Message.Contains("Bad Request"))
             {
                 // ✅ EXPECTED: API doesn't support this special character
-                Assert.True(true, "API correctly rejects unsupported special character");
+                TestAssert.True(true, "API correctly rejects unsupported special character");
                 return;
             }
         }
@@ -114,7 +111,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             // ✅ Special characters may cause 400 Bad Request (API limitation)
             try
@@ -125,12 +121,12 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
             }
             catch (Exception ex) when (ex.Message.Contains("400") || ex.Message.Contains("Bad Request"))
             {
                 // ✅ EXPECTED: API doesn't support this special character
-                Assert.True(true, "API correctly rejects unsupported special character");
+                TestAssert.True(true, "API correctly rejects unsupported special character");
                 return;
             }
         }
@@ -151,12 +147,12 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
                 var result = await query.Find<Entry>();
                 
                 // If API accepts it, result should be valid
-                Assert.NotNull(result);
+                TestAssert.NotNull(result);
             }
             catch (Exception)
             {
                 // ✅ EXPECTED: API may reject hash character
-                Assert.True(true, "API correctly handles hash character limitation");
+                TestAssert.True(true, "API correctly handles hash character limitation");
             }
         }
         
@@ -176,7 +172,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "测试");
             var result = await query.Find<Entry>();
@@ -184,7 +179,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Unicode Japanese Characters")]
@@ -199,7 +194,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "テスト");
             var result = await query.Find<Entry>();
@@ -207,7 +201,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Unicode Arabic Characters")]
@@ -222,7 +216,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "اختبار");
             var result = await query.Find<Entry>();
@@ -230,7 +223,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Unicode Emoji Characters")]
@@ -245,7 +238,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "Test 🚀 Entry");
             var result = await query.Find<Entry>();
@@ -253,7 +245,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -272,7 +264,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "100% Complete");
             var result = await query.Find<Entry>();
@@ -280,7 +271,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Question Mark Encoded Correctly")]
@@ -295,7 +286,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "What?");
             var result = await query.Find<Entry>();
@@ -303,7 +293,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Slash Encoded Correctly")]
@@ -318,7 +308,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("url", "/test/path");
             var result = await query.Find<Entry>();
@@ -326,7 +315,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Equals Encoded Correctly")]
@@ -341,7 +330,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "A=B");
             var result = await query.Find<Entry>();
@@ -349,7 +337,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -368,7 +356,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "It's Working");
             var result = await query.Find<Entry>();
@@ -376,7 +363,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Double Quote Encoded Correctly")]
@@ -391,7 +378,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "\"Quoted\"");
             var result = await query.Find<Entry>();
@@ -399,7 +385,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Square Brackets Encoded Correctly")]
@@ -414,7 +400,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "[Test]");
             var result = await query.Find<Entry>();
@@ -422,7 +407,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Curly Brackets Encoded Correctly")]
@@ -437,7 +422,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "{Test}");
             var result = await query.Find<Entry>();
@@ -445,7 +429,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -464,7 +448,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Regex("title", "Test.*", "i");
             var result = await query.Find<Entry>();
@@ -472,7 +455,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Contained In With Special Chars")]
@@ -490,7 +473,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.ContainedIn("title", new object[] { "Test & Entry", "Test | Entry" });
             var result = await query.Find<Entry>();
@@ -498,12 +480,12 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
             }
             catch (Exception)
             {
                 // ✅ EXPECTED: API doesn't support all special characters
-                Assert.True(true, "API correctly rejects unsupported special characters");
+                TestAssert.True(true, "API correctly rejects unsupported special characters");
                 return;
             }
         }
@@ -523,7 +505,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var sub1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("title", "Test & Entry");
             var sub2 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Where("url", "/test/path");
@@ -533,12 +514,12 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
             }
             catch (Exception)
             {
                 // ✅ EXPECTED: API doesn't support all special characters
-                Assert.True(true, "API correctly rejects unsupported special characters");
+                TestAssert.True(true, "API correctly rejects unsupported special characters");
                 return;
             }
         }
@@ -559,7 +540,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -570,10 +550,10 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Header Value With Special Chars")]
@@ -588,7 +568,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entryObj = client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -599,8 +578,8 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         #endregion
@@ -620,7 +599,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", longString);
             var result = await query.Find<Entry>();
@@ -628,7 +606,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Empty String Handles Correctly")]
@@ -643,7 +621,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "");
             var result = await query.Find<Entry>();
@@ -651,7 +628,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Whitespace Only String")]
@@ -666,7 +643,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "   ");
             var result = await query.Find<Entry>();
@@ -674,7 +650,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Newline Characters Encoded Correctly")]
@@ -689,7 +665,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "Line1\nLine2");
             var result = await query.Find<Entry>();
@@ -697,7 +672,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Tab Characters Encoded Correctly")]
@@ -712,7 +687,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "Column1\tColumn2");
             var result = await query.Find<Entry>();
@@ -720,7 +694,7 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Query Operations - Encoding Mixed Character Set All Types Encoded")]
@@ -738,7 +712,6 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             
             // Act - Mix of special chars, unicode, and regular text
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("title", "Test & Special: #C++ 测试 🚀!");
             var result = await query.Find<Entry>();
@@ -746,12 +719,12 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
             }
             catch (Exception)
             {
                 // ✅ EXPECTED: API doesn't support all special characters
-                Assert.True(true, "API correctly rejects unsupported special characters");
+                TestAssert.True(true, "API correctly rejects unsupported special characters");
                 return;
             }
         }
@@ -770,7 +743,9 @@ namespace Contentstack.Core.Tests.Integration.QueryEncodingTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

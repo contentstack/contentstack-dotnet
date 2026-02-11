@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -46,8 +45,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 15000, $"Large query should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 15000, $"Large query should complete within 15s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Multiple Pages Sequential")]
@@ -62,7 +61,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act - Fetch 3 pages sequentially
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             for (int i = 0; i < 3; i++)
             {
@@ -77,7 +75,7 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.True(elapsed < 20000, $"3 pages should fetch within 20s, took {elapsed}ms");
+            TestAssert.True(elapsed < 20000, $"3 pages should fetch within 20s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Complex Query Large Results")]
@@ -92,7 +90,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -104,8 +101,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 15000, $"Complex query should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 15000, $"Complex query should complete within 15s, took {elapsed}ms");
         }
         
         #endregion
@@ -124,7 +121,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -136,8 +132,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 20000, $"Large query with refs should complete within 20s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 20000, $"Large query with refs should complete within 20s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Deep References Large Dataset")]
@@ -152,7 +148,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -164,8 +159,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 25000, $"Deep refs with large dataset should complete within 25s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 25000, $"Deep refs with large dataset should complete within 25s, took {elapsed}ms");
         }
         
         #endregion
@@ -183,7 +178,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -194,8 +188,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 15000, $"Large asset query should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 15000, $"Large asset query should complete within 15s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Assets Pagination Sequential")]
@@ -209,7 +203,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act - Fetch 3 pages of assets
             LogAct("Fetching all items");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/assets");
 
             for (int i = 0; i < 3; i++)
             {
@@ -224,7 +217,7 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.True(elapsed < 20000, $"3 asset pages should fetch within 20s, took {elapsed}ms");
+            TestAssert.True(elapsed < 20000, $"3 asset pages should fetch within 20s, took {elapsed}ms");
         }
         
         #endregion
@@ -243,7 +236,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -257,8 +249,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 20000, $"Complex filters should complete within 20s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 20000, $"Complex filters should complete within 20s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Sorting Large Dataset")]
@@ -273,7 +265,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -285,8 +276,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 15000, $"Sorted query should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 15000, $"Sorted query should complete within 15s, took {elapsed}ms");
         }
         
         #endregion
@@ -307,7 +298,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act - Execute 3 queries in parallel
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var task1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query().Limit(10).Find<Entry>();
             var task2 = client.ContentType(TestDataHelper.MediumContentTypeUid).Query().Limit(10).Find<Entry>();
@@ -319,7 +309,7 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert - Parallel should be faster than sequential
             LogAssert("Verifying response");
 
-            Assert.True(elapsed < 15000, $"3 parallel queries should complete within 15s, took {elapsed}ms");
+            TestAssert.True(elapsed < 15000, $"3 parallel queries should complete within 15s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Parallel Asset Queries Concurrent")]
@@ -334,7 +324,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act - Fetch assets in parallel
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var task1 = client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             var task2 = client.AssetLibrary().Limit(10).FetchAll();
@@ -345,7 +334,7 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.True(elapsed < 10000, $"Parallel asset queries should complete within 10s, took {elapsed}ms");
+            TestAssert.True(elapsed < 10000, $"Parallel asset queries should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -364,7 +353,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -377,8 +365,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Large entry should fetch within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Large entry should fetch within 10s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Projection Reduces Payload Faster")]
@@ -393,7 +381,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act - With projection should be faster/equal to full fetch
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -407,8 +394,8 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 8000, $"Projection query should be fast, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 8000, $"Projection query should be fast, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Performance - Performance Cached Vs Uncached Consistency")]
@@ -423,7 +410,6 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             
             // Act - Fetch same entry twice
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (entry1, elapsed1) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -444,10 +430,10 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
             // Assert - Both should complete reasonably
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry1);
-            Assert.NotNull(entry2);
-            Assert.True(elapsed1 < 10000);
-            Assert.True(elapsed2 < 10000);
+            TestAssert.NotNull(entry1);
+            TestAssert.NotNull(entry2);
+            TestAssert.True(elapsed1 < 10000);
+            TestAssert.True(elapsed2 < 10000);
         }
         
         #endregion
@@ -464,7 +450,9 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

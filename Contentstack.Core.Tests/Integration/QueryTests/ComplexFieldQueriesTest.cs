@@ -34,7 +34,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("group.nested_field");
             var result = await query.Find<Entry>();
@@ -42,7 +41,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Query Nested Group Deep Path")]
@@ -57,7 +56,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("group.nested_group.deep_field");
             var result = await query.Find<Entry>();
@@ -65,7 +63,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Where On Group Field Filters Correctly")]
@@ -80,7 +78,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Where("group.title", "Test");
             var result = await query.Find<Entry>();
@@ -88,7 +85,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -107,7 +104,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("modular_blocks");
             var result = await query.Find<Entry>();
@@ -115,7 +111,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Query Modular Block Field Dot Notation")]
@@ -130,7 +126,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("modular_blocks.block_title");
             var result = await query.Find<Entry>();
@@ -138,7 +133,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -157,7 +152,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("json_rte");
             var result = await query.Find<Entry>();
@@ -165,7 +159,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Query Json Rte Embedded Finds Entries")]
@@ -180,7 +174,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.includeEmbeddedItems();
             query.Exists("json_rte");
@@ -189,7 +182,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -208,7 +201,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.ContainedIn("multi_select", new object[] { "option1", "option2" });
             var result = await query.Find<Entry>();
@@ -216,7 +208,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Query Multi Reference Array Containment")]
@@ -232,7 +224,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.ContainedIn("authors", new object[] { TestDataHelper.SimpleEntryUid });
             var result = await query.Find<Entry>();
@@ -240,7 +231,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -259,7 +250,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("file");
             var result = await query.Find<Entry>();
@@ -267,7 +257,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Query Multiple File Fields And Condition")]
@@ -282,7 +272,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("file");
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("image");
@@ -292,7 +281,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -312,7 +301,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Where("taxonomy.usa_states", TestDataHelper.TaxUsaState);
             var result = await query.Find<Entry>();
@@ -320,7 +308,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Complex Field Query Multiple Taxonomies Or Condition")]
@@ -337,7 +325,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Where("taxonomy.usa_states", TestDataHelper.TaxUsaState);
             var sub2 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Where("taxonomy.india_states", TestDataHelper.TaxIndiaState);
@@ -347,7 +334,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -366,7 +353,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -377,8 +363,8 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 10000, $"Nested query should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 10000, $"Nested query should complete within 10s, took {elapsed}ms");
         }
         
         #endregion
@@ -395,7 +381,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

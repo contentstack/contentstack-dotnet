@@ -36,7 +36,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Where("uid", TestDataHelper.SimpleEntryUid);
             var result = await query.Find<Entry>();
@@ -44,11 +43,11 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             var entry = result.Items.First();
-            Assert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
+            TestAssert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
         }
         
         [Fact(DisplayName = "Entry Operations - Query Not Equal To Excludes Specific Entry")]
@@ -64,7 +63,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.NotEqualTo("uid", TestDataHelper.SimpleEntryUid);
             var result = await query.Find<Entry>();
@@ -72,10 +70,10 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // Should not contain the excluded entry
-            Assert.DoesNotContain(result.Items, e => e.Uid == TestDataHelper.SimpleEntryUid);
+            TestAssert.DoesNotContain(result.Items, e => e.Uid == TestDataHelper.SimpleEntryUid);
         }
         
         [Fact(DisplayName = "Entry Operations - Query Less Than Filters Correctly")]
@@ -91,7 +89,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.LessThan("created_at", comparisonDate);
             var result = await query.Find<Entry>();
@@ -99,16 +96,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // All returned entries should have been created before the comparison date
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             if (result.Items.Any())
             {
                 foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
             }
@@ -127,7 +124,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.LessThanOrEqualTo("created_at", comparisonDate);
             var result = await query.Find<Entry>();
@@ -135,16 +131,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             if (result.Items.Any())
             {
                 foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
             }
@@ -163,7 +159,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.GreaterThan("created_at", comparisonDate);
             var result = await query.Find<Entry>();
@@ -171,10 +166,10 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // Should return entries created after the comparison date
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         [Fact(DisplayName = "Entry Operations - Query Greater Than Or Equal To Filters Correctly")]
@@ -190,7 +185,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.GreaterThanOrEqualTo("created_at", comparisonDate);
             var result = await query.Find<Entry>();
@@ -198,9 +192,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         [Fact(DisplayName = "Entry Operations - Query Regex Matches Pattern")]
@@ -215,7 +209,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Search for entries with UIDs starting with "blt"
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Regex("uid", "^blt.*");
             var result = await query.Find<Entry>();
@@ -223,11 +216,11 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             // All UIDs should start with "blt"
-            Assert.All(result.Items, entry => Assert.StartsWith("blt", entry.Uid));
+            TestAssert.All(result.Items, entry => TestAssert.StartsWith("blt", entry.Uid));
         }
         
         [Fact(DisplayName = "Entry Operations - Query Regex Case Insensitive Matches Pattern")]
@@ -242,7 +235,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Case-insensitive search (RegexOptions = "i")
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Regex("uid", "BLT.*", "i");
             var result = await query.Find<Entry>();
@@ -250,9 +242,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         #endregion
@@ -274,7 +266,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.ContainedIn("uid", uids);
             var result = await query.Find<Entry>();
@@ -282,11 +273,11 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             // All returned entries should have UIDs in the provided list
-            Assert.All(result.Items, entry => Assert.Contains(entry.Uid, uids));
+            TestAssert.All(result.Items, entry => TestAssert.Contains(entry.Uid, uids));
         }
         
         [Fact(DisplayName = "Entry Operations - Query Not Contained In Excludes Entries")]
@@ -303,7 +294,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.NotContainedIn("uid", excludedUids);
             var result = await query.Find<Entry>();
@@ -311,10 +301,10 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // None of the returned entries should have the excluded UID
-            Assert.DoesNotContain(result.Items, e => excludedUids.Contains(e.Uid));
+            TestAssert.DoesNotContain(result.Items, e => excludedUids.Contains(e.Uid));
         }
         
         [Fact(DisplayName = "Entry Operations - Query Tags Exact Match Returns Entries With Tag")]
@@ -329,7 +319,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Query by tags (assuming entries have tags)
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.WhereTags(new[] { "test" }); // Adjust tag based on your test data
             var result = await query.Find<Entry>();
@@ -337,16 +326,16 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             // Results may be empty if no entries have the tag, which is fine
             // If results exist, validate structure
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -363,7 +352,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.ContainedIn("uid", new string[] { });
             var result = await query.Find<Entry>();
@@ -371,10 +359,10 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
             // Empty array should return no results
-            Assert.Equal(0, result.Items.Count());
+            TestAssert.Equal(0, result.Items.Count());
         }
         
         #endregion
@@ -393,7 +381,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Exists("title"); // Title should exist on all entries
             var result = await query.Find<Entry>();
@@ -401,11 +388,11 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             // All returned entries should have the title field
-            Assert.All(result.Items, entry => Assert.NotNull(entry.Title));
+            TestAssert.All(result.Items, entry => TestAssert.NotNull(entry.Title));
         }
         
         [Fact(DisplayName = "Entry Operations - Query Not Exists Returns Entries Without Field")]
@@ -420,7 +407,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.NotExists("non_existent_field_xyz_123");
             var result = await query.Find<Entry>();
@@ -428,17 +414,17 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             // Should return entries without the non-existent field (which is all of them)
             if (result.Items.Any())
             {
                 foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
             }
@@ -460,7 +446,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Ascending("created_at");
             var result = await query.Find<Entry>();
@@ -468,18 +453,18 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             
             // Verify entries have required fields
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
-                Assert.NotNull(entry.Title);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Title);
             }
         }
         
@@ -495,7 +480,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Descending("created_at");
             var result = await query.Find<Entry>();
@@ -503,18 +487,18 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             
             // Verify entries have required fields
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
-                Assert.NotNull(entry.Title);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Title);
             }
         }
         
@@ -530,7 +514,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Sort by created_at descending, then by title ascending
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Descending("created_at").Ascending("title");
             var result = await query.Find<Entry>();
@@ -538,15 +521,15 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             // Multiple sorts applied successfully - validate entries if present
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -568,7 +551,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             query.IncludeReference("authors"); // Assuming authors is a reference field
@@ -577,13 +559,13 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
             
             var entry = result.Items.First();
             // Check if reference field exists (even if null or empty)
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Query Include Reference Content Type UID Loads Specific References")]
@@ -599,7 +581,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Where("uid", TestDataHelper.ComplexEntryUid);
             query.IncludeReferenceContentTypeUID(); // Include reference content type UID
@@ -608,9 +589,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0);
         }
         
         #endregion
@@ -630,7 +611,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Combine multiple conditions
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var subQuery1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             subQuery1.Where("uid", TestDataHelper.SimpleEntryUid);
@@ -644,15 +624,15 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             // Should return entries matching both conditions
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -670,7 +650,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Either condition should match
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var subQuery1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Query();
             subQuery1.Where("uid", TestDataHelper.SimpleEntryUid);
@@ -684,9 +663,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0); // Should find at least the first one
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0); // Should find at least the first one
         }
         
         [Fact(DisplayName = "Entry Operations - Query Complex Logical Nested And Or")]
@@ -701,7 +680,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Complex nested logical query
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var subQuery1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             subQuery1.Exists("title");
@@ -715,14 +693,14 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -741,7 +719,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act - Multiple OR conditions
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var queries = new List<Query>
             {
@@ -755,14 +732,14 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Count >= 0, "Count should be non-negative");
-            Assert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Count >= 0, "Count should be non-negative");
+            TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             foreach (var entry in result.Items)
             {
-                Assert.NotNull(entry.Uid);
-                Assert.NotEmpty(entry.Uid);
+                TestAssert.NotNull(entry.Uid);
+                TestAssert.NotEmpty(entry.Uid);
                 // Each entry must have valid structure
             }
         }
@@ -783,7 +760,6 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(2).Skip(0);
             var result = await query.Find<Entry>();
@@ -791,9 +767,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() <= 2, "Limit should restrict results to 2 or fewer");
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() <= 2, "Limit should restrict results to 2 or fewer");
         }
         
         [Fact(DisplayName = "Entry Operations - Query Count Returns Correct Count")]
@@ -808,16 +784,15 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
             
             // Act
             LogAct("Performing test action");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var countResult = await query.Count();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(countResult);
+            TestAssert.NotNull(countResult);
             // Count returns a JObject with count information
-            Assert.True(countResult.Count > 0, "Count result should contain data");
+            TestAssert.True(countResult.Count > 0, "Count result should contain data");
         }
         
         #endregion
@@ -834,7 +809,9 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

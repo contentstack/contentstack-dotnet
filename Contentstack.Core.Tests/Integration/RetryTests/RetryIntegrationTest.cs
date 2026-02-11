@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -45,7 +44,7 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Retry Multiple Successful Requests Consistent")]
@@ -64,7 +63,6 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             
             // Act - Multiple requests should all succeed
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var task1 = client.ContentType(TestDataHelper.SimpleContentTypeUid).Entry(TestDataHelper.SimpleEntryUid).Fetch<Entry>();
             var task2 = client.ContentType(TestDataHelper.MediumContentTypeUid).Entry(TestDataHelper.MediumEntryUid).Fetch<Entry>();
@@ -75,9 +73,9 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(task1.Result);
-            Assert.NotNull(task2.Result);
-            Assert.NotNull(task3.Result);
+            TestAssert.NotNull(task1.Result);
+            TestAssert.NotNull(task2.Result);
+            TestAssert.NotNull(task3.Result);
         }
         
         #endregion
@@ -96,7 +94,6 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -106,7 +103,7 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Retry Reasonable Timeout Works For Complex Queries")]
@@ -121,7 +118,6 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.IncludeReference(new[] { "authors", "authors.reference" });
             query.Limit(10);
@@ -130,7 +126,7 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -150,7 +146,6 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             
             // Act - 5 parallel requests
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             for (int i = 0; i < 5; i++)
             {
@@ -165,7 +160,7 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             // Assert - All should succeed
             LogAssert("Verifying response");
 
-            Assert.True(tasks.All(t => t.Result != null));
+            TestAssert.True(tasks.All(t => t.Result != null));
         }
         
         #endregion
@@ -182,7 +177,9 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         private ContentstackClient CreateClientWithTimeout(int timeoutMs)
@@ -196,7 +193,9 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
                 Timeout = timeoutMs
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

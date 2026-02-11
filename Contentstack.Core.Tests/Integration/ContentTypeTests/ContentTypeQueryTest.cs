@@ -35,15 +35,14 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
-            Assert.True(schema.ContainsKey("uid"));
+            TestAssert.NotNull(schema);
+            TestAssert.True(schema.ContainsKey("uid"));
         }
         
         [Fact(DisplayName = "Query Operations - Content Type Query Fetch Multiple All Valid")]
@@ -59,7 +58,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema1 = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             var schema2 = await client.ContentType(TestDataHelper.MediumContentTypeUid).Fetch();
@@ -68,9 +66,9 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema1);
-            Assert.NotNull(schema2);
-            Assert.NotNull(schema3);
+            TestAssert.NotNull(schema1);
+            TestAssert.NotNull(schema2);
+            TestAssert.NotNull(schema3);
         }
         
         #endregion
@@ -88,7 +86,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -97,7 +94,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
         }
         
         [Fact(DisplayName = "Query Operations - Content Type Query Schema Validation Is Valid J Object")]
@@ -111,7 +108,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -120,8 +116,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
-            Assert.IsType<JObject>(schema);
+            TestAssert.NotNull(schema);
+            TestAssert.IsType<JObject>(schema);
         }
         
         #endregion
@@ -139,15 +135,14 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.True(schema.ContainsKey("uid"));
-            Assert.Equal(TestDataHelper.SimpleContentTypeUid, schema["uid"]?.ToString());
+            TestAssert.True(schema.ContainsKey("uid"));
+            TestAssert.Equal(TestDataHelper.SimpleContentTypeUid, schema["uid"]?.ToString());
         }
         
         [Fact(DisplayName = "Query Operations - Content Type Query Schema Has Title Valid")]
@@ -161,14 +156,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.True(schema.ContainsKey("title") || schema.ContainsKey("name"));
+            TestAssert.True(schema.ContainsKey("title") || schema.ContainsKey("name"));
         }
         
         [Fact(DisplayName = "Query Operations - Content Type Query Schema Has Fields Field Array")]
@@ -182,14 +176,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
             // Schema should describe fields
         }
         
@@ -208,14 +201,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
             // Metadata should be present
         }
         
@@ -230,14 +222,13 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var schema = await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
         }
         
         #endregion
@@ -255,7 +246,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -264,7 +254,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
             // Should include all complex field type definitions
         }
         
@@ -279,7 +269,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var schema = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -288,7 +277,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
+            TestAssert.NotNull(schema);
         }
         
         #endregion
@@ -306,7 +295,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var (schema, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -316,8 +304,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(schema);
-            Assert.True(elapsed < 5000, $"Schema fetch should complete within 5s, took {elapsed}ms");
+            TestAssert.NotNull(schema);
+            TestAssert.True(elapsed < 5000, $"Schema fetch should complete within 5s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Query Operations - Content Type Query Performance Multiple Schemas")]
@@ -334,7 +322,6 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act - Fetch multiple schemas
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             await client.ContentType(TestDataHelper.SimpleContentTypeUid).Fetch();
             await client.ContentType(TestDataHelper.MediumContentTypeUid).Fetch();
@@ -345,7 +332,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.True(elapsed < 15000, $"3 schemas should fetch within 15s, took {elapsed}ms");
+            TestAssert.True(elapsed < 15000, $"3 schemas should fetch within 15s, took {elapsed}ms");
         }
         
         #endregion
@@ -362,9 +349,8 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             
             // Act & Assert
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{"non_existent_uid"}/entries");
 
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.ContentType("non_existent_uid").Fetch();
             });
@@ -384,7 +370,9 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

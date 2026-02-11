@@ -40,11 +40,11 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
-            Assert.NotNull(syncResult.SyncToken);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.NotNull(syncResult.SyncToken);
             // Token validation // Sync token must be present and non-empty
         }
         
@@ -64,10 +64,10 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
         }
         
         [Fact(DisplayName = "Sync API - Sync Initialize With Start Date Returns Sync From Date")]
@@ -87,9 +87,9 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.NotNull(syncResult.SyncToken);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.NotNull(syncResult.SyncToken);
             // Token validation // Sync token must be present and non-empty
         }
         
@@ -113,11 +113,11 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
             // Verify items are entries (not assets)
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
         }
         
         [Fact(DisplayName = "Sync API - Sync Asset Published Returns Only Published Assets")]
@@ -136,10 +136,10 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
         }
         
         [Fact(DisplayName = "Sync API - Sync Combined Types Returns Multiple Types")]
@@ -158,10 +158,10 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
         }
         
         [Fact(DisplayName = "Sync API - Sync Deleted Content Returns Deleted Items")]
@@ -180,11 +180,11 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
             // May return 0 if no deletions
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
         }
         
         #endregion
@@ -208,10 +208,10 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.True(syncResult.TotalCount >= 0);
-            Assert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.True(syncResult.TotalCount >= 0);
+            TestAssert.IsAssignableFrom<IEnumerable<object>>(syncResult.Items);
         }
         
         [Fact(DisplayName = "Sync API - Sync Content Type With Date Returns Combined Filter")]
@@ -235,9 +235,9 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.NotNull(syncResult.SyncToken);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.NotNull(syncResult.SyncToken);
             // Token validation // Sync token must be present and non-empty
         }
         
@@ -259,19 +259,18 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             
             // Act - Delta sync with token
             LogAct("Performing sync operation");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
 
             var deltaSync = await client.SyncToken(syncToken);
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(deltaSync);
-            Assert.NotNull(deltaSync.Items);
-            Assert.NotNull(deltaSync.SyncToken);
+            TestAssert.NotNull(deltaSync);
+            TestAssert.NotNull(deltaSync.Items);
+            TestAssert.NotNull(deltaSync.SyncToken);
             // Token validation // Sync token must be present and non-empty
             // May have 0 items if no changes
-            Assert.True(deltaSync.TotalCount >= 0);
+            TestAssert.True(deltaSync.TotalCount >= 0);
         }
         
         [Fact(DisplayName = "Sync API - Sync Multiple Delta Syncs Maintains Consistency")]
@@ -292,18 +291,17 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             
             // Act - Second delta
             LogAct("Performing sync operation");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
 
             var sync3 = await client.SyncToken(token2);
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(sync3);
-            Assert.NotNull(sync3.SyncToken);
+            TestAssert.NotNull(sync3);
+            TestAssert.NotNull(sync3.SyncToken);
             // Token validation // Sync token must be present and non-empty
             // Token is present (may or may not change if no new changes)
-            Assert.NotEmpty(sync3.SyncToken);
+            TestAssert.NotEmpty(sync3.SyncToken);
         }
         
         #endregion
@@ -324,13 +322,13 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(initialSync);
-            Assert.NotNull(initialSync.Items);
+            TestAssert.NotNull(initialSync);
+            TestAssert.NotNull(initialSync.Items);
             // If pagination_token exists, verify it's handled
             if (!string.IsNullOrEmpty(initialSync.PaginationToken))
             {
                 var nextPage = await client.SyncPaginationToken(initialSync.PaginationToken);
-                Assert.NotNull(nextPage);
+                TestAssert.NotNull(nextPage);
             }
         }
         
@@ -353,13 +351,13 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(syncResult);
-            Assert.NotNull(syncResult.Items);
-            Assert.Null(syncResult.PaginationToken); // Should be null after recursive sync
-            Assert.NotNull(syncResult.SyncToken);
+            TestAssert.NotNull(syncResult);
+            TestAssert.NotNull(syncResult.Items);
+            TestAssert.Null(syncResult.PaginationToken); // Should be null after recursive sync
+            TestAssert.NotNull(syncResult.SyncToken);
             // Token validation // Sync token must be present and non-empty
             // Reasonable execution time even with pagination
-            Assert.True(elapsed < 30000, $"Sync should complete within 30s, took {elapsed}ms");
+            TestAssert.True(elapsed < 30000, $"Sync should complete within 30s, took {elapsed}ms");
         }
         
         #endregion
@@ -376,9 +374,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             
             // Act & Assert
             LogAct("Performing sync operation");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
 
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.SyncToken("invalid_sync_token_xyz_123");
             });
@@ -394,9 +391,8 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
             
             // Act & Assert
             LogAct("Performing sync operation");
-            LogGetRequest("https://" + TestDataHelper.Host + "/v3/stacks/sync");
 
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            await TestAssert.ThrowsAnyAsync<Exception>(async () =>
             {
                 await client.SyncPaginationToken("invalid_pagination_token_xyz");
             });
@@ -416,7 +412,9 @@ namespace Contentstack.Core.Tests.Integration.SyncTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

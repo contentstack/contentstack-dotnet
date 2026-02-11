@@ -68,7 +68,8 @@ class EnhancedTestReportGenerator:
                         'url': data.get('url', ''),
                         'headers': data.get('headers', {}),
                         'body': data.get('body', ''),
-                        'curl': data.get('curlCommand', '')
+                        'curl': data.get('curlCommand', ''),
+                        'sdkMethod': data.get('sdkMethod', '')
                     })
                 elif output_type == 'HTTP_RESPONSE':
                     structured_data['responses'].append({
@@ -198,28 +199,6 @@ class EnhancedTestReportGenerator:
         
         structured = test['structured_output']
         
-        # Test Steps
-        if structured.get('steps'):
-            html += """
-                <div class="test-details-section">
-                    <h4 class="details-heading">📝 Test Steps</h4>
-                    <div class="steps-list">
-"""
-            for step in structured['steps']:
-                html += f"""
-                        <div class="step-item">
-                            <strong>{self.escape_html(step['name'])}</strong>
-"""
-                if step.get('description'):
-                    html += f"""<p>{self.escape_html(step['description'])}</p>"""
-                html += """
-                        </div>
-"""
-            html += """
-                    </div>
-                </div>
-"""
-        
         # Assertions (Expected vs Actual)
         if structured.get('assertions'):
             html += """
@@ -263,8 +242,13 @@ class EnhancedTestReportGenerator:
                     <h4 class="details-heading">🌐 HTTP Requests</h4>
 """
             for i, request in enumerate(structured['requests']):
+                sdk_method_html = ''
+                if request.get('sdkMethod'):
+                    sdk_method_html = f'<div class="sdk-method-badge">📦 SDK Method: <code>{self.escape_html(request["sdkMethod"])}</code></div>'
+                
                 html += f"""
                     <div class="request-block">
+                        {sdk_method_html}
                         <div class="request-summary">
                             <span class="http-method">{self.escape_html(request['method'])}</span>
                             <span class="http-url">{self.escape_html(request['url'])}</span>
@@ -353,23 +337,25 @@ class EnhancedTestReportGenerator:
                 </div>
 """
         
-        # Context Information
+        # Context Information (collapsible, compact)
         if structured.get('context'):
             html += """
-                <div class="test-details-section">
-                    <h4 class="details-heading">ℹ️ Context</h4>
-                    <div class="context-list">
+                <details class="test-details-section" style="margin-bottom: 15px;">
+                    <summary class="details-heading" style="cursor: pointer;">ℹ️ Test Context</summary>
+                    <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.85em;">
+                        <tbody>
 """
             for ctx in structured['context']:
                 html += f"""
-                        <div class="context-item">
-                            <strong>{self.escape_html(ctx['key'])}:</strong>
-                            <pre class="context-value">{self.escape_html(str(ctx['value']))}</pre>
-                        </div>
+                            <tr style="border-bottom:1px solid #e9ecef;">
+                                <td style="padding:6px 10px; font-weight:600; white-space:nowrap; color:#555; width:180px;">{self.escape_html(ctx['key'])}</td>
+                                <td style="padding:6px 10px; font-family:Consolas,Monaco,monospace; word-break:break-all;">{self.escape_html(str(ctx['value']))}</td>
+                            </tr>
 """
             html += """
-                    </div>
-                </div>
+                        </tbody>
+                    </table>
+                </details>
 """
         
         return html
@@ -724,6 +710,26 @@ class EnhancedTestReportGenerator:
             border-radius: 6px;
             margin-bottom: 15px;
             border: 1px solid #dee2e6;
+        }}
+        
+        .sdk-method-badge {{
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border: 1px solid #81c784;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin-bottom: 8px;
+            font-size: 0.88em;
+            color: #2e7d32;
+        }}
+        
+        .sdk-method-badge code {{
+            background: #c8e6c9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #1b5e20;
         }}
         
         .request-summary, .response-summary {{

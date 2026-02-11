@@ -38,7 +38,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             entryObj.SetHeader("X-Custom-Header", "test-value");
             var entry = await entryObj.Fetch<Entry>();
@@ -46,8 +45,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         [Fact(DisplayName = "Header Management - Header Multiple Custom Headers All Applied")]
@@ -65,7 +64,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             entryObj.SetHeader("X-Custom-1", "value1");
             entryObj.SetHeader("X-Custom-2", "value2");
@@ -74,8 +72,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         [Fact(DisplayName = "Header Management - Header Query With Header Header Applied")]
@@ -90,7 +88,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.SetHeader("X-Query-Header", "query-value");
             query.Limit(5);
@@ -99,8 +96,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -122,7 +119,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             entryObj.SetHeader("X-Test", "original");
             entryObj.SetHeader("X-Test", "updated");
@@ -131,8 +127,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         [Fact(DisplayName = "Header Management - Header Remove Header Works Correctly")]
@@ -150,7 +146,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             entryObj.SetHeader("X-Remove", "value");
             entryObj.RemoveHeader("X-Remove");
@@ -159,8 +154,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         #endregion
@@ -182,7 +177,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             entryObj.SetHeader("User-Agent", "CustomUserAgent/1.0");
             var entry = await entryObj.Fetch<Entry>();
@@ -190,8 +184,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         [Fact(DisplayName = "Header Management - Header Accept Header Can Be Set")]
@@ -209,7 +203,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             entryObj.SetHeader("Accept", "application/json");
             var entry = await entryObj.Fetch<Entry>();
@@ -217,8 +210,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
         }
         
         #endregion
@@ -237,7 +230,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             assetObj.SetHeader("X-Asset-Header", "asset-value");
             var asset = await assetObj.Fetch();
@@ -245,8 +237,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
-            Assert.NotNull(asset.Uid);
+            TestAssert.NotNull(asset);
+            TestAssert.NotNull(asset.Uid);
         }
         
         [Fact(DisplayName = "Header Management - Header Query With Multiple Headers All Applied")]
@@ -261,7 +253,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.SetHeader("X-Query-1", "value1");
             query.SetHeader("X-Query-2", "value2");
@@ -271,8 +262,8 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -291,7 +282,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act - Multiple requests should maintain headers
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entryObj1 = client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -307,10 +297,10 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry1);
-            Assert.NotNull(entry1.Uid);
-            Assert.NotNull(entry2);
-            Assert.NotNull(entry2.Uid);
+            TestAssert.NotNull(entry1);
+            TestAssert.NotNull(entry1.Uid);
+            TestAssert.NotNull(entry2);
+            TestAssert.NotNull(entry2.Uid);
         }
         
         [Fact(DisplayName = "Header Management - Header Request Level Independent Requests")]
@@ -327,7 +317,6 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             
             // Act - Headers should be independent per request
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entryObj1 = client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -344,10 +333,10 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry1);
-            Assert.NotNull(entry1.Uid);
-            Assert.NotNull(entry2);
-            Assert.NotNull(entry2.Uid);
+            TestAssert.NotNull(entry1);
+            TestAssert.NotNull(entry1.Uid);
+            TestAssert.NotNull(entry2);
+            TestAssert.NotNull(entry2.Uid);
         }
         
         #endregion
@@ -364,7 +353,9 @@ namespace Contentstack.Core.Tests.Integration.HeaderTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

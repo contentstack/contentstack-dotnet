@@ -33,16 +33,16 @@ namespace Contentstack.Core.Tests.Integration
 
             // Arrange & Act & Assert
             // This will throw if any required configuration is missing
-            Assert.NotNull(TestDataHelper.Host);
-            Assert.NotNull(TestDataHelper.ApiKey);
-            Assert.NotNull(TestDataHelper.DeliveryToken);
-            Assert.NotNull(TestDataHelper.Environment);
-            Assert.NotNull(TestDataHelper.ComplexEntryUid);
-            Assert.NotNull(TestDataHelper.MediumEntryUid);
-            Assert.NotNull(TestDataHelper.SimpleEntryUid);
-            Assert.NotNull(TestDataHelper.ComplexContentTypeUid);
-            Assert.NotNull(TestDataHelper.MediumContentTypeUid);
-            Assert.NotNull(TestDataHelper.SimpleContentTypeUid);
+            TestAssert.NotNull(TestDataHelper.Host);
+            TestAssert.NotNull(TestDataHelper.ApiKey);
+            TestAssert.NotNull(TestDataHelper.DeliveryToken);
+            TestAssert.NotNull(TestDataHelper.Environment);
+            TestAssert.NotNull(TestDataHelper.ComplexEntryUid);
+            TestAssert.NotNull(TestDataHelper.MediumEntryUid);
+            TestAssert.NotNull(TestDataHelper.SimpleEntryUid);
+            TestAssert.NotNull(TestDataHelper.ComplexContentTypeUid);
+            TestAssert.NotNull(TestDataHelper.MediumContentTypeUid);
+            TestAssert.NotNull(TestDataHelper.SimpleContentTypeUid);
         }
         
         [Fact(DisplayName = "Test Data Helper Validation Passes")]
@@ -65,9 +65,9 @@ namespace Contentstack.Core.Tests.Integration
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(branchUid); // Should default to "main"
+            TestAssert.NotNull(branchUid); // Should default to "main"
             // Live preview may or may not be configured
-            Assert.True(livePreviewConfigured || !livePreviewConfigured); // Just checking it doesn't throw
+            TestAssert.True(livePreviewConfigured || !livePreviewConfigured); // Just checking it doesn't throw
         }
         
         [Fact(DisplayName = "Stack Connectivity Can Connect To Stack")]
@@ -85,10 +85,10 @@ namespace Contentstack.Core.Tests.Integration
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(config);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act
             LogAct("Performing test action");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             var contentType = client.ContentType(TestDataHelper.SimpleContentTypeUid);
             var query = contentType.Query();
@@ -97,9 +97,9 @@ namespace Contentstack.Core.Tests.Integration
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
-            Assert.True(result.Items.Count() > 0, "Should fetch at least one entry from the stack");
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+            TestAssert.True(result.Items.Count() > 0, "Should fetch at least one entry from the stack");
         }
         
         [Fact(DisplayName = "Entry Factory Can Fetch Entry")]
@@ -118,6 +118,7 @@ namespace Contentstack.Core.Tests.Integration
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(config);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             var factory = new EntryFactory(client);
             
             // Act
@@ -131,9 +132,9 @@ namespace Contentstack.Core.Tests.Integration
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Generic Models Can Be Instantiated")]
@@ -147,9 +148,9 @@ namespace Contentstack.Core.Tests.Integration
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(complexModel);
-            Assert.NotNull(mediumModel);
-            Assert.NotNull(simpleModel);
+            TestAssert.NotNull(complexModel);
+            TestAssert.NotNull(mediumModel);
+            TestAssert.NotNull(simpleModel);
         }
         
         [Fact(DisplayName = "Generic Models Can Be Used With SDK")]
@@ -168,10 +169,10 @@ namespace Contentstack.Core.Tests.Integration
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(config);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act - Fetch using strongly-typed model
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -181,10 +182,10 @@ namespace Contentstack.Core.Tests.Integration
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.IsType<SimpleContentTypeModel>(entry);
-            Assert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.IsType<SimpleContentTypeModel>(entry);
+            TestAssert.Equal(TestDataHelper.SimpleEntryUid, entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Performance Helper Can Measure Operations")]
@@ -203,10 +204,10 @@ namespace Contentstack.Core.Tests.Integration
                 Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(config);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
             
             // Act - Measure a simple fetch operation
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -219,9 +220,9 @@ namespace Contentstack.Core.Tests.Integration
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed >= 0, $"Elapsed time should be non-negative, got {elapsed}ms");
-            Assert.True(elapsed < 30000, $"Single fetch should complete within 30s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed >= 0, $"Elapsed time should be non-negative, got {elapsed}ms");
+            TestAssert.True(elapsed < 30000, $"Single fetch should complete within 30s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Directory Structure All Directories Exist")]
@@ -239,11 +240,11 @@ namespace Contentstack.Core.Tests.Integration
             // Act & Assert - Check that key directories exist
             LogAct("Performing test action");
 
-            Assert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Integration")), 
+            TestAssert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Integration")), 
                 "Integration directory should exist");
-            Assert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Helpers")), 
+            TestAssert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Helpers")), 
                 "Helpers directory should exist");
-            Assert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Models")), 
+            TestAssert.True(System.IO.Directory.Exists(System.IO.Path.Combine(projectRoot, "Models")), 
                 "Models directory should exist");
         }
     }

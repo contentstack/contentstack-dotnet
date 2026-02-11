@@ -27,9 +27,9 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(version);
-            Assert.StartsWith("contentstack-delivery-dotnet/", version);
-            Assert.True(version.Length > "contentstack-delivery-dotnet/".Length);
+            TestAssert.NotNull(version);
+            TestAssert.StartsWith("contentstack-delivery-dotnet/", version);
+            TestAssert.True(version.Length > "contentstack-delivery-dotnet/".Length);
         }
 
         [Fact(DisplayName = "Get Sdk Version Returns Consistent Result")]
@@ -44,7 +44,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.Equal(version1, version2);
+            TestAssert.Equal(version1, version2);
         }
 
         [Fact(DisplayName = "Get Sdk Version Does Not Return Null")]
@@ -58,8 +58,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(version);
-            Assert.NotEmpty(version);
+            TestAssert.NotNull(version);
+            TestAssert.NotEmpty(version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Does Not Return Empty String")]
@@ -73,7 +73,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotEmpty(version);
+            TestAssert.NotEmpty(version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Contains Expected Prefix")]
@@ -87,7 +87,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.StartsWith("contentstack-delivery-dotnet/", version);
+            TestAssert.StartsWith("contentstack-delivery-dotnet/", version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Does Not Contain Spaces")]
@@ -101,7 +101,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.DoesNotContain(" ", version);
+            TestAssert.DoesNotContain(" ", version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Does Not Contain Newlines")]
@@ -115,8 +115,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.DoesNotContain("\n", version);
-            Assert.DoesNotContain("\r", version);
+            TestAssert.DoesNotContain("\n", version);
+            TestAssert.DoesNotContain("\r", version);
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Equal(expected, result);
+            TestAssert.Equal(expected, result);
         }
 
         [Theory]
@@ -164,7 +164,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Null(result);
+            TestAssert.Null(result);
         }
 
         [Fact(DisplayName = "Extract Semantic Version Null Input Returns Null")]
@@ -183,7 +183,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.Null(result);
+            TestAssert.Null(result);
         }
 
         [Theory]
@@ -199,7 +199,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Equal(expected, result);
+            TestAssert.Equal(expected, result);
         }
 
         [Theory]
@@ -215,7 +215,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Equal(expected, result);
+            TestAssert.Equal(expected, result);
         }
 
         [Theory]
@@ -232,7 +232,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Equal(expected, result);
+            TestAssert.Equal(expected, result);
         }
 
         [Theory]
@@ -249,7 +249,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Equal(expected, result);
+            TestAssert.Equal(expected, result);
         }
 
         #endregion
@@ -266,8 +266,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             LogAct("Performing test action");
 
             var version = VersionUtility.GetSdkVersion();
-            Assert.NotNull(version);
-            Assert.NotEmpty(version);
+            TestAssert.NotNull(version);
+            TestAssert.NotEmpty(version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Returns Fallback When Assembly Version Is Invalid")]
@@ -284,8 +284,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(version);
-            Assert.True(version == "contentstack-delivery-dotnet/dev" || 
+            TestAssert.NotNull(version);
+            TestAssert.True(version == "contentstack-delivery-dotnet/dev" || 
                        version.StartsWith("contentstack-delivery-dotnet/"));
         }
 
@@ -305,7 +305,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var result = method.Invoke(null, new object[] { input }) as string;
 
             // Assert
-            Assert.Null(result);
+            TestAssert.Null(result);
         }
 
         [Theory]
@@ -323,12 +323,12 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             if (input == "0.0.0")
             {
-                Assert.Equal("0.0.0", result);
+                TestAssert.Equal("0.0.0", result);
             }
             else
             {
-                Assert.NotNull(result);
-                Assert.True(result.Split('.').Length == 3);
+                TestAssert.NotNull(result);
+                TestAssert.True(result.Split('.').Length == 3);
             }
         }
 
@@ -347,7 +347,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             LogAct("Performing test action");
 
             var result = method.Invoke(null, new object[] { "invalid-version-string" }) as string;
-            Assert.Null(result);
+            TestAssert.Null(result);
         }
 
         #endregion
@@ -365,14 +365,14 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(version);
-            Assert.StartsWith("contentstack-delivery-dotnet/", version);
+            TestAssert.NotNull(version);
+            TestAssert.StartsWith("contentstack-delivery-dotnet/", version);
             
             // Verify it's in a format suitable for User-Agent headers
-            Assert.DoesNotContain(" ", version);
-            Assert.DoesNotContain("\n", version);
-            Assert.DoesNotContain("\r", version);
-            Assert.DoesNotContain("\t", version);
+            TestAssert.DoesNotContain(" ", version);
+            TestAssert.DoesNotContain("\n", version);
+            TestAssert.DoesNotContain("\r", version);
+            TestAssert.DoesNotContain("\t", version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Integration Can Be Used In Http Headers")]
@@ -387,14 +387,14 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             LogAssert("Verifying response");
 
             // Verify the version string is suitable for HTTP headers
-            Assert.NotNull(version);
-            Assert.NotEmpty(version);
+            TestAssert.NotNull(version);
+            TestAssert.NotEmpty(version);
             
             // Should not contain characters that would break HTTP headers
-            Assert.DoesNotContain("\"", version);
-            Assert.DoesNotContain("'", version);
-            Assert.DoesNotContain("\n", version);
-            Assert.DoesNotContain("\r", version);
+            TestAssert.DoesNotContain("\"", version);
+            TestAssert.DoesNotContain("'", version);
+            TestAssert.DoesNotContain("\n", version);
+            TestAssert.DoesNotContain("\r", version);
         }
 
         #endregion
@@ -413,8 +413,8 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
 
             // Should complete quickly (less than 1 second)
             var duration = endTime - startTime;
-            Assert.True(duration.TotalSeconds < 1, $"GetSdkVersion took {duration.TotalSeconds} seconds");
-            Assert.NotNull(version);
+            TestAssert.True(duration.TotalSeconds < 1, $"GetSdkVersion took {duration.TotalSeconds} seconds");
+            TestAssert.NotNull(version);
         }
 
         [Fact(DisplayName = "Get Sdk Version Performance Multiple Calls Consistent")]
@@ -435,7 +435,7 @@ namespace Contentstack.Core.Tests.Integration.UtilityTests
             var firstVersion = versions[0];
             for (int i = 1; i < versions.Length; i++)
             {
-                Assert.Equal(firstVersion, versions[i]);
+                TestAssert.Equal(firstVersion, versions[i]);
             }
         }
 

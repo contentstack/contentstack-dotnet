@@ -48,7 +48,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             };
             
             var url = $"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}";
-            TestOutput.LogRequest("GET", url, headers);
             
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -56,24 +55,19 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
                 .Variant(TestDataHelper.VariantUid)
                 .Fetch<Entry>();
             
-            TestOutput.LogResponse(200, "OK", new Dictionary<string, string> 
-            { 
-                { "content-type", "application/json" },
-                { "x-contentstack-request-id", "sample-request-id" }
-            });
             
             // Assert
             LogAssert("Verifying entry properties and variant content");
             
             TestOutput.LogAssertion("Entry is not null", "NotNull", entry != null ? "NotNull" : "Null", entry != null);
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             
             TestOutput.LogAssertion("Entry UID", TestDataHelper.ComplexEntryUid, entry?.Uid, entry?.Uid == TestDataHelper.ComplexEntryUid);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
             
             TestOutput.LogAssertion("Entry has title", "NotEmpty", entry?.Title ?? "Empty", !string.IsNullOrEmpty(entry?.Title));
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry.Title);
             
             LogContext("Fetched Entry Title", entry?.Title);
             
@@ -100,7 +94,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using AddParam (NOT RECOMMENDED)
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -111,7 +104,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // Note: This might work but doesn't test proper variant functionality
             // Use .Variant() method in production code
         }
@@ -138,20 +131,18 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             };
             
             var url = $"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}";
-            TestOutput.LogRequest("GET", url, headers);
             
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
                 .Fetch<Entry>();
             
-            TestOutput.LogResponse(200, "OK");
             
             // Assert
             LogAssert("Verifying default (non-variant) content");
             
             TestOutput.LogAssertion("Entry is not null", "NotNull", entry != null ? "NotNull" : "Null", entry != null);
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             
             LogContext("Default Entry Title", entry?.Title);
             // Should return default (non-variant) content
@@ -180,7 +171,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             };
             
             var url = $"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}";
-            TestOutput.LogRequest("GET", url, headers);
             
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -188,13 +178,12 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
                 .Variant("invalid_variant_uid")
                 .Fetch<Entry>();
             
-            TestOutput.LogResponse(200, "OK (API handled gracefully)");
             
             // Assert
             LogAssert("Verifying graceful handling of invalid variant UID");
             
             TestOutput.LogAssertion("Entry is not null", "NotNull", entry != null ? "NotNull" : "Null", entry != null);
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             
             LogContext("Result", "API handled invalid variant UID gracefully - returned default content");
             // Should fallback to default content
@@ -213,7 +202,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with multiple variant UIDs (SDK supports List<string>)
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -224,9 +212,9 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
         }
         
         #endregion
@@ -246,7 +234,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using proper SDK .Variant() method on Query
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             query.Limit(5);
@@ -255,8 +242,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Query Multiple Variants Using List")]
@@ -272,7 +259,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with List<string>
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(new List<string> { TestDataHelper.VariantUid });
             query.Limit(5);
@@ -281,8 +267,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Query Filter By Variant Content")]
@@ -298,7 +284,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with filters
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             query.Exists("title");
@@ -308,8 +293,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Query With Projection")]
@@ -325,7 +310,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with field projection
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             query.Only(new[] { "title", "uid" });
@@ -334,8 +318,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Query With Sorting And Pagination")]
@@ -351,7 +335,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Combining variant with sorting and pagination
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             query.Ascending("created_at");
@@ -362,8 +345,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -383,7 +366,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with references
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -395,7 +377,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Deep References Multi Level")]
@@ -411,7 +393,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with deep references
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -423,7 +404,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant With All References Includes Everything")]
@@ -439,7 +420,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with IncludeReference (specific field)
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -451,7 +431,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         #endregion
@@ -471,7 +451,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with locale
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -483,7 +462,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Locale With Fallback Handles Correctly")]
@@ -499,7 +478,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act & Assert - Using .Variant() with locale fallback
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             try
             {
@@ -511,12 +489,12 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
                     .IncludeFallback()
                     .Fetch<Entry>();
                 
-                Assert.NotNull(entry);
+                TestAssert.NotNull(entry);
             }
             catch (Exception)
             {
                 // Fallback may not be configured, test that method works
-                Assert.True(true);
+                TestAssert.True(true);
             }
         }
         
@@ -533,7 +511,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Variant with locale in query
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             query.SetLocale("en-us");
@@ -543,8 +520,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Items);
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
         }
         
         #endregion
@@ -564,7 +541,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() method
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -575,7 +551,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Variant Priority First Wins")]
@@ -591,7 +567,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() method (single variant)
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -602,7 +577,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         #endregion
@@ -622,7 +597,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Fetch same entry with and without variant using .Variant() method
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var defaultEntry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -638,8 +612,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert - Both should be valid
             LogAssert("Verifying response");
 
-            Assert.NotNull(defaultEntry);
-            Assert.NotNull(variantEntry);
+            TestAssert.NotNull(defaultEntry);
+            TestAssert.NotNull(variantEntry);
             // Variant may have different field values
         }
         
@@ -656,7 +630,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() method
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -667,7 +640,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // Some fields from variant, some from default
         }
         
@@ -688,7 +661,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with filter
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             query.Exists("title");
@@ -697,7 +669,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Complex Query With Variant")]
@@ -713,7 +685,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with complex query
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             query.Variant(TestDataHelper.VariantUid);
             var sub1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query().Exists("title");
@@ -724,7 +695,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -744,7 +715,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() method
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -755,7 +725,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // Asset references should work with variants
         }
         
@@ -772,7 +742,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with embedded items
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -784,7 +753,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
         }
         
         #endregion
@@ -804,7 +773,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() method for performance test
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -818,8 +786,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000, $"Variant fetch should complete within 10s, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000, $"Variant fetch should complete within 10s, took {elapsed}ms");
         }
         
         [Fact(DisplayName = "Entry Operations - Variant Performance Query With Variant")]
@@ -835,7 +803,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() method for performance test
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var (result, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -847,8 +814,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
-            Assert.True(elapsed < 15000, $"Variant query should complete within 15s, took {elapsed}ms");
+            TestAssert.NotNull(result);
+            TestAssert.True(elapsed < 15000, $"Variant query should complete within 15s, took {elapsed}ms");
         }
         
         #endregion
@@ -867,7 +834,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with empty string (proper API)
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -878,7 +844,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // Empty variant should use default content
         }
         
@@ -895,7 +861,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() on entry without variants
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -906,7 +871,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // Should handle entries without variants configured
         }
         
@@ -923,7 +888,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Using .Variant() with all features combined
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -937,7 +901,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
+            TestAssert.NotNull(entry);
             // All features should work together
         }
         
@@ -954,7 +918,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Fetch both versions using .Variant() vs no variant
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var defaultEntry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -970,9 +933,9 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(defaultEntry);
-            Assert.NotNull(variantEntry);
-            Assert.Equal(defaultEntry.Uid, variantEntry.Uid);
+            TestAssert.NotNull(defaultEntry);
+            TestAssert.NotNull(variantEntry);
+            TestAssert.Equal(defaultEntry.Uid, variantEntry.Uid);
             // Same UID, potentially different content
         }
         
@@ -988,7 +951,6 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             
             // Act - Multiple queries should be independent using .Variant()
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries");
 
             var query1 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
             query1.Variant(TestDataHelper.VariantUid);
@@ -1000,8 +962,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result1);
-            Assert.NotNull(result2);
+            TestAssert.NotNull(result1);
+            TestAssert.NotNull(result2);
             // Both queries should work independently
         }
         
@@ -1019,7 +981,9 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
                 Environment = TestDataHelper.Environment
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

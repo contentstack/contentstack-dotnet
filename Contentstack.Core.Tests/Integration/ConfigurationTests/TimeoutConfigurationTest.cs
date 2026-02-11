@@ -35,7 +35,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -45,10 +44,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Timeout Configuration - Timeout Long Timeout Allows Complex Operations")]
@@ -63,7 +62,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.ComplexContentTypeUid}/entries/{TestDataHelper.ComplexEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -74,10 +72,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Timeout Configuration - Timeout Standard Timeout Query Operations")]
@@ -92,7 +90,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Executing query");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries");
 
             query.Limit(10);
             var result = await query.Find<Entry>();
@@ -100,7 +97,7 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(result);
+            TestAssert.NotNull(result);
         }
         
         #endregion
@@ -119,7 +116,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -132,8 +128,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 10000);
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 10000);
         }
         
         [Fact(DisplayName = "Timeout Configuration - Timeout Asset Fetch Within Timeout")]
@@ -147,14 +143,13 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/assets/{TestDataHelper.ImageAssetUid}");
 
             var asset = await client.Asset(TestDataHelper.ImageAssetUid).Fetch();
             
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(asset);
+            TestAssert.NotNull(asset);
         }
         
         #endregion
@@ -173,7 +168,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
@@ -183,10 +177,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         [Fact(DisplayName = "Timeout Configuration - Timeout Medium Timeout Medium Complexity")]
@@ -201,7 +195,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.MediumContentTypeUid}/entries/{TestDataHelper.MediumEntryUid}");
 
             var entry = await client
                 .ContentType(TestDataHelper.MediumContentTypeUid)
@@ -212,10 +205,10 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.NotNull(entry.Uid);
-            Assert.NotEmpty(entry.Uid);
-            Assert.NotNull(entry.Title);
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+            TestAssert.NotEmpty(entry.Uid);
+            TestAssert.NotNull(entry.Title);
         }
         
         #endregion
@@ -234,7 +227,6 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             
             // Act
             LogAct("Fetching entry from API");
-            LogGetRequest($"https://{TestDataHelper.Host}/v3/content_types/{TestDataHelper.SimpleContentTypeUid}/entries/{TestDataHelper.SimpleEntryUid}");
 
             var (entry, elapsed) = await PerformanceHelper.MeasureExecutionTimeAsync(async () =>
             {
@@ -247,8 +239,8 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             // Assert
             LogAssert("Verifying response");
 
-            Assert.NotNull(entry);
-            Assert.True(elapsed < 30000, $"Should complete within configured timeout, took {elapsed}ms");
+            TestAssert.NotNull(entry);
+            TestAssert.True(elapsed < 30000, $"Should complete within configured timeout, took {elapsed}ms");
         }
         
         #endregion
@@ -266,7 +258,9 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
                 Timeout = timeoutMs
             };
             
-            return new ContentstackClient(options);
+            var client = new ContentstackClient(options);
+            client.Plugins.Add(new RequestLoggingPlugin(TestOutput));
+            return client;
         }
         
         #endregion

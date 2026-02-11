@@ -40,9 +40,9 @@ namespace Contentstack.Core.Tests.Helpers
         }
 
         /// <summary>
-        /// Log HTTP Request details (including cURL)
+        /// Log HTTP Request details (including cURL and SDK method)
         /// </summary>
-        public void LogRequest(string method, string url, Dictionary<string, string> headers = null, string body = null)
+        public void LogRequest(string method, string url, Dictionary<string, string> headers = null, string body = null, string sdkMethod = null)
         {
             var curlCommand = GenerateCurlCommand(method, url, headers, body);
             
@@ -55,6 +55,7 @@ namespace Contentstack.Core.Tests.Helpers
                 Headers = headers ?? new Dictionary<string, string>(),
                 Body = body,
                 CurlCommand = curlCommand,
+                SdkMethod = sdkMethod,
                 Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
             };
             
@@ -162,9 +163,7 @@ namespace Contentstack.Core.Tests.Helpers
             {
                 foreach (var header in headers)
                 {
-                    // Mask sensitive headers
-                    var value = IsSensitiveHeader(header.Key) ? "***MASKED***" : header.Value;
-                    curl += $" \\\n  -H '{header.Key}: {value}'";
+                    curl += $" \\\n  -H '{header.Key}: {header.Value}'";
                 }
             }
             
@@ -175,12 +174,6 @@ namespace Contentstack.Core.Tests.Helpers
             }
             
             return curl;
-        }
-
-        private bool IsSensitiveHeader(string headerName)
-        {
-            var sensitive = new[] { "authorization", "api_key", "access_token", "api-key", "delivery_token" };
-            return Array.Exists(sensitive, s => headerName.ToLower().Contains(s));
         }
 
         private string TruncateBody(string body, int maxLength)
