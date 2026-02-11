@@ -1167,7 +1167,9 @@ def main():
     print(f"   • Skipped: {generator.results['skipped']}")
     
     print("\n⏳ Generating enhanced HTML report...")
-    output_file = generator.generate_html('test-report-enhanced.html')
+    from datetime import datetime
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    output_file = generator.generate_html(f'test-report-enhanced_{timestamp}.html')
     
     print("\n" + "="*80)
     print("✅ SUCCESS! Enhanced HTML report generated")

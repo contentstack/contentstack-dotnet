@@ -104,28 +104,31 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
         public async Task EntryInclude_Metadata_IncludesMetadataFields()
         {
             // Arrange
-            LogArrange("Setting up entry fetch test");
+            LogArrange("Setting up entry fetch test with IncludeMetadata");
             LogContext("ContentType", TestDataHelper.SimpleContentTypeUid);
             LogContext("EntryUid", TestDataHelper.SimpleEntryUid);
 
             var client = CreateClient();
             
             // Act
-            LogAct("Fetching entry from API");
+            LogAct("Fetching entry with IncludeMetadata() from API");
 
             var entry = await client
                 .ContentType(TestDataHelper.SimpleContentTypeUid)
                 .Entry(TestDataHelper.SimpleEntryUid)
+                .IncludeMetadata()
                 .Fetch<Entry>();
             
             // Assert
-            LogAssert("Verifying response");
+            LogAssert("Verifying entry with metadata");
 
             TestAssert.NotNull(entry);
             TestAssert.NotNull(entry.Uid);
             TestAssert.NotEmpty(entry.Uid);
             TestAssert.NotNull(entry.Title);
-            TestAssert.NotNull(entry.Title);
+            // Metadata property should be accessible after IncludeMetadata()
+            var metadata = entry.GetMetadata();
+            TestAssert.NotNull(metadata);
         }
         
         [Fact(DisplayName = "Entry Operations - Entry Include Embedded Items Includes Embedded")]

@@ -69,6 +69,8 @@ fileignoreconfig:
   checksum: 2ddcb8884f4a224ab16fa393f689ec6f8855159b3d52b63eb19c5524f2d5712c
 - filename: Contentstack.Core.Tests/Integration/EntryTests/EntryIncludeExtendedTest.cs
   checksum: cdd92a05886e84235814eadb8dad2d1dedc1ae3f7bcd03ae7925d790fc964ad9
+- filename: Contentstack.Core.Tests/Integration/MetadataTests/IncludeMetadataComprehensiveTest.cs
+  checksum: c67730d830b66b266937b9ad81c2fe4500455f23f72326d1c8478a15224076ec
 - filename: Contentstack.Core.Tests/Integration/EntryTests/EntryOperationsComprehensiveTest.cs
   checksum: 76c3cebeb144aa2787576df9590a457f90dda35489a30e316e62be6a60fde13e
 - filename: Contentstack.Core.Tests/Integration/ErrorHandling/ErrorHandlingComprehensiveTest.cs
