@@ -1,4 +1,31 @@
 fileignoreconfig:
+- filename: .github/workflows/secrets-scan.yml
+  ignore_detectors:
+    - filecontent
+- filename: Contentstack.Core/Internals/HttpRequestHandler.cs
+  checksum: 62053e1b8772f44db054efc504d5d57f28fb7962c81021325854d478f570de09
+- filename: Contentstack.Core/Models/Entry.cs
+  checksum: 78a09b03b9fd6aefd0251353b2d8c70962bdfced16a6e1e28d10dc9af43da244
+- filename: Contentstack.Core/ContentstackClient.cs
+  checksum: 687dc0a5f20037509731cfe540dcec9c3cc2b6cf50373cd183ece4f3249dc88e
+- filename: Contentstack.Core/Models/AssetLibrary.cs
+  checksum: 0c67f8bb3b7ffdb9b04cd38ae096904b53d6d4372e86c91c1f935e36b6b0ce56
+- filename: Contentstack.Core.Tests/AssetTest.cs
+  checksum: 9e197065aa6ea46af795a8ddb9d652a4972d9d4b4bfc7b1772d304d848f1c3e1
+- filename: Contentstack.Core/Models/Asset.cs
+  checksum: d192718723e6cb2aa8f08f873d3a7ea7268c89cc15da3bdeea4c16fd304c410e
+- filename: Contentstack.Core/Models/Query.cs
+  checksum: 5816324addf20bc9ed66496ed3f18a90a2a140763378f899798d2d3b019c5f14
+- filename: Contentstack.Core/Models/Taxonomy.cs
+  checksum: 751a725d94eff7d845bb22a5ce80a5529bb62971373de39288149fff3d024930
+- filename: .github/workflows/nuget-publish.yml
+  checksum: 53ba4ce874c4d2362ad00deb23f5a6ec219318860352f997b945e9161a580651
+- filename: Contentstack.Core.Tests/ContentstackClientTest.cs
+  checksum: b63897181a8cb5993d1305248cfc3e711c4039b5677b6c1e4e2a639e4ecb391b
+- filename: Contentstack.Core.Tests/RegionHandlerTest.cs
+  checksum: 69899138754908e156aa477d775d12fd6b3fefc1a6c2afec22cb409bd6e6446c
+- filename: CHANGELOG.md
+  checksum: bc17fd4cf564e524c686a8271033f8e6e7f5f69de8137007d1c72d5f563fe92a
 - filename: Contentstack.Core.Tests/Helpers/RequestLoggingPlugin.cs
   checksum: 8814a9c304834162cf27c214ef9d13dce4d9b458dd55a9c68d7bb48607cd87c4
 - filename: Contentstack.Core.Tests/Helpers/TestAssert.cs

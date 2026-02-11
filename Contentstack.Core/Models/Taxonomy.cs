@@ -21,6 +21,14 @@ namespace Contentstack.Core.Models
         {
             get
             {
+                if (this.Stack == null)
+                {
+                    throw new TaxonomyException("Taxonomy Stack instance is null. Please ensure the Taxonomy is properly initialized with a ContentstackClient instance.");
+                }
+                if (this.Stack.Config == null)
+                {
+                    throw new TaxonomyException("Taxonomy Stack Config is null. Please ensure the ContentstackClient is properly configured.");
+                }
                 Config config = this.Stack.Config;
                 return String.Format("{0}/taxonomies/entries", config.BaseUrl);
             }
@@ -40,6 +48,10 @@ namespace Contentstack.Core.Models
         }
         internal Taxonomy(ContentstackClient stack): base(stack)
         {
+            if (stack == null)
+            {
+                throw new TaxonomyException("ContentstackClient instance cannot be null when creating a Taxonomy instance.");
+            }
             this.Stack = stack;
             this._StackHeaders = stack._LocalHeaders;
         }
@@ -252,30 +264,59 @@ namespace Contentstack.Core.Models
 
             try
             {
-                System.Net.WebException webEx = (System.Net.WebException)ex;
-
-                using (var exResp = webEx.Response)
-                using (var stream = exResp.GetResponseStream())
-                using (var reader = new StreamReader(stream))
+                System.Net.WebException webEx = ex as System.Net.WebException;
+                
+                if (webEx != null && webEx.Response != null)
                 {
-                    errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
+                    using (var exResp = webEx.Response)
+                    {
+                        var stream = exResp.GetResponseStream();
+                        if (stream != null)
+                        {
+                            using (stream)
+                            using (var reader = new StreamReader(stream))
+                            {
+                                errorMessage = reader.ReadToEnd();
+                                
+                                if (!string.IsNullOrWhiteSpace(errorMessage))
+                                {
+                                    try
+                                    {
+                                        JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
 
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
+                                        JToken token = data["error_code"];
+                                        if (token != null)
+                                            errorCode = token.Value<int>();
 
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
+                                        token = data["error_message"];
+                                        if (token != null)
+                                            errorMessage = token.Value<string>();
 
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                                        token = data["errors"];
+                                        if (token != null)
+                                            errors = token.ToObject<Dictionary<string, object>>();
+                                    }
+                                    catch (Newtonsoft.Json.JsonException)
+                                    {
+                                        // If JSON parsing fails, use the raw error message
+                                        // errorMessage is already set from ReadToEnd()
+                                    }
+                                }
 
-                    var response = exResp as HttpWebResponse;
-                    if (response != null)
-                        statusCode = response.StatusCode;
+                                var response = exResp as HttpWebResponse;
+                                if (response != null)
+                                    statusCode = response.StatusCode;
+                            }
+                        }
+                        else
+                        {
+                            errorMessage = webEx.Message;
+                        }
+                    }
+                }
+                else
+                {
+                    errorMessage = ex.Message;
                 }
             }
             catch
