@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
@@ -456,6 +456,98 @@ namespace Contentstack.Core.Tests
                 // The actual content depends on what the API returns
                 Assert.True(true, "GetMetadata() returns a valid dictionary (may be empty)");
             }
+        }
+
+        [Fact]
+        public async Task AssetFields_SingleEntry_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            sourceEntry.AssetFields("user_defined_fields", "visual_markups");
+            var result = await sourceEntry.Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_ChainedWithIncludeMetadata_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            var result = await sourceEntry
+                .AssetFields("user_defined_fields")
+                .IncludeMetadata()
+                .Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields and IncludeMetadata did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_SingleField_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            sourceEntry.AssetFields("user_defined_fields");
+            var result = await sourceEntry.Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields single field did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithNoArguments_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            sourceEntry.AssetFields();
+            var result = await sourceEntry.Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields() no arguments did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithNull_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            sourceEntry.AssetFields(null);
+            var result = await sourceEntry.Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields(null) did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithEmptyArray_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            sourceEntry.AssetFields(new string[0]);
+            var result = await sourceEntry.Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields(empty array) did not return a result.");
+            Assert.NotNull(result.Uid);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 using Contentstack.Core.Models;
 using System.Threading.Tasks;
@@ -950,6 +950,162 @@ namespace Contentstack.Core.Tests
             // Assert
             Assert.NotNull(result);
             Assert.IsType<AssetLibrary>(result);
+        }
+
+        [Fact]
+        public async Task AssetFields_SingleAsset_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset asset = client.Asset(uid);
+
+            asset.AssetFields("user_defined_fields", "embedded_metadata", "ai_generated_metadata", "visual_markups");
+            Asset result = await asset.Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields did not return a result.");
+            Assert.NotNull(result.Uid);
+            Assert.NotEmpty(result.FileName);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_RequestSucceeds()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.AssetFields("user_defined_fields", "ai_generated_metadata");
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields did not return a result.");
+            Assert.NotNull(assets.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_ChainedWithIncludeMetadata_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset result = await client.Asset(uid)
+                .AssetFields("user_defined_fields")
+                .IncludeMetadata()
+                .Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields and IncludeMetadata did not return a result.");
+            Assert.NotNull(result.Uid);
+            Assert.NotEmpty(result.FileName);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_ChainedWithIncludeMetadata_RequestSucceeds()
+        {
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .AssetFields("user_defined_fields")
+                .IncludeMetadata()
+                .FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields and IncludeMetadata did not return a result.");
+            Assert.NotNull(assets.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_SingleField_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset asset = client.Asset(uid);
+            asset.AssetFields("user_defined_fields");
+            Asset result = await asset.Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields single field did not return a result.");
+            Assert.NotNull(result.Uid);
+            Assert.NotEmpty(result.FileName);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_SingleField_RequestSucceeds()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.AssetFields("user_defined_fields");
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields single field did not return a result.");
+            Assert.NotNull(assets.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithNoArguments_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset asset = client.Asset(uid);
+            asset.AssetFields();
+            Asset result = await asset.Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields() no arguments did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_WithNoArguments_RequestSucceeds()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.AssetFields();
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields() no arguments did not return a result.");
+            Assert.NotNull(assets.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithNull_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset asset = client.Asset(uid);
+            asset.AssetFields(null);
+            Asset result = await asset.Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields(null) did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithEmptyArray_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset asset = client.Asset(uid);
+            asset.AssetFields(new string[0]);
+            Asset result = await asset.Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields(empty array) did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_WithNull_RequestSucceeds()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.AssetFields(null);
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields(null) did not return a result.");
+            Assert.NotNull(assets.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_WithEmptyArray_RequestSucceeds()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.AssetFields(new string[0]);
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields(empty array) did not return a result.");
+            Assert.NotNull(assets.Items);
         }
     }
 }

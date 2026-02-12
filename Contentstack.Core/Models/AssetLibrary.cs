@@ -246,6 +246,26 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Request specific asset-related metadata in the response (CDA asset_fields[]).
+        /// Supported values include: user_defined_fields, embedded, ai_suggested, visual_markups.
+        /// </summary>
+        /// <param name="fields">Asset field names to include.</param>
+        /// <returns>Current instance of AssetLibrary for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     stack.Asset().AssetFields("user_defined_fields").Find()
+        /// </code>
+        /// </example>
+        public AssetLibrary AssetFields(params string[] fields)
+        {
+            if (fields != null && fields.Length > 0)
+            {
+                UrlQueries.Add("asset_fields[]", fields);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Sets the locale.
         /// </summary>
         /// <returns>The locale.</returns>

@@ -1619,6 +1619,18 @@ namespace Contentstack.Core.Tests
                 // The exact assertion depends on your data structure
             }
         }
+
+        [Fact]
+        public async Task AssetFieldsQueryEntriesRequestSucceeds()
+        {
+            Query query = client.ContentType(source).Query();
+            query.AssetFields("user_defined_fields", "visual_markups");
+            var result = await query.Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields did not return a result.");
+            Assert.NotNull(result.Items);
+        }
     }
 }
 

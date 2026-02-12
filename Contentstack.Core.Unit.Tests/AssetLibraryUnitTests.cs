@@ -171,6 +171,119 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
+        #region AssetFields Tests
+
+        [Fact]
+        public void AssetFields_WithSingleField_AddsQueryParameter()
+        {
+            // Arrange
+            var assetLibrary = CreateAssetLibrary();
+            var field = "user_defined_fields";
+
+            // Act
+            AssetLibrary result = assetLibrary.AssetFields(field);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(assetLibrary, result);
+
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+
+            Assert.True(urlQueries?.ContainsKey("asset_fields[]") ?? false);
+            var fields = urlQueries?["asset_fields[]"] as string[];
+            Assert.NotNull(fields);
+            Assert.Single(fields);
+            Assert.Equal("user_defined_fields", fields[0]);
+        }
+
+        [Fact]
+        public void AssetFields_WithMultipleFields_AddsQueryParameter()
+        {
+            // Arrange
+            var assetLibrary = CreateAssetLibrary();
+            var fields = new[] { "user_defined_fields", "embedded", "ai_suggested" };
+
+            // Act
+            AssetLibrary result = assetLibrary.AssetFields(fields);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(assetLibrary, result);
+
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+
+            Assert.True(urlQueries?.ContainsKey("asset_fields[]") ?? false);
+            Assert.Equal(fields, urlQueries?["asset_fields[]"]);
+        }
+
+        [Fact]
+        public void AssetFields_ReturnsSameInstance_ForChaining()
+        {
+            // Arrange
+            var assetLibrary = CreateAssetLibrary();
+
+            // Act
+            AssetLibrary result = assetLibrary.AssetFields("embedded");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Same(assetLibrary, result);
+        }
+
+        [Fact]
+        public void AssetFields_WithNoArguments_DoesNotAddParameter()
+        {
+            // Arrange
+            var assetLibrary = CreateAssetLibrary();
+
+            // Act
+            AssetLibrary result = assetLibrary.AssetFields();
+
+            // Assert
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+            Assert.False(urlQueries?.ContainsKey("asset_fields[]") ?? false);
+        }
+
+        [Fact]
+        public void AssetFields_WithNull_DoesNotAddParameter()
+        {
+            // Arrange
+            var assetLibrary = CreateAssetLibrary();
+
+            // Act
+            AssetLibrary result = assetLibrary.AssetFields(null);
+
+            // Assert
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+            Assert.False(urlQueries?.ContainsKey("asset_fields[]") ?? false);
+        }
+
+        [Fact]
+        public void AssetFields_WithEmptyArray_DoesNotAddParameter()
+        {
+            // Arrange
+            var assetLibrary = CreateAssetLibrary();
+
+            // Act
+            AssetLibrary result = assetLibrary.AssetFields(new string[0]);
+
+            // Assert
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+            Assert.False(urlQueries?.ContainsKey("asset_fields[]") ?? false);
+        }
+
+        #endregion
+
         #region IncludeBranch Tests
 
         [Fact]

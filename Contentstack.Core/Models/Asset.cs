@@ -299,6 +299,27 @@ namespace Contentstack.Core.Models
             return this;
         }
 
+        /// <summary>
+        /// Request specific asset-related metadata in the response (CDA asset_fields[]).
+        /// Supported values include: user_defined_fields, embedded, ai_suggested, visual_markups.
+        /// </summary>
+        /// <param name="fields">Asset field names to include.</param>
+        /// <returns>Current instance of Asset for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     stack.Asset(uid).AssetFields("user_defined_fields", "embedded").Fetch()
+        /// </code>
+        /// </example>
+        public Asset AssetFields(params string[] fields)
+        {
+            if (fields != null && fields.Length > 0)
+            {
+                this.UrlQueries.Add("asset_fields[]", fields);
+            }
+            return this;
+        }
+
+
         public void RemoveHeader(string key)
         {
             if (this._Headers.ContainsKey(key))

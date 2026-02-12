@@ -1020,6 +1020,27 @@ namespace Contentstack.Core.Models
 
 
         /// <summary>
+        /// Request specific asset-related metadata in the response (CDA asset_fields[]).
+        /// Supported values include: user_defined_fields, embedded, ai_suggested, visual_markups.
+        /// </summary>
+        /// <param name="fields">Asset field names to include.</param>
+        /// <returns>Current instance of Query for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     stack.ContentType(uid).Entry().AssetFields("user_defined_fields").Find()
+        /// </code>
+        /// </example>
+        public Query AssetFields(params string[] fields)
+        {
+            if (fields != null && fields.Length > 0)
+            {
+                UrlQueries.Add("asset_fields[]", fields);
+            }
+            return this;
+        }
+
+
+        /// <summary>
         /// Include tags with which to search entries.
         /// </summary>
         /// <param name="tags">Comma separated array of tags with which to search entries.</param>
