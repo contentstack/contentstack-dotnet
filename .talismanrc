@@ -26,3 +26,7 @@ fileignoreconfig:
   checksum: 69899138754908e156aa477d775d12fd6b3fefc1a6c2afec22cb409bd6e6446c
 - filename: CHANGELOG.md
   checksum: bc17fd4cf564e524c686a8271033f8e6e7f5f69de8137007d1c72d5f563fe92a
+- filename: Scripts/generate_html_report.py
+  checksum: 343a6c4a3608e4506cd7c9de04f9246da304ff95d256a3215c2f0a2d37d4e4da
+- filename: Scripts/generate_enhanced_html_report.py
+  checksum: 69de208724714fcb474e41e17c5e67a1f875b96e2cc479c71f03c38b7a8c3be9
