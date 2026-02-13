@@ -1370,7 +1370,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var entry = CreateEntry();
-            var fields = new[] { "user_defined_fields", "embedded", "ai_suggested" };
+            var fields = new[] { "user_defined_fields", "embedded_metadata", "ai_generated_metadata" };
 
             // Act
             Entry result = entry.AssetFields(fields);
@@ -1394,7 +1394,7 @@ namespace Contentstack.Core.Unit.Tests
             var entry = CreateEntry();
 
             // Act
-            Entry result = entry.AssetFields("embedded");
+            Entry result = entry.AssetFields("embedded_metadata");
 
             // Assert
             Assert.NotNull(result);

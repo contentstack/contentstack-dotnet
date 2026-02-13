@@ -203,7 +203,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var fields = new[] { "user_defined_fields", "embedded", "ai_suggested" };
+            var fields = new[] { "user_defined_fields", "embedded_metadata", "ai_generated_metadata" };
 
             // Act
             AssetLibrary result = assetLibrary.AssetFields(fields);
@@ -227,7 +227,7 @@ namespace Contentstack.Core.Unit.Tests
             var assetLibrary = CreateAssetLibrary();
 
             // Act
-            AssetLibrary result = assetLibrary.AssetFields("embedded");
+            AssetLibrary result = assetLibrary.AssetFields("embedded_metadata");
 
             // Assert
             Assert.NotNull(result);

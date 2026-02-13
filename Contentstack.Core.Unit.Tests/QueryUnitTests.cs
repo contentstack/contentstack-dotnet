@@ -786,7 +786,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var fields = new[] { "user_defined_fields", "embedded" };
+            var fields = new[] { "user_defined_fields", "embedded_metadata" };
 
             // Act
             Query result = query.AssetFields(fields);
@@ -810,7 +810,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = CreateQuery();
 
             // Act
-            Query result = query.AssetFields("embedded");
+            Query result = query.AssetFields("embedded_metadata");
 
             // Assert
             Assert.NotNull(result);

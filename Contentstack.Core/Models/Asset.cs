@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -301,13 +301,13 @@ namespace Contentstack.Core.Models
 
         /// <summary>
         /// Request specific asset-related metadata in the response (CDA asset_fields[]).
-        /// Supported values include: user_defined_fields, embedded, ai_suggested, visual_markups.
+        /// Valid parameters: user_defined_fields, embedded_metadata, ai_generated_metadata, visual_markups.
         /// </summary>
         /// <param name="fields">Asset field names to include.</param>
         /// <returns>Current instance of Asset for chaining.</returns>
         /// <example>
         /// <code>
-        ///     stack.Asset(uid).AssetFields("user_defined_fields", "embedded").Fetch()
+        ///     stack.Asset(uid).AssetFields("user_defined_fields", "embedded_metadata").Fetch()
         /// </code>
         /// </example>
         public Asset AssetFields(params string[] fields)

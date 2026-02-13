@@ -1022,6 +1022,20 @@ namespace Contentstack.Core.Tests
         }
 
         [Fact]
+        public async Task AssetFields_WithMultipleFields_RequestSucceeds()
+        {
+            string uid = await FetchAssetUID();
+            Asset asset = client.Asset(uid);
+            asset.AssetFields("user_defined_fields", "embedded_metadata", "visual_markups");
+            Asset result = await asset.Fetch();
+
+            if (result == null)
+                Assert.Fail("Asset.Fetch with AssetFields multiple fields did not return a result.");
+            Assert.NotNull(result.Uid);
+            Assert.NotEmpty(result.FileName);
+        }
+
+        [Fact]
         public async Task AssetFields_AssetLibrary_SingleField_RequestSucceeds()
         {
             AssetLibrary assetLibrary = client.AssetLibrary();
@@ -1030,6 +1044,18 @@ namespace Contentstack.Core.Tests
 
             if (assets == null)
                 Assert.Fail("AssetLibrary.FetchAll with AssetFields single field did not return a result.");
+            Assert.NotNull(assets.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_AssetLibrary_WithMultipleFields_RequestSucceeds()
+        {
+            AssetLibrary assetLibrary = client.AssetLibrary();
+            assetLibrary.AssetFields("user_defined_fields", "embedded_metadata", "ai_generated_metadata", "visual_markups");
+            ContentstackCollection<Asset> assets = await assetLibrary.FetchAll();
+
+            if (assets == null)
+                Assert.Fail("AssetLibrary.FetchAll with AssetFields multiple fields did not return a result.");
             Assert.NotNull(assets.Items);
         }
 

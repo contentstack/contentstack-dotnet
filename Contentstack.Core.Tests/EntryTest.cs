@@ -465,7 +465,7 @@ namespace Contentstack.Core.Tests
             string uid = await GetUID("source1");
             Entry sourceEntry = contenttype.Entry(uid);
 
-            sourceEntry.AssetFields("user_defined_fields", "visual_markups");
+            sourceEntry.AssetFields("user_defined_fields", "embedded_metadata", "ai_generated_metadata", "visual_markups");
             var result = await sourceEntry.Fetch<Entry>();
 
             if (result == null)
@@ -502,6 +502,21 @@ namespace Contentstack.Core.Tests
 
             if (result == null)
                 Assert.Fail("Entry.Fetch with AssetFields single field did not return a result.");
+            Assert.NotNull(result.Uid);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithMultipleFields_RequestSucceeds()
+        {
+            ContentType contenttype = client.ContentType(source);
+            string uid = await GetUID("source1");
+            Entry sourceEntry = contenttype.Entry(uid);
+
+            sourceEntry.AssetFields("user_defined_fields", "embedded_metadata", "visual_markups");
+            var result = await sourceEntry.Fetch<Entry>();
+
+            if (result == null)
+                Assert.Fail("Entry.Fetch with AssetFields multiple fields did not return a result.");
             Assert.NotNull(result.Uid);
         }
 

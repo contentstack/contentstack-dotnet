@@ -5,7 +5,7 @@
 - CDA / DAM 2.0 – AssetFields support
   - Added `AssetFields(params string[] fields)` to request specific asset-related metadata via the CDA `asset_fields[]` query parameter
   - Implemented on: Entry (single entry fetch), Query (entries find), Asset (single asset fetch), AssetLibrary (assets find)
-  - Supported asset field values: `user_defined_fields`, `embedded`, `ai_suggested`, `visual_markups`
+  - Valid parameters: `user_defined_fields`, `embedded_metadata`, `ai_generated_metadata`, `visual_markups`
   - Method is chainable; when called with no arguments, the query parameter is not set
 
 ### Version: 2.25.2

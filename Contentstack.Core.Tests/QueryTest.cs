@@ -1624,11 +1624,84 @@ namespace Contentstack.Core.Tests
         public async Task AssetFieldsQueryEntriesRequestSucceeds()
         {
             Query query = client.ContentType(source).Query();
-            query.AssetFields("user_defined_fields", "visual_markups");
+            query.AssetFields("user_defined_fields", "embedded_metadata", "ai_generated_metadata", "visual_markups");
             var result = await query.Find<Entry>();
 
             if (result == null)
                 Assert.Fail("Query.Find with AssetFields did not return a result.");
+            Assert.NotNull(result.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_ChainedWithIncludeMetadata_RequestSucceeds()
+        {
+            var result = await client.ContentType(source).Query()
+                .AssetFields("user_defined_fields")
+                .IncludeMetadata()
+                .Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields and IncludeMetadata did not return a result.");
+            Assert.NotNull(result.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_SingleField_RequestSucceeds()
+        {
+            Query query = client.ContentType(source).Query();
+            query.AssetFields("user_defined_fields");
+            var result = await query.Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields single field did not return a result.");
+            Assert.NotNull(result.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithMultipleFields_RequestSucceeds()
+        {
+            Query query = client.ContentType(source).Query();
+            query.AssetFields("user_defined_fields", "embedded_metadata", "visual_markups");
+            var result = await query.Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields multiple fields did not return a result.");
+            Assert.NotNull(result.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithNoArguments_RequestSucceeds()
+        {
+            Query query = client.ContentType(source).Query();
+            query.AssetFields();
+            var result = await query.Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields() no arguments did not return a result.");
+            Assert.NotNull(result.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithNull_RequestSucceeds()
+        {
+            Query query = client.ContentType(source).Query();
+            query.AssetFields(null);
+            var result = await query.Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields(null) did not return a result.");
+            Assert.NotNull(result.Items);
+        }
+
+        [Fact]
+        public async Task AssetFields_WithEmptyArray_RequestSucceeds()
+        {
+            Query query = client.ContentType(source).Query();
+            query.AssetFields(new string[0]);
+            var result = await query.Find<Entry>();
+
+            if (result == null)
+                Assert.Fail("Query.Find with AssetFields(empty array) did not return a result.");
             Assert.NotNull(result.Items);
         }
     }

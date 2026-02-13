@@ -400,7 +400,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var asset = CreateAsset();
-            var fields = new[] { "embedded", "visual_markups" };
+            var fields = new[] { "embedded_metadata", "visual_markups" };
 
             // Act
             Asset result = asset.AssetFields(fields);
@@ -424,7 +424,7 @@ namespace Contentstack.Core.Unit.Tests
             var asset = CreateAsset();
 
             // Act
-            Asset result = asset.AssetFields("ai_suggested");
+            Asset result = asset.AssetFields("ai_generated_metadata");
 
             // Assert
             Assert.NotNull(result);
