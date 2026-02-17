@@ -533,6 +533,68 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
+        #region Asset Locale Tests (single-asset fetch with locale)
+
+        /// <summary>
+        /// Asset.SetLocale adds locale query param for single-asset fetch.
+        /// </summary>
+        [Fact]
+        public void SetLocale_AddsQueryParameter()
+        {
+            var asset = CreateAsset();
+            var locale = "en-us";
+
+            Asset result = asset.SetLocale(locale);
+
+            Assert.NotNull(result);
+            Assert.Same(asset, result);
+            var urlQueriesField = typeof(Asset).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(asset);
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.Equal("en-us", urlQueries?["locale"]?.ToString());
+        }
+        /// <summary>
+        /// Asset localisation: AddParam("locale", "ar") adds locale query for single-asset fetch.
+        /// </summary>
+        [Fact]
+        public void AddParam_WithLocale_AddsLocaleQueryParameter()
+        {
+            var asset = CreateAsset();
+            var locale = "ar";
+
+            Asset result = asset.AddParam("locale", locale);
+
+            Assert.NotNull(result);
+            Assert.Same(asset, result);
+            var urlQueriesField = typeof(Asset).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(asset);
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.Equal("ar", urlQueries?["locale"]?.ToString());
+        }
+
+        /// <summary>
+        /// Single-asset fetch: locale can be combined with include_fallback.
+        /// </summary>
+        [Fact]
+        public void AddParam_LocaleWithIncludeFallback_AddsBothQueryParameters()
+        {
+            var asset = CreateAsset();
+
+            asset.AddParam("locale", "en-us").IncludeFallback();
+
+            var urlQueriesField = typeof(Asset).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(asset);
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.Equal("en-us", urlQueries?["locale"]?.ToString());
+            Assert.True(urlQueries?.ContainsKey("include_fallback") ?? false);
+            Assert.Equal("true", urlQueries?["include_fallback"]?.ToString());
+        }
+
+        #endregion
+
         #region SetHeader and RemoveHeader Tests
 
         [Fact]

@@ -119,6 +119,12 @@ namespace Contentstack.Core.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// Localized title of the asset (e.g. when fetched with SetLocale / asset localisation).
+        /// </summary>
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+
+        /// <summary>
         /// Set array of Tags
         /// </summary>
         public Object[] Tags { get; set; }
@@ -315,6 +321,28 @@ namespace Contentstack.Core.Models
             if (fields != null && fields.Length > 0)
             {
                 this.UrlQueries.Add("asset_fields[]", fields);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the locale for fetching this asset. Returns the asset in the specified locale.
+        /// </summary>
+        /// <param name="locale">Locale code (e.g. "en-us", "ar").</param>
+        /// <returns>Current instance of Asset for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var asset = await stack.Asset(uid).SetLocale("en-us").Fetch();
+        /// </code>
+        /// </example>
+        public Asset SetLocale(string locale)
+        {
+            if (!string.IsNullOrEmpty(locale))
+            {
+                if (UrlQueries.ContainsKey("locale"))
+                    UrlQueries["locale"] = locale;
+                else
+                    UrlQueries.Add("locale", locale);
             }
             return this;
         }

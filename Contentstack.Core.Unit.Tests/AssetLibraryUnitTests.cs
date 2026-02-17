@@ -333,6 +333,43 @@ namespace Contentstack.Core.Unit.Tests
             Assert.Equal(locale, urlQueries?["locale"]?.ToString());
         }
 
+        /// <summary>
+        /// Asset localisation: SetLocale with locale "ar" adds locale query param for API.
+        /// </summary>
+        [Fact]
+        public void SetLocale_ForAssetLocalisation_AddsLocaleQueryParameter()
+        {
+            var assetLibrary = CreateAssetLibrary();
+            var locale = "ar";
+
+            AssetLibrary result = assetLibrary.SetLocale(locale);
+
+            Assert.NotNull(result);
+            Assert.Same(assetLibrary, result);
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.Equal("ar", urlQueries?["locale"]?.ToString());
+        }
+
+        /// <summary>
+        /// SetLocale when called again updates the locale query param (overwrite).
+        /// </summary>
+        [Fact]
+        public void SetLocale_UpdatesLocaleWhenCalledAgain()
+        {
+            var assetLibrary = CreateAssetLibrary();
+            assetLibrary.SetLocale("ar");   
+            assetLibrary.SetLocale("en-us");
+
+            var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.Equal("ar", urlQueries?["locale"]?.ToString());
+        }
+
         #endregion
 
         #region AddParam Tests
