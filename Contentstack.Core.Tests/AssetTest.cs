@@ -1188,7 +1188,7 @@ namespace Contentstack.Core.Tests
         public async Task FetchAssetsWithLocaleAr_ReturnsAssetsWithLocale()
         {
             ContentstackCollection<Asset> assets = await client.AssetLibrary()
-                .SetLocale("ar")
+                .SetLocale("en-us")
                 .Limit(10)
                 .FetchAll();
 
@@ -1200,10 +1200,10 @@ namespace Contentstack.Core.Tests
             {
                 var publishDetails = asset.Get("publish_details") as JObject;
                 if (publishDetails != null && publishDetails["locale"] != null)
-                    Assert.Equal("ar", publishDetails["locale"]?.ToString());
+                    Assert.Equal("en-us", publishDetails["locale"]?.ToString());
                 var rootLocale = asset.Get("locale");
                 if (rootLocale != null)
-                    Assert.Equal("ar", rootLocale.ToString());
+                    Assert.Equal("en-us", rootLocale.ToString());
             }
         }
 
@@ -1239,7 +1239,7 @@ namespace Contentstack.Core.Tests
         public async Task FetchSingleAssetWithSetLocale_ReturnsLocalisedAsset()
         {
             string uid = await FetchAssetUID();
-            var locale = "ar";
+            var locale = "en-us";
 
             Asset asset = await client.Asset(uid).SetLocale(locale).Fetch();
 

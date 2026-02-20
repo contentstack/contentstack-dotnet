@@ -360,8 +360,8 @@ namespace Contentstack.Core.Unit.Tests
         public void SetLocale_UpdatesLocaleWhenCalledAgain()
         {
             var assetLibrary = CreateAssetLibrary();
-            assetLibrary.SetLocale("ar");   
             assetLibrary.SetLocale("en-us");
+            assetLibrary.SetLocale("ar");
 
             var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries",
                 BindingFlags.NonPublic | BindingFlags.Instance);
