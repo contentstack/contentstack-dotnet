@@ -2,11 +2,15 @@
 #### Date: Feb-10-2026
 
 ##### Feat:
-- CDA / DAM 2.0 – AssetFields support
+- CDA / – AssetFields support
   - Added `AssetFields(params string[] fields)` to request specific asset-related metadata via the CDA `asset_fields[]` query parameter
   - Implemented on: Entry (single entry fetch), Query (entries find), Asset (single asset fetch), AssetLibrary (assets find)
   - Valid parameters: `user_defined_fields`, `embedded_metadata`, `ai_generated_metadata`, `visual_markups`
   - Method is chainable; when called with no arguments, the query parameter is not set
+- CDA / – Asset localisation support
+  - Added `SetLocale(string locale)` on Asset for single-asset fetch by locale (e.g. `stack.Asset(uid).SetLocale("en-us").Fetch()`)
+  - Added `Title` property on Asset for localised title in API response
+  - AssetLibrary `SetLocale` continues to support listing assets by locale
 
 ### Version: 2.25.2
 #### Date: Nov-13-2025

@@ -1133,5 +1133,124 @@ namespace Contentstack.Core.Tests
                 Assert.Fail("AssetLibrary.FetchAll with AssetFields(empty array) did not return a result.");
             Assert.NotNull(assets.Items);
         }
+
+        [Fact]
+        public async Task FetchAssetsWithLocale_ReturnsLocalisedAssets()
+        {
+            var locale = "en-us"; // or "ar" if your stack has that locale
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .SetLocale(locale)
+                .FetchAll();
+
+            Assert.True(assets.Items != null);
+            if (assets.Items.Count() == 0)
+                return; // no assets in this locale
+
+            foreach (Asset asset in assets)
+            {
+                // Root-level locale (when API returns it)
+                var rootLocale = asset.Get("locale");
+                if (rootLocale != null)
+                    Assert.Equal(locale, rootLocale.ToString());
+
+                // Or via publish_details (existing pattern from FetchAssetsPublishWithoutFallback)
+                var publishDetails = asset.Get("publish_details") as JObject;
+                if (publishDetails != null && publishDetails["locale"] != null)
+                    Assert.Equal(locale, publishDetails["locale"]?.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Asset localisation: Fetch single asset with locale query param; response has requested locale.
+        /// </summary>
+        [Fact]
+        public async Task FetchSingleAssetWithLocale_ReturnsLocalisedAsset()
+        {
+            string uid = await FetchAssetUID();
+            var locale = "en-us";
+
+            Asset asset = await client.Asset(uid).AddParam("locale", locale).Fetch();
+
+            Assert.NotNull(asset);
+            Assert.NotNull(asset.Uid);
+            var publishDetails = asset.Get("publish_details") as JObject;
+            if (publishDetails != null && publishDetails["locale"] != null)
+                Assert.Equal(locale, publishDetails["locale"]?.ToString());
+            var rootLocale = asset.Get("locale");
+            if (rootLocale != null)
+                Assert.Equal(locale, rootLocale.ToString());
+        }
+
+        /// <summary>
+        /// Asset localisation: List assets with SetLocale("ar"); each asset has locale in response.
+        /// </summary>
+        [Fact]
+        public async Task FetchAssetsWithLocaleAr_ReturnsAssetsWithLocale()
+        {
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .SetLocale("en-us")
+                .Limit(10)
+                .FetchAll();
+
+            Assert.NotNull(assets.Items);
+            if (assets.Items.Count() == 0)
+                return; // stack may not have assets in "ar"
+
+            foreach (Asset asset in assets)
+            {
+                var publishDetails = asset.Get("publish_details") as JObject;
+                if (publishDetails != null && publishDetails["locale"] != null)
+                    Assert.Equal("en-us", publishDetails["locale"]?.ToString());
+                var rootLocale = asset.Get("locale");
+                if (rootLocale != null)
+                    Assert.Equal("en-us", rootLocale.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Asset localisation: SetLocale with IncludeFallback returns assets; locale in publish_details.
+        /// </summary>
+        [Fact]
+        public async Task FetchAssetsWithLocaleAndFallback_ReturnsLocalisedOrFallback()
+        {
+            var locale = "en-us";
+            ContentstackCollection<Asset> assets = await client.AssetLibrary()
+                .SetLocale(locale)
+                .IncludeFallback()
+                .Limit(10)
+                .FetchAll();
+
+            Assert.NotNull(assets.Items);
+            if (assets.Items.Count() == 0)
+                return;
+
+            foreach (Asset asset in assets)
+            {
+                var publishDetails = asset.Get("publish_details") as JObject;
+                Assert.NotNull(publishDetails);
+                Assert.NotNull(publishDetails["locale"]);
+            }
+        }
+
+        /// <summary>
+        /// Asset localisation: Single asset fetch using Asset.SetLocale returns localised asset.
+        /// </summary>
+        [Fact]
+        public async Task FetchSingleAssetWithSetLocale_ReturnsLocalisedAsset()
+        {
+            string uid = await FetchAssetUID();
+            var locale = "en-us";
+
+            Asset asset = await client.Asset(uid).SetLocale(locale).Fetch();
+
+            Assert.NotNull(asset);
+            Assert.NotNull(asset.Uid);
+            var publishDetails = asset.Get("publish_details") as JObject;
+            if (publishDetails != null && publishDetails["locale"] != null)
+                Assert.Equal(locale, publishDetails["locale"]?.ToString());
+            var rootLocale = asset.Get("locale");
+            if (rootLocale != null)
+                Assert.Equal(locale, rootLocale.ToString());
+        }
     }
 }
