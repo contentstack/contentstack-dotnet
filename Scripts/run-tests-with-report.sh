@@ -1,5 +1,7 @@
 #!/bin/bash
-# Run tests and generate HTML report
+# Run all integration tests and generate enhanced HTML report
+# Usage: ./Scripts/run-tests-with-report.sh  (run from project root)
+#    or: cd Scripts && ./run-tests-with-report.sh
 
 set -e
 
@@ -11,7 +13,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 echo "=============================================="
-echo "  Running Tests & Generating HTML Report"
+echo "  Running Integration Tests & HTML Report"
 echo "=============================================="
 echo ""
 echo "Project: $PROJECT_ROOT"
@@ -20,7 +22,7 @@ echo ""
 
 # Step 1: Run tests with .trx logger (timestamped)
 TRX_FILE="test-results_${TIMESTAMP}.trx"
-echo "Step 1: Running tests..."
+echo "Step 1: Running all integration tests..."
 dotnet test "$PROJECT_ROOT/Contentstack.Core.Tests/Contentstack.Core.Tests.csproj" \
   --filter "FullyQualifiedName~Integration" \
   --logger "trx;LogFileName=$TRX_FILE" \
