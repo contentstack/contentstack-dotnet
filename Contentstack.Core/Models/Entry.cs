@@ -1,4 +1,4 @@
-﻿using Markdig;
+using Markdig;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -1180,6 +1180,26 @@ namespace Contentstack.Core.Models
             }
             return this;
         }
+
+        /// <summary>
+        /// Request specific asset-related metadata in the response (CDA asset_fields[]).
+        /// Valid parameters: user_defined_fields, embedded_metadata, ai_generated_metadata, visual_markups.
+        /// </summary>
+        /// <param name="fields">Asset field names to include (e.g. "user_defined_fields", "embedded_metadata").</param>
+        /// <returns>Current instance of Entry for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     stack.ContentType(uid).Entry(uid).AssetFields("user_defined_fields", "embedded_metadata").Fetch()
+        /// </code>
+        /// </example>
+        public Entry AssetFields(params string[] fields)
+        {
+            if (fields != null && fields.Length > 0)
+            {
+                UrlQueries.Add("asset_fields[]", fields);
+            }
+            return this;
+        }       
 
         /// <summary>
         /// Include branch for publish content.

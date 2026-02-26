@@ -120,6 +120,8 @@ fileignoreconfig:
   checksum: 01517f2224fbb2956d79292e6d3d23d1cc970dbfc190623496bcac1335bcd683
 - filename: Contentstack.Core.Tests/generate_html_report.py
   checksum: b4bec9ef853703e989b3d8077edc5c3ec6ea13a23826699d8beca5e87323e128
+- filename: Scripts/generate_html_report.py
+  checksum: 343a6c4a3608e4506cd7c9de04f9246da304ff95d256a3215c2f0a2d37d4e4da
 - filename: Scripts/generate_enhanced_html_report.py
-  checksum: e31c1372ea6e1cd1381c9533ba89b95edf746b36e4a1098d4aa51fba296ca928
+  checksum: 69de208724714fcb474e41e17c5e67a1f875b96e2cc479c71f03c38b7a8c3be9
 version: "1.0"
