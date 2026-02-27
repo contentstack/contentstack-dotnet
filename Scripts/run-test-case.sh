@@ -4,7 +4,7 @@
 #  Contentstack Delivery SDK
 #
 #  Created based on Management SDK pattern
-#  Copyright © 2025 Contentstack. All rights reserved.
+#  Copyright © 2026 Contentstack. All rights reserved.
 
 echo "Removing old test results..."
 

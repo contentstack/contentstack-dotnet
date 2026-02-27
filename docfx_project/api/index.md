@@ -61,7 +61,7 @@ Once you have initialized the SDK, you can start getting content in your app.
 
 To retrieve a single entry from a content type, use the code snippet given below:
 ``` cs
-Entry entry = client.ContentType("blog").Entry("blta464e9fbd048668c");
+Entry entry = client.ContentType("blog").Entry("<entry_uid>");
 entry.Fetch<Product>().ContinueWith((t) => { 
     if (!t.IsFaulted) { 
         Console.WriteLine("entry:" + t.Result);  

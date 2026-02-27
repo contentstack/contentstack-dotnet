@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -117,6 +117,12 @@ namespace Contentstack.Core.Models
         /// This is Asset description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Localized title of the asset (e.g. when fetched with SetLocale / asset localisation).
+        /// </summary>
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
 
         /// <summary>
         /// Set array of Tags
@@ -298,6 +304,49 @@ namespace Contentstack.Core.Models
             this.UrlQueries.Add(key, value);
             return this;
         }
+
+        /// <summary>
+        /// Request specific asset-related metadata in the response (CDA asset_fields[]).
+        /// Valid parameters: user_defined_fields, embedded_metadata, ai_generated_metadata, visual_markups.
+        /// </summary>
+        /// <param name="fields">Asset field names to include.</param>
+        /// <returns>Current instance of Asset for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     stack.Asset(uid).AssetFields("user_defined_fields", "embedded_metadata").Fetch()
+        /// </code>
+        /// </example>
+        public Asset AssetFields(params string[] fields)
+        {
+            if (fields != null && fields.Length > 0)
+            {
+                this.UrlQueries.Add("asset_fields[]", fields);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the locale for fetching this asset. Returns the asset in the specified locale.
+        /// </summary>
+        /// <param name="locale">Locale code (e.g. "en-us", "ar").</param>
+        /// <returns>Current instance of Asset for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var asset = await stack.Asset(uid).SetLocale("en-us").Fetch();
+        /// </code>
+        /// </example>
+        public Asset SetLocale(string locale)
+        {
+            if (!string.IsNullOrEmpty(locale))
+            {
+                if (UrlQueries.ContainsKey("locale"))
+                    UrlQueries["locale"] = locale;
+                else
+                    UrlQueries.Add("locale", locale);
+            }
+            return this;
+        }
+
 
         public void RemoveHeader(string key)
         {
