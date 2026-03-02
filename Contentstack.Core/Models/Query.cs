@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1014,6 +1014,27 @@ namespace Contentstack.Core.Models
             if (filed_uids != null && filed_uids.Length > 0)
             {
                 UrlQueries.Add("include[]", filed_uids);
+            }
+            return this;
+        }
+
+
+        /// <summary>
+        /// Request specific asset-related metadata in the response (CDA asset_fields[]).
+        /// Valid parameters: user_defined_fields, embedded_metadata, ai_generated_metadata, visual_markups.
+        /// </summary>
+        /// <param name="fields">Asset field names to include.</param>
+        /// <returns>Current instance of Query for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     stack.ContentType(uid).Entry().AssetFields("user_defined_fields").Find()
+        /// </code>
+        /// </example>
+        public Query AssetFields(params string[] fields)
+        {
+            if (fields != null && fields.Length > 0)
+            {
+                UrlQueries.Add("asset_fields[]", fields);
             }
             return this;
         }

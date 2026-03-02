@@ -22,3 +22,47 @@ packages/
 */TestResults/
 */app.config
 */LivePreviewTest.cs
+# Security - Exclude ALL configuration files with credentials
+App.config.local
+*.config.local
+**/App.config
+**/app.config
+Contentstack.Core.Tests/App.config
+Contentstack.Core.Tests/app.config
+
+# Test Results
+TestResults/
+test-report*.html
+test-report-enhanced*.html
+*.trx
+docs
+
+# Security Scan Reports
+SECURITY-SCAN-REPORT.txt
+
+# IDE and OS files
+.DS_Store
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
