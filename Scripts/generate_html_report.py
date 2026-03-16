@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
 HTML Test Report Generator for .NET Test Results
-Converts .trx files to beautiful HTML reports
-No external dependencies - uses only Python standard library
+Converts .trx files to beautiful HTML reports.
+Uses defusedxml for secure XML parsing (XXE/DDoS-safe).
 """
 
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import os
 import sys
 from datetime import datetime

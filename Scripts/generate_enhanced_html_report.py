@@ -5,10 +5,10 @@ Converts .trx files to beautiful HTML reports with:
 - Expected vs Actual values
 - HTTP Request details (including cURL)
 - Response details
-No external dependencies - uses only Python standard library
+Uses defusedxml for secure XML parsing (XXE/DDoS-safe).
 """
 
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import os
 import sys
 import re

@@ -1,0 +1,2 @@
+# Secure XML parsing (fixes Snyk CWE-611 Insecure Xml Parser / XXE)
+defusedxml>=0.7.0
