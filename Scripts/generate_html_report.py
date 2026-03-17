@@ -78,9 +78,9 @@ class TestReportGenerator:
                         if stacktrace_elem is not None:
                             error_stacktrace = stacktrace_elem.text
                 
-                # Get test category
+                # Get test category (find by id without dynamic XPath to avoid CWE-643)
                 test_def_id = test_result.get('testId', '')
-                test_def = root.find(f".//UnitTest[@id='{test_def_id}']", ns)
+                test_def = next((el for el in root.findall('.//UnitTest', ns) if el.get('id') == test_def_id), None)
                 category = 'General'
                 if test_def is not None:
                     test_method = test_def.find('.//TestMethod', ns)

@@ -158,9 +158,9 @@ class EnhancedTestReportGenerator:
                         test_output = stdout_elem.text
                         structured_output = self.parse_structured_output(test_output)
                 
-                # Get test category
+                # Get test category (find by id without dynamic XPath to avoid CWE-643)
                 test_def_id = test_result.get('testId', '')
-                test_def = root.find(f".//UnitTest[@id='{test_def_id}']", ns)
+                test_def = next((el for el in root.findall('.//UnitTest', ns) if el.get('id') == test_def_id), None)
                 category = 'General'
                 if test_def is not None:
                     test_method = test_def.find('.//TestMethod', ns)
