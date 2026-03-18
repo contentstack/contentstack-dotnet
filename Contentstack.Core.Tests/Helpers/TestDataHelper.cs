@@ -187,16 +187,16 @@ namespace Contentstack.Core.Tests.Helpers
         /// <summary>
         /// Gets a required configuration value and throws if not found
         /// </summary>
-        /// <param name="key">Configuration key</param>
+        /// <param name="configKey">Configuration key name</param>
         /// <returns>Configuration value</returns>
         /// <exception cref="InvalidOperationException">Thrown when configuration is missing</exception>
-        private static string GetRequiredConfig(string key)
+        private static string GetRequiredConfig(string configKey)
         {
-            var value = ConfigurationManager.AppSettings[key];
+            var value = ConfigurationManager.AppSettings[configKey];
             if (string.IsNullOrEmpty(value))
             {
                 throw new InvalidOperationException(
-                    $"Required configuration '{key}' is missing from app.config. " +
+                    $"Required configuration '{configKey}' is missing from app.config. " +
                     $"Please ensure all required keys are present in the <appSettings> section.");
             }
             return value;
@@ -205,12 +205,12 @@ namespace Contentstack.Core.Tests.Helpers
         /// <summary>
         /// Gets an optional configuration value with a default
         /// </summary>
-        /// <param name="key">Configuration key</param>
+        /// <param name="configKey">Configuration key name</param>
         /// <param name="defaultValue">Default value if not found</param>
         /// <returns>Configuration value or default</returns>
-        private static string GetOptionalConfig(string key, string defaultValue = null)
+        private static string GetOptionalConfig(string configKey, string defaultValue = null)
         {
-            return ConfigurationManager.AppSettings[key] ?? defaultValue;
+            return ConfigurationManager.AppSettings[configKey] ?? defaultValue;
         }
         
         /// <summary>
