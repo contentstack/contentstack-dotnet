@@ -5,10 +5,10 @@ Converts .trx files to beautiful HTML reports with:
 - Expected vs Actual values
 - HTTP Request details (including cURL)
 - Response details
-No external dependencies - uses only Python standard library
+Uses defusedxml for secure XML parsing (XXE/DDoS-safe).
 """
 
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import os
 import sys
 import re
@@ -158,9 +158,9 @@ class EnhancedTestReportGenerator:
                         test_output = stdout_elem.text
                         structured_output = self.parse_structured_output(test_output)
                 
-                # Get test category
+                # Get test category (find by id without dynamic XPath to avoid CWE-643)
                 test_def_id = test_result.get('testId', '')
-                test_def = root.find(f".//UnitTest[@id='{test_def_id}']", ns)
+                test_def = next((el for el in root.findall('.//UnitTest', ns) if el.get('id') == test_def_id), None)
                 category = 'General'
                 if test_def is not None:
                     test_method = test_def.find('.//TestMethod', ns)

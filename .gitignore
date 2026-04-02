@@ -66,3 +66,5 @@ packages/
 *.userosscache
 *.sln.docstates
 
+# Python
+Scripts/venv/
