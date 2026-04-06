@@ -2,25 +2,33 @@ name: Source Composition Analysis Scan
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   security-sca:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@master
+
       - name: Setup .NET Core @ Latest
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "7.0.x"
+
       - name: Run Dotnet Restore
-        run: |
-          dotnet restore
+        run: dotnet restore
+
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master   # just installs Snyk CLI, no deprecated dotnet action
+
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/dotnet@master
+        run: |
+          snyk test \
+            --file=Contentstack.Core/obj/project.assets.json \
+            --fail-on=all \
+            --json-file-output=snyk.json   # ← writes snyk.json to disk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --file=Contentstack.Core/obj/project.assets.json --fail-on=all
-          json: true
-        continue-on-error: true
+        continue-on-error: true            # ← let pipeline continue even if vulns found
+
       - uses: contentstack/sca-policy@main
