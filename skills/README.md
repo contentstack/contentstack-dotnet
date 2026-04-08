@@ -14,7 +14,7 @@ Source of truth for detailed guidance. Read **[AGENTS.md](../AGENTS.md)** first,
 | `testing` | Writing or debugging unit/integration tests, coverage, test layout. |
 | `code-review` | Reviewing a PR against SDK-specific checklist. |
 
-Each folder contains **`SKILL.md`** with YAML frontmatter (`name`, `description`) for agent discovery. Long-form content is under **`references/`** when applicable—open `SKILL.md` first, then follow links.
+Each folder contains **`SKILL.md`** with YAML frontmatter (`name`, `description`) for agent discovery.
 
 ### Cursor
 

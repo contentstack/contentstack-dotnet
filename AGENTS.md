@@ -1,6 +1,6 @@
 # Contentstack .NET SDK – Agent guide
 
-**Universal entry point** for contributors and AI agents. Each skill has a short **`skills/*/SKILL.md`** entry; exhaustive patterns, checklists, and examples live in **`skills/*/references/*.md`** where present.
+**Universal entry point** for contributors and AI agents. Each skill is documented in **`skills/*/SKILL.md`** (YAML frontmatter for agent discovery where applicable).
 
 ## What this repo is
 
@@ -46,4 +46,4 @@ An index with “when to use” hints is in [`skills/README.md`](skills/README.m
 
 ## Using Cursor (optional)
 
-If you use **Cursor**, [`.cursor/rules/README.md`](.cursor/rules/README.md) only points to **`AGENTS.md`**—the same conventions as for everyone else. Canonical guidance remains in **`skills/*/SKILL.md`** and **`skills/*/references/`**.
+If you use **Cursor**, [`.cursor/rules/README.md`](.cursor/rules/README.md) only points to **`AGENTS.md`**—the same conventions as for everyone else. Canonical guidance remains in **`skills/*/SKILL.md`**.
