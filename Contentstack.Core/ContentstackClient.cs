@@ -61,6 +61,88 @@ namespace Contentstack.Core
         private string currentContenttypeUid = null;
         private string currentEntryUid = null;
         public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
+
+        private static LivePreviewConfig CloneLivePreviewConfig(LivePreviewConfig source)
+        {
+            if (source == null) return null;
+
+            return new LivePreviewConfig
+            {
+                Enable = source.Enable,
+                Host = source.Host,
+                ManagementToken = source.ManagementToken,
+                PreviewToken = source.PreviewToken,
+                ReleaseId = source.ReleaseId,
+                PreviewTimestamp = source.PreviewTimestamp,
+
+                // internal state (same assembly)
+                LivePreview = source.LivePreview,
+                ContentTypeUID = source.ContentTypeUID,
+                EntryUID = source.EntryUID,
+                PreviewResponse = source.PreviewResponse
+            };
+        }
+
+        private static ContentstackOptions CloneOptions(ContentstackOptions source)
+        {
+            if (source == null) return null;
+
+            return new ContentstackOptions
+            {
+                ApiKey = source.ApiKey,
+                AccessToken = source.AccessToken,
+                DeliveryToken = source.DeliveryToken,
+                Environment = source.Environment,
+                Host = source.Host,
+                Proxy = source.Proxy,
+                Region = source.Region,
+                Version = source.Version,
+                Branch = source.Branch,
+                Timeout = source.Timeout,
+                EarlyAccessHeader = source.EarlyAccessHeader,
+                LivePreview = CloneLivePreviewConfig(source.LivePreview)
+            };
+        }
+
+        /// <summary>
+        /// Clears any in-memory Live Preview context (hash, release, timestamp, content type, entry).
+        /// Useful when switching back to the Delivery API after using Live Preview / Timeline preview.
+        /// </summary>
+        public void ResetLivePreview()
+        {
+            if (this.LivePreviewConfig == null) return;
+
+            this.LivePreviewConfig.LivePreview = null;
+            this.LivePreviewConfig.ReleaseId = null;
+            this.LivePreviewConfig.PreviewTimestamp = null;
+            this.LivePreviewConfig.ContentTypeUID = null;
+            this.LivePreviewConfig.EntryUID = null;
+            this.LivePreviewConfig.PreviewResponse = null;
+        }
+
+        /// <summary>
+        /// Creates a new client instance with the same configuration but isolated in-memory state.
+        /// Use this to safely perform Timeline comparisons (left/right) without shared Live Preview context.
+        /// </summary>
+        public ContentstackClient Fork()
+        {
+            var forked = new ContentstackClient(CloneOptions(_options));
+
+            // Preserve any runtime header mutations (e.g., custom headers added via SetHeader).
+            if (this._LocalHeaders != null)
+            {
+                foreach (var kvp in this._LocalHeaders)
+                {
+                    forked.SetHeader(kvp.Key, kvp.Value?.ToString());
+                }
+            }
+
+            // Carry over current content type / entry hints (used when live preview query omits them)
+            forked.currentContenttypeUid = this.currentContenttypeUid;
+            forked.currentEntryUid = this.currentEntryUid;
+
+            return forked;
+        }
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
         /// </summary>
