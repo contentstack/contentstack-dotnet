@@ -1402,6 +1402,36 @@ namespace Contentstack.Core.Models
             //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
 
             var livePreviewConfig = this.ContentTypeInstance?.StackInstance?.LivePreviewConfig;
+            if (livePreviewConfig != null
+                && livePreviewConfig.Enable
+                && livePreviewConfig.PreviewResponse != null
+                && livePreviewConfig.PreviewResponse.Type == JTokenType.Object
+                && livePreviewConfig.PreviewResponse.HasValues
+                && !string.IsNullOrEmpty(this.Uid)
+                && string.Equals(livePreviewConfig.EntryUID, this.Uid, StringComparison.Ordinal)
+                && this.ContentTypeInstance != null
+                && string.Equals(
+                    livePreviewConfig.ContentTypeUID,
+                    this.ContentTypeInstance.ContentTypeId,
+                    StringComparison.OrdinalIgnoreCase)
+                && livePreviewConfig.IsCachedPreviewForCurrentQuery())
+            {
+                try
+                {
+                    var serializedFromPreview = livePreviewConfig.PreviewResponse.ToObject<T>(
+                        this.ContentTypeInstance.StackInstance.Serializer);
+                    if (serializedFromPreview != null && serializedFromPreview.GetType() == typeof(Entry))
+                    {
+                        (serializedFromPreview as Entry).ContentTypeInstance = this.ContentTypeInstance;
+                    }
+                    return serializedFromPreview;
+                }
+                catch
+                {
+                    // Fall through to network fetch.
+                }
+            }
+
             if (headers != null && headers.Count() > 0)
             {
                 foreach (var header in headers)
