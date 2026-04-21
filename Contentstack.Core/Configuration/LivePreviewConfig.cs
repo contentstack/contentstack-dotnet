@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Configuration
@@ -28,9 +28,9 @@ namespace Contentstack.Core.Configuration
         internal bool IsCachedPreviewForCurrentQuery()
         {
             if (PreviewResponse == null) return false;
-            return string.Equals(PreviewTimestamp ?? "", PreviewResponseFingerprintPreviewTimestamp ?? "", StringComparison.Ordinal)
-                && string.Equals(ReleaseId ?? "", PreviewResponseFingerprintReleaseId ?? "", StringComparison.Ordinal)
-                && string.Equals(LivePreview ?? "", PreviewResponseFingerprintLivePreview ?? "", StringComparison.Ordinal);
+            return string.Equals(PreviewTimestamp, PreviewResponseFingerprintPreviewTimestamp, StringComparison.Ordinal)
+                && string.Equals(ReleaseId, PreviewResponseFingerprintReleaseId, StringComparison.Ordinal)
+                && string.Equals(LivePreview, PreviewResponseFingerprintLivePreview, StringComparison.Ordinal);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
@@ -133,6 +133,12 @@ namespace Contentstack.Core
         public ContentstackClient Fork()
         {
             var forked = new ContentstackClient(CloneOptions(_options));
+
+            // Clone current LivePreviewConfig state (not from original options)
+            if (this.LivePreviewConfig != null)
+            {
+                forked.LivePreviewConfig = CloneLivePreviewConfig(this.LivePreviewConfig);
+            }
 
             // Preserve any runtime header mutations (e.g., custom headers added via SetHeader).
             if (this._LocalHeaders != null)
