@@ -10,25 +10,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Setup .NET Core @ Latest
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
 
-      - name: Run Dotnet Restore
-        run: dotnet restore
+      - name: Restore
+        run: dotnet restore Contentstack.Net.sln
 
-      - name: Setup Snyk
-        uses: snyk/actions/setup@master   # just installs Snyk CLI, no deprecated dotnet action
+      - name: Setup Snyk CLI
+        uses: snyk/actions/setup@master
 
-      - name: Run Snyk to check for vulnerabilities
+      - name: Snyk test (Contentstack.Core lockfile)
         run: |
           snyk test \
             --file=Contentstack.Core/obj/project.assets.json \
             --fail-on=all \
-            --json-file-output=snyk.json   # ← writes snyk.json to disk
+            --json-file-output=snyk.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        continue-on-error: true            # ← let pipeline continue even if vulns found
+        continue-on-error: true
 
       - uses: contentstack/sca-policy@main
