@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Contentstack.Core.Internals;
 using Contentstack.Core.Interfaces;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Tests.Models
 {
-    public class TestPlugin: IContentstackPlugin
+    public class TestPlugin : IContentstackPlugin
     {
         private ContentstackClient Client;
-        private JObject injectData;
-        
-        private string resp = $"{{\"emails\":[{string.Join(",", new List<string>(){$"\"test\""})}]}}";
+        private JsonObject injectData;
+
+        private string resp = $"{{\"emails\":[{string.Join(",", new List<string>() { $"\"test\"" })}]}}";
+
         public TestPlugin(ContentstackClient client)
         {
             Client = client;
-            injectData = JsonConvert.DeserializeObject<JObject>(resp.Replace("\r\n", ""), Client.SerializerSettings);
+            injectData = JsonNode.Parse(resp.Replace("\r\n", "")).AsObject();
         }
-        
+
         public virtual async Task<HttpWebRequest> OnRequest(ContentstackClient stack, HttpWebRequest request)
         {
             request.Headers["test-header"] = "new header";
@@ -30,49 +32,47 @@ namespace Contentstack.Core.Tests.Models
 
         public virtual async Task<string> OnResponse(ContentstackClient stack, HttpWebRequest request, HttpWebResponse response, string responseString)
         {
-            JObject data = JsonConvert.DeserializeObject<JObject>(responseString.Replace("\r\n", ""), Client.SerializerSettings);
+            JsonObject data = JsonNode.Parse(responseString.Replace("\r\n", "")).AsObject();
             _ = await Client.AssetLibrary().FetchAll();
 
             updateLivePreviewContent(data);
-            return JsonConvert.SerializeObject(data); ;
+            return JsonSerializer.Serialize(data, Client.SerializerOptions);
         }
 
-        internal void updateLivePreviewContent(JObject response)
+        internal void updateLivePreviewContent(JsonObject response)
         {
             if (response.ContainsKey("uid"))
             {
-                response.Merge(injectData, new JsonMergeSettings()
-                {
-                    MergeArrayHandling = MergeArrayHandling.Replace
-                });
+                JsonObjectMerge.UnionMergeInto(response, injectData);
+                return;
             }
-            else
+
+            foreach (var key in response.Select(p => p.Key).ToList())
             {
-                foreach (var content in response)
+                var node = response[key];
+                if (node is JsonArray arr)
                 {
-                    if (content.Value.Type == JTokenType.Array)
-                    {
-                        updateArray((JArray)response[content.Key]);
-                    }
-                    else if (content.Value.Type == JTokenType.Object)
-                    {
-                        updateLivePreviewContent((JObject)response[content.Key]);
-                    }
+                    updateArray(arr);
+                }
+                else if (node is JsonObject jo)
+                {
+                    updateLivePreviewContent(jo);
                 }
             }
         }
 
-        internal void updateArray(JArray array)
+        internal void updateArray(JsonArray array)
         {
-            for (var i = 0; i < array.Count(); i++)
+            for (var i = 0; i < array.Count; i++)
             {
-                if (array[i].Type == JTokenType.Array)
+                var item = array[i];
+                if (item is JsonArray childArr)
                 {
-                    updateArray((JArray)array[i]);
+                    updateArray(childArr);
                 }
-                else if (array[i].Type == JTokenType.Object)
+                else if (item is JsonObject jo)
                 {
-                    updateLivePreviewContent((JObject)array[i]);
+                    updateLivePreviewContent(jo);
                 }
             }
         }

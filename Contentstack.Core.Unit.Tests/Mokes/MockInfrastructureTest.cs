@@ -27,13 +27,13 @@ namespace Contentstack.Core.Unit.Tests.Mokes
         }
 
         [Fact]
-        public void MockResponse_CreateContentstackResponseAsJObject_ShouldParseJson()
+        public void MockResponse_CreateContentstackResponseAsJsonObject_ShouldParseJson()
         {
             // Arrange & Act
-            var jObject = MockResponse.CreateContentstackResponseAsJObject("MockResponse.txt");
+            var jsonObject = MockResponse.CreateContentstackResponseAsJsonObject("MockResponse.txt");
 
             // Assert
-            Assert.NotNull(jObject);
+            Assert.NotNull(jsonObject);
         }
 
         [Fact]
@@ -51,18 +51,18 @@ namespace Contentstack.Core.Unit.Tests.Mokes
         }
 
         [Fact]
-        public void ContentstackResponse_OpenJObjectResponse_ShouldParseJson()
+        public void ContentstackResponse_OpenJsonObjectResponse_ShouldParseJson()
         {
             // Arrange
             var responseString = "{\"test\": \"value\"}";
             var response = new ContentstackResponse(responseString);
 
             // Act
-            var jObject = response.OpenJObjectResponse();
+            var jsonObject = response.OpenJsonObjectResponse();
 
             // Assert
-            Assert.NotNull(jObject);
-            Assert.Equal("value", jObject["test"]?.ToString());
+            Assert.NotNull(jsonObject);
+            Assert.Equal("value", jsonObject["test"]?.GetValue<string>());
         }
 
         [Fact]

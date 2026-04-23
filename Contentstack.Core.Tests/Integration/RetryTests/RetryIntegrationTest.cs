@@ -69,13 +69,17 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
             var task3 = client.ContentType(TestDataHelper.ComplexContentTypeUid).Entry(TestDataHelper.ComplexEntryUid).Fetch<Entry>();
             
             await Task.WhenAll(task1, task2, task3);
-            
+
+            var entry1 = await task1;
+            var entry2 = await task2;
+            var entry3 = await task3;
+
             // Assert
             LogAssert("Verifying response");
 
-            TestAssert.NotNull(task1.Result);
-            TestAssert.NotNull(task2.Result);
-            TestAssert.NotNull(task3.Result);
+            TestAssert.NotNull(entry1);
+            TestAssert.NotNull(entry2);
+            TestAssert.NotNull(entry3);
         }
         
         #endregion
@@ -155,19 +159,19 @@ namespace Contentstack.Core.Tests.Integration.RetryTests
                     .Fetch<Entry>());
             }
             
-            await Task.WhenAll(tasks);
-            
+            var entries = await Task.WhenAll(tasks);
+
             // Assert - All should succeed
             LogAssert("Verifying response");
 
-            TestAssert.True(tasks.All(t => t.Result != null));
+            TestAssert.True(entries.All(e => e != null));
         }
         
         #endregion
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

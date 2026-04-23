@@ -7,7 +7,6 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
 using Contentstack.Core.Tests.Models;
-using Newtonsoft.Json.Linq;
 using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.EntryTests
@@ -619,7 +618,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

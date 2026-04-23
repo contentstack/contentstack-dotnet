@@ -6,7 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using Xunit.Abstractions;
 
 namespace Contentstack.Core.Tests.Integration.ContentTypeTests
@@ -117,7 +117,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             LogAssert("Verifying response");
 
             TestAssert.NotNull(schema);
-            TestAssert.IsType<JObject>(schema);
+            TestAssert.IsType<JsonObject>(schema);
         }
         
         #endregion
@@ -360,7 +360,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

@@ -4,10 +4,9 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using System.Threading.Tasks;
 using System.Net;
-using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text.Json.Nodes;
 
 namespace Contentstack.Core.Models
 {
@@ -96,19 +95,7 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
-
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
-
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)
@@ -152,7 +139,7 @@ namespace Contentstack.Core.Models
         /// </example>
         /// <param name="param">A dictionary of additional parameters.</param>
         /// <returns>The Global Field schema object.</returns>
-        public async Task<JObject> Fetch(Dictionary<string, object> param = null)
+        public async Task<JsonObject> Fetch(Dictionary<string, object> param = null)
         {
             Dictionary<String, Object> headers = GetHeader(_Headers);
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -181,9 +168,9 @@ namespace Contentstack.Core.Models
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.StackInstance.Config.Branch, timeout: this.StackInstance.Config.Timeout, proxy: this.StackInstance.Config.Proxy);
-                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.StackInstance.SerializerSettings);
+                JsonObject data = JsonNode.Parse(outputResult.Replace("\r\n", ""))!.AsObject();
 
-                JObject globalTypes = (Newtonsoft.Json.Linq.JObject)data["global_field"];
+                JsonObject globalTypes = data["global_field"]!.AsObject();
                 return globalTypes;
             }
             catch (Exception ex)

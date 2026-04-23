@@ -5,8 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace Contentstack.Core.Internals
 {
@@ -48,7 +47,7 @@ namespace Contentstack.Core.Internals
                         return value;
                     }
                     else if (kvp.Value is Dictionary<string, object>)
-                        value = JsonConvert.SerializeObject(kvp.Value);
+                        value = JsonSerializer.Serialize(kvp.Value, client.SerializerOptions);
                     else
                         return String.Format("{0}={1}", kvp.Key, kvp.Value);
 
@@ -91,7 +90,7 @@ namespace Contentstack.Core.Internals
             }
             ;
 
-            var serializedresult = JsonConvert.SerializeObject(BodyJson);
+            var serializedresult = JsonSerializer.Serialize(BodyJson, client.SerializerOptions);
             byte[] requestBody = Encoding.UTF8.GetBytes(serializedresult);
             StreamReader reader = null;
             HttpWebResponse response = null;

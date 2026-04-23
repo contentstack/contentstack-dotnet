@@ -52,7 +52,7 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
             var blocks = entry.Get("modular_blocks");
             if (blocks != null)
             {
-                var blocksArray = blocks as Newtonsoft.Json.Linq.JArray;
+                var blocksArray = blocks as System.Collections.IList;
                 if (blocksArray != null && blocksArray.Count > 0)
                 {
                     TestAssert.True(blocksArray.Count > 0, "Modular blocks should have content");
@@ -418,7 +418,7 @@ namespace Contentstack.Core.Tests.Integration.ModularBlocksTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

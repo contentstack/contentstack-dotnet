@@ -7,7 +7,7 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Models;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace Contentstack.Core.Unit.Tests
@@ -63,9 +63,9 @@ namespace Contentstack.Core.Unit.Tests
             var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
             
             Assert.True(urlQueries?.ContainsKey("query") ?? false);
-            var query = urlQueries?["query"] as JObject;
+            var query = urlQueries?["query"] as JsonObject;
             Assert.NotNull(query);
-            Assert.Equal(value, query?[key]?.ToString());
+            Assert.Equal(value, query[key]?.GetValue<string>());
         }
 
         [Fact]
@@ -115,8 +115,8 @@ namespace Contentstack.Core.Unit.Tests
             var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
-            var query = urlQueries?["query"] as JObject;
-            Assert.Equal(value2, query?[key]?.ToString());
+            var query = urlQueries?["query"] as JsonObject;
+            Assert.Equal(value2, query[key]?.GetValue<string>());
         }
 
         #endregion
@@ -622,13 +622,13 @@ namespace Contentstack.Core.Unit.Tests
         #region Query Factory Method Tests
 
         [Fact]
-        public void Query_WithJObject_AddsQueryToUrlQueries()
+        public void Query_WithJsonObject_AddsQueryToUrlQueries()
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var queryObject = new Newtonsoft.Json.Linq.JObject
+            var queryObject = new JsonObject
             {
-                { "field", "value" }
+                ["field"] = "value"
             };
 
             // Act

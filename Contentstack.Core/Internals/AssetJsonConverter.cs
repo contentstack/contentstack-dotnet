@@ -1,24 +1,29 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Contentstack.Core.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
     [CSJsonConverter("AssetJsonConverter")]
     public class AssetJsonConverter : JsonConverter<Asset>
     {
-        public override Asset ReadJson(JsonReader reader, Type objectType, Asset existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override Asset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            JObject jObject = JObject.Load(reader);
-            JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
-            JsonSerializer Serializer = JsonSerializer.Create(SerializerSettings);
-            Asset asset = jObject.ToObject<Asset>(Serializer);
-            asset.ParseObject(jObject);
+            using var doc = JsonDocument.ParseValue(ref reader);
+            var jsonObject = JsonNode.Parse(doc.RootElement.GetRawText())!.AsObject();
+
+            var asset = JsonSerializer.Deserialize<Asset>(
+                jsonObject.ToJsonString(),
+                ContentstackJsonDefaults.ModelDeserializeOnly);
+
+            asset ??= new Asset();
+            asset.ParseObject(jsonObject);
             return asset;
         }
 
-        public override void WriteJson(JsonWriter writer, Asset value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, Asset value, JsonSerializerOptions options)
         {
             throw AssetException.CreateForJsonConversionError();
         }

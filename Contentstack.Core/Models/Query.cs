@@ -1,5 +1,7 @@
-using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -93,19 +95,7 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
-
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
-
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)
@@ -1267,7 +1257,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
 
             return this;
@@ -1336,7 +1326,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return this;
         }
@@ -1798,7 +1788,7 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public async Task<JObject> Count()
+        public async Task<JsonObject> Count()
         {
             try
             {
@@ -1839,35 +1829,54 @@ namespace Contentstack.Core.Models
             return this.parseJObject<T>(await Exec());
         }
 
-        private ContentstackCollection<T> parseJObject<T>(JObject jObject)
+        private ContentstackCollection<T> parseJObject<T>(JsonObject jObject)
         {
-          
-            if(this.TaxonomyInstance!=null)
-            {
-                var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.TaxonomyInstance.Serializer);
-                var collection = jObject.ToObject<ContentstackCollection<T>>(this.TaxonomyInstance.Serializer);
-                collection.Items = entries;
-                return collection;
+            JsonSerializerOptions opts = this.TaxonomyInstance != null
+                ? this.TaxonomyInstance.SerializerOptions
+                : this.ContentTypeInstance.StackInstance.SerializerOptions;
 
-            } else
+            JsonArray entriesArray = jObject["entries"]?.AsArray();
+            IEnumerable<T> entries = Enumerable.Empty<T>();
+
+            try
             {
-                var entries = jObject.SelectToken("$.entries").ToObject<IEnumerable<T>>(this.ContentTypeInstance.StackInstance.Serializer);
-                var collection = jObject.ToObject<ContentstackCollection<T>>(this.ContentTypeInstance.StackInstance.Serializer);
+                if (entriesArray != null)
+                {
+                    entries = JsonSerializer.Deserialize<List<T>>(entriesArray.ToJsonString(), opts)
+                        ?? new List<T>();
+                }
+            }
+            catch (JsonException ex)
+            {
+                var preview = jObject.ToJsonString();
+                if (preview.Length > 500)
+                {
+                    preview = preview.Substring(0, 500) + "...";
+                }
+
+                throw new ContentstackException(
+                    "Could not deserialize entry documents from the query response. Response preview: " + preview,
+                    ex);
+            }
+
+            var collection = ContentstackCollection<T>.FromDeliveryEnvelope(jObject, entries);
+
+            if (this.TaxonomyInstance == null)
+            {
                 foreach (var entry in entries)
                 {
-                    if (entry.GetType() == typeof(Entry))
+                    if (entry != null && entry.GetType() == typeof(Entry))
                     {
                         (entry as Entry).SetContentTypeInstance(this.ContentTypeInstance);
                     }
                 }
-                collection.Items = entries;
-                return collection;
             }
-           
+
+            return collection;
         }
 
         #endregion
-        private async Task<JObject> Exec()
+        private async Task<JsonObject> Exec()
         {
             Dictionary<string, Object> headers = GetHeader(_Headers);
             Dictionary<string, object> headerAll = new Dictionary<string, object>();
@@ -1957,13 +1966,13 @@ namespace Contentstack.Core.Models
                     HttpRequestHandler requestHandler = new HttpRequestHandler(this.TaxonomyInstance);
                     var branch = this.TaxonomyInstance.Config.Branch != null ? this.TaxonomyInstance.Config.Branch : "main";
                     var outputResult = await requestHandler.ProcessRequest(this._Url, headerAll, mainJson, Branch: branch, isLivePreview: isLivePreview, timeout: this.TaxonomyInstance.Config.Timeout);
-                    return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                    return JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}"))!.AsObject();
                 }
                 else
                 {
                     HttpRequestHandler requestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
                     var outputResult = await requestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout);
-                    return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                    return JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}"))!.AsObject();
                 }
             }
             catch (Exception ex)

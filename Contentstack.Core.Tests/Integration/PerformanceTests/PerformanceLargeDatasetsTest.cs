@@ -440,7 +440,7 @@ namespace Contentstack.Core.Tests.Integration.PerformanceTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

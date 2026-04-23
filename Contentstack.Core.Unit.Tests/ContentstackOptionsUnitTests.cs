@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Reflection;
 using AutoFixture;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -69,15 +70,12 @@ namespace Contentstack.Core.Unit.Tests
             var options = new ContentstackOptions();
             var accessToken = _fixture.Create<string>();
 
-            // Act
-#pragma warning disable CS0618 // Type or member is obsolete
-            options.AccessToken = accessToken;
-#pragma warning restore CS0618 // Type or member is obsolete
+            // Act — use reflection so we still validate the deprecated property without CS0618 at compile time
+            var accessTokenProp = typeof(ContentstackOptions).GetProperty("AccessToken")!;
+            accessTokenProp.SetValue(options, accessToken);
 
             // Assert
-#pragma warning disable CS0618 // Type or member is obsolete
-            Assert.Equal(accessToken, options.AccessToken);
-#pragma warning restore CS0618 // Type or member is obsolete
+            Assert.Equal(accessToken, accessTokenProp.GetValue(options));
         }
 
         [Fact]

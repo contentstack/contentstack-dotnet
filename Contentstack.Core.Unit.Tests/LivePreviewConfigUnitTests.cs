@@ -1,7 +1,6 @@
 using System;
 using AutoFixture;
 using Contentstack.Core.Configuration;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Contentstack.Core.Unit.Tests

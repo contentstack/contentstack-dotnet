@@ -282,7 +282,7 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
-        #region JSON Serialization Tests (Based on JsonProperty attributes)
+        #region JSON Serialization Tests (Based on JsonPropertyName attributes)
 
         [Fact]
         public void SyncStack_TotalCount_ShouldMapToTotalCountProperty()
@@ -294,7 +294,7 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act & Assert
-            // The property uses [JsonProperty("total_count")] so it should serialize correctly
+            // The property uses [JsonPropertyName("total_count")] so it should serialize correctly
             Assert.Equal(42, syncStack.TotalCount);
         }
 
@@ -308,7 +308,7 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act & Assert
-            // The property uses [JsonProperty("sync_token")] so it should serialize correctly
+            // The property uses [JsonPropertyName("sync_token")] so it should serialize correctly
             Assert.Equal("test_token", syncStack.SyncToken);
         }
 
@@ -322,7 +322,7 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act & Assert
-            // The property uses [JsonProperty("pagination_token")] so it should serialize correctly
+            // The property uses [JsonPropertyName("pagination_token")] so it should serialize correctly
             Assert.Equal("test_pagination_token", syncStack.PaginationToken);
         }
 
