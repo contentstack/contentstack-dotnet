@@ -1,3 +1,23 @@
+### Version: 2.27.0
+#### Date: Apr-23-2026
+
+##### Feat:
+- Timeline Preview Support
+  - Added `ReleaseId` and `PreviewTimestamp` properties to `LivePreviewConfig` for temporal content queries
+  - Enhanced `LivePreviewQueryAsync()` to support `preview_timestamp` and `release_id` parameters
+  - Implemented Timeline Preview API headers (`preview_timestamp`, `release_id`) in preview requests
+  - Added intelligent cache fingerprinting system to prevent stale timeline data
+  - New `IsCachedPreviewForCurrentQuery()` method for Timeline-aware cache validation
+  - Fork isolation now maintains independent Timeline contexts for concurrent operations
+  - Timeline Preview works seamlessly with complex nested content types and group fields
+- Integration Test Coverage Enhancement  
+  - Added comprehensive Timeline Preview integration test suites (70+ test cases)
+  - New test categories: `TimelinePreviewApiTests`, `TimelineAuthenticationTests`, `TimelineCacheValidationTests`
+  - Enhanced performance testing with Timeline-specific benchmarking
+  - Added authentication flow validation for Management Token vs Preview Token scenarios
+  - Comprehensive error handling tests for Timeline Preview edge cases
+
+
 ### Version: 2.26.0
 #### Date: Feb-10-2026
 
