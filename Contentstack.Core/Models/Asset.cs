@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,8 +8,9 @@ using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Contentstack.Utils.Interfaces;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace Contentstack.Core.Models
 {
@@ -64,7 +66,7 @@ namespace Contentstack.Core.Models
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                        Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                     }
                 }
             }
@@ -98,19 +100,19 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// This is Asset type uid.
         /// </summary>
-        [JsonProperty(propertyName: "_content_type_uid")]
+        [JsonPropertyName("_content_type_uid")]
         public string ContentTypeUid { get; set; }
 
         /// <summary>
         /// The size of the file in bytes.
         /// </summary>
-        [JsonProperty(PropertyName = "file_size")]
+        [JsonPropertyName("file_size")]
         public string FileSize { get; set; }
 
         /// <summary>
         /// The original name of the file.
         /// </summary>
-        [JsonProperty(PropertyName = "filename")]
+        [JsonPropertyName("filename")]
         public string FileName { get; set; }
 
         /// <summary>
@@ -121,7 +123,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Localized title of the asset (e.g. when fetched with SetLocale / asset localisation).
         /// </summary>
-        [JsonProperty(PropertyName = "title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
         /// <summary>
@@ -132,50 +134,50 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// This content_type in asset.
         /// </summary>
-        [JsonProperty(propertyName: "content_type")]
+        [JsonPropertyName("content_type")]
         public string ContentType { get; set; }
 
         /// <summary>
         /// This for whether it is asset directory
         /// </summary>
-        [JsonProperty(propertyName: "is_dir")]
+        [JsonPropertyName("is_dir")]
         public Boolean IsDir { get; set; }
 
         /// <summary>
         /// Uid of user who updated the file
         /// </summary>
-        [JsonProperty(PropertyName = "updated_by")]
+        [JsonPropertyName("updated_by")]
         public string UpdatedBy { get; set; }
 
         /// <summary>
         /// Uid of user who updated the file
         /// </summary>
-        [JsonProperty(PropertyName = "created_by")]
+        [JsonPropertyName("created_by")]
         public string CreatedBy { get; set; }
 
 
         /// <summary>
         /// The Uid of folder in which the asset is present
         /// </summary>
-        [JsonProperty(PropertyName = "parent_uid")]
+        [JsonPropertyName("parent_uid")]
         public string ParentUid { get; set; }
 
         /// <summary>
         /// The Version of Asset
         /// </summary>
-        [JsonProperty(PropertyName = "_version")]
+        [JsonPropertyName("_version")]
         public string Version { get; set; }
 
         /// <summary>
         /// Dimension Object of the asset containing Height and width
         /// </summary>
-        [JsonProperty(PropertyName = "dimension")]
+        [JsonPropertyName("dimension")]
         public Dictionary<string, object> Dimension { get; set; }
 
         /// <summary>
         /// Dimension Object of the asset publish details
         /// </summary>
-        [JsonProperty(PropertyName = "publish_details")]
+        [JsonPropertyName("publish_details")]
         public Dictionary<string, object> PublishDetails { get; set; }
 
         #region Internal Constructors
@@ -192,6 +194,7 @@ namespace Contentstack.Core.Models
             this._StackHeaders = stack._LocalHeaders;
         }
 
+        [JsonConstructor]
         internal Asset()
         {
 
@@ -355,9 +358,9 @@ namespace Contentstack.Core.Models
 
         }
 
-        internal void ParseObject(JObject jsonObj)
+        internal void ParseObject(JsonObject jsonObj)
         {
-            this._ObjectAttributes = jsonObj.ToObject<Dictionary<string, object>>();
+            this._ObjectAttributes = JsonNodeConversion.JsonObjectToDictionary(jsonObj);
         }
 
         public DateTime GetCreateAt()
@@ -371,7 +374,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -411,7 +414,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -433,7 +436,7 @@ namespace Contentstack.Core.Models
             catch (Exception e)
             {
                 if (e.Source != null)
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
             }
             return DateTime.MinValue;
         }
@@ -468,8 +471,8 @@ namespace Contentstack.Core.Models
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headers, mainJson, Branch: this.StackInstance.Config.Branch, timeout: this.StackInstance.Config.Timeout, proxy: this.StackInstance.Config.Proxy);
-                JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
-                return obj.SelectToken("$.asset").ToObject<Asset>(this.StackInstance.Serializer);
+                JsonObject obj = JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}"))!.AsObject();
+                return JsonSerializer.Deserialize<Asset>(obj["asset"]!.ToJsonString(), this.StackInstance.SerializerOptions);
             }
             catch (Exception ex)
             {
@@ -545,21 +548,7 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-                    //errorCode = ContentstackConvert.ToInt32(data.Property("error_code").Value);
-                    //errorMessage = ContentstackConvert.ToString(data.Property("error_message").Value);
-
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
-
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
-
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)

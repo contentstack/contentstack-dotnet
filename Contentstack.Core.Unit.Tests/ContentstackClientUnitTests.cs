@@ -167,9 +167,10 @@ namespace Contentstack.Core.Unit.Tests
             var options = new ContentstackOptions()
             {
                 ApiKey = _fixture.Create<string>(),
-                AccessToken = accessToken,
                 Environment = _fixture.Create<string>()
             };
+            typeof(ContentstackOptions).GetProperty("AccessToken")!
+                .SetValue(options, accessToken);
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
 
             // Act
@@ -811,7 +812,7 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithContentTypeUid_SetsContentTypeUID()
+        public async Task LivePreviewQueryAsync_WithContentTypeUid_SetsContentTypeUID()
         {
             // Arrange
             var client = CreateClient();
@@ -821,15 +822,14 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal("test_ct_uid", client.LivePreviewConfig.ContentTypeUID);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithEntryUid_SetsEntryUID()
+        public async Task LivePreviewQueryAsync_WithEntryUid_SetsEntryUID()
         {
             // Arrange
             var client = CreateClient();
@@ -839,15 +839,14 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal("test_entry_uid", client.LivePreviewConfig.EntryUID);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithLivePreview_SetsLivePreview()
+        public async Task LivePreviewQueryAsync_WithLivePreview_SetsLivePreview()
         {
             // Arrange
             var client = CreateClient();
@@ -857,15 +856,14 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal("test_hash", client.LivePreviewConfig.LivePreview);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithReleaseId_SetsReleaseId()
+        public async Task LivePreviewQueryAsync_WithReleaseId_SetsReleaseId()
         {
             // Arrange
             var client = CreateClient();
@@ -875,15 +873,14 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal("test_release_id", client.LivePreviewConfig.ReleaseId);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithPreviewTimestamp_SetsPreviewTimestamp()
+        public async Task LivePreviewQueryAsync_WithPreviewTimestamp_SetsPreviewTimestamp()
         {
             // Arrange
             var client = CreateClient();
@@ -893,15 +890,14 @@ namespace Contentstack.Core.Unit.Tests
             };
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal("test_timestamp", client.LivePreviewConfig.PreviewTimestamp);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithoutContentTypeUid_UsesCurrentContentTypeUid()
+        public async Task LivePreviewQueryAsync_WithoutContentTypeUid_UsesCurrentContentTypeUid()
         {
             // Arrange
             var client = CreateClient();
@@ -913,15 +909,14 @@ namespace Contentstack.Core.Unit.Tests
             var query = new Dictionary<string, string>();
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal(currentContentTypeUid, client.LivePreviewConfig.ContentTypeUID);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_WithoutEntryUid_UsesCurrentEntryUid()
+        public async Task LivePreviewQueryAsync_WithoutEntryUid_UsesCurrentEntryUid()
         {
             // Arrange
             var client = CreateClient();
@@ -933,15 +928,14 @@ namespace Contentstack.Core.Unit.Tests
             var query = new Dictionary<string, string>();
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Equal(currentEntryUid, client.LivePreviewConfig.EntryUID);
         }
 
         [Fact]
-        public void LivePreviewQueryAsync_ClearsLivePreviewConfig()
+        public async Task LivePreviewQueryAsync_ClearsLivePreviewConfig()
         {
             // Arrange
             var client = CreateClient();
@@ -952,8 +946,7 @@ namespace Contentstack.Core.Unit.Tests
             var query = new Dictionary<string, string>();
 
             // Act
-            var task = client.LivePreviewQueryAsync(query);
-            task.Wait();
+            await client.LivePreviewQueryAsync(query);
 
             // Assert
             Assert.Null(client.LivePreviewConfig.LivePreview);

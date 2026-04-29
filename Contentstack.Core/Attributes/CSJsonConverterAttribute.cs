@@ -69,9 +69,8 @@ namespace Contentstack.Core
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        
                     }
                 }
                 _types[attribute] = result;

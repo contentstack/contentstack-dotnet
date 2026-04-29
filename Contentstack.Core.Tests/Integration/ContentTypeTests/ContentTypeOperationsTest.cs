@@ -6,7 +6,7 @@ using Xunit;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Helpers;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System.Collections;
 using Xunit.Abstractions;
 
@@ -165,10 +165,10 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             LogAssert("Verifying response");
 
             TestAssert.NotNull(schema);
-            TestAssert.IsType<JObject>(schema);
+            TestAssert.IsType<JsonObject>(schema);
             // Schema should contain uid
             TestAssert.True(schema.ContainsKey("uid"));
-            TestAssert.Equal(TestDataHelper.SimpleContentTypeUid, schema["uid"]?.ToString());
+            TestAssert.Equal(TestDataHelper.SimpleContentTypeUid, schema["uid"]?.GetValue<string>());
         }
         
         [Fact(DisplayName = "Content Type - Content Type Fetch With Global Fields Includes Global Field Schema")]
@@ -194,7 +194,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             LogAssert("Verifying response");
 
             TestAssert.NotNull(schema);
-            TestAssert.IsType<JObject>(schema);
+            TestAssert.IsType<JsonObject>(schema);
         }
         
         [Fact(DisplayName = "Content Type - Content Type Fetch Complex Type Contains Expected Fields")]
@@ -216,7 +216,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
             LogAssert("Verifying response");
 
             TestAssert.NotNull(schema);
-            TestAssert.IsType<JObject>(schema);
+            TestAssert.IsType<JsonObject>(schema);
             // Should have schema field
             TestAssert.True(schema.ContainsKey("schema"));
         }
@@ -287,7 +287,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
 
             TestAssert.NotNull(schema);
             TestAssert.True(schema.ContainsKey("uid"));
-            TestAssert.Equal(TestDataHelper.MediumContentTypeUid, schema["uid"].ToString());
+            TestAssert.Equal(TestDataHelper.MediumContentTypeUid, schema["uid"]?.GetValue<string>());
         }
         
         [Fact(DisplayName = "Content Type - Content Type Schema Contains Schema Definition")]
@@ -310,7 +310,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
 
             TestAssert.NotNull(schema);
             TestAssert.True(schema.ContainsKey("schema"));
-            var schemaArray = schema["schema"] as JArray;
+            var schemaArray = schema["schema"] as JsonArray;
             TestAssert.NotNull(schemaArray);
             TestAssert.True(schemaArray.Count > 0, "Schema should contain field definitions");
         }
@@ -402,7 +402,7 @@ namespace Contentstack.Core.Tests.Integration.ContentTypeTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

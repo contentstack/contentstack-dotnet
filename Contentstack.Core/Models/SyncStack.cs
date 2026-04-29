@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Contentstack.Core.Models
 {
@@ -15,17 +15,17 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Readonly property to check totalCount
         /// </summary>
-        [JsonProperty("total_count")]
+        [JsonPropertyName("total_count")]
         public int TotalCount { get; set; }
         /// <summary>
         /// Readonly property to delta sync.
         /// </summary>
-        [JsonProperty("sync_token")]
+        [JsonPropertyName("sync_token")]
         public string SyncToken { get; set; }
         /// <summary>
         /// Readonly property for paginating sync
         /// </summary>
-        [JsonProperty("pagination_token")]
+        [JsonPropertyName("pagination_token")]
         public string PaginationToken { get; set;}
     }
 }

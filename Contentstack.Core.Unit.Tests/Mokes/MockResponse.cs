@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using Contentstack.Core.Unit.Tests.Mokes;
 
 namespace Contentstack.Core.Unit.Tests.Mokes
@@ -58,14 +58,14 @@ namespace Contentstack.Core.Unit.Tests.Mokes
         }
 
         /// <summary>
-        /// Creates a JObject from a mock response file
+        /// Creates a <see cref="JsonObject"/> from a mock response file
         /// </summary>
         /// <param name="resourceName">Name of the resource file</param>
-        /// <returns>JObject parsed from the response</returns>
-        public static JObject CreateContentstackResponseAsJObject(string resourceName)
+        /// <returns>JSON object parsed from the response</returns>
+        public static JsonObject CreateContentstackResponseAsJsonObject(string resourceName)
         {
             var jsonString = CreateContentstackResponse(resourceName);
-            return JObject.Parse(jsonString);
+            return JsonNode.Parse(jsonString).AsObject();
         }
 
         /// <summary>

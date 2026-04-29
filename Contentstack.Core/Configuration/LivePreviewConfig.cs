@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 
 namespace Contentstack.Core.Configuration
 {
@@ -11,7 +11,7 @@ namespace Contentstack.Core.Configuration
         internal string LivePreview { get; set; }
         internal string ContentTypeUID { get; set; }
         internal string EntryUID { get; set; }
-        internal JObject PreviewResponse { get; set; }
+        internal JsonObject PreviewResponse { get; set; }
         public string ReleaseId {get; set;}
         public string PreviewTimestamp {get; set;}
     }

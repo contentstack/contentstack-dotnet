@@ -799,7 +799,7 @@ namespace Contentstack.Core.Tests.Integration.QueryTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {
