@@ -418,9 +418,13 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Entry Variant(string variant_header)
+        public Entry Variant(string variant_header, string branch = null)
         {
             this.SetHeader("x-cs-variant-uid", variant_header);
+            string branchToUse = string.IsNullOrWhiteSpace(branch) 
+                ? (this.ContentTypeInstance?.StackInstance?.Config?.Branch ?? "main") 
+                : branch;
+            this.SetHeader("branch", branchToUse);
             return this;
         }
 
@@ -443,9 +447,13 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Entry Variant(List<string> variant_headers)
+        public Entry Variant(List<string> variant_headers, string branch = null)
         {
             this.SetHeader("x-cs-variant-uid", string.Join(",", variant_headers));
+            string branchToUse = string.IsNullOrWhiteSpace(branch) 
+                ? (this.ContentTypeInstance?.StackInstance?.Config?.Branch ?? "main") 
+                : branch;
+            this.SetHeader("branch", branchToUse);
             return this;
         }
 

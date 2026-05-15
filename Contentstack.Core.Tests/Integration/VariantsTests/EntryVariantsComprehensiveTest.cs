@@ -24,6 +24,96 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
 
         #region Basic Variant Operations
         
+        [Fact(DisplayName = "Entry Operations - Variant With Invalid Branch Throws Exception")]
+        public async Task Variant_WithInvalidBranch_ThrowsException()
+        {
+            // Arrange
+            LogArrange("Creating client and setting up test data");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+            LogContext("VariantUid", TestDataHelper.VariantUid);
+            LogContext("Branch", "invalid_branch_name_123");
+            
+            var client = CreateClient();
+            
+            // Act & Assert
+            LogAct("Fetching entry with variant and INVALID branch using .Variant() method");
+            
+            var exception = await Assert.ThrowsAsync<Exception>(async () => 
+            {
+                await client
+                    .ContentType(TestDataHelper.ComplexContentTypeUid)
+                    .Entry(TestDataHelper.ComplexEntryUid)
+                    .Variant(TestDataHelper.VariantUid, "invalid_branch_name_123")
+                    .Fetch<Entry>();
+            });
+            
+            LogAssert("Verifying exception was thrown");
+            TestAssert.NotNull(exception);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant With Valid Branch Returns Results")]
+        public async Task Variant_WithValidBranch_ReturnsResults()
+        {
+            // Arrange
+            LogArrange("Creating client and setting up test data");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+            LogContext("VariantUid", TestDataHelper.VariantUid);
+            LogContext("Branch", "development");
+            
+            var client = CreateClient();
+            
+            // Act
+            LogAct("Fetching entry with variant and valid branch using .Variant() method");
+            
+            var entry = await client
+                .ContentType(TestDataHelper.ComplexContentTypeUid)
+                .Entry(TestDataHelper.ComplexEntryUid)
+                .Variant(TestDataHelper.VariantUid, "development")
+                .Fetch<Entry>();
+            
+            // Assert
+            LogAssert("Verifying entry properties");
+            TestAssert.NotNull(entry);
+            TestAssert.NotNull(entry.Uid);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant With Null Or Empty Branch Falls Back To Stack Branch Or Main")]
+        public async Task Variant_WithNullOrEmptyBranch_FallsBackToStackBranchOrMain()
+        {
+            // Arrange
+            LogArrange("Creating client and setting up test data");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
+            LogContext("VariantUid", TestDataHelper.VariantUid);
+            
+            var client = CreateClient();
+            
+            // Act
+            LogAct("Fetching entry with variant and null/empty branch using .Variant() method");
+            
+            var entryWithNullBranch = await client
+                .ContentType(TestDataHelper.ComplexContentTypeUid)
+                .Entry(TestDataHelper.ComplexEntryUid)
+                .Variant(TestDataHelper.VariantUid, null)
+                .Fetch<Entry>();
+                
+            var entryWithEmptyBranch = await client
+                .ContentType(TestDataHelper.ComplexContentTypeUid)
+                .Entry(TestDataHelper.ComplexEntryUid)
+                .Variant(TestDataHelper.VariantUid, "   ")
+                .Fetch<Entry>();
+            
+            // Assert
+            LogAssert("Verifying entry properties");
+            TestAssert.NotNull(entryWithNullBranch);
+            TestAssert.NotNull(entryWithNullBranch.Uid);
+            
+            TestAssert.NotNull(entryWithEmptyBranch);
+            TestAssert.NotNull(entryWithEmptyBranch.Uid);
+        }
+        
         [Fact(DisplayName = "Entry Operations - Variant Fetch With Variant Method Returns Variant Content")]
         public async Task Variant_FetchWithVariantMethod_ReturnsVariantContent()
         {
@@ -220,6 +310,92 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
         #endregion
         
         #region Query with Variants
+        
+        [Fact(DisplayName = "Entry Operations - Variant Query With Invalid Branch Throws Exception")]
+        public async Task Variant_Query_WithInvalidBranch_ThrowsException()
+        {
+            // Arrange
+            LogArrange("Setting up query operation with invalid branch");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("VariantUid", TestDataHelper.VariantUid);
+            LogContext("Branch", "invalid_branch_name_123");
+
+            var client = CreateClient();
+            var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
+            
+            // Act & Assert
+            LogAct("Executing query with variant and INVALID branch");
+
+            query.Variant(TestDataHelper.VariantUid, "invalid_branch_name_123");
+            query.Limit(5);
+            
+            var exception = await Assert.ThrowsAsync<Exception>(async () => 
+            {
+                await query.Find<Entry>();
+            });
+            
+            LogAssert("Verifying exception was thrown");
+            TestAssert.NotNull(exception);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant Query With Valid Branch Returns Results")]
+        public async Task Variant_Query_WithValidBranch_ReturnsResults()
+        {
+            // Arrange
+            LogArrange("Setting up query operation with valid branch");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("VariantUid", TestDataHelper.VariantUid);
+            LogContext("Branch", "development");
+
+            var client = CreateClient();
+            var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
+            
+            // Act
+            LogAct("Executing query with variant and valid branch");
+
+            query.Variant(TestDataHelper.VariantUid, "development");
+            query.Limit(5);
+            var result = await query.Find<Entry>();
+            
+            // Assert
+            LogAssert("Verifying response");
+
+            TestAssert.NotNull(result);
+            TestAssert.NotNull(result.Items);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant Query With Null Or Empty Branch Falls Back To Stack Branch Or Main")]
+        public async Task Variant_Query_WithNullOrEmptyBranch_FallsBackToStackBranchOrMain()
+        {
+            // Arrange
+            LogArrange("Setting up query operation with null/empty branch");
+            LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
+            LogContext("VariantUid", TestDataHelper.VariantUid);
+
+            var client = CreateClient();
+            
+            // Act
+            LogAct("Executing queries with variant and null/empty branch");
+
+            var queryWithNullBranch = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
+            queryWithNullBranch.Variant(TestDataHelper.VariantUid, null);
+            queryWithNullBranch.Limit(1);
+            var resultWithNullBranch = await queryWithNullBranch.Find<Entry>();
+            
+            var queryWithEmptyBranch = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
+            queryWithEmptyBranch.Variant(TestDataHelper.VariantUid, "   ");
+            queryWithEmptyBranch.Limit(1);
+            var resultWithEmptyBranch = await queryWithEmptyBranch.Find<Entry>();
+            
+            // Assert
+            LogAssert("Verifying response");
+
+            TestAssert.NotNull(resultWithNullBranch);
+            TestAssert.NotNull(resultWithNullBranch.Items);
+            
+            TestAssert.NotNull(resultWithEmptyBranch);
+            TestAssert.NotNull(resultWithEmptyBranch.Items);
+        }
         
         [Fact(DisplayName = "Entry Operations - Variant Query With Variant Method")]
         public async Task Variant_Query_WithVariantMethod()
