@@ -1,3 +1,12 @@
+### Version: 2.28.0
+#### Date: May-15-2026
+
+##### Feat:
+- Entry Variants Branch Support
+  - Added support for passing an optional `branch` parameter to the `.Variant()` method in both `Entry` and `Query` classes.
+  - If the branch parameter is null or empty, it automatically falls back to the Stack's configured branch or "main".
+  - Added comprehensive unit and integration tests for Entry and Query variant branch logic.
+
 ### Version: 2.27.0
 #### Date: Apr-23-2026
 

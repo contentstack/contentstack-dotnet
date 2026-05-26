@@ -2632,6 +2632,107 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         #endregion
+
+        #region Variant Tests
+
+        private ContentstackClient GetMockClient(string stackBranch = null)
+        {
+            var options = new ContentstackOptions
+            {
+                ApiKey = "dummy_api_key",
+                DeliveryToken = "dummy_delivery_token",
+                Environment = "dummy_environment",
+                Branch = stackBranch
+            };
+            return new ContentstackClient(options);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Branch Sets Branch Header")]
+        public void Query_Variant_WithBranch_SetsBranchHeader()
+        {
+            // Arrange
+            var client = GetMockClient("main");
+            var query = client.ContentType("dummy_content_type").Query();
+
+            // Act
+            query.Variant("variant_1", "development");
+
+            // Assert
+            var headersField = typeof(Query).GetField("_Headers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var headers = (Dictionary<string, object>)headersField.GetValue(query);
+            
+            Assert.True(headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("variant_1", headers["x-cs-variant-uid"]);
+            
+            Assert.True(headers.ContainsKey("branch"));
+            Assert.Equal("development", headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Null Branch Falls Back To Stack Branch")]
+        public void Query_Variant_WithNullBranch_FallsBackToStackBranch()
+        {
+            // Arrange
+            var client = GetMockClient("stack_branch");
+            var query = client.ContentType("dummy_content_type").Query();
+
+            // Act
+            query.Variant("variant_1", null);
+
+            // Assert
+            var headersField = typeof(Query).GetField("_Headers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var headers = (Dictionary<string, object>)headersField.GetValue(query);
+
+            Assert.True(headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("variant_1", headers["x-cs-variant-uid"]);
+            
+            Assert.True(headers.ContainsKey("branch"));
+            Assert.Equal("stack_branch", headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Empty Branch Falls Back To Main If Stack Branch Is Null")]
+        public void Query_Variant_WithEmptyBranch_FallsBackToMainIfStackBranchIsNull()
+        {
+            // Arrange
+            var client = GetMockClient(null);
+            var query = client.ContentType("dummy_content_type").Query();
+
+            // Act
+            query.Variant("variant_1", "   ");
+
+            // Assert
+            var headersField = typeof(Query).GetField("_Headers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var headers = (Dictionary<string, object>)headersField.GetValue(query);
+
+            Assert.True(headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("variant_1", headers["x-cs-variant-uid"]);
+            
+            Assert.True(headers.ContainsKey("branch"));
+            Assert.Equal("main", headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Multiple Variants And Branch Sets Headers")]
+        public void Query_Variant_WithMultipleVariantsAndBranch_SetsHeaders()
+        {
+            // Arrange
+            var client = GetMockClient("main");
+            var query = client.ContentType("dummy_content_type").Query();
+            var variants = new List<string> { "variant_1", "variant_2" };
+
+            // Act
+            query.Variant(variants, "feature_branch");
+
+            // Assert
+            var headersField = typeof(Query).GetField("_Headers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var headers = (Dictionary<string, object>)headersField.GetValue(query);
+
+            Assert.True(headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("variant_1,variant_2", headers["x-cs-variant-uid"]);
+            
+            Assert.True(headers.ContainsKey("branch"));
+            Assert.Equal("feature_branch", headers["branch"]);
+        }
+
+        #endregion
     }
 }
 
