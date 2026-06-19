@@ -1,17 +1,19 @@
-### Version: 3.0.0
-#### Date: Jun-15-2026
+### Version: 3.0.0-beta.2
+#### Date: Jun-22-2026
 
 ##### Feat:
-- Migrated all internal JSON handling to `System.Text.Json`
-- Added `ApiErrorBodyParser` for consistent API error envelope parsing
-- Added `JsonNodeConversion` and `JsonObjectMerge` utilities to replace Newtonsoft equivalents
-- Added `ContentstackJsonDefaults` — shared `JsonSerializerOptions` used across all custom converters
+- Added `Endpoint` class for dynamic region-to-URL resolution via CDN-backed `regions.json`
+- Added `ContentstackRegionMap` to map `ContentstackRegion` enum to registry region IDs
+- Added `GCP_EU` region support
 
 ##### Enh:
-- Replaced `Console.WriteLine` with `Debug.WriteLine` in `ContentstackConvert` to suppress parse warnings from application stdout
+- `Config.BaseUrl` now resolves hosts from the regions registry; removed hardcoded `regionCode()` and `HostURL`
 
 ##### Chore:
-- Updated .NET version in SCA scan CI from `7.0.x` to `10.0.x`
+- Replaced `refresh-region.cs` with `refresh-region.py` — avoids MSBuild compiling the script as source
+- Added `build/contentstack.csharp.targets` to auto-deliver `refresh-region.py` to consumer projects on first build
+- Added `Assets/regions.json` to `.gitignore`
+- Added `EndpointTest.cs`
 
 ---
 

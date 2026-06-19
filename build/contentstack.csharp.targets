@@ -1,0 +1,20 @@
+<Project>
+  <!--
+    Copies refresh-region.py into the consuming project's Scripts/ folder
+    on first build. Customer then runs:
+      python3 Scripts/refresh-region.py   (Mac / Linux)
+      python  Scripts/refresh-region.py   (Windows)
+  -->
+  <PropertyGroup>
+    <_RefreshScriptDest>$(MSBuildProjectDirectory)/Scripts/refresh-region.py</_RefreshScriptDest>
+    <_RefreshScriptSrc>$(MSBuildThisFileDirectory)../contentFiles/cs/any/Scripts/refresh-region.py</_RefreshScriptSrc>
+  </PropertyGroup>
+
+  <Target Name="ContentstackCore_PlaceRefreshScript"
+          AfterTargets="ResolvePackageDependenciesForBuild"
+          Condition="!Exists('$(_RefreshScriptDest)')">
+    <MakeDir Directories="$(MSBuildProjectDirectory)/Scripts" />
+    <Copy SourceFiles="$(_RefreshScriptSrc)" DestinationFiles="$(_RefreshScriptDest)" />
+    <Message Text="contentstack.csharp: Scripts/refresh-region.py added to your project. Run 'python3 Scripts/refresh-region.py' to refresh regions." Importance="High" />
+  </Target>
+</Project>
