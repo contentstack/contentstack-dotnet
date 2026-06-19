@@ -1,4 +1,4 @@
-### Version: 3.0.0-beta.2
+### Version: 2.27.0
 #### Date: Jun-22-2026
 
 ##### Feat:
@@ -14,30 +14,6 @@
 - Added `build/contentstack.csharp.targets` to auto-deliver `refresh-region.py` to consumer projects on first build
 - Added `Assets/regions.json` to `.gitignore`
 - Added `EndpointTest.cs`
-
----
-
-### Version: 3.0.0-beta.1
-#### Date: May-04-2026
-
-##### Breaking Changes:
-- Removed `Newtonsoft.Json` dependency; all JSON serialisation now uses `System.Text.Json` (BCL)
-  - `AssetJsonConverter` and `EntryJsonConverter` now implement `System.Text.Json.Serialization.JsonConverter<T>`
-  - `ContentstackCollection<T>` no longer carries `[JsonObject]`; direct `JsonSerializer` usage on this type is not supported
-- Updated `contentstack.utils` from `1.0.6` to `2.0.0-beta.1` (major version bump)
-
-##### Feat:
-- Migrated all internal JSON handling to `System.Text.Json`
-- Added `ApiErrorBodyParser` for consistent API error envelope parsing
-- Added `JsonNodeConversion` and `JsonObjectMerge` utilities to replace Newtonsoft equivalents
-- Added `ContentstackJsonDefaults` — shared `JsonSerializerOptions` used across all custom converters
-
-##### Enh:
-- Replaced `Console.WriteLine` with `Debug.WriteLine` in `ContentstackConvert` to suppress parse warnings from application stdout
-
-##### Chore:
-- Updated .NET version in SCA scan CI from `7.0.x` to `10.0.x`
-
 ---
 
 ### Version: 2.26.0

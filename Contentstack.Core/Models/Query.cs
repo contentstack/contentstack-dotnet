@@ -1883,26 +1883,37 @@ namespace Contentstack.Core.Models
             Dictionary<string, object> mainJson = new Dictionary<string, object>();
 
             bool isLivePreview = false;
-            if (this.ContentTypeInstance!=null && this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
-                && this.ContentTypeInstance.StackInstance?.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
-            {
-                mainJson.Add("live_preview", string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview) ? "init" : this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview);
+            var livePreviewConfig = this.ContentTypeInstance?.StackInstance?.LivePreviewConfig;
+            var hasLivePreviewContext =
+                this.ContentTypeInstance != null
+                && livePreviewConfig != null
+                && livePreviewConfig.Enable
+                && livePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
+                && (
+                    !string.IsNullOrEmpty(livePreviewConfig.LivePreview)
+                    || !string.IsNullOrEmpty(livePreviewConfig.ReleaseId)
+                    || !string.IsNullOrEmpty(livePreviewConfig.PreviewTimestamp)
+                );
 
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken)) {
-                    headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
-                } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
-                    headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
+            if (hasLivePreviewContext)
+            {
+                mainJson.Add("live_preview", string.IsNullOrEmpty(livePreviewConfig.LivePreview) ? "init" : livePreviewConfig.LivePreview);
+
+                if (!string.IsNullOrEmpty(livePreviewConfig.ManagementToken)) {
+                    headerAll["authorization"] = livePreviewConfig.ManagementToken;
+                } else if (!string.IsNullOrEmpty(livePreviewConfig.PreviewToken)) {
+                    headerAll["preview_token"] = livePreviewConfig.PreviewToken;
                 } else {
                     throw new LivePreviewException();
                 }
 
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
+                if (!string.IsNullOrEmpty(livePreviewConfig.ReleaseId))
                 {
-                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId;
+                    headerAll["release_id"] = livePreviewConfig.ReleaseId;
                 }
-                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp))
+                if (!string.IsNullOrEmpty(livePreviewConfig.PreviewTimestamp))
                 {
-                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp;
+                    headerAll["preview_timestamp"] = livePreviewConfig.PreviewTimestamp;
                 }
 
                 isLivePreview = true;
@@ -1912,10 +1923,11 @@ namespace Contentstack.Core.Models
             {
                 foreach (var header in headers)
                 {
-                    if (this.ContentTypeInstance!=null && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.Enable == true
-                        && this.ContentTypeInstance?.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance?.ContentTypeId
+                    if (this.ContentTypeInstance!=null && livePreviewConfig != null
+                        && livePreviewConfig.Enable
+                        && livePreviewConfig.ContentTypeUID == this.ContentTypeInstance?.ContentTypeId
                         && header.Key == "access_token"
-                        && !string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview))
+                        && !string.IsNullOrEmpty(livePreviewConfig.LivePreview))
                     {
                         continue;
                     }
