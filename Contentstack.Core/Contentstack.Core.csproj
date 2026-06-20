@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net47;net472;</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <PackageId>contentstack.csharp</PackageId>
     <Authors>Contentstack</Authors>
@@ -33,6 +33,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Markdig" Version="0.36.2" />
     <PackageReference Include="contentstack.utils" Version="2.0.0-beta.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" Condition="'$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net472'" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Interfaces\" />
@@ -47,10 +48,27 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Endpoints\" />
     <Folder Include="Internals\" />
     <Folder Include="Models\" />
     <Folder Include="Attributes\" />
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Ship refresh-region.py inside the NuGet package.
+         The .targets file copies it into the consumer's Scripts/ folder on first build.
+         Customer runs:  python3 Scripts/refresh-region.py  (Mac/Linux)
+                         python  Scripts/refresh-region.py  (Windows)      -->
+    <Content Include="..\Scripts\refresh-region.py">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles/cs/any/Scripts/refresh-region.py</PackagePath>
+      <BuildAction>Content</BuildAction>
+      <CopyToOutput>false</CopyToOutput>
+    </Content>
+    <None Include="..\build\contentstack.csharp.targets">
+      <Pack>true</Pack>
+      <PackagePath>build/contentstack.csharp.targets</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />

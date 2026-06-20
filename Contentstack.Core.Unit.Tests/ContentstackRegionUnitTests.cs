@@ -184,7 +184,7 @@ namespace Contentstack.Core.Unit.Tests
 
             // Assert
             Assert.NotNull(values);
-            Assert.Equal(6, values.Length);
+            Assert.Equal(7, values.Length);
             var regionArray = values.Cast<ContentstackRegion>().ToArray();
             Assert.Contains(ContentstackRegion.US, regionArray);
             Assert.Contains(ContentstackRegion.EU, regionArray);
@@ -192,6 +192,7 @@ namespace Contentstack.Core.Unit.Tests
             Assert.Contains(ContentstackRegion.AZURE_NA, regionArray);
             Assert.Contains(ContentstackRegion.GCP_NA, regionArray);
             Assert.Contains(ContentstackRegion.AU, regionArray);
+            Assert.Contains(ContentstackRegion.GCP_EU, regionArray);
         }
 
         #endregion

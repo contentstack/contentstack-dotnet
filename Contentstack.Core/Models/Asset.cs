@@ -166,7 +166,7 @@ namespace Contentstack.Core.Models
         /// The Version of Asset
         /// </summary>
         [JsonPropertyName("_version")]
-        public string Version { get; set; }
+        public int Version { get; set; }
 
         /// <summary>
         /// Dimension Object of the asset containing Height and width

@@ -1,4 +1,6 @@
-﻿namespace Contentstack.Core.Internals
+using System.Collections.Generic;
+
+namespace Contentstack.Core.Internals
 {
     /// <summary>
     /// Contentstack region.
@@ -31,7 +33,12 @@
         /// <summary>
         /// To specify AWS_AU region.
         /// </summary>
-        AU
+        AU,
+
+        /// <summary>
+        /// To specify GCP_EU region.
+        /// </summary>
+        GCP_EU
     }
 
 
@@ -48,6 +55,25 @@
         gcp_na,
 
         au,
-        
+
+        gcp_eu,
+    }
+
+    /// <summary>
+    /// Maps <see cref="ContentstackRegion"/> enum values to the region ID strings
+    /// used by the Contentstack regions registry (artifacts.contentstack.com/regions.json).
+    /// </summary>
+    internal static class ContentstackRegionMap
+    {
+        internal static readonly Dictionary<ContentstackRegion, string> RegionIdMap = new Dictionary<ContentstackRegion, string>
+        {
+            { ContentstackRegion.US,       "na"       },
+            { ContentstackRegion.EU,       "eu"       },
+            { ContentstackRegion.AZURE_EU, "azure-eu" },
+            { ContentstackRegion.AZURE_NA, "azure-na" },
+            { ContentstackRegion.GCP_NA,   "gcp-na"   },
+            { ContentstackRegion.AU,       "au"       },
+            { ContentstackRegion.GCP_EU,   "gcp-eu"   },
+        };
     }
 }
