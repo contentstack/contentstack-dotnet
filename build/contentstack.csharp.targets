@@ -1,10 +1,4 @@
 <Project>
-  <!--
-    Copies refresh-region.py into the consuming project's Scripts/ folder
-    on first build. Customer then runs:
-      python3 Scripts/refresh-region.py   (Mac / Linux)
-      python  Scripts/refresh-region.py   (Windows)
-  -->
   <PropertyGroup>
     <_RefreshScriptDest>$(MSBuildProjectDirectory)/Scripts/refresh-region.py</_RefreshScriptDest>
     <_RefreshScriptSrc>$(MSBuildThisFileDirectory)../contentFiles/cs/any/Scripts/refresh-region.py</_RefreshScriptSrc>

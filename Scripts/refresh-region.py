@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # Refresh regions.json from the Contentstack CDN.
 # Usage (run from your project root):
-#   python3 Scripts/refresh-region.py   # Mac / Linux
-#   python  Scripts/refresh-region.py   # Windows
+#   python3 Scripts/refresh-region.py
+#   python  Scripts/refresh-region.py
 
 import glob
 import json
