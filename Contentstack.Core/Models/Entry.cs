@@ -1390,47 +1390,13 @@ namespace Contentstack.Core.Models
 
             //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
 
-            var livePreviewConfig = this.ContentTypeInstance?.StackInstance?.LivePreviewConfig;
-            if (livePreviewConfig != null
-                && livePreviewConfig.Enable
-                && livePreviewConfig.PreviewResponse != null
-                && livePreviewConfig.PreviewResponse.Type == JTokenType.Object
-                && livePreviewConfig.PreviewResponse.HasValues
-                && !string.IsNullOrEmpty(this.Uid)
-                && string.Equals(livePreviewConfig.EntryUID, this.Uid, StringComparison.Ordinal)
-                && this.ContentTypeInstance != null
-                && string.Equals(
-                    livePreviewConfig.ContentTypeUID,
-                    this.ContentTypeInstance.ContentTypeId,
-                    StringComparison.OrdinalIgnoreCase)
-                && livePreviewConfig.IsCachedPreviewForCurrentQuery())
-            {
-                try
-                {
-                    var serializedFromPreview = livePreviewConfig.PreviewResponse.ToObject<T>(
-                        this.ContentTypeInstance.StackInstance.Serializer);
-                    if (serializedFromPreview != null && serializedFromPreview.GetType() == typeof(Entry))
-                    {
-                        (serializedFromPreview as Entry).ContentTypeInstance = this.ContentTypeInstance;
-                    }
-                    return serializedFromPreview;
-                }
-                catch
-                {
-                    // Fall through to network fetch.
-                }
-            }
-
             if (headers != null && headers.Count() > 0)
             {
                 foreach (var header in headers)
                 {
-                    if (this.ContentTypeInstance != null
-                        && livePreviewConfig != null
-                        && livePreviewConfig.Enable
-                        && livePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
-                        && header.Key == "access_token"
-                        && !string.IsNullOrEmpty(livePreviewConfig.LivePreview))
+                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
+                        && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
+                        && header.Key == "access_token" && !string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }
@@ -1438,36 +1404,25 @@ namespace Contentstack.Core.Models
                 }
             }
             bool isLivePreview = false;
-            var hasLivePreviewContext =
-                this.ContentTypeInstance != null
-                && livePreviewConfig != null
-                && livePreviewConfig.Enable
-                && livePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
-                && (
-                    !string.IsNullOrEmpty(livePreviewConfig.LivePreview)
-                    || !string.IsNullOrEmpty(livePreviewConfig.ReleaseId)
-                    || !string.IsNullOrEmpty(livePreviewConfig.PreviewTimestamp)
-                );
-
-            if (hasLivePreviewContext)
+            if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
-                mainJson.Add("live_preview", string.IsNullOrEmpty(livePreviewConfig.LivePreview)? "init" : livePreviewConfig.LivePreview);
+                mainJson.Add("live_preview", string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview)? "init" : this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview);
                 
-                if (!string.IsNullOrEmpty(livePreviewConfig.ManagementToken)) {
-                    headerAll["authorization"] = livePreviewConfig.ManagementToken;
-                } else if (!string.IsNullOrEmpty(livePreviewConfig.PreviewToken)) {
-                    headerAll["preview_token"] = livePreviewConfig.PreviewToken;
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken)) {
+                    headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
+                } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
+                    headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
                 } else {
                     throw new LivePreviewException();
                 }
 
-                if (!string.IsNullOrEmpty(livePreviewConfig.ReleaseId))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
                 {
-                    headerAll["release_id"] = livePreviewConfig.ReleaseId;
+                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId;
                 }
-                if (!string.IsNullOrEmpty(livePreviewConfig.PreviewTimestamp))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp))
                 {
-                    headerAll["preview_timestamp"] = livePreviewConfig.PreviewTimestamp;
+                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp;
                 }
 
                 isLivePreview = true;

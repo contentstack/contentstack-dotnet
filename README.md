@@ -3,8 +3,6 @@
 
 .NET SDK for Contentstack's Content Delivery API
 
-Contributor and agent conventions: see **[AGENTS.md](AGENTS.md)**.
-
 ## Getting Started
 
 This guide will help you get started with our .NET SDK to build apps powered by Contentstack.

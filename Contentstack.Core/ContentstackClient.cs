@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
@@ -61,100 +61,6 @@ namespace Contentstack.Core
         private string currentContenttypeUid = null;
         private string currentEntryUid = null;
         public List<IContentstackPlugin> Plugins { get; set; } = new List<IContentstackPlugin>();
-
-        private static LivePreviewConfig CloneLivePreviewConfig(LivePreviewConfig source)
-        {
-            if (source == null) return null;
-
-            return new LivePreviewConfig
-            {
-                Enable = source.Enable,
-                Host = source.Host,
-                ManagementToken = source.ManagementToken,
-                PreviewToken = source.PreviewToken,
-                ReleaseId = source.ReleaseId,
-                PreviewTimestamp = source.PreviewTimestamp,
-
-                // internal state (same assembly)
-                LivePreview = source.LivePreview,
-                ContentTypeUID = source.ContentTypeUID,
-                EntryUID = source.EntryUID,
-                PreviewResponse = source.PreviewResponse,
-                PreviewResponseFingerprintPreviewTimestamp = source.PreviewResponseFingerprintPreviewTimestamp,
-                PreviewResponseFingerprintReleaseId = source.PreviewResponseFingerprintReleaseId,
-                PreviewResponseFingerprintLivePreview = source.PreviewResponseFingerprintLivePreview
-            };
-        }
-
-        private static ContentstackOptions CloneOptions(ContentstackOptions source)
-        {
-            if (source == null) return null;
-
-            return new ContentstackOptions
-            {
-                ApiKey = source.ApiKey,
-                AccessToken = source.AccessToken,
-                DeliveryToken = source.DeliveryToken,
-                Environment = source.Environment,
-                Host = source.Host,
-                Proxy = source.Proxy,
-                Region = source.Region,
-                Version = source.Version,
-                Branch = source.Branch,
-                Timeout = source.Timeout,
-                EarlyAccessHeader = source.EarlyAccessHeader,
-                LivePreview = CloneLivePreviewConfig(source.LivePreview)
-            };
-        }
-
-        /// <summary>
-        /// Clears any in-memory Live Preview context (hash, release, timestamp, content type, entry).
-        /// Useful when switching back to the Delivery API after using Live Preview / Timeline preview.
-        /// </summary>
-        public void ResetLivePreview()
-        {
-            if (this.LivePreviewConfig == null) return;
-
-            this.LivePreviewConfig.LivePreview = null;
-            this.LivePreviewConfig.ReleaseId = null;
-            this.LivePreviewConfig.PreviewTimestamp = null;
-            this.LivePreviewConfig.ContentTypeUID = null;
-            this.LivePreviewConfig.EntryUID = null;
-            this.LivePreviewConfig.PreviewResponse = null;
-            this.LivePreviewConfig.PreviewResponseFingerprintPreviewTimestamp = null;
-            this.LivePreviewConfig.PreviewResponseFingerprintReleaseId = null;
-            this.LivePreviewConfig.PreviewResponseFingerprintLivePreview = null;
-        }
-
-        /// <summary>
-        /// Creates a new client instance with the same configuration but isolated in-memory state.
-        /// Use this to safely perform Timeline comparisons (left/right) without shared Live Preview context.
-        /// </summary>
-        public ContentstackClient Fork()
-        {
-            var forked = new ContentstackClient(CloneOptions(_options));
-
-            // Clone current LivePreviewConfig state (not from original options)
-            if (this.LivePreviewConfig != null)
-            {
-                forked.LivePreviewConfig = CloneLivePreviewConfig(this.LivePreviewConfig);
-            }
-
-            // Preserve any runtime header mutations (e.g., custom headers added via SetHeader).
-            if (this._LocalHeaders != null)
-            {
-                foreach (var kvp in this._LocalHeaders)
-                {
-                    forked.SetHeader(kvp.Key, kvp.Value?.ToString());
-                }
-            }
-
-            // Carry over current content type / entry hints (used when live preview query omits them)
-            forked.currentContenttypeUid = this.currentContenttypeUid;
-            forked.currentEntryUid = this.currentEntryUid;
-
-            return forked;
-        }
         /// <summary>
         /// Initializes a instance of the <see cref="ContentstackClient"/> class. 
         /// </summary>
@@ -205,7 +111,7 @@ namespace Contentstack.Core
             this.SetConfig(cnfig);
             if (_options.LivePreview != null)
             {
-                this.LivePreviewConfig = CloneLivePreviewConfig(_options.LivePreview);
+                this.LivePreviewConfig = _options.LivePreview;
             }
             else
             {
@@ -431,12 +337,7 @@ namespace Contentstack.Core
             }
         }
 
-        /// <summary>
-        /// Fetches draft entry JSON from the Live Preview host (Java Stack.livePreviewQuery equivalent).
-        /// Always uses the configured preview host so the call succeeds even when the delivery base URL
-        /// would still point at CDN (e.g. live_preview hash is "init").
-        /// </summary>
-        private async Task<JObject> GetLivePreviewData()
+        private async Task<JsonObject> GetLivePreviewData()
         {
 
             Dictionary<String, object> headerAll = new Dictionary<string, object>();
@@ -481,25 +382,11 @@ namespace Contentstack.Core
             try
             {
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this);
-                string basePreview = this.Config.getLivePreviewUrl(this.LivePreviewConfig);
-                string URL = String.Format("{0}/content_types/{1}/entries/{2}", basePreview, this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID);
+                //string branch =  this.Config.Branch ? this.Config.Branch : "main";
+                string URL = String.Format("{0}/content_types/{1}/entries/{2}", this.Config.getBaseUrl(this.LivePreviewConfig, this.LivePreviewConfig.ContentTypeUID), this.LivePreviewConfig.ContentTypeUID, this.LivePreviewConfig.EntryUID);
                 var outputResult = await RequestHandler.ProcessRequest(URL, headerAll, mainJson, Branch: this.Config.Branch, isLivePreview: true, timeout: this.Config.Timeout, proxy: this.Config.Proxy);
-                JObject data = JsonConvert.DeserializeObject<JObject>(outputResult.Replace("\r\n", ""), this.SerializerSettings);
-                if (data == null) return null;
-                if (data["entry"] is JObject single && single.HasValues)
-                    return single;
-                if (data["entries"] is JArray arr && arr.Count > 0)
-                {
-                    string targetUid = this.LivePreviewConfig.EntryUID;
-                    foreach (var token in arr)
-                    {
-                        if (token is JObject jo && jo["uid"] != null
-                            && string.Equals(jo["uid"].ToString(), targetUid, StringComparison.Ordinal))
-                            return jo;
-                    }
-                    return arr[0] as JObject;
-                }
-                return null;
+                JsonObject data = JsonNode.Parse(outputResult.Replace("\r\n", ""))!.AsObject();
+                return data["entry"]!.AsObject();
             }
             catch (Exception ex)
             {
@@ -721,10 +608,6 @@ namespace Contentstack.Core
             this.LivePreviewConfig.LivePreview = null;
             this.LivePreviewConfig.PreviewTimestamp = null;
             this.LivePreviewConfig.ReleaseId = null;
-            this.LivePreviewConfig.PreviewResponse = null;
-            this.LivePreviewConfig.PreviewResponseFingerprintPreviewTimestamp = null;
-            this.LivePreviewConfig.PreviewResponseFingerprintReleaseId = null;
-            this.LivePreviewConfig.PreviewResponseFingerprintLivePreview = null;
             if (query.Keys.Contains("content_type_uid"))
             {
                 string contentTypeUID = null;
@@ -768,28 +651,10 @@ namespace Contentstack.Core
                 query.TryGetValue("preview_timestamp", out PreviewTimestamp);
                 this.LivePreviewConfig.PreviewTimestamp = PreviewTimestamp;
             }
-
-            if (this.LivePreviewConfig.Enable
-                && !string.IsNullOrEmpty(this.LivePreviewConfig.Host)
-                && !string.IsNullOrEmpty(this.LivePreviewConfig.ContentTypeUID)
-                && !string.IsNullOrEmpty(this.LivePreviewConfig.EntryUID))
-            {
-                try
-                {
-                    var draft = await GetLivePreviewData();
-                    if (draft != null && draft.Type == JTokenType.Object && draft.HasValues)
-                    {
-                        this.LivePreviewConfig.PreviewResponse = draft;
-                        this.LivePreviewConfig.PreviewResponseFingerprintPreviewTimestamp = this.LivePreviewConfig.PreviewTimestamp;
-                        this.LivePreviewConfig.PreviewResponseFingerprintReleaseId = this.LivePreviewConfig.ReleaseId;
-                        this.LivePreviewConfig.PreviewResponseFingerprintLivePreview = this.LivePreviewConfig.LivePreview;
-                    }
-                }
-                catch
-                {
-                    // Prefetch failed: Entry.Fetch still uses preview headers on the network path.
-                }
-            }
+            //if (!string.IsNullOrEmpty(this.LivePreviewConfig.LivePreview))
+            //{
+            //    this.LivePreviewConfig.PreviewResponse = await GetLivePreviewData();
+            //}
         }
 
         /// <summary>
