@@ -32,7 +32,7 @@
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Markdig" Version="0.36.2" />
-    <PackageReference Include="contentstack.utils" Version="2.0.0-beta.1" />
+    <PackageReference Include="contentstack.utils" Version="2.0.0-beta.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" Condition="'$(TargetFramework)' == 'net47' Or '$(TargetFramework)' == 'net472'" />
   </ItemGroup>
   <ItemGroup>
