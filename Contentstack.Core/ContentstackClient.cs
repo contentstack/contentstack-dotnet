@@ -12,6 +12,7 @@ using System.Net;
 using System.IO;
 using System.Collections;
 using Contentstack.Core.Interfaces;
+using Contentstack.Utils.Converters;
 
 namespace Contentstack.Core
 {
@@ -242,6 +243,9 @@ namespace Contentstack.Core
             {
                 SerializerSettings.Converters.Add((JsonConverter)Activator.CreateInstance(t));
             }
+
+            // Handles deserialization of embedded entries and assets in _embedded_items responses.
+            SerializerSettings.Converters.Add(new EmbeddedObjectConverter());
         }
 
         public ContentstackClient(ContentstackOptions options) :
