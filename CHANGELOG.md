@@ -1,3 +1,10 @@
+### Version: 2.28.0
+#### Date: Jun-24-2026
+
+##### Fix:
+- Register `EmbeddedObjectConverter` in `ContentstackClient` constructor so `.includeEmbeddedItems().Fetch<T>()` deserializes `_embedded_items` correctly when the model implements `IEntryEmbedable`. No changes required in consumer code.
+- Upgraded utils dependency from `contentstack.utils 1.3.0` to `contentstack.utils 1.4.0` which ships the concrete `EmbeddedObject` class and `EmbeddedObjectConverter`.
+
 ### Version: 2.27.0
 #### Date: Apr-23-2026
 

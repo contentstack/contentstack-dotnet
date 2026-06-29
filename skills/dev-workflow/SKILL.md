@@ -32,9 +32,9 @@ Package version: [`Directory.Build.props`](../../../Directory.Build.props) (`<Ve
 
 [`.github/workflows/unit-test.yml`](../../../.github/workflows/unit-test.yml): on `pull_request` and `push`, Windows runner, .NET 7, `dotnet restore` → `dotnet build Contentstack.Net.sln` → `dotnet test` on `Contentstack.Core.Unit.Tests`.
 
-### CI — branch policy
+### CI — branch and release flow
 
-[`.github/workflows/check-branch.yml`](../../../.github/workflows/check-branch.yml): on `pull_request`, if base is `master` and head is not `staging`, the job fails with a message to open PRs from `staging` toward `master` per team policy.
+Release PRs follow the direct flow `development -> master` (or `main` where applicable); `staging` is no longer part of the release path. Keep feature work targeting `development`, and use the back-merge workflow to keep branches aligned after production releases.
 
 ### CI — CodeQL
 
