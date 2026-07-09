@@ -148,6 +148,9 @@ namespace Contentstack.Core
                     SerializerOptions.Converters.Add(converter);
                 }
             }
+
+            // Handles deserialization of embedded entries and assets in _embedded_items responses.
+            SerializerSettings.Converters.Add(new EmbeddedObjectConverter());
         }
 
         public ContentstackClient(ContentstackOptions options) :
