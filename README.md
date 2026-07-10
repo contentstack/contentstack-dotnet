@@ -7,6 +7,13 @@
 
 This guide will help you get started with our .NET SDK to build apps powered by Contentstack.
 
+## Prerequisites
+To get started with .NET, you will need the following:
+
+-   .NET 10 or later
+
+> **Migrating from v2.x?** Version 3.0.0 replaces Newtonsoft.Json with System.Text.Json and changes several public API return/parameter types (e.g. `Entry.ToJson()`, `Query.Count()` now return `JsonObject` instead of `JObject`). See the [migration guide](https://www.contentstack.com/docs/developers/sdks/content-delivery-sdk/dot-net/migrate-dotnet-delivery-sdk-from-newtonsoft-to-stj) before upgrading.
+
 ## SDK Installation and Setup
 
 To use the .NET SDK, download it from here
@@ -99,6 +106,31 @@ query.Find<Product>().ContinueWith((t) => {
     } 
 });
 ```
+## Endpoint Resolution
+
+Use the `Endpoint` class to resolve Contentstack service URLs for any supported region without hardcoding hosts. This is useful when configuring `ContentstackOptions` for a specific region, including the newly added `gcp-eu` region.
+
+``` cs
+using Contentstack.Core.Endpoints; // Endpoint
+
+// Resolve the Content Delivery endpoint for a region
+string url = Endpoint.GetContentstackEndpoint("us", "contentDelivery");
+// → "https://cdn.contentstack.io"
+
+// GCP-EU region support
+string gcpEuUrl = Endpoint.GetContentstackEndpoint("gcp-eu", "contentDelivery");
+
+// Strip the https:// scheme — useful when passing the host directly to SDK configuration
+var options = new ContentstackOptions()
+{
+    ApiKey = "<api_key>",
+    DeliveryToken = "<delivery_token>",
+    Environment = "<environment>",
+    Host = Endpoint.GetContentstackEndpoint("eu", "contentDelivery", omitHttps: true)
+};
+ContentstackClient stack = new ContentstackClient(options);
+```
+
 ## API Reference
 Go through our .NET SDK API Reference guide to know about the methods that can be used to query your content in Contentstack.
 
