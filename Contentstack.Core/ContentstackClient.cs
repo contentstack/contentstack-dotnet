@@ -13,6 +13,7 @@ using Contentstack.Core.Interfaces;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Contentstack.Utils.Converters;
 
 namespace Contentstack.Core
 {
@@ -150,7 +151,7 @@ namespace Contentstack.Core
             }
 
             // Handles deserialization of embedded entries and assets in _embedded_items responses.
-            SerializerSettings.Converters.Add(new EmbeddedObjectConverter());
+            SerializerOptions.Converters.Add(new EmbeddedObjectConverter());
         }
 
         public ContentstackClient(ContentstackOptions options) :
