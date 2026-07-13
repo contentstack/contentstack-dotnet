@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <_RefreshScriptDest>$(MSBuildProjectDirectory)/Scripts/refresh-region.py</_RefreshScriptDest>
+    <_RefreshScriptSrc>$(MSBuildThisFileDirectory)../contentFiles/cs/any/Scripts/refresh-region.py</_RefreshScriptSrc>
+  </PropertyGroup>
+
+  <Target Name="ContentstackCore_PlaceRefreshScript"
+          AfterTargets="ResolvePackageDependenciesForBuild"
+          Condition="!Exists('$(_RefreshScriptDest)')">
+    <MakeDir Directories="$(MSBuildProjectDirectory)/Scripts" />
+    <Copy SourceFiles="$(_RefreshScriptSrc)" DestinationFiles="$(_RefreshScriptDest)" />
+    <Message Text="contentstack.csharp: Scripts/refresh-region.py added to your project. Run 'python3 Scripts/refresh-region.py' to refresh regions." Importance="High" />
+  </Target>
+</Project>

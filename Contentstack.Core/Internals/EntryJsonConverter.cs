@@ -1,26 +1,33 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Contentstack.Core.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Internals
 {
     [CSJsonConverter("EntryJsonConverter")]
     public class EntryJsonConverter : JsonConverter<Entry>
     {
-        public override Entry ReadJson(JsonReader reader, Type objectType, Entry existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override Entry Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            JObject jObject = JObject.Load(reader);
-            JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
-            JsonSerializer Serializer = JsonSerializer.Create(SerializerSettings);
-            Entry entry = jObject.ToObject<Entry>(Serializer);
-            entry.ParseObject(jObject);
+            using var doc = JsonDocument.ParseValue(ref reader);
+            var jsonObject = JsonNode.Parse(doc.RootElement.GetRawText())!.AsObject();
+
+            var entry = JsonSerializer.Deserialize<Entry>(
+                jsonObject.ToJsonString(),
+                ContentstackJsonDefaults.ModelDeserializeOnly);
+
+            entry ??= new Entry();
+            entry.ParseObject(jsonObject);
             return entry;
         }
 
-        public override void WriteJson(JsonWriter writer, Entry value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, Entry value, JsonSerializerOptions options)
         {
-
+            // Serialization of Entry is handled outside this converter during normal flows.
+            writer.WriteStartObject();
+            writer.WriteEndObject();
         }
     }
 }

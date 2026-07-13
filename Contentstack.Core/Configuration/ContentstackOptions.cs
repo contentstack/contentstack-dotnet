@@ -76,6 +76,27 @@ namespace Contentstack.Core.Configuration
         }
 
         /// <summary>
+        /// Resolves the token for the access_token HTTP header. Obsolete AccessToken is still honored when set (before DeliveryToken).
+        /// </summary>
+        internal bool TryGetAccessTokenHeaderValue(out string token)
+        {
+#pragma warning disable CS0618 // AccessToken is obsolete; retained for backward compatibility until removed from the API surface
+            if (AccessToken != null)
+            {
+                token = AccessToken;
+                return true;
+            }
+#pragma warning restore CS0618
+            if (DeliveryToken != null)
+            {
+                token = DeliveryToken;
+                return true;
+            }
+            token = null;
+            return false;
+        }
+
+        /// <summary>
         /// TheEarlyAccessHeader used to set service which the user has early access to.
         /// </summary>
         public string[] EarlyAccessHeader { get; set; }

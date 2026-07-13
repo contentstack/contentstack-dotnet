@@ -84,9 +84,8 @@ namespace Contentstack.Core.Unit.Tests
             // Act
             var result = config.Host;
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Contains("cdn.contentstack", result);
+            // Assert — Host is a custom override; defaults to empty string. URL resolution happens via BaseUrl.
+            Assert.Equal(string.Empty, result);
         }
 
         [Fact]
@@ -274,12 +273,11 @@ namespace Contentstack.Core.Unit.Tests
             var config = CreateConfig();
             config.Region = ContentstackRegion.US;
 
-            // Act
-            var hostUrlProperty = typeof(Config).GetProperty("HostURL", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = hostUrlProperty?.GetValue(config) as string;
+            // Act — HostURL was removed; BaseUrl is the public observable equivalent
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal("cdn.contentstack.io", result);
+            Assert.Contains("cdn.contentstack.io", result);
         }
 
         [Fact]
@@ -290,11 +288,10 @@ namespace Contentstack.Core.Unit.Tests
             config.Region = ContentstackRegion.EU;
 
             // Act
-            var hostUrlProperty = typeof(Config).GetProperty("HostURL", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = hostUrlProperty?.GetValue(config) as string;
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal("cdn.contentstack.com", result);
+            Assert.Contains("eu-cdn.contentstack.com", result);
         }
 
         [Fact]
@@ -305,11 +302,10 @@ namespace Contentstack.Core.Unit.Tests
             config.Region = ContentstackRegion.AZURE_EU;
 
             // Act
-            var hostUrlProperty = typeof(Config).GetProperty("HostURL", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = hostUrlProperty?.GetValue(config) as string;
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal("cdn.contentstack.com", result);
+            Assert.Contains("azure-eu-cdn.contentstack.com", result);
         }
 
         [Fact]
@@ -320,11 +316,10 @@ namespace Contentstack.Core.Unit.Tests
             config.Region = ContentstackRegion.AZURE_NA;
 
             // Act
-            var hostUrlProperty = typeof(Config).GetProperty("HostURL", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = hostUrlProperty?.GetValue(config) as string;
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal("cdn.contentstack.com", result);
+            Assert.Contains("azure-na-cdn.contentstack.com", result);
         }
 
         [Fact]
@@ -335,11 +330,10 @@ namespace Contentstack.Core.Unit.Tests
             config.Region = ContentstackRegion.GCP_NA;
 
             // Act
-            var hostUrlProperty = typeof(Config).GetProperty("HostURL", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = hostUrlProperty?.GetValue(config) as string;
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal("cdn.contentstack.com", result);
+            Assert.Contains("gcp-na-cdn.contentstack.com", result);
         }
 
         [Fact]
@@ -350,11 +344,10 @@ namespace Contentstack.Core.Unit.Tests
             config.Region = ContentstackRegion.AU;
 
             // Act
-            var hostUrlProperty = typeof(Config).GetProperty("HostURL", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = hostUrlProperty?.GetValue(config) as string;
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal("cdn.contentstack.com", result);
+            Assert.Contains("au-cdn.contentstack.com", result);
         }
 
         [Fact]
@@ -364,12 +357,12 @@ namespace Contentstack.Core.Unit.Tests
             var config = CreateConfig();
             config.Region = ContentstackRegion.US;
 
-            // Act
-            var regionCodeMethod = typeof(Config).GetMethod("regionCode", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = regionCodeMethod?.Invoke(config, null) as string;
+            // Act — regionCode() was removed; US resolves to cdn.contentstack.io with no region prefix in the host
+            var result = config.BaseUrl;
 
             // Assert
-            Assert.Equal(string.Empty, result);
+            Assert.Contains("cdn.contentstack.io", result);
+            Assert.DoesNotContain("-cdn", result);
         }
 
         [Fact]
@@ -379,13 +372,12 @@ namespace Contentstack.Core.Unit.Tests
             var config = CreateConfig();
             config.Region = ContentstackRegion.EU;
 
-            // Act
-            var regionCodeMethod = typeof(Config).GetMethod("regionCode", BindingFlags.NonPublic | BindingFlags.Instance);
-            var result = regionCodeMethod?.Invoke(config, null) as string;
+            // Act — non-US regions resolve to a host with a region prefix (e.g. eu-cdn)
+            var result = config.BaseUrl;
 
             // Assert
             Assert.NotNull(result);
-            Assert.Contains("-", result);
+            Assert.Contains("-cdn", result);
         }
 
         [Fact]

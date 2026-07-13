@@ -13,7 +13,13 @@ namespace Contentstack.Core.Tests
         {
             get
             {
-                return ConfigurationManager.OpenExeConfiguration(new Uri(uriString: GetType().Assembly.CodeBase).LocalPath);
+                var assembly = GetType().Assembly;
+                var path = assembly.Location;
+                if (string.IsNullOrEmpty(path))
+                {
+                    throw new InvalidOperationException("Assembly.Location is unavailable; cannot load assembly configuration.");
+                }
+                return ConfigurationManager.OpenExeConfiguration(path);
             }
         }
 

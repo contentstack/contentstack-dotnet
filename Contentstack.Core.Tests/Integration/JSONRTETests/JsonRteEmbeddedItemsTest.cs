@@ -52,7 +52,7 @@ namespace Contentstack.Core.Tests.Integration.JsonRteTests
             var blocks = entry.Get("json_rte_field");
             if (blocks != null)
             {
-                var blocksArray = blocks as Newtonsoft.Json.Linq.JArray;
+                var blocksArray = blocks as System.Collections.IList;
                 if (blocksArray != null && blocksArray.Count > 0)
                 {
                     TestAssert.True(blocksArray.Count > 0, "Modular blocks should have content");
@@ -90,7 +90,7 @@ namespace Contentstack.Core.Tests.Integration.JsonRteTests
             var blocks = entry.Get("json_rte_field");
             if (blocks != null)
             {
-                var blocksArray = blocks as Newtonsoft.Json.Linq.JArray;
+                var blocksArray = blocks as System.Collections.IList;
                 if (blocksArray != null && blocksArray.Count > 0)
                 {
                     TestAssert.True(blocksArray.Count > 0, "Modular blocks should have content");
@@ -132,7 +132,7 @@ namespace Contentstack.Core.Tests.Integration.JsonRteTests
             var blocks = entry.Get("json_rte_field");
             if (blocks != null)
             {
-                var blocksArray = blocks as Newtonsoft.Json.Linq.JArray;
+                var blocksArray = blocks as System.Collections.IList;
                 if (blocksArray != null && blocksArray.Count > 0)
                 {
                     TestAssert.True(blocksArray.Count > 0, "Modular blocks should have content");
@@ -426,7 +426,7 @@ namespace Contentstack.Core.Tests.Integration.JsonRteTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

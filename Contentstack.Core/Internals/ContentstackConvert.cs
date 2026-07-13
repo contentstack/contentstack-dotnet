@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -19,7 +20,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -38,7 +39,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -57,7 +58,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -76,7 +77,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null) 
                 { 
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -95,7 +96,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -114,7 +115,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 
@@ -132,7 +133,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
             return now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'sszzz");
@@ -186,7 +187,7 @@ namespace Contentstack.Core.Internals
             {
                 if (e.Source != null)
                 {
-                    Console.WriteLine(ErrorMessages.FormatExceptionDetails(e));
+                    Debug.WriteLine(ErrorMessages.FormatExceptionDetails(e));
                 }
             }
 

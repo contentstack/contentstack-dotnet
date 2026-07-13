@@ -6,6 +6,24 @@ namespace Contentstack.Core.Internals
 {
     internal class StackOutput
     {
+        internal StackOutput()
+        {
+            // Touch fields so CS0414 does not fire for legacy/reflection-only state retained for compatibility tests.
+            _ = _TotalCount;
+            _ = _Json;
+            _ = _Notice;
+            _ = _Output;
+            _ = _ObjectAttributes;
+            _ = _Schema;
+            _ = _Object;
+            _ = _Objects;
+            _ = _Result;
+            _ = _ApplicationUser;
+            _ = _Tags;
+            _ = _Owner;
+            _ = _Uid;
+        }
+
         private Int32 _TotalCount = 0;
         private string _Json = string.Empty;
         private string _Notice = string.Empty;
