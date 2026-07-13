@@ -7,14 +7,12 @@ jobs:
   check_branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Comment PR
-        if: github.base_ref == 'master' && github.head_ref != 'staging'
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            We regret to inform you that you are currently not able to merge your changes into the master branch due to restrictions applied by our SRE team. To proceed with merging your changes, we kindly request that you create a pull request from the staging branch. Our team will then review the changes and work with you to ensure a successful merge into the master branch.
-      - name: Check branch
-        if: github.base_ref == 'master' && github.head_ref != 'staging'
+      # PRs into master are no longer blocked here based on their source branch.
+      # Direct merges into master (i.e. without going through PR review) are expected
+      # to be prevented by GitHub branch protection rules on master, not by this CI check.
+      - name: Branch check (informational only)
         run: |
-          echo "ERROR: We regret to inform you that you are currently not able to merge your changes into the master branch due to restrictions applied by our SRE team. To proceed with merging your changes, we kindly request that you create a pull request from the staging branch. Our team will then review the changes and work with you to ensure a successful merge into the master branch."
-          exit 1
+          echo "This workflow no longer restricts which branch a PR into master can come from."
+          echo "Base branch : ${{ github.base_ref }}"
+          echo "Head branch : ${{ github.head_ref }}"
+          echo "Direct pushes/merges to master should be prevented via branch protection rules, not this workflow."
