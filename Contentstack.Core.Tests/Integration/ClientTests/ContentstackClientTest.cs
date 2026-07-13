@@ -17,7 +17,7 @@ namespace Contentstack.Core.Tests.Integration.ClientTests
         {
         }
 
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

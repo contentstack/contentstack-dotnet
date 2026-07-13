@@ -1,13 +1,13 @@
 using System;
-using System.IO;
-using System.Reflection;
+using System.Buffers;
+using System.Text;
+using System.Text.Json;
 using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Models;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Contentstack.Core.Unit.Tests
@@ -28,36 +28,33 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void ReadJson_WithValidJson_ReturnsEntry()
+        public void Read_WithValidJson_ReturnsEntry()
         {
-            // Arrange
             var converter = new EntryJsonConverter();
             var json = "{\"uid\":\"test_uid\",\"title\":\"Test Title\"}";
-            var reader = new JsonTextReader(new StringReader(json));
+            var reader = new Utf8JsonReader(Encoding.UTF8.GetBytes(json));
+            reader.Read();
 
-            // Act
-            var entry = converter.ReadJson(reader, typeof(Entry), null, JsonSerializer.CreateDefault());
+            var entry = converter.Read(ref reader, typeof(Entry), CreateClient().SerializerOptions);
 
-            // Assert
             Assert.NotNull(entry);
             Assert.IsType<Entry>(entry);
         }
 
         [Fact]
-        public void WriteJson_WithEntry_DoesNothing()
+        public void Write_WithEntry_Completes()
         {
-            // Arrange
             var converter = new EntryJsonConverter();
             var client = CreateClient();
             var contentType = client.ContentType("test_content_type");
             var entry = contentType.Entry("test_uid");
-            var writer = new JsonTextWriter(new StringWriter());
+            var buffer = new ArrayBufferWriter<byte>();
+            using (var writer = new Utf8JsonWriter(buffer))
+            {
+                converter.Write(writer, entry, client.SerializerOptions);
+            }
 
-            // Act - Should not throw
-            converter.WriteJson(writer, entry, JsonSerializer.CreateDefault());
-
-            // Assert
-            Assert.True(true);
+            Assert.True(buffer.WrittenCount > 0);
         }
     }
 
@@ -77,34 +74,34 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void ReadJson_WithValidJson_ReturnsAsset()
+        public void Read_WithValidJson_ReturnsAsset()
         {
-            // Arrange
             var converter = new AssetJsonConverter();
             var json = "{\"uid\":\"test_uid\",\"title\":\"Test Asset\"}";
-            var reader = new JsonTextReader(new StringReader(json));
+            var reader = new Utf8JsonReader(Encoding.UTF8.GetBytes(json));
+            reader.Read();
 
-            // Act
-            var asset = converter.ReadJson(reader, typeof(Asset), null, JsonSerializer.CreateDefault());
+            var asset = converter.Read(ref reader, typeof(Asset), CreateClient().SerializerOptions);
 
-            // Assert
             Assert.NotNull(asset);
             Assert.IsType<Asset>(asset);
         }
 
         [Fact]
-        public void WriteJson_WithAsset_ThrowsAssetException()
+        public void Write_WithAsset_ThrowsAssetException()
         {
-            // Arrange
             var converter = new AssetJsonConverter();
             var client = CreateClient();
             var asset = client.Asset("test_uid");
-            var writer = new JsonTextWriter(new StringWriter());
+            var buffer = new ArrayBufferWriter<byte>();
 
-            // Act & Assert
-            Assert.Throws<AssetException>(() => 
-                converter.WriteJson(writer, asset, JsonSerializer.CreateDefault()));
+            Assert.Throws<AssetException>(() =>
+            {
+                using (var writer = new Utf8JsonWriter(buffer))
+                {
+                    converter.Write(writer, asset, client.SerializerOptions);
+                }
+            });
         }
     }
 }
-

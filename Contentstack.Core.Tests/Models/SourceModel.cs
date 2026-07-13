@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Contentstack.Core.Models;
 using Markdig;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Contentstack.Core.Tests.Models
 {
@@ -19,8 +20,6 @@ namespace Contentstack.Core.Tests.Models
         public Asset file;
         public List<Object> Reference;
         public List<object> Other_reference;
-        // public List<Dictionary<string, object>> Reference;
-        // public List<Dictionary<string, object>> Other_reference;
         public Dictionary<string, object> Group;
         public List<Dictionary<string, object>> Modular_blocks;
         public object[] Tags;
@@ -29,6 +28,7 @@ namespace Contentstack.Core.Tests.Models
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime updated_at;
         public string Updated_by;
+
         public String GetHTMLText()
         {
             string result = string.Empty;
@@ -45,14 +45,25 @@ namespace Contentstack.Core.Tests.Models
             }
             return result;
         }
-
     }
 
-    public class CustomDateTimeConverter : IsoDateTimeConverter
+    public class CustomDateTimeConverter : JsonConverter<DateTime>
     {
-        public CustomDateTimeConverter()
+        private const string Format = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            base.DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+            var s = reader.GetString();
+            if (string.IsNullOrEmpty(s))
+            {
+                return default;
+            }
+            return DateTime.ParseExact(s, Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToUniversalTime().ToString(Format, CultureInfo.InvariantCulture));
         }
     }
 }

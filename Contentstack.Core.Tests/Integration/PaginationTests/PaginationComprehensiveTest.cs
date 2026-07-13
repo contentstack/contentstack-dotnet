@@ -282,7 +282,7 @@ namespace Contentstack.Core.Tests.Integration.PaginationTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

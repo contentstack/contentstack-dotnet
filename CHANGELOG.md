@@ -1,9 +1,90 @@
+### Version: 3.0.0
+#### Date: Jul-13-2026
+
+##### Breaking Changes:
+- Removed `Newtonsoft.Json` dependency; all JSON serialisation now uses `System.Text.Json` (BCL)
+- `Entry.ToJson()`, `Query.Count()`, `AssetLibrary.Count()` now return `JsonObject` instead of `JObject`
+- `AssetLibrary.Query(JsonObject)` — parameter type changed from `JObject` to `JsonObject`
+- `ContentType.Fetch()`, `GlobalField.Fetch()`, `GlobalFieldQuery.Find()` now return `JsonObject` instead of `JObject`
+- `SerializerSettings` → `SerializerOptions`
+- Model classes use `[JsonPropertyName]` instead of `[JsonProperty]`
+- Requires **.NET 10** or later
+- Updated `contentstack.utils` dependency to `2.0.0` (final, non-beta)
+
+##### Feat:
+- Added `Endpoint` class for dynamic region-to-URL resolution via CDN-backed `regions.json`
+- Added `ContentstackRegionMap` to map `ContentstackRegion` enum to registry region IDs
+- Added `GCP_EU` region support
+- Added `ApiErrorBodyParser` for consistent API error envelope parsing
+- Added `JsonNodeConversion` and `JsonObjectMerge` utilities to replace Newtonsoft equivalents
+- Added `ContentstackJsonDefaults` — shared `JsonSerializerOptions` used across all custom converters
+
+##### Enh:
+- `Config.BaseUrl` now resolves hosts from the regions registry; removed hardcoded `regionCode()` and `HostURL`
+- Replaced `Console.WriteLine` with `Debug.WriteLine` in `ContentstackConvert` to suppress parse warnings from application stdout
+
+##### Chore:
+- Replaced `refresh-region.cs` with `refresh-region.py` — avoids MSBuild compiling the script as source
+- Added `build/contentstack.csharp.targets` to auto-deliver `refresh-region.py` to consumer projects on first build
+- Added `Assets/regions.json` to `.gitignore`
+- Added `EndpointTest.cs`
+- Updated .NET version in SCA scan CI from `7.0.x` to `10.0.x`
+
+##### Migration Guide:
+- See [Migrating from Newtonsoft.Json to System.Text.Json](https://www.contentstack.com/docs/developers/sdks/content-delivery-sdk/dot-net/migrate-dotnet-delivery-sdk-from-newtonsoft.json-to-system.text.json) for the full upgrade path from v2.x.
+
+---
+
+### Version: 3.0.0-beta.2
+#### Date: Jun-22-2026
+
+##### Feat:
+- Added `Endpoint` class for dynamic region-to-URL resolution via CDN-backed `regions.json`
+- Added `ContentstackRegionMap` to map `ContentstackRegion` enum to registry region IDs
+- Added `GCP_EU` region support
+
+##### Enh:
+- `Config.BaseUrl` now resolves hosts from the regions registry; removed hardcoded `regionCode()` and `HostURL`
+
+##### Chore:
+- Replaced `refresh-region.cs` with `refresh-region.py` — avoids MSBuild compiling the script as source
+- Added `build/contentstack.csharp.targets` to auto-deliver `refresh-region.py` to consumer projects on first build
+- Added `Assets/regions.json` to `.gitignore`
+- Added `EndpointTest.cs`
+
+---
+
+### Version: 3.0.0-beta.1
+#### Date: May-04-2026
+
+##### Breaking Changes:
+- Removed `Newtonsoft.Json` dependency; all JSON serialisation now uses `System.Text.Json` (BCL)
+  - `AssetJsonConverter` and `EntryJsonConverter` now implement `System.Text.Json.Serialization.JsonConverter<T>`
+  - `ContentstackCollection<T>` no longer carries `[JsonObject]`; direct `JsonSerializer` usage on this type is not supported
+- Updated `contentstack.utils` from `1.0.6` to `2.0.0-beta.1` (major version bump)
+
+##### Feat:
+- Migrated all internal JSON handling to `System.Text.Json`
+- Added `ApiErrorBodyParser` for consistent API error envelope parsing
+- Added `JsonNodeConversion` and `JsonObjectMerge` utilities to replace Newtonsoft equivalents
+- Added `ContentstackJsonDefaults` — shared `JsonSerializerOptions` used across all custom converters
+
+##### Enh:
+- Replaced `Console.WriteLine` with `Debug.WriteLine` in `ContentstackConvert` to suppress parse warnings from application stdout
+
+##### Chore:
+- Updated .NET version in SCA scan CI from `7.0.x` to `10.0.x`
+
+---
+
 ### Version: 2.28.0
 #### Date: Jun-24-2026
 
 ##### Fix:
 - Register `EmbeddedObjectConverter` in `ContentstackClient` constructor so `.includeEmbeddedItems().Fetch<T>()` deserializes `_embedded_items` correctly when the model implements `IEntryEmbedable`. No changes required in consumer code.
 - Upgraded utils dependency from `contentstack.utils 1.3.0` to `contentstack.utils 1.4.0` which ships the concrete `EmbeddedObject` class and `EmbeddedObjectConverter`.
+
+---
 
 ### Version: 2.27.0
 #### Date: Apr-23-2026
@@ -24,6 +105,8 @@
   - Added authentication flow validation for Management Token vs Preview Token scenarios
   - Comprehensive error handling tests for Timeline Preview edge cases
 
+
+---
 
 ### Version: 2.26.0
 #### Date: Feb-10-2026
