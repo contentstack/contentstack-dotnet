@@ -83,19 +83,24 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
 
         // ── 2. Find all taxonomies ────────────────────────────────────────────
 
-        [Fact(DisplayName = "TaxPublish - Find all taxonomies returns non-empty collection")]
+        [Fact(DisplayName = "TaxPublish - Find all terms without locale returns master-locale terms")]
         public async Task Find_AllTaxonomies_ReturnsCollection()
         {
-            LogArrange("Fetching all published taxonomies");
+            LogArrange("Fetching all terms in master locale (no locale filter)");
+            LogContext("TaxonomyUid", TestDataHelper.TaxPublishTaxonomyUid);
 
             var client = CreateGadgetsClient();
 
-            LogAct("Calling Taxonomies().Find<Entry>()");
-            var result = await client.Taxonomies().Find<Entry>();
+            LogAct("Calling Taxonomies(uid).Terms().Find<JObject>()");
+            var result = await client
+                .Taxonomies(TestDataHelper.TaxPublishTaxonomyUid)
+                .Terms()
+                .Find<Newtonsoft.Json.Linq.JObject>();
 
             LogAssert("Verifying response");
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
+            Assert.True(result.Items.Any());
         }
 
         // ── 3. Find terms with locale ─────────────────────────────────────────
@@ -179,11 +184,11 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
             LogContext("TermUid", termUid);
             LogContext("Locale", TestDataHelper.TaxPublishLocale);
 
-            LogAct("Calling Term(termUid).Fetch<JObject>(locale)");
+            LogAct("Calling Term(termUid).Fetch<JObject>(locale, includeFallback: true)");
             var result = await client
                 .Taxonomies(TestDataHelper.TaxPublishTaxonomyUid)
                 .Term(termUid)
-                .Fetch<Newtonsoft.Json.Linq.JObject>(TestDataHelper.TaxPublishLocale);
+                .Fetch<Newtonsoft.Json.Linq.JObject>(TestDataHelper.TaxPublishLocale, includeFallback: true);
 
             LogAssert("Verifying response");
             Assert.NotNull(result);

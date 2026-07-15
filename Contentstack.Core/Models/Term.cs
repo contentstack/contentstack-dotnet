@@ -32,20 +32,24 @@ namespace Contentstack.Core.Models
         /// Fetches the published term from the CDA.
         /// </summary>
         /// <param name="locale">Optional locale code (e.g. "mr-in"). Omit for the master locale.</param>
+        /// <param name="includeFallback">When true, falls back to the master locale if the term has no localized version.</param>
         /// <returns>The deserialized term object.</returns>
         /// <example>
         /// <code>
         ///     var term           = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;();
         ///     var localizedTerm  = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;("mr-in");
+        ///     var withFallback   = await stack.Taxonomies("gadgets").Term("laptop").Fetch&lt;MyTerm&gt;("hi-in", includeFallback: true);
         /// </code>
         /// </example>
-        public async Task<T> Fetch<T>(string locale = null)
+        public async Task<T> Fetch<T>(string locale = null, bool includeFallback = false)
         {
             try
             {
                 var queryParams = new Dictionary<string, object>();
                 if (!string.IsNullOrEmpty(locale))
                     queryParams["locale"] = locale;
+                if (includeFallback)
+                    queryParams["include_fallback"] = "true";
 
                 var result = await ExecuteRequest(BaseUrlPath, queryParams);
                 var jObject = JObject.Parse(result);
