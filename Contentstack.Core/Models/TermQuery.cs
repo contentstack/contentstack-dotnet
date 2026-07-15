@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contentstack.Core.Internals;
 using Newtonsoft.Json.Linq;
@@ -87,10 +88,9 @@ namespace Contentstack.Core.Models
                     mainJson[param.Key] = param.Value;
 
                 var handler = new HttpRequestHandler(_stack);
-                var branch = _stack.Config?.Branch ?? "main";
                 var result = await handler.ProcessRequest(
                     Url, headerAll, mainJson,
-                    Branch: branch,
+                    Branch: _stack.Config.Branch,
                     timeout: _stack.Config.Timeout,
                     proxy: _stack.Config.Proxy
                 );
@@ -98,7 +98,7 @@ namespace Contentstack.Core.Models
                 var jObject = JObject.Parse(result);
                 var terms = jObject.SelectToken("$.terms")?.ToObject<IEnumerable<T>>(_stack.Serializer);
                 var collection = jObject.ToObject<ContentstackCollection<T>>(_stack.Serializer);
-                collection.Items = terms ?? new List<T>();
+                collection.Items = terms ?? Enumerable.Empty<T>();
                 return collection;
             }
             catch (TaxonomyException)
@@ -107,7 +107,13 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw TaxonomyException.CreateForProcessingError(ex);
+                var contentstackError = Taxonomy.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
             }
         }
     }

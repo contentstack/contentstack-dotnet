@@ -126,10 +126,9 @@ namespace Contentstack.Core.Models
                     mainJson["locale"] = locale;
 
                 var handler = new HttpRequestHandler(Stack);
-                var branch = Stack.Config?.Branch ?? "main";
                 var result = await handler.ProcessRequest(
                     _Url, headerAll, mainJson,
-                    Branch: branch,
+                    Branch: Stack.Config.Branch,
                     timeout: Stack.Config.Timeout,
                     proxy: Stack.Config.Proxy
                 );
@@ -142,7 +141,13 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw TaxonomyException.CreateForProcessingError(ex);
+                var contentstackError = GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
             }
         }
 

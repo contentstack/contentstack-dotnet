@@ -60,7 +60,13 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw TaxonomyException.CreateForProcessingError(ex);
+                var contentstackError = Taxonomy.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
             }
         }
 
@@ -91,7 +97,13 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw TaxonomyException.CreateForProcessingError(ex);
+                var contentstackError = Taxonomy.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
             }
         }
 
@@ -122,7 +134,13 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw TaxonomyException.CreateForProcessingError(ex);
+                var contentstackError = Taxonomy.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
             }
         }
 
@@ -153,7 +171,13 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                throw TaxonomyException.CreateForProcessingError(ex);
+                var contentstackError = Taxonomy.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
             }
         }
 
@@ -172,10 +196,9 @@ namespace Contentstack.Core.Models
                     mainJson[param.Key] = param.Value;
 
             var handler = new HttpRequestHandler(_stack);
-            var branch = _stack.Config?.Branch ?? "main";
             return await handler.ProcessRequest(
                 url, headerAll, mainJson,
-                Branch: branch,
+                Branch: _stack.Config.Branch,
                 timeout: _stack.Config.Timeout,
                 proxy: _stack.Config.Proxy
             );
