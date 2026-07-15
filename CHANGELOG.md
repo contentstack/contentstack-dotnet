@@ -1,3 +1,11 @@
+### Version: 2.29.0
+#### Date: Jul-15-2026
+
+##### Feat:
+- Taxonomy / Term localisation
+  - Added `includeFallback` parameter to `Term.Fetch<T>(string locale, bool includeFallback)` so callers can request master-locale fallback on single-term fetch, consistent with `TermQuery.IncludeFallback()`
+  - Fixed `include_fallback` serialization: the value is now sent as the string `"true"` instead of a C# `bool`, which was being serialized as `"True"` (capital T) and rejected by the CDA
+
 ### Version: 2.28.0
 #### Date: Jun-24-2026
 
