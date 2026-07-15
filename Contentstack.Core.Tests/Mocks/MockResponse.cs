@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 
 namespace Contentstack.Core.Tests.Mocks
 {
@@ -59,24 +59,24 @@ namespace Contentstack.Core.Tests.Mocks
         }
 
         /// <summary>
-        /// Creates a JObject from a mock response file
+        /// Creates a <see cref="JsonObject"/> from a mock response file
         /// </summary>
         /// <param name="fileName">Name of the JSON file</param>
-        /// <returns>JObject parsed from the response</returns>
-        public static JObject CreateContentstackResponseAsJObject(string fileName)
+        /// <returns>JSON object parsed from the response</returns>
+        public static JsonObject CreateContentstackResponseAsJsonObject(string fileName)
         {
             var jsonString = CreateContentstackResponse(fileName);
-            return JObject.Parse(jsonString);
+            return JsonNode.Parse(jsonString).AsObject();
         }
 
         /// <summary>
-        /// Creates a mock response from a JObject
+        /// Creates a mock response from a <see cref="JsonObject"/>
         /// </summary>
-        /// <param name="jObject">The JObject to serialize</param>
+        /// <param name="jsonObject">The JSON object to serialize</param>
         /// <returns>JSON string response</returns>
-        public static string CreateContentstackResponseFromJObject(JObject jObject)
+        public static string CreateContentstackResponseFromJsonObject(JsonObject jsonObject)
         {
-            return jObject.ToString();
+            return jsonObject.ToJsonString();
         }
     }
 }

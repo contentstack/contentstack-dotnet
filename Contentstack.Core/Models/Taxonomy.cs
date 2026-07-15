@@ -5,8 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
-using Newtonsoft.Json.Linq;
-
 namespace Contentstack.Core.Models
 {
     public class Taxonomy: Query
@@ -38,7 +36,7 @@ namespace Contentstack.Core.Models
             }
         }
         #endregion
-        public ContentstackClient Stack
+        public new ContentstackClient Stack
         {
             get;
             set;
@@ -341,7 +339,7 @@ namespace Contentstack.Core.Models
                 return _StackHeaders;
             }
         }
-        internal static ContentstackException GetContentstackError(Exception ex)
+        internal static new ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
             string errorMessage = string.Empty;
@@ -367,27 +365,7 @@ namespace Contentstack.Core.Models
                                 
                                 if (!string.IsNullOrWhiteSpace(errorMessage))
                                 {
-                                    try
-                                    {
-                                        JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-
-                                        JToken token = data["error_code"];
-                                        if (token != null)
-                                            errorCode = token.Value<int>();
-
-                                        token = data["error_message"];
-                                        if (token != null)
-                                            errorMessage = token.Value<string>();
-
-                                        token = data["errors"];
-                                        if (token != null)
-                                            errors = token.ToObject<Dictionary<string, object>>();
-                                    }
-                                    catch (Newtonsoft.Json.JsonException)
-                                    {
-                                        // If JSON parsing fails, use the raw error message
-                                        // errorMessage is already set from ReadToEnd()
-                                    }
+                                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
                                 }
 
                                 var response = exResp as HttpWebResponse;

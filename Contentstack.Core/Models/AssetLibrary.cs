@@ -6,7 +6,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Contentstack.Core.Models
 {
@@ -75,35 +76,31 @@ namespace Contentstack.Core.Models
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     AssetLibrary assetLibrary = stack.AssetLibrary();
-        ///     JObject jObject = await assetLibrary.Count();
+        ///     JsonObject jObject = await assetLibrary.Count();
         /// </code>
         /// </example>
-        public async Task<JObject> Count()
+        public async Task<JsonObject> Count()
         {
             UrlQueries.Add("count", "true");
             return await Exec();
         }
 
-        public AssetLibrary Query(JObject QueryObject)
+        public AssetLibrary Query(JsonObject QueryObject)
         {
             try
             {
                 if (UrlQueries.ContainsKey("query"))
                 {
                     // If query already exists, append/merge the new query object
-                    JObject existingQuery = UrlQueries["query"] as JObject;
+                    JsonObject existingQuery = UrlQueries["query"] as JsonObject;
                     if (existingQuery != null)
                     {
-                        // Merge the new query object with the existing one
-                        existingQuery.Merge(QueryObject, new JsonMergeSettings
-                        {
-                            MergeArrayHandling = MergeArrayHandling.Union
-                        });
+                        JsonObjectMerge.UnionMergeInto(existingQuery, QueryObject);
                         UrlQueries["query"] = existingQuery;
                     }
                     else
                     {
-                        // If existing query is not a JObject, replace it
+                        // If existing query is not a JsonObject, replace it
                         UrlQueries["query"] = QueryObject;
                     }
                 }
@@ -147,7 +144,7 @@ namespace Contentstack.Core.Models
                 if (UrlQueries.ContainsKey("query"))
                 {
                     // If query already exists, get it and add the key-value pair
-                    JObject existingQuery = UrlQueries["query"] as JObject;
+                    JsonObject existingQuery = UrlQueries["query"] as JsonObject;
                     if (existingQuery != null)
                     {
                         existingQuery[key] = value;
@@ -155,8 +152,8 @@ namespace Contentstack.Core.Models
                     }
                     else
                     {
-                        // If existing query is not a JObject, create a new one
-                        JObject newQuery = new JObject();
+                        // If existing query is not a JsonObject, create a new one
+                        JsonObject newQuery = new JsonObject();
                         newQuery[key] = value;
                         UrlQueries["query"] = newQuery;
                     }
@@ -164,7 +161,7 @@ namespace Contentstack.Core.Models
                 else
                 {
                     // If query doesn't exist, create a new one with the key-value pair
-                    JObject newQuery = new JObject();
+                    JsonObject newQuery = new JsonObject();
                     newQuery[key] = value;
                     UrlQueries.Add("query", newQuery);
                 }
@@ -549,10 +546,15 @@ namespace Contentstack.Core.Models
         /// </example>
         public async Task<ContentstackCollection<Asset>> FetchAll()
         {
-            JObject json = await Exec();
-            var assets = json.SelectToken("$.assets")
-                .ToObject<IEnumerable<Asset>>(this.Stack.Serializer);
-            var collection = json.ToObject<ContentstackCollection<Asset>>(this.Stack.Serializer);
+            JsonObject json = await Exec();
+            JsonArray assetsArray = json["assets"]?.AsArray();
+            IEnumerable<Asset> assets = Enumerable.Empty<Asset>();
+            if (assetsArray != null)
+            {
+                assets = JsonSerializer.Deserialize<List<Asset>>(assetsArray.ToJsonString(), this.Stack.SerializerOptions)
+                    ?? new List<Asset>();
+            }
+            var collection = ContentstackCollection<Asset>.FromDeliveryEnvelope(json, assets);
             foreach (var entry in assets)
             {
                 if (entry.GetType() == typeof(Asset))
@@ -560,11 +562,10 @@ namespace Contentstack.Core.Models
                     (entry as Asset).SetStackInstance(this.Stack);
                 }
             }
-            collection.Items = assets;
             return collection;
         }
 
-        private async Task<JObject> Exec()
+        private async Task<JsonObject> Exec()
         {
             Dictionary<string, object> headers = GetHeader(_Headers);
 
@@ -596,7 +597,7 @@ namespace Contentstack.Core.Models
                     timeout: this.Stack.Config.Timeout,
                     proxy: this.Stack.Config.Proxy
                 );
-                return JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
+                return JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}"))!.AsObject();
             }
             catch (Exception ex)
             {
@@ -671,19 +672,7 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
-
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
-
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)

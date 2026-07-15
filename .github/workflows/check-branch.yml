@@ -1,0 +1,18 @@
+name: 'Check Branch'
+
+on:
+  pull_request:
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      # PRs into master are no longer blocked here based on their source branch.
+      # Direct merges into master (i.e. without going through PR review) are expected
+      # to be prevented by GitHub branch protection rules on master, not by this CI check.
+      - name: Branch check (informational only)
+        run: |
+          echo "This workflow no longer restricts which branch a PR into master can come from."
+          echo "Base branch : ${{ github.base_ref }}"
+          echo "Head branch : ${{ github.head_ref }}"
+          echo "Direct pushes/merges to master should be prevented via branch protection rules, not this workflow."

@@ -68,3 +68,5 @@ packages/
 
 # Python
 Scripts/venv/
+# Cached region registry — regenerated at runtime from CDN
+*/Assets/regions.json

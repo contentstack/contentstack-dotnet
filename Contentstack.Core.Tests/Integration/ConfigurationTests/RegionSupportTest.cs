@@ -296,13 +296,14 @@ namespace Contentstack.Core.Tests.Integration.ConfigurationTests
             LogArrange("Setting up test");
 
             var regions = Enum.GetValues<ContentstackRegion>();
-            TestAssert.Equal(6, regions.Length);
+            TestAssert.Equal(7, regions.Length);
             TestAssert.Contains(ContentstackRegion.US, regions);
             TestAssert.Contains(ContentstackRegion.EU, regions);
             TestAssert.Contains(ContentstackRegion.AZURE_EU, regions);
             TestAssert.Contains(ContentstackRegion.AZURE_NA, regions);
             TestAssert.Contains(ContentstackRegion.GCP_NA, regions);
             TestAssert.Contains(ContentstackRegion.AU, regions);
+            TestAssert.Contains(ContentstackRegion.GCP_EU, regions);
         }
         
         [Fact(DisplayName = "Region Configuration - Region Options Default Value Is US")]

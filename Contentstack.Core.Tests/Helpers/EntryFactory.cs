@@ -228,7 +228,7 @@ namespace Contentstack.Core.Tests.Helpers
         /// </summary>
         /// <param name="contentTypeUid">Content type UID</param>
         /// <returns>Count result</returns>
-        public async Task<Newtonsoft.Json.Linq.JObject> CountEntriesAsync(string contentTypeUid)
+        public async Task<System.Text.Json.Nodes.JsonObject> CountEntriesAsync(string contentTypeUid)
         {
             return await CreateQuery(contentTypeUid).Count();
         }
