@@ -563,6 +563,169 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         #endregion
+
+        #region Taxonomy UID Constructor Tests
+
+        [Fact]
+        public void Taxonomy_WithUid_DoesNotThrow()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            Assert.NotNull(taxonomy);
+        }
+
+        [Fact]
+        public void Taxonomy_WithNullUid_ThrowsTaxonomyException()
+        {
+            Assert.Throws<TaxonomyException>(() => _client.Taxonomies(null));
+        }
+
+        [Fact]
+        public void Taxonomy_WithEmptyUid_ThrowsTaxonomyException()
+        {
+            Assert.Throws<TaxonomyException>(() => _client.Taxonomies(string.Empty));
+        }
+
+        #endregion
+
+        #region Taxonomy.Term() Tests
+
+        [Fact]
+        public void Taxonomy_TermWithUid_ReturnsTaxonomyInstance()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            var term = taxonomy.Term("smartwatch");
+            Assert.NotNull(term);
+            Assert.IsType<Term>(term);
+        }
+
+        [Fact]
+        public void Taxonomy_TermWithoutUid_ThrowsTaxonomyException()
+        {
+            var taxonomy = _client.Taxonomies();
+            Assert.Throws<TaxonomyException>(() => taxonomy.Term("smartwatch"));
+        }
+
+        #endregion
+
+        #region Taxonomy.Terms() Tests
+
+        [Fact]
+        public void Taxonomy_Terms_ReturnsTermQueryInstance()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            var termQuery = taxonomy.Terms();
+            Assert.NotNull(termQuery);
+            Assert.IsType<TermQuery>(termQuery);
+        }
+
+        [Fact]
+        public void Taxonomy_Terms_WithoutUid_ThrowsTaxonomyException()
+        {
+            var taxonomy = _client.Taxonomies();
+            Assert.Throws<TaxonomyException>(() => taxonomy.Terms());
+        }
+
+        #endregion
+
+        #region TermQuery Tests
+
+        [Fact]
+        public void TermQuery_SetLocale_ReturnsSelfForChaining()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            var result = termQuery.SetLocale("hi-in");
+            Assert.Same(termQuery, result);
+        }
+
+        [Fact]
+        public void TermQuery_SetLocale_SetsLocaleParam()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.SetLocale("hi-in");
+
+            var field = typeof(TermQuery).GetField("_queryParams",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("locale") ?? false);
+            Assert.Equal("hi-in", queryParams["locale"]);
+        }
+
+        [Fact]
+        public void TermQuery_SetLocale_WithNull_ThrowsTaxonomyException()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            Assert.Throws<TaxonomyException>(() => termQuery.SetLocale(null));
+        }
+
+        [Fact]
+        public void TermQuery_IncludeFallback_ReturnsSelfForChaining()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            var result = termQuery.IncludeFallback();
+            Assert.Same(termQuery, result);
+        }
+
+        [Fact]
+        public void TermQuery_IncludeFallback_SetsParam()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.IncludeFallback();
+
+            var field = typeof(TermQuery).GetField("_queryParams",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("include_fallback") ?? false);
+            Assert.Equal("true", queryParams["include_fallback"]);
+        }
+
+        [Fact]
+        public void TermQuery_SetLocale_Then_IncludeFallback_ChainsBoth()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms()
+                .SetLocale("hi-in")
+                .IncludeFallback();
+
+            var field = typeof(TermQuery).GetField("_queryParams",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("locale") ?? false);
+            Assert.True(queryParams?.ContainsKey("include_fallback") ?? false);
+        }
+
+        #endregion
+
+        #region Term Constructor Validation Tests
+
+        [Fact]
+        public void Term_WithNullTaxonomyUid_ThrowsTaxonomyException()
+        {
+            Assert.Throws<TaxonomyException>(() =>
+            {
+                var t = typeof(Term)
+                    .GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null,
+                        new[] { typeof(ContentstackClient), typeof(string), typeof(string) }, null);
+                try { t?.Invoke(new object[] { _client, null, "smartwatch" }); }
+                catch (System.Reflection.TargetInvocationException ex) { throw ex.InnerException; }
+            });
+        }
+
+        [Fact]
+        public void Term_WithNullTermUid_ThrowsTaxonomyException()
+        {
+            Assert.Throws<TaxonomyException>(() =>
+            {
+                var t = typeof(Term)
+                    .GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null,
+                        new[] { typeof(ContentstackClient), typeof(string), typeof(string) }, null);
+                try { t?.Invoke(new object[] { _client, "gadgets", null }); }
+                catch (System.Reflection.TargetInvocationException ex) { throw ex.InnerException; }
+            });
+        }
+
+        #endregion
     }
 }
 
