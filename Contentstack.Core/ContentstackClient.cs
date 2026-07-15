@@ -609,6 +609,25 @@ namespace Contentstack.Core
         }
 
         /// <summary>
+        /// Returns a <see cref="Taxonomy"/> instance scoped to the given taxonomy UID,
+        /// providing access to published taxonomy data, terms, and locale-aware delivery via the CDA.
+        /// </summary>
+        /// <param name="uid">The UID of the published taxonomy.</param>
+        /// <returns>A <see cref="Taxonomy"/> instance scoped to the given UID.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///     var taxonomy = await stack.Taxonomies("gadgets").Fetch&lt;MyTaxonomy&gt;();
+        ///     var terms    = await stack.Taxonomies("gadgets").Terms().SetLocale("hi-in").Find&lt;MyTerm&gt;();
+        ///     var term     = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;("mr-in");
+        /// </code>
+        /// </example>
+        public Taxonomy Taxonomies(string uid)
+        {
+            return new Taxonomy(this, uid);
+        }
+
+        /// <summary>
         /// Get version.
         /// </summary>
         /// <returns>Version</returns>

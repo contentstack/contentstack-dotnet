@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Newtonsoft.Json.Linq;
@@ -16,6 +17,7 @@ namespace Contentstack.Core.Models
         private Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
+        private string _uid = null;
 
         protected override string _Url
         {
@@ -30,6 +32,8 @@ namespace Contentstack.Core.Models
                     throw new TaxonomyException("Taxonomy Stack Config is null. Please ensure the ContentstackClient is properly configured.");
                 }
                 Config config = this.Stack.Config;
+                if (_uid != null)
+                    return String.Format("{0}/taxonomies/{1}", config.BaseUrl, _uid);
                 return String.Format("{0}/taxonomies/entries", config.BaseUrl);
             }
         }
@@ -56,8 +60,91 @@ namespace Contentstack.Core.Models
             this._StackHeaders = stack._LocalHeaders;
         }
 
+        internal Taxonomy(ContentstackClient stack, string uid) : this(stack)
+        {
+            if (string.IsNullOrEmpty(uid))
+                throw new TaxonomyException("Taxonomy UID cannot be null or empty.");
+            _uid = uid;
+        }
+
         #endregion
         #region Public Functions
+
+        /// <summary>
+        /// Returns a Term instance for the given term UID within this taxonomy.
+        /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// </summary>
+        /// <param name="termUid">The UID of the term to retrieve.</param>
+        /// <returns>A <see cref="Term"/> instance scoped to this taxonomy and term.</returns>
+        public Term Term(string termUid)
+        {
+            if (_uid == null)
+                throw new TaxonomyException("Term() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
+            return new Term(Stack, _uid, termUid);
+        }
+
+        /// <summary>
+        /// Returns a TermQuery for listing all published terms within this taxonomy.
+        /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// </summary>
+        /// <returns>A <see cref="TermQuery"/> instance for this taxonomy.</returns>
+        public TermQuery Terms()
+        {
+            if (_uid == null)
+                throw new TaxonomyException("Terms() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
+            return new TermQuery(Stack, _uid);
+        }
+
+        /// <summary>
+        /// Fetches the published taxonomy by its UID from the CDA.
+        /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// </summary>
+        /// <param name="locale">Optional locale code (e.g. "hi-in"). Omit for the master locale.</param>
+        /// <returns>The deserialized taxonomy object.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///     var taxonomy = await stack.Taxonomies("gadgets").Fetch&lt;MyTaxonomy&gt;();
+        ///     var localized = await stack.Taxonomies("gadgets").Fetch&lt;MyTaxonomy&gt;("hi-in");
+        /// </code>
+        /// </example>
+        public async System.Threading.Tasks.Task<T> Fetch<T>(string locale = null)
+        {
+            if (_uid == null)
+                throw new TaxonomyException("Fetch() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
+
+            try
+            {
+                var headerAll = new Dictionary<string, object>();
+                foreach (var header in Stack._LocalHeaders)
+                    headerAll[header.Key] = header.Value;
+
+                var mainJson = new Dictionary<string, object>();
+                if (Stack.Config?.Environment != null)
+                    mainJson["environment"] = Stack.Config.Environment;
+                if (!string.IsNullOrEmpty(locale))
+                    mainJson["locale"] = locale;
+
+                var handler = new HttpRequestHandler(Stack);
+                var branch = Stack.Config?.Branch ?? "main";
+                var result = await handler.ProcessRequest(
+                    _Url, headerAll, mainJson,
+                    Branch: branch,
+                    timeout: Stack.Config.Timeout,
+                    proxy: Stack.Config.Proxy
+                );
+
+                var jObject = Newtonsoft.Json.Linq.JObject.Parse(result);
+                var token = jObject.SelectToken("$.taxonomy");
+                if (token != null)
+                    return token.ToObject<T>(Stack.Serializer);
+                return jObject.ToObject<T>(Stack.Serializer);
+            }
+            catch (Exception ex)
+            {
+                throw TaxonomyException.CreateForProcessingError(ex);
+            }
+        }
 
         /// <summary>
         /// Add a constraint to the query that requires a particular key entry to be less than the provided value.

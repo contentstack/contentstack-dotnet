@@ -117,19 +117,49 @@ namespace Contentstack.Core.Tests.Helpers
         #endregion
 
         #region Taxonomy
-        
+
         /// <summary>
         /// Gets the taxonomy term for USA state (e.g., "california")
         /// </summary>
-        public static string TaxUsaState => 
+        public static string TaxUsaState =>
             GetRequiredConfig("TAX_USA_STATE");
-        
+
         /// <summary>
         /// Gets the taxonomy term for India state (e.g., "maharashtra")
         /// </summary>
-        public static string TaxIndiaState => 
+        public static string TaxIndiaState =>
             GetRequiredConfig("TAX_INDIA_STATE");
-        
+
+        /// <summary>
+        /// API key for the taxonomy-publish test stack (gadgets).
+        /// </summary>
+        public static string TaxPublishApiKey =>
+            GetRequiredConfig("TAX_PUBLISH_API_KEY");
+
+        /// <summary>
+        /// Delivery token for the taxonomy-publish test stack.
+        /// </summary>
+        public static string TaxPublishDeliveryToken =>
+            GetRequiredConfig("TAX_PUBLISH_DELIVERY_TOKEN");
+
+        /// <summary>
+        /// Environment for the taxonomy-publish test stack.
+        /// </summary>
+        public static string TaxPublishEnvironment =>
+            GetRequiredConfig("TAX_PUBLISH_ENVIRONMENT");
+
+        /// <summary>
+        /// UID of the published taxonomy to use in localization tests (e.g. "gadgets").
+        /// </summary>
+        public static string TaxPublishTaxonomyUid =>
+            GetRequiredConfig("TAX_PUBLISH_TAXONOMY_UID");
+
+        /// <summary>
+        /// Locale code used for localized taxonomy/term delivery tests (e.g. "hi-in").
+        /// </summary>
+        public static string TaxPublishLocale =>
+            GetRequiredConfig("TAX_PUBLISH_LOCALE");
+
         #endregion
 
         #region Live Preview
