@@ -23,16 +23,16 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         public TaxonomyLocalisationTest(ITestOutputHelper output) : base(output) { }
 
         /// <summary>
-        /// Creates a client scoped to the gadgets taxonomy-publish test stack.
+        /// Creates a client scoped to the main test stack, which also carries the
         /// Uses the default CDN host (no custom host override needed).
         /// </summary>
         private ContentstackClient CreateGadgetsClient()
         {
             var options = new ContentstackOptions
             {
-                ApiKey = TestDataHelper.TaxPublishApiKey,
-                DeliveryToken = TestDataHelper.TaxPublishDeliveryToken,
-                Environment = TestDataHelper.TaxPublishEnvironment
+                ApiKey = TestDataHelper.ApiKey,
+                DeliveryToken = TestDataHelper.DeliveryToken,
+                Environment = TestDataHelper.Environment
             };
             var client = new ContentstackClient(options);
             client.Plugins.Add(new RequestLoggingPlugin(TestOutput));

@@ -131,24 +131,6 @@ namespace Contentstack.Core.Tests.Helpers
             GetRequiredConfig("TAX_INDIA_STATE");
 
         /// <summary>
-        /// API key for the taxonomy-publish test stack (gadgets).
-        /// </summary>
-        public static string TaxPublishApiKey =>
-            GetRequiredConfig("TAX_PUBLISH_API_KEY");
-
-        /// <summary>
-        /// Delivery token for the taxonomy-publish test stack.
-        /// </summary>
-        public static string TaxPublishDeliveryToken =>
-            GetRequiredConfig("TAX_PUBLISH_DELIVERY_TOKEN");
-
-        /// <summary>
-        /// Environment for the taxonomy-publish test stack.
-        /// </summary>
-        public static string TaxPublishEnvironment =>
-            GetRequiredConfig("TAX_PUBLISH_ENVIRONMENT");
-
-        /// <summary>
         /// UID of the published taxonomy to use in localization tests (e.g. "gadgets").
         /// </summary>
         public static string TaxPublishTaxonomyUid =>
