@@ -44,13 +44,12 @@ namespace Contentstack.Core.Models
             }
         }
         #endregion
-        public ContentstackClient Stack
+        internal new ContentstackClient Stack
         {
             get;
             set;
         }
 
-       
         #region Internal Constructors
 
         internal Taxonomy()
