@@ -146,7 +146,6 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
             LogAssert("Verifying response");
             Assert.NotNull(result);
             Assert.NotNull(result.Items);
-            // Fallback means we should get at least as many terms as without fallback
             Assert.True(result.Items.Any());
         }
 
