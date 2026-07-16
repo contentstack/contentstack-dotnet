@@ -7,7 +7,7 @@ using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
 using Contentstack.Core.Tests.Mocks;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 
 namespace Contentstack.Core.Tests.Mocks
 {
@@ -21,8 +21,8 @@ namespace Contentstack.Core.Tests.Mocks
         /// </summary>
         public static Entry CreateEntryFromJson(string jsonString, ContentstackClient client, string contentTypeId = "source")
         {
-            JObject jsonObj = JObject.Parse(jsonString);
-            JToken entryToken = jsonObj["entry"] ?? jsonObj;
+            JsonObject jsonObj = JsonNode.Parse(jsonString).AsObject();
+            JsonNode entryToken = jsonObj["entry"] ?? jsonObj;
             
             // Create Entry using internal constructor
             var entry = CreateEntryInternal(client, contentTypeId);
@@ -30,7 +30,7 @@ namespace Contentstack.Core.Tests.Mocks
             // Use reflection to call ParseObject
             var parseMethod = typeof(Entry).GetMethod("ParseObject", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            parseMethod?.Invoke(entry, new object[] { entryToken as JObject, null });
+            parseMethod?.Invoke(entry, new object[] { entryToken.AsObject(), null });
             
             return entry;
         }

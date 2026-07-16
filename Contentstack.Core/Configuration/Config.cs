@@ -1,6 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
+using Contentstack.Core.Endpoints;
 using Contentstack.Core.Internals;
 
 namespace Contentstack.Core.Configuration
@@ -35,8 +34,8 @@ namespace Contentstack.Core.Configuration
             set { this._Protocol = value; }
         }
 
-        public string Host { 
-            get { return _Host ?? HostURL; }
+        public string Host {
+            get { return _Host ?? string.Empty; }
             set { this._Host = value; }
         }
 
@@ -76,12 +75,17 @@ namespace Contentstack.Core.Configuration
         {
             get
             {
-                string BaseURL = string.Format("{0}://{1}{2}/{3}",
-                                              this.Protocol.Trim('/').Trim('\\'),
-                                              regionCode(),
-                                              this.Host.Trim('/').Trim('\\'),
-                                              this.Version.Trim('/').Trim('\\'));
-                return BaseURL;
+                string protocol = this.Protocol.Trim('/').Trim('\\');
+                string version = this.Version.Trim('/').Trim('\\');
+
+                // Custom host explicitly set — bypass CDN registry and use it directly.
+                if (!string.IsNullOrEmpty(_Host))
+                    return string.Format("{0}://{1}/{2}", protocol, _Host.Trim('/').Trim('\\'), version);
+
+                // Resolve host from CDN-backed regions registry.
+                string regionId = ContentstackRegionMap.RegionIdMap[Region];
+                string host = Endpoint.GetContentstackEndpoint(regionId, "contentDelivery", omitHttps: true);
+                return string.Format("{0}://{1}/{2}", protocol, host, version);
             }
         }
 
@@ -109,22 +113,6 @@ namespace Contentstack.Core.Configuration
             return BaseUrl;
         }
 
-        internal string regionCode()
-        {
-            if (Region == ContentstackRegion.US) return "";
-            ContentstackRegionCode[] regionCodes = Enum.GetValues(typeof(ContentstackRegionCode)).Cast<ContentstackRegionCode>().ToArray();
-            return string.Format("{0}-", regionCodes[(int)Region].ToString().Replace("_", "-"));
-        }
-
-        internal string HostURL
-        {
-            get
-            {
-                if (Region == ContentstackRegion.EU || Region == ContentstackRegion.AZURE_EU || Region == ContentstackRegion.AZURE_NA || Region == ContentstackRegion.GCP_NA || Region==ContentstackRegion.AU)
-                    return "cdn.contentstack.com";
-                return "cdn.contentstack.io";
-            }
-        }
         #endregion
     }
 }

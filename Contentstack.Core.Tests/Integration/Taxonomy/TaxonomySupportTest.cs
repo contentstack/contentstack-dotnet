@@ -910,7 +910,7 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {

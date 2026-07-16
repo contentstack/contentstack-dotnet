@@ -10,7 +10,7 @@ using Contentstack.Core.Internals;
 using Contentstack.Core.Models;
 using Contentstack.Core.Unit.Tests.Mokes;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace Contentstack.Core.Unit.Tests
@@ -838,31 +838,31 @@ namespace Contentstack.Core.Unit.Tests
         #region ToJson Tests
 
         [Fact]
-        public void ToJson_ReturnsJObject()
+        public void ToJson_ReturnsJsonObject()
         {
             // Arrange
             var entry = CreateEntry();
             var jObjectField = typeof(Entry).GetField("jObject", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            var jObject = new JObject
+            var jsonObject = new JsonObject
             {
-                { "uid", "test_entry_uid" },
-                { "title", "Test Entry" },
-                { "content_type_uid", "source" }
+                ["uid"] = "test_entry_uid",
+                ["title"] = "Test Entry",
+                ["content_type_uid"] = "source"
             };
-            jObjectField?.SetValue(entry, jObject);
+            jObjectField?.SetValue(entry, jsonObject);
 
             // Act
-            JObject result = entry.ToJson();
+            JsonObject result = entry.ToJson();
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("test_entry_uid", result["uid"].ToString());
-            Assert.Equal("Test Entry", result["title"].ToString());
+            Assert.Equal("test_entry_uid", result["uid"]?.GetValue<string>());
+            Assert.Equal("Test Entry", result["title"]?.GetValue<string>());
         }
 
         [Fact]
-        public void ToJson_WithNullJObject_ReturnsNull()
+        public void ToJson_WithNullJsonObject_ReturnsNull()
         {
             // Arrange
             var entry = CreateEntry();
@@ -871,7 +871,7 @@ namespace Contentstack.Core.Unit.Tests
             jObjectField?.SetValue(entry, null);
 
             // Act
-            JObject result = entry.ToJson();
+            JsonObject result = entry.ToJson();
 
             // Assert
             Assert.Null(result);
@@ -1915,13 +1915,13 @@ namespace Contentstack.Core.Unit.Tests
             var entry = CreateEntry();
             var parseObjectMethod = typeof(Entry).GetMethod("ParseObject", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            var json = new JObject
+            var json = new JsonObject
             {
                 ["title"] = "Test Title",
-                ["_metadata"] = new JObject
+                ["_metadata"] = new JsonObject
                 {
                     ["uid"] = "test_uid",
-                    ["tags"] = new JArray("tag1", "tag2")
+                    ["tags"] = new JsonArray("tag1", "tag2")
                 }
             };
 
@@ -1942,7 +1942,7 @@ namespace Contentstack.Core.Unit.Tests
             var entry = CreateEntry();
             var parseObjectMethod = typeof(Entry).GetMethod("ParseObject", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            var json = new JObject
+            var json = new JsonObject
             {
                 ["title"] = "Test Title"
             };

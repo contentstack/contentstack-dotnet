@@ -1,5 +1,4 @@
 using Markdig;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +7,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Contentstack.Core.Internals;
 using Contentstack.Core.Configuration;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace Contentstack.Core.Models
 {
@@ -24,7 +25,7 @@ namespace Contentstack.Core.Models
         private CachePolicy _CachePolicy;
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private bool _IsCachePolicySet;
-        private JObject jObject;
+        private JsonObject jObject;
         private string _Url
         {
             get
@@ -113,7 +114,7 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Dimension Object of the entries publish details
         /// </summary>
-        [JsonProperty(PropertyName = "publish_details")]
+        [JsonPropertyName("publish_details")]
         public Dictionary<string, object> PublishDetails { get; set; }
 
         /// <summary>
@@ -159,6 +160,7 @@ namespace Contentstack.Core.Models
         #endregion
 
         #region Internal Constructors
+        [JsonConstructor]
         internal Entry()
         {
         }
@@ -190,19 +192,7 @@ namespace Contentstack.Core.Models
                 using (var reader = new StreamReader(stream))
                 {
                     errorMessage = reader.ReadToEnd();
-                    JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-
-                    JToken token = data["error_code"];
-                    if (token != null)
-                        errorCode = token.Value<int>();
-
-                    token = data["error_message"];
-                    if (token != null)
-                        errorMessage = token.Value<string>();
-
-                    token = data["errors"];
-                    if (token != null)
-                        errors = token.ToObject<Dictionary<string, object>>();
+                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
 
                     var response = exResp as HttpWebResponse;
                     if (response != null)
@@ -875,7 +865,7 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public JObject ToJson()
+        public JsonObject ToJson()
         {
             return this.jObject;
         }
@@ -900,7 +890,7 @@ namespace Contentstack.Core.Models
         private Asset GetAsset(String key)
         {
 
-            JObject assetObject = (JObject)jObject.GetValue(key);
+            JsonObject assetObject = jObject[key]!.AsObject();
             var asset = ContentTypeInstance.StackInstance.Asset();
             asset.ParseObject(assetObject);
             return asset;
@@ -925,12 +915,11 @@ namespace Contentstack.Core.Models
         private List<Asset> GetAssets(String key)
         {
             List<Asset> assets = new List<Asset>();
-            JArray assetArray = (Newtonsoft.Json.Linq.JArray)jObject.GetValue(key);
-            //Dictionary<string, object> assetArray = (Dictionary<string, object>)_ObjectAttributes[key];
+            JsonArray assetArray = jObject[key]!.AsArray();
 
-            foreach (JToken v in assetArray)
+            foreach (JsonNode v in assetArray)
             {
-                JObject assetobj = (JObject)v;
+                JsonObject assetobj = v.AsObject();
                 Asset asset = ContentTypeInstance.StackInstance.Asset();
                 asset.ParseObject(assetobj);
                 assets.Add(asset);
@@ -1409,47 +1398,13 @@ namespace Contentstack.Core.Models
 
             //Dictionary<string, object> urlQueries = new Dictionary<string, object>();
 
-            var livePreviewConfig = this.ContentTypeInstance?.StackInstance?.LivePreviewConfig;
-            if (livePreviewConfig != null
-                && livePreviewConfig.Enable
-                && livePreviewConfig.PreviewResponse != null
-                && livePreviewConfig.PreviewResponse.Type == JTokenType.Object
-                && livePreviewConfig.PreviewResponse.HasValues
-                && !string.IsNullOrEmpty(this.Uid)
-                && string.Equals(livePreviewConfig.EntryUID, this.Uid, StringComparison.Ordinal)
-                && this.ContentTypeInstance != null
-                && string.Equals(
-                    livePreviewConfig.ContentTypeUID,
-                    this.ContentTypeInstance.ContentTypeId,
-                    StringComparison.OrdinalIgnoreCase)
-                && livePreviewConfig.IsCachedPreviewForCurrentQuery())
-            {
-                try
-                {
-                    var serializedFromPreview = livePreviewConfig.PreviewResponse.ToObject<T>(
-                        this.ContentTypeInstance.StackInstance.Serializer);
-                    if (serializedFromPreview != null && serializedFromPreview.GetType() == typeof(Entry))
-                    {
-                        (serializedFromPreview as Entry).ContentTypeInstance = this.ContentTypeInstance;
-                    }
-                    return serializedFromPreview;
-                }
-                catch
-                {
-                    // Fall through to network fetch.
-                }
-            }
-
             if (headers != null && headers.Count() > 0)
             {
                 foreach (var header in headers)
                 {
-                    if (this.ContentTypeInstance != null
-                        && livePreviewConfig != null
-                        && livePreviewConfig.Enable
-                        && livePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
-                        && header.Key == "access_token"
-                        && !string.IsNullOrEmpty(livePreviewConfig.LivePreview))
+                    if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true
+                        && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
+                        && header.Key == "access_token" && !string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview))
                     {
                         continue;
                     }
@@ -1457,36 +1412,25 @@ namespace Contentstack.Core.Models
                 }
             }
             bool isLivePreview = false;
-            var hasLivePreviewContext =
-                this.ContentTypeInstance != null
-                && livePreviewConfig != null
-                && livePreviewConfig.Enable
-                && livePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId
-                && (
-                    !string.IsNullOrEmpty(livePreviewConfig.LivePreview)
-                    || !string.IsNullOrEmpty(livePreviewConfig.ReleaseId)
-                    || !string.IsNullOrEmpty(livePreviewConfig.PreviewTimestamp)
-                );
-
-            if (hasLivePreviewContext)
+            if (this.ContentTypeInstance.StackInstance.LivePreviewConfig.Enable == true && this.ContentTypeInstance.StackInstance.LivePreviewConfig.ContentTypeUID == this.ContentTypeInstance.ContentTypeId)
             {
-                mainJson.Add("live_preview", string.IsNullOrEmpty(livePreviewConfig.LivePreview)? "init" : livePreviewConfig.LivePreview);
+                mainJson.Add("live_preview", string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview)? "init" : this.ContentTypeInstance.StackInstance.LivePreviewConfig.LivePreview);
                 
-                if (!string.IsNullOrEmpty(livePreviewConfig.ManagementToken)) {
-                    headerAll["authorization"] = livePreviewConfig.ManagementToken;
-                } else if (!string.IsNullOrEmpty(livePreviewConfig.PreviewToken)) {
-                    headerAll["preview_token"] = livePreviewConfig.PreviewToken;
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken)) {
+                    headerAll["authorization"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ManagementToken;
+                } else if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken)) {
+                    headerAll["preview_token"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewToken;
                 } else {
                     throw new LivePreviewException();
                 }
 
-                if (!string.IsNullOrEmpty(livePreviewConfig.ReleaseId))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId))
                 {
-                    headerAll["release_id"] = livePreviewConfig.ReleaseId;
+                    headerAll["release_id"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.ReleaseId;
                 }
-                if (!string.IsNullOrEmpty(livePreviewConfig.PreviewTimestamp))
+                if (!string.IsNullOrEmpty(this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp))
                 {
-                    headerAll["preview_timestamp"] = livePreviewConfig.PreviewTimestamp;
+                    headerAll["preview_timestamp"] = this.ContentTypeInstance.StackInstance.LivePreviewConfig.PreviewTimestamp;
                 }
 
                 isLivePreview = true;
@@ -1508,8 +1452,8 @@ namespace Contentstack.Core.Models
                 
                 HttpRequestHandler RequestHandler = new HttpRequestHandler(this.ContentTypeInstance.StackInstance);
                 var outputResult = await RequestHandler.ProcessRequest(_Url, headerAll, mainJson, Branch: this.ContentTypeInstance.StackInstance.Config.Branch, isLivePreview: isLivePreview, timeout: this.ContentTypeInstance.StackInstance.Config.Timeout, proxy: this.ContentTypeInstance.StackInstance.Config.Proxy);
-                JObject obj = JObject.Parse(ContentstackConvert.ToString(outputResult, "{}"));
-                var serializedObject = obj.SelectToken("$.entry").ToObject<T>(this.ContentTypeInstance.StackInstance.Serializer);
+                JsonObject obj = JsonNode.Parse(ContentstackConvert.ToString(outputResult, "{}"))!.AsObject();
+                var serializedObject = JsonSerializer.Deserialize<T>(obj["entry"]!.ToJsonString(), this.ContentTypeInstance.StackInstance.SerializerOptions);
                 if (serializedObject.GetType() == typeof(Entry))
                 {
                     (serializedObject as Entry).ContentTypeInstance = this.ContentTypeInstance;
@@ -1575,24 +1519,14 @@ namespace Contentstack.Core.Models
             }
         }
 
-        internal void ParseObject(JObject jsonObj, string url = null)
+        internal void ParseObject(JsonObject jsonObj, string url = null)
         {
             this.jObject = jsonObj;
-            this._ObjectAttributes = jsonObj.ToObject<Dictionary<string, object>>();
-            if (_ObjectAttributes != null && _ObjectAttributes.ContainsKey("_metadata"))
+            this._ObjectAttributes = JsonNodeConversion.JsonObjectToDictionary(jsonObj);
+            if (_ObjectAttributes != null && _ObjectAttributes.TryGetValue("_metadata", out var mdObj)
+                && mdObj is Dictionary<string, object> mdDict)
             {
-                var jObject = (Newtonsoft.Json.Linq.JObject)_ObjectAttributes["_metadata"];
-                var _metadataJSON = new Dictionary<string, object>();
-                foreach (var property in jObject.Properties())
-                {
-                    _metadataJSON[property.Name] = property.Value.ToObject<object>();
-                }
-                List<string> iterator = _metadataJSON.Keys.ToList();
-                Metadata = new Dictionary<string, object>();
-                foreach (var key in iterator)
-                {
-                    Metadata.Add(key, _metadataJSON[key]);
-                }
+                Metadata = new Dictionary<string, object>(mdDict);
             }
         }
 

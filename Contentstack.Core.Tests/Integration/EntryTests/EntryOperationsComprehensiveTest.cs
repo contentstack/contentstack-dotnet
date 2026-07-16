@@ -734,7 +734,7 @@ namespace Contentstack.Core.Tests.Integration.EntryTests
         
         #region Helper Methods
         
-        private ContentstackClient CreateClient()
+        private new ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {
