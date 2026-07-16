@@ -2437,8 +2437,8 @@ namespace Contentstack.Core.Unit.Tests
 
             // Act - Just verify setup - Taxonomy extends Query, so it has QueryInstance properties
             var taxonomyType = typeof(Taxonomy);
-            var stackProperty = taxonomyType.GetProperty("Stack", 
-                BindingFlags.Public | BindingFlags.Instance);
+            var stackProperty = taxonomyType.GetProperty("Stack",
+                BindingFlags.NonPublic | BindingFlags.Instance);
 
             // Assert
             Assert.NotNull(taxonomy);
@@ -2460,8 +2460,8 @@ namespace Contentstack.Core.Unit.Tests
 
             // Act - Just verify setup
             var taxonomyType = typeof(Taxonomy);
-            var stackProperty = taxonomyType.GetProperty("Stack", 
-                BindingFlags.Public | BindingFlags.Instance);
+            var stackProperty = taxonomyType.GetProperty("Stack",
+                BindingFlags.NonPublic | BindingFlags.Instance);
 
             // Assert
             Assert.NotNull(taxonomy);
@@ -2484,8 +2484,8 @@ namespace Contentstack.Core.Unit.Tests
 
             // Act - Just verify setup
             var taxonomyType = typeof(Taxonomy);
-            var stackProperty = taxonomyType.GetProperty("Stack", 
-                BindingFlags.Public | BindingFlags.Instance);
+            var stackProperty = taxonomyType.GetProperty("Stack",
+                BindingFlags.NonPublic | BindingFlags.Instance);
 
             // Assert
             Assert.NotNull(taxonomy);
