@@ -9,12 +9,15 @@ namespace Contentstack.Core.Models
     /// <summary>
     /// Represents a single published term within a taxonomy, providing methods to fetch
     /// the term, its localized versions, ancestors, and descendants from the CDA.
+    /// Use <see cref="SetLocale"/>, <see cref="IncludeFallback"/>, and <see cref="AddParam"/> to
+    /// configure the request before calling <see cref="Fetch{T}"/>.
     /// </summary>
     public class Term
     {
         private readonly ContentstackClient _stack;
         private readonly string _taxonomyUid;
         private readonly string _termUid;
+        private readonly Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
 
         private string BaseUrlPath =>
             $"{_stack.Config.BaseUrl}/taxonomies/{_taxonomyUid}/terms/{_termUid}";
@@ -29,29 +32,73 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// Fetches the published term from the CDA.
+        /// Sets the locale for this term fetch.
+        /// Passing null or empty is a no-op.
         /// </summary>
-        /// <param name="locale">Optional locale code (e.g. "mr-in"). Omit for the master locale.</param>
-        /// <param name="includeFallback">When true, falls back to the master locale if the term has no localized version.</param>
+        /// <param name="locale">Locale code (e.g. "hi-in", "en-us").</param>
+        /// <returns>The current <see cref="Term"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var term = await stack.Taxonomies("gadgets").Term("smartwatch").SetLocale("hi-in").Fetch&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public Term SetLocale(string locale)
+        {
+            if (!string.IsNullOrEmpty(locale))
+                UrlQueries["locale"] = locale;
+            return this;
+        }
+
+        /// <summary>
+        /// Falls back to the master locale when the term is not published in the requested locale.
+        /// Can be used with or without <see cref="SetLocale"/>.
+        /// </summary>
+        /// <returns>The current <see cref="Term"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var term = await stack.Taxonomies("gadgets").Term("smartwatch").SetLocale("hi-in").IncludeFallback().Fetch&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public Term IncludeFallback()
+        {
+            UrlQueries["include_fallback"] = "true";
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a custom query parameter to the request.
+        /// </summary>
+        /// <param name="key">Parameter key.</param>
+        /// <param name="value">Parameter value.</param>
+        /// <returns>The current <see cref="Term"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var term = await stack.Taxonomies("gadgets").Term("smartwatch").AddParam("include_branch", "true").Fetch&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public Term AddParam(string key, string value)
+        {
+            UrlQueries[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Fetches the published term from the CDA.
+        /// Maps to GET /v3/taxonomies/{uid}/terms/{termUid} with any configured query parameters.
+        /// </summary>
         /// <returns>The deserialized term object.</returns>
         /// <example>
         /// <code>
-        ///     var term           = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;();
-        ///     var localizedTerm  = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;("mr-in");
-        ///     var withFallback   = await stack.Taxonomies("gadgets").Term("laptop").Fetch&lt;MyTerm&gt;("hi-in", includeFallback: true);
+        ///     var term         = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;();
+        ///     var localized    = await stack.Taxonomies("gadgets").Term("smartwatch").SetLocale("hi-in").Fetch&lt;MyTerm&gt;();
+        ///     var withFallback = await stack.Taxonomies("gadgets").Term("smartwatch").SetLocale("hi-in").IncludeFallback().Fetch&lt;MyTerm&gt;();
         /// </code>
         /// </example>
-        public async Task<T> Fetch<T>(string locale = null, bool includeFallback = false)
+        public async Task<T> Fetch<T>()
         {
             try
             {
-                var queryParams = new Dictionary<string, object>();
-                if (!string.IsNullOrEmpty(locale))
-                    queryParams["locale"] = locale;
-                if (includeFallback)
-                    queryParams["include_fallback"] = "true";
-
-                var result = await ExecuteRequest(BaseUrlPath, queryParams);
+                var result = await ExecuteRequest(BaseUrlPath, UrlQueries);
                 var jObject = JObject.Parse(result);
                 var token = jObject.SelectToken("$.term");
                 if (token != null)
@@ -75,13 +122,13 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// Fetches all published, localized versions of this term across every locale.
-        /// Maps to GET /taxonomies/{uid}/terms/{termUid}/locales.
+        /// Fetches all published localized versions of this term across every locale.
+        /// Maps to GET /v3/taxonomies/{uid}/terms/{termUid}/locales.
         /// </summary>
         /// <returns>The deserialized locales collection.</returns>
         /// <example>
         /// <code>
-        ///     var locales = await stack.Taxonomies("gadgets").Term("smartwatch").Locales&lt;MyLocales&gt;();
+        ///     var locales = await stack.Taxonomies("gadgets").Term("smartwatch").Locales&lt;JToken&gt;();
         /// </code>
         /// </example>
         public async Task<T> Locales<T>()
@@ -112,13 +159,13 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// Fetches all ancestors of this term up to the root.
-        /// Maps to GET /taxonomies/{uid}/terms/{termUid}/ancestors.
+        /// Fetches all ancestors of this term up to the taxonomy root.
+        /// Maps to GET /v3/taxonomies/{uid}/terms/{termUid}/ancestors.
         /// </summary>
         /// <returns>The deserialized ancestors collection.</returns>
         /// <example>
         /// <code>
-        ///     var ancestors = await stack.Taxonomies("gadgets").Term("smartwatch").Ancestors&lt;MyTerms&gt;();
+        ///     var ancestors = await stack.Taxonomies("gadgets").Term("smartwatch").Ancestors&lt;JToken&gt;();
         /// </code>
         /// </example>
         public async Task<T> Ancestors<T>()
@@ -150,12 +197,12 @@ namespace Contentstack.Core.Models
 
         /// <summary>
         /// Fetches all descendants of this term.
-        /// Maps to GET /taxonomies/{uid}/terms/{termUid}/descendants.
+        /// Maps to GET /v3/taxonomies/{uid}/terms/{termUid}/descendants.
         /// </summary>
         /// <returns>The deserialized descendants collection.</returns>
         /// <example>
         /// <code>
-        ///     var descendants = await stack.Taxonomies("gadgets").Term("smartwatch").Descendants&lt;MyTerms&gt;();
+        ///     var descendants = await stack.Taxonomies("gadgets").Term("smartwatch").Descendants&lt;JToken&gt;();
         /// </code>
         /// </example>
         public async Task<T> Descendants<T>()
@@ -196,8 +243,8 @@ namespace Contentstack.Core.Models
                 mainJson["environment"] = _stack.Config.Environment;
 
             if (extraParams != null)
-                foreach (var param in extraParams)
-                    mainJson[param.Key] = param.Value;
+                foreach (var kvp in extraParams)
+                    mainJson[kvp.Key] = kvp.Value;
 
             var handler = new HttpRequestHandler(_stack);
             return await handler.ProcessRequest(

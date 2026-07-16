@@ -1,3 +1,16 @@
+### Version: 2.29.1
+#### Date: Jul-16-2026
+
+##### Fix:
+- Taxonomy / Term / TermQuery — branch handling
+  - Removed `?? "main"` fallback on `Config.Branch` in `Taxonomy.Fetch<T>()`, `Term.ExecuteRequest()`, and `TermQuery.Find<T>()`. The fallback was injecting `branch=main` into every CDA request when branching was not configured on the stack, causing `422 Branch not found` errors. Branch is now passed directly from `Config.Branch`, consistent with `Asset` and `Entry`.
+- Taxonomy / Term / TermQuery — structured error propagation
+  - Replaced `TaxonomyException.CreateForProcessingError(ex)` with `GetContentstackError(ex)` in all catch blocks across `Taxonomy.Fetch<T>()`, `Term.Fetch<T>()`, `Term.Locales<T>()`, `Term.Ancestors<T>()`, `Term.Descendants<T>()`, and `TermQuery.Find<T>()`. On 4xx responses, `ErrorCode`, `StatusCode`, and `Errors` are now correctly populated from the API response body, consistent with `Asset` and `Entry` error handling.
+- Taxonomy / Term — locale/fallback API convention alignment
+  - `Taxonomy.Fetch<T>()` and `Term.Fetch<T>()` no longer accept `locale` / `includeFallback` parameters. Use the new chainable `SetLocale(string)`, `IncludeFallback()`, and `AddParam(string, string)` methods before calling `Fetch<T>()`, matching the convention used by `Asset`, `Entry`, and `AssetLibrary`.
+  - Migration: `Taxonomies("uid").Fetch<T>("hi-in")` → `Taxonomies("uid").SetLocale("hi-in").Fetch<T>()`
+  - Migration: `Term("uid").Fetch<T>("hi-in", includeFallback: true)` → `Term("uid").SetLocale("hi-in").IncludeFallback().Fetch<T>()`
+
 ### Version: 2.29.0
 #### Date: Jul-15-2026
 

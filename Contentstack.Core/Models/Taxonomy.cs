@@ -9,6 +9,12 @@ using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Models
 {
+    /// <summary>
+    /// Represents a published taxonomy from the CDA, providing methods to fetch the taxonomy,
+    /// list its terms, and navigate to individual terms.
+    /// Use <see cref="SetLocale"/>, <see cref="IncludeFallback"/>, and <see cref="AddParam"/> to
+    /// configure the request before calling <see cref="Fetch{T}"/>.
+    /// </summary>
     public class Taxonomy: Query
     {
 
@@ -71,11 +77,67 @@ namespace Contentstack.Core.Models
         #region Public Functions
 
         /// <summary>
+        /// Sets the locale for this taxonomy fetch.
+        /// Passing null or empty is a no-op.
+        /// </summary>
+        /// <param name="locale">Locale code (e.g. "hi-in", "en-us").</param>
+        /// <returns>The current <see cref="Taxonomy"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var taxonomy = await stack.Taxonomies("gadgets").SetLocale("hi-in").Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new Taxonomy SetLocale(string locale)
+        {
+            if (!string.IsNullOrEmpty(locale))
+                UrlQueries["locale"] = locale;
+            return this;
+        }
+
+        /// <summary>
+        /// Falls back to the master locale when the taxonomy is not published in the requested locale.
+        /// Can be used with or without <see cref="SetLocale"/>.
+        /// </summary>
+        /// <returns>The current <see cref="Taxonomy"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var taxonomy = await stack.Taxonomies("gadgets").SetLocale("hi-in").IncludeFallback().Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new Taxonomy IncludeFallback()
+        {
+            UrlQueries["include_fallback"] = "true";
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a custom query parameter to the request.
+        /// </summary>
+        /// <param name="key">Parameter key.</param>
+        /// <param name="value">Parameter value.</param>
+        /// <returns>The current <see cref="Taxonomy"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var taxonomy = await stack.Taxonomies("gadgets").AddParam("include_branch", "true").Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new Taxonomy AddParam(string key, string value)
+        {
+            UrlQueries[key] = value;
+            return this;
+        }
+
+        /// <summary>
         /// Returns a Term instance for the given term UID within this taxonomy.
         /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
         /// </summary>
         /// <param name="termUid">The UID of the term to retrieve.</param>
         /// <returns>A <see cref="Term"/> instance scoped to this taxonomy and term.</returns>
+        /// <example>
+        /// <code>
+        ///     var term = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
         public Term Term(string termUid)
         {
             if (_uid == null)
@@ -88,6 +150,11 @@ namespace Contentstack.Core.Models
         /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
         /// </summary>
         /// <returns>A <see cref="TermQuery"/> instance for this taxonomy.</returns>
+        /// <example>
+        /// <code>
+        ///     var terms = await stack.Taxonomies("gadgets").Terms().SetLocale("hi-in").Find&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
         public TermQuery Terms()
         {
             if (_uid == null)
@@ -98,17 +165,18 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Fetches the published taxonomy by its UID from the CDA.
         /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// Use <see cref="SetLocale"/> and <see cref="IncludeFallback"/> to set query parameters before calling.
         /// </summary>
-        /// <param name="locale">Optional locale code (e.g. "hi-in"). Omit for the master locale.</param>
         /// <returns>The deserialized taxonomy object.</returns>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
         ///     var taxonomy = await stack.Taxonomies("gadgets").Fetch&lt;MyTaxonomy&gt;();
-        ///     var localized = await stack.Taxonomies("gadgets").Fetch&lt;MyTaxonomy&gt;("hi-in");
+        ///     var localized = await stack.Taxonomies("gadgets").SetLocale("hi-in").Fetch&lt;MyTaxonomy&gt;();
+        ///     var withFallback = await stack.Taxonomies("gadgets").SetLocale("hi-in").IncludeFallback().Fetch&lt;MyTaxonomy&gt;();
         /// </code>
         /// </example>
-        public async System.Threading.Tasks.Task<T> Fetch<T>(string locale = null)
+        public async Task<T> Fetch<T>()
         {
             if (_uid == null)
                 throw new TaxonomyException("Fetch() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
@@ -122,8 +190,8 @@ namespace Contentstack.Core.Models
                 var mainJson = new Dictionary<string, object>();
                 if (Stack.Config?.Environment != null)
                     mainJson["environment"] = Stack.Config.Environment;
-                if (!string.IsNullOrEmpty(locale))
-                    mainJson["locale"] = locale;
+                foreach (var kvp in UrlQueries)
+                    mainJson[kvp.Key] = kvp.Value;
 
                 var handler = new HttpRequestHandler(Stack);
                 var result = await handler.ProcessRequest(
@@ -346,7 +414,7 @@ namespace Contentstack.Core.Models
                 return _StackHeaders;
             }
         }
-        internal static ContentstackException GetContentstackError(Exception ex)
+        internal new static ContentstackException GetContentstackError(Exception ex)
         {
             Int32 errorCode = 0;
             string errorMessage = string.Empty;

@@ -69,10 +69,11 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
 
             var client = CreateGadgetsClient();
 
-            LogAct("Calling Taxonomies(uid).Fetch<JObject>(locale)");
+            LogAct("Calling Taxonomies(uid).SetLocale(locale).Fetch<JObject>()");
             var result = await client
                 .Taxonomies(TestDataHelper.TaxPublishTaxonomyUid)
-                .Fetch<Newtonsoft.Json.Linq.JObject>(TestDataHelper.TaxPublishLocale);
+                .SetLocale(TestDataHelper.TaxPublishLocale)
+                .Fetch<Newtonsoft.Json.Linq.JObject>();
 
             LogAssert("Verifying response");
             Assert.NotNull(result);
@@ -183,11 +184,13 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
             LogContext("TermUid", termUid);
             LogContext("Locale", TestDataHelper.TaxPublishLocale);
 
-            LogAct("Calling Term(termUid).Fetch<JObject>(locale, includeFallback: true)");
+            LogAct("Calling Term(termUid).SetLocale(locale).IncludeFallback().Fetch<JObject>()");
             var result = await client
                 .Taxonomies(TestDataHelper.TaxPublishTaxonomyUid)
                 .Term(termUid)
-                .Fetch<Newtonsoft.Json.Linq.JObject>(TestDataHelper.TaxPublishLocale, includeFallback: true);
+                .SetLocale(TestDataHelper.TaxPublishLocale)
+                .IncludeFallback()
+                .Fetch<Newtonsoft.Json.Linq.JObject>();
 
             LogAssert("Verifying response");
             Assert.NotNull(result);

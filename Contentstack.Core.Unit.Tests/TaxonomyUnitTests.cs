@@ -643,7 +643,7 @@ namespace Contentstack.Core.Unit.Tests
             var termQuery = _client.Taxonomies("gadgets").Terms();
             termQuery.SetLocale("hi-in");
 
-            var field = typeof(TermQuery).GetField("_queryParams",
+            var field = typeof(TermQuery).GetField("UrlQueries",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
 
@@ -652,10 +652,16 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void TermQuery_SetLocale_WithNull_ThrowsTaxonomyException()
+        public void TermQuery_SetLocale_WithNull_DoesNotSetParam()
         {
             var termQuery = _client.Taxonomies("gadgets").Terms();
-            Assert.Throws<TaxonomyException>(() => termQuery.SetLocale(null));
+            termQuery.SetLocale(null);
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.False(urlQueries?.ContainsKey("locale") ?? false);
         }
 
         [Fact]
@@ -672,7 +678,7 @@ namespace Contentstack.Core.Unit.Tests
             var termQuery = _client.Taxonomies("gadgets").Terms();
             termQuery.IncludeFallback();
 
-            var field = typeof(TermQuery).GetField("_queryParams",
+            var field = typeof(TermQuery).GetField("UrlQueries",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
 
@@ -687,9 +693,203 @@ namespace Contentstack.Core.Unit.Tests
                 .SetLocale("hi-in")
                 .IncludeFallback();
 
-            var field = typeof(TermQuery).GetField("_queryParams",
+            var field = typeof(TermQuery).GetField("UrlQueries",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("locale") ?? false);
+            Assert.True(queryParams?.ContainsKey("include_fallback") ?? false);
+        }
+
+        [Fact]
+        public void TermQuery_AddParam_SetsUrlQuery()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.AddParam("custom_key", "custom_value");
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("custom_key") ?? false);
+            Assert.Equal("custom_value", queryParams["custom_key"]);
+        }
+
+        #endregion
+
+        #region Taxonomy.SetLocale / IncludeFallback / AddParam Tests
+
+        [Fact]
+        public void Taxonomy_SetLocale_ReturnsSelfForChaining()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            var result = taxonomy.SetLocale("hi-in");
+            Assert.Same(taxonomy, result);
+        }
+
+        [Fact]
+        public void Taxonomy_SetLocale_SetsUrlQuery()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            taxonomy.SetLocale("hi-in");
+
+            var field = typeof(Taxonomy).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(taxonomy);
+
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.Equal("hi-in", urlQueries["locale"]);
+        }
+
+        [Fact]
+        public void Taxonomy_SetLocale_WithNull_DoesNotSetParam()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            taxonomy.SetLocale(null);
+
+            var field = typeof(Taxonomy).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(taxonomy);
+
+            Assert.False(urlQueries?.ContainsKey("locale") ?? false);
+        }
+
+        [Fact]
+        public void Taxonomy_IncludeFallback_ReturnsSelfForChaining()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            var result = taxonomy.IncludeFallback();
+            Assert.Same(taxonomy, result);
+        }
+
+        [Fact]
+        public void Taxonomy_IncludeFallback_SetsUrlQuery()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            taxonomy.IncludeFallback();
+
+            var field = typeof(Taxonomy).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(taxonomy);
+
+            Assert.True(urlQueries?.ContainsKey("include_fallback") ?? false);
+            Assert.Equal("true", urlQueries["include_fallback"]);
+        }
+
+        [Fact]
+        public void Taxonomy_AddParam_SetsUrlQuery()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            taxonomy.AddParam("custom_key", "custom_value");
+
+            var field = typeof(Taxonomy).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(taxonomy);
+
+            Assert.True(urlQueries?.ContainsKey("custom_key") ?? false);
+            Assert.Equal("custom_value", urlQueries["custom_key"]);
+        }
+
+        [Fact]
+        public void Taxonomy_SetLocale_Then_IncludeFallback_ChainsBoth()
+        {
+            var taxonomy = _client.Taxonomies("gadgets")
+                .SetLocale("hi-in")
+                .IncludeFallback();
+
+            var field = typeof(Taxonomy).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(taxonomy);
+
+            Assert.True(urlQueries?.ContainsKey("locale") ?? false);
+            Assert.True(urlQueries?.ContainsKey("include_fallback") ?? false);
+        }
+
+        #endregion
+
+        #region Term.SetLocale / IncludeFallback / AddParam Tests
+
+        [Fact]
+        public void Term_SetLocale_ReturnsSelfForChaining()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            var result = term.SetLocale("hi-in");
+            Assert.Same(term, result);
+        }
+
+        [Fact]
+        public void Term_SetLocale_SetsQueryParam()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            term.SetLocale("hi-in");
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.True(queryParams?.ContainsKey("locale") ?? false);
+            Assert.Equal("hi-in", queryParams["locale"]);
+        }
+
+        [Fact]
+        public void Term_SetLocale_WithNull_DoesNotSetParam()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            term.SetLocale(null);
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.False(queryParams?.ContainsKey("locale") ?? false);
+        }
+
+        [Fact]
+        public void Term_IncludeFallback_ReturnsSelfForChaining()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            var result = term.IncludeFallback();
+            Assert.Same(term, result);
+        }
+
+        [Fact]
+        public void Term_IncludeFallback_SetsQueryParam()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            term.IncludeFallback();
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.True(queryParams?.ContainsKey("include_fallback") ?? false);
+            Assert.Equal("true", queryParams["include_fallback"]);
+        }
+
+        [Fact]
+        public void Term_AddParam_SetsQueryParam()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            term.AddParam("custom_key", "custom_value");
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.True(queryParams?.ContainsKey("custom_key") ?? false);
+            Assert.Equal("custom_value", queryParams["custom_key"]);
+        }
+
+        [Fact]
+        public void Term_SetLocale_Then_IncludeFallback_ChainsBoth()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch")
+                .SetLocale("hi-in")
+                .IncludeFallback();
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
 
             Assert.True(queryParams?.ContainsKey("locale") ?? false);
             Assert.True(queryParams?.ContainsKey("include_fallback") ?? false);
