@@ -20,7 +20,7 @@ namespace Contentstack.Core.Models
         #region Private Variables
 
         internal Dictionary<string, object> _FormHeaders = new Dictionary<string, object>();
-        private Dictionary<string, object> _Headers = new Dictionary<string, object>();
+        internal Dictionary<string, object> _Headers = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
 
         protected Dictionary<string, object> QueryValueJson = new Dictionary<string, object>();
@@ -1711,12 +1711,13 @@ namespace Contentstack.Core.Models
         /// To set variants header using query instance.
         /// </summary>
         /// <param name="Variant">Query instance</param>
+        /// <param name="branch">Optional branch to fetch the variant from. Falls back to the stack's configured branch, then "main".</param>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     Query csQuery = stack.ContentType("contentType_id").Query();
-        ///     
+        ///
         ///     csQuery.Variant("variant_entry_1");
         ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
@@ -1726,10 +1727,7 @@ namespace Contentstack.Core.Models
         public Query Variant(string variant_header, string branch = null)
         {
             this.SetHeader("x-cs-variant-uid", variant_header);
-            string branchToUse = string.IsNullOrWhiteSpace(branch) 
-                ? (this.ContentTypeInstance?.StackInstance?.Config?.Branch ?? "main") 
-                : branch;
-            this.SetHeader("branch", branchToUse);
+            this.SetHeader("branch", ResolveBranch(branch));
             return this;
         }
 
@@ -1739,12 +1737,13 @@ namespace Contentstack.Core.Models
         /// To set multiple variants headers using query instance.
         /// </summary>
         /// <param name="Variant">Query instance</param>
+        /// <param name="branch">Optional branch to fetch the variant from. Falls back to the stack's configured branch, then "main".</param>
         /// <returns>Current instance of Query, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     Query csQuery = stack.ContentType("contentType_id").Query();
-        ///     
+        ///
         ///     csQuery.Variant(new List<string> { "variant_entry_1", "variant_entry_2", "variant_entry_3" });
         ///     csQuery.Find<Product>().ContinueWith((queryResult) => {
         ///         //Your callback code.
@@ -1754,12 +1753,16 @@ namespace Contentstack.Core.Models
         public Query Variant(List<string> variant_headers, string branch = null)
         {
             this.SetHeader("x-cs-variant-uid", string.Join(",", variant_headers));
-            string branchToUse = string.IsNullOrWhiteSpace(branch) 
-                ? (this.ContentTypeInstance?.StackInstance?.Config?.Branch ?? "main") 
-                : branch;
-            this.SetHeader("branch", branchToUse);
+            this.SetHeader("branch", ResolveBranch(branch));
             return this;
         }
+
+        private const string DefaultBranch = "main";
+
+        private string ResolveBranch(string branch) =>
+            string.IsNullOrWhiteSpace(branch)
+                ? (ContentTypeInstance?.StackInstance?.Config?.Branch ?? DefaultBranch)
+                : branch;
 
         /// <summary>
         /// Execute a Query and Caches its result (Optional)

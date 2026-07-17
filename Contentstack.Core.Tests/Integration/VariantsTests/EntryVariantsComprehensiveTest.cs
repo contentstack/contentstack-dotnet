@@ -39,7 +39,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Act & Assert
             LogAct("Fetching entry with variant and INVALID branch using .Variant() method");
             
-            var exception = await Assert.ThrowsAsync<Exception>(async () => 
+            var exception = await Assert.ThrowsAnyAsync<Exception>(async () => 
             {
                 await client
                     .ContentType(TestDataHelper.ComplexContentTypeUid)
@@ -48,8 +48,8 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
                     .Fetch<Entry>();
             });
             
-            LogAssert("Verifying exception was thrown");
-            TestAssert.NotNull(exception);
+            LogAssert("Verifying exception was thrown for invalid branch");
+            Assert.Contains("branch", exception.Message, System.StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact(DisplayName = "Entry Operations - Variant With Valid Branch Returns Results")]
@@ -60,7 +60,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
             LogContext("EntryUid", TestDataHelper.ComplexEntryUid);
             LogContext("VariantUid", TestDataHelper.VariantUid);
-            LogContext("Branch", "development");
+            LogContext("Branch", TestDataHelper.BranchUid);
             
             var client = CreateClient();
             
@@ -70,7 +70,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             var entry = await client
                 .ContentType(TestDataHelper.ComplexContentTypeUid)
                 .Entry(TestDataHelper.ComplexEntryUid)
-                .Variant(TestDataHelper.VariantUid, "development")
+                .Variant(TestDataHelper.VariantUid, TestDataHelper.BranchUid)
                 .Fetch<Entry>();
             
             // Assert
@@ -329,13 +329,13 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             query.Variant(TestDataHelper.VariantUid, "invalid_branch_name_123");
             query.Limit(5);
             
-            var exception = await Assert.ThrowsAsync<Exception>(async () => 
+            var exception = await Assert.ThrowsAnyAsync<Exception>(async () => 
             {
                 await query.Find<Entry>();
             });
             
-            LogAssert("Verifying exception was thrown");
-            TestAssert.NotNull(exception);
+            LogAssert("Verifying exception was thrown for invalid branch");
+            Assert.Contains("branch", exception.Message, System.StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact(DisplayName = "Entry Operations - Variant Query With Valid Branch Returns Results")]
@@ -345,7 +345,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             LogArrange("Setting up query operation with valid branch");
             LogContext("ContentType", TestDataHelper.ComplexContentTypeUid);
             LogContext("VariantUid", TestDataHelper.VariantUid);
-            LogContext("Branch", "development");
+            LogContext("Branch", TestDataHelper.BranchUid);
 
             var client = CreateClient();
             var query = client.ContentType(TestDataHelper.ComplexContentTypeUid).Query();
@@ -353,7 +353,7 @@ namespace Contentstack.Core.Tests.Integration.VariantsTests
             // Act
             LogAct("Executing query with variant and valid branch");
 
-            query.Variant(TestDataHelper.VariantUid, "development");
+            query.Variant(TestDataHelper.VariantUid, TestDataHelper.BranchUid);
             query.Limit(5);
             var result = await query.Find<Entry>();
             
