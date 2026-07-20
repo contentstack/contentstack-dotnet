@@ -395,12 +395,13 @@ namespace Contentstack.Core.Models
         /// To set variants header using Entry instance.
         /// </summary>
         /// <param name="variant_header">Entry instance</param>
+        /// <param name="branch">Optional branch to fetch the variant from. Falls back to the stack's configured branch, then "main".</param>
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     Entry csEntry = stack.ContentType("contentType_id").Entry("entry_uid");
-        ///     
+        ///
         ///     csEntry.Variant("variant_entry_1");
         ///     csEntry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
@@ -408,9 +409,10 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Entry Variant(string variant_header)
+        public Entry Variant(string variant_header, string branch = null)
         {
             this.SetHeader("x-cs-variant-uid", variant_header);
+            this.SetHeader("branch", ResolveBranch(branch));
             return this;
         }
 
@@ -420,12 +422,13 @@ namespace Contentstack.Core.Models
         /// To set multiple variants headers using Entry instance.
         /// </summary>
         /// <param name="variant_headers">Entry instance</param>
+        /// <param name="branch">Optional branch to fetch the variant from. Falls back to the stack's configured branch, then "main".</param>
         /// <returns>Current instance of Entry, this will be useful for a chaining calls.</returns>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
         ///     Entry csEntry = stack.ContentType("contentType_id").Query();
-        ///     
+        ///
         ///     csEntry.Variant(new List<string> { "variant_entry_1", "variant_entry_2", "variant_entry_3" });
         ///     csEntry.Fetch<Product>().ContinueWith((entryResult) => {
         ///         //Your callback code.
@@ -433,11 +436,19 @@ namespace Contentstack.Core.Models
         ///     });
         /// </code>
         /// </example>
-        public Entry Variant(List<string> variant_headers)
+        public Entry Variant(List<string> variant_headers, string branch = null)
         {
             this.SetHeader("x-cs-variant-uid", string.Join(",", variant_headers));
+            this.SetHeader("branch", ResolveBranch(branch));
             return this;
         }
+
+        private const string DefaultBranch = "main";
+
+        private string ResolveBranch(string branch) =>
+            string.IsNullOrWhiteSpace(branch)
+                ? (ContentTypeInstance?.StackInstance?.Config?.Branch ?? DefaultBranch)
+                : branch;
 
         /// <summary>
         /// Get metadata of entry.
