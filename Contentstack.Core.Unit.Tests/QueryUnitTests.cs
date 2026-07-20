@@ -2632,6 +2632,75 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         #endregion
+
+        #region Variant Tests
+
+        [Fact(DisplayName = "Query Operations - Variant With Branch Sets Branch Header")]
+        public void Query_Variant_WithBranch_SetsBranchHeader()
+        {
+            // Arrange
+            var query = UnitTestHelpers.GetMockClient("main").ContentType("DUMMY_CONTENT_TYPE").Query();
+
+            // Act
+            query.Variant("VARIANT_1", "development");
+
+            // Assert
+            Assert.True(query._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1", query._Headers["x-cs-variant-uid"]);
+            Assert.True(query._Headers.ContainsKey("branch"));
+            Assert.Equal("development", query._Headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Null Branch Falls Back To Stack Branch")]
+        public void Query_Variant_WithNullBranch_FallsBackToStackBranch()
+        {
+            // Arrange
+            var query = UnitTestHelpers.GetMockClient("stack_branch").ContentType("DUMMY_CONTENT_TYPE").Query();
+
+            // Act
+            query.Variant("VARIANT_1", null);
+
+            // Assert
+            Assert.True(query._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1", query._Headers["x-cs-variant-uid"]);
+            Assert.True(query._Headers.ContainsKey("branch"));
+            Assert.Equal("stack_branch", query._Headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Empty Branch Falls Back To Main If Stack Branch Is Null")]
+        public void Query_Variant_WithEmptyBranch_FallsBackToMainIfStackBranchIsNull()
+        {
+            // Arrange
+            var query = UnitTestHelpers.GetMockClient(null).ContentType("DUMMY_CONTENT_TYPE").Query();
+
+            // Act
+            query.Variant("VARIANT_1", "   ");
+
+            // Assert
+            Assert.True(query._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1", query._Headers["x-cs-variant-uid"]);
+            Assert.True(query._Headers.ContainsKey("branch"));
+            Assert.Equal("main", query._Headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Query Operations - Variant With Multiple Variants And Branch Sets Headers")]
+        public void Query_Variant_WithMultipleVariantsAndBranch_SetsHeaders()
+        {
+            // Arrange
+            var query = UnitTestHelpers.GetMockClient("main").ContentType("DUMMY_CONTENT_TYPE").Query();
+            var variants = new List<string> { "VARIANT_1", "VARIANT_2" };
+
+            // Act
+            query.Variant(variants, "feature_branch");
+
+            // Assert
+            Assert.True(query._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1,VARIANT_2", query._Headers["x-cs-variant-uid"]);
+            Assert.True(query._Headers.ContainsKey("branch"));
+            Assert.Equal("feature_branch", query._Headers["branch"]);
+        }
+
+        #endregion
     }
 }
 

@@ -2745,6 +2745,83 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         #endregion
+
+        #region Variant Tests
+
+        [Fact(DisplayName = "Entry Operations - Variant With Branch Sets Branch Header")]
+        public void Entry_Variant_WithBranch_SetsBranchHeader()
+        {
+            // Arrange
+            var client = UnitTestHelpers.GetMockClient("main");
+            var entry = client.ContentType("DUMMY_CONTENT_TYPE").Entry("DUMMY_ENTRY_UID");
+
+            // Act
+            entry.Variant("VARIANT_1", "development");
+
+            // Assert
+            Assert.True(entry._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1", entry._Headers["x-cs-variant-uid"]);
+
+            Assert.True(entry._Headers.ContainsKey("branch"));
+            Assert.Equal("development", entry._Headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant With Null Branch Falls Back To Stack Branch")]
+        public void Entry_Variant_WithNullBranch_FallsBackToStackBranch()
+        {
+            // Arrange
+            var client = UnitTestHelpers.GetMockClient("stack_branch");
+            var entry = client.ContentType("DUMMY_CONTENT_TYPE").Entry("DUMMY_ENTRY_UID");
+
+            // Act
+            entry.Variant("VARIANT_1", null);
+
+            // Assert
+            Assert.True(entry._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1", entry._Headers["x-cs-variant-uid"]);
+
+            Assert.True(entry._Headers.ContainsKey("branch"));
+            Assert.Equal("stack_branch", entry._Headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant With Empty Branch Falls Back To Main If Stack Branch Is Null")]
+        public void Entry_Variant_WithEmptyBranch_FallsBackToMainIfStackBranchIsNull()
+        {
+            // Arrange
+            var client = UnitTestHelpers.GetMockClient(null);
+            var entry = client.ContentType("DUMMY_CONTENT_TYPE").Entry("DUMMY_ENTRY_UID");
+
+            // Act
+            entry.Variant("VARIANT_1", "   ");
+
+            // Assert
+            Assert.True(entry._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1", entry._Headers["x-cs-variant-uid"]);
+
+            Assert.True(entry._Headers.ContainsKey("branch"));
+            Assert.Equal("main", entry._Headers["branch"]);
+        }
+
+        [Fact(DisplayName = "Entry Operations - Variant With Multiple Variants And Branch Sets Headers")]
+        public void Entry_Variant_WithMultipleVariantsAndBranch_SetsHeaders()
+        {
+            // Arrange
+            var client = UnitTestHelpers.GetMockClient("main");
+            var entry = client.ContentType("DUMMY_CONTENT_TYPE").Entry("DUMMY_ENTRY_UID");
+            var variants = new List<string> { "VARIANT_1", "VARIANT_2" };
+
+            // Act
+            entry.Variant(variants, "feature_branch");
+
+            // Assert
+            Assert.True(entry._Headers.ContainsKey("x-cs-variant-uid"));
+            Assert.Equal("VARIANT_1,VARIANT_2", entry._Headers["x-cs-variant-uid"]);
+
+            Assert.True(entry._Headers.ContainsKey("branch"));
+            Assert.Equal("feature_branch", entry._Headers["branch"]);
+        }
+
+        #endregion
     }
 }
 
