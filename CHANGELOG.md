@@ -1,3 +1,14 @@
+### Version: 3.2.0
+#### Date: Jul-23-2026
+
+##### Feat:
+- Taxonomy CDA (Content Delivery API) support
+  - Added `stack.Taxonomy()` — returns a `TaxonomyQuery` to list all published taxonomies (supports `Limit`, `Skip`, `IncludeCount`).
+  - Added `stack.Taxonomy(uid)` — returns a `TaxonomyCDA` instance for fetching a specific taxonomy, listing its terms, and traversing term hierarchy (ancestors, descendants, locales).
+  - New models: `TaxonomyCDA`, `TaxonomyQuery`, `TaxonomyTerm`, `TaxonomyTermQuery`.
+
+---
+
 ### Version: 3.1.0
 #### Date: Jul-20-2026
 
