@@ -492,6 +492,91 @@ namespace Contentstack.Core
         }
 
         /// <summary>
+        /// Returns a <see cref="TaxonomyQuery"/> for listing all published taxonomies
+        /// from the Contentstack Content Delivery API.
+        /// </summary>
+        /// <remarks>
+        /// This method provides access to the taxonomy CDA endpoints introduced with
+        /// the Taxonomy Publishing feature. It is distinct from <see cref="Taxonomies()"/>,
+        /// which returns an entry-level query builder for the <c>$above</c>/<c>$below</c>
+        /// hierarchy operators and remains unchanged.
+        /// </remarks>
+        /// <returns>
+        /// A <see cref="TaxonomyQuery"/> instance. Call modifier methods
+        /// (<see cref="TaxonomyQuery.Limit"/>, <see cref="TaxonomyQuery.Skip"/>,
+        /// <see cref="TaxonomyQuery.IncludeCount"/>) then <see cref="TaxonomyQuery.Find{T}"/>
+        /// to execute the request.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///
+        /// // List all published taxonomies with count
+        /// var result = await stack.Taxonomy()
+        ///     .Limit(10)
+        ///     .IncludeCount()
+        ///     .Find&lt;JsonObject&gt;();
+        ///
+        /// Console.WriteLine($"Total: {result.Count}");
+        /// foreach (var taxonomy in result.Items)
+        ///     Console.WriteLine(taxonomy["uid"]);
+        /// </code>
+        /// </example>
+        public TaxonomyQuery Taxonomy()
+        {
+            return new TaxonomyQuery(this);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="TaxonomyCDA"/> for a specific published taxonomy,
+        /// identified by its UID.
+        /// </summary>
+        /// <param name="taxonomyUid">
+        /// The unique identifier of the taxonomy (e.g., <c>"regions"</c>, <c>"categories"</c>).
+        /// The UID is unique across the stack.
+        /// </param>
+        /// <remarks>
+        /// From the returned <see cref="TaxonomyCDA"/> you can:
+        /// <list type="bullet">
+        /// <item><description>Call <see cref="TaxonomyCDA.Fetch{T}"/> to retrieve the taxonomy definition.</description></item>
+        /// <item><description>Call <see cref="TaxonomyCDA.Term()"/> to list all terms in the taxonomy.</description></item>
+        /// <item><description>Call <see cref="TaxonomyCDA.Term(string)"/> to work with a specific term,
+        /// including hierarchy traversal via <see cref="TaxonomyTerm.Ancestors{T}"/>,
+        /// <see cref="TaxonomyTerm.Descendants{T}"/>, and <see cref="TaxonomyTerm.Locales{T}"/>.</description></item>
+        /// </list>
+        /// </remarks>
+        /// <returns>
+        /// A <see cref="TaxonomyCDA"/> instance pre-configured for the given taxonomy UID.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///
+        /// // Fetch a single taxonomy
+        /// var taxonomy = await stack.Taxonomy("regions")
+        ///     .SetLocale("en-us")
+        ///     .Fetch&lt;JsonObject&gt;();
+        ///
+        /// // Fetch all terms in the taxonomy
+        /// var terms = await stack.Taxonomy("regions")
+        ///     .Term()
+        ///     .SetLocale("en-us")
+        ///     .Depth(3)
+        ///     .Find&lt;JsonObject&gt;();
+        ///
+        /// // Traverse ancestors of a specific term
+        /// var ancestors = await stack.Taxonomy("regions")
+        ///     .Term("san-francisco")
+        ///     .Depth(5)
+        ///     .Ancestors&lt;JsonObject&gt;();
+        /// </code>
+        /// </example>
+        public TaxonomyCDA Taxonomy(string taxonomyUid)
+        {
+            return new TaxonomyCDA(this, taxonomyUid);
+        }
+
+        /// <summary>
         /// Get version.
         /// </summary>
         /// <returns>Version</returns>

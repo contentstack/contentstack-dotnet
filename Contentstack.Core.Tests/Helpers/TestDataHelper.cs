@@ -116,20 +116,50 @@ namespace Contentstack.Core.Tests.Helpers
         
         #endregion
 
-        #region Taxonomy
-        
+        #region Taxonomy (Entry Query Operators — existing)
+
         /// <summary>
-        /// Gets the taxonomy term for USA state (e.g., "california")
+        /// Gets the taxonomy term for USA state (e.g., "california").
+        /// Used by entry-level taxonomy query operator tests (Taxonomies()).
         /// </summary>
-        public static string TaxUsaState => 
+        public static string TaxUsaState =>
             GetRequiredConfig("TAX_USA_STATE");
-        
+
         /// <summary>
-        /// Gets the taxonomy term for India state (e.g., "maharashtra")
+        /// Gets the taxonomy term for India state (e.g., "maharashtra").
+        /// Used by entry-level taxonomy query operator tests (Taxonomies()).
         /// </summary>
-        public static string TaxIndiaState => 
+        public static string TaxIndiaState =>
             GetRequiredConfig("TAX_INDIA_STATE");
-        
+
+        #endregion
+
+        #region Taxonomy CDA (new Publishing & Delivery endpoints)
+
+        /// <summary>
+        /// Gets the UID of a taxonomy that has been published to the test environment.
+        /// Used by Taxonomy CDA endpoint tests (stack.Taxonomy(uid)).
+        /// Configure in app.config: <c>&lt;add key="TAXONOMY_CDA_UID" value="your_taxonomy_uid" /&gt;</c>
+        /// </summary>
+        public static string TaxonomyCdaUid =>
+            GetRequiredConfig("TAXONOMY_CDA_UID");
+
+        /// <summary>
+        /// Gets the UID of a term within <see cref="TaxonomyCdaUid"/> that has been published
+        /// to the test environment. Used for term-level CDA endpoint tests.
+        /// Configure in app.config: <c>&lt;add key="TAXONOMY_CDA_TERM_UID" value="your_term_uid" /&gt;</c>
+        /// </summary>
+        public static string TaxonomyCdaTermUid =>
+            GetRequiredConfig("TAXONOMY_CDA_TERM_UID");
+
+        /// <summary>
+        /// Gets the locale used for Taxonomy CDA locale-specific tests (e.g., "fr-fr").
+        /// The taxonomy must be published in this locale on the test environment.
+        /// Configure in app.config: <c>&lt;add key="TAXONOMY_CDA_LOCALE" value="fr-fr" /&gt;</c>
+        /// </summary>
+        public static string TaxonomyCdaLocale =>
+            GetRequiredConfig("TAXONOMY_CDA_LOCALE");
+
         #endregion
 
         #region Live Preview
