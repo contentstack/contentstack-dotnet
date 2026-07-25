@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -20,15 +19,14 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class ContentstackClientUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         private ContentstackClient CreateClient(string environment = null, string apiKey = null, string deliveryToken = null, string version = null)
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = apiKey ?? _fixture.Create<string>(),
-                DeliveryToken = deliveryToken ?? _fixture.Create<string>(),
-                Environment = environment ?? _fixture.Create<string>(),
+                ApiKey = apiKey ?? Guid.NewGuid().ToString("N"),
+                DeliveryToken = deliveryToken ?? Guid.NewGuid().ToString("N"),
+                Environment = environment ?? Guid.NewGuid().ToString("N"),
                 Version = version
             };
             return new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
@@ -38,7 +36,7 @@ namespace Contentstack.Core.Unit.Tests
         public void GetEnvironment_ReturnsEnvironment()
         {
             // Arrange
-            var environment = _fixture.Create<string>();
+            var environment = Guid.NewGuid().ToString("N");
             var client = CreateClient(environment);
 
             // Act
@@ -68,8 +66,8 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
                 Environment = null  // Explicitly set to null
             };
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
@@ -131,7 +129,7 @@ namespace Contentstack.Core.Unit.Tests
         public void GetApplicationKey_ReturnsApiKey()
         {
             // Arrange
-            var apiKey = _fixture.Create<string>();
+            var apiKey = Guid.NewGuid().ToString("N");
             var client = CreateClient(apiKey: apiKey);
 
             // Act
@@ -149,7 +147,7 @@ namespace Contentstack.Core.Unit.Tests
         public void GetAccessToken_WithDeliveryToken_ReturnsDeliveryToken()
         {
             // Arrange
-            var deliveryToken = _fixture.Create<string>();
+            var deliveryToken = Guid.NewGuid().ToString("N");
             var client = CreateClient(deliveryToken: deliveryToken);
 
             // Act
@@ -163,11 +161,11 @@ namespace Contentstack.Core.Unit.Tests
         public void GetAccessToken_WithAccessToken_ReturnsAccessToken()
         {
             // Arrange
-            var accessToken = _fixture.Create<string>();
+            var accessToken = Guid.NewGuid().ToString("N");
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             typeof(ContentstackOptions).GetProperty("AccessToken")!
                 .SetValue(options, accessToken);
@@ -205,13 +203,13 @@ namespace Contentstack.Core.Unit.Tests
             var livePreview = new LivePreviewConfig()
             {
                 Enable = true,
-                PreviewToken = _fixture.Create<string>()
+                PreviewToken = Guid.NewGuid().ToString("N")
             };
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = livePreview
             };
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
@@ -233,7 +231,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var contentTypeName = _fixture.Create<string>();
+            var contentTypeName = Guid.NewGuid().ToString("N");
 
             // Act
             var result = client.ContentType(contentTypeName);
@@ -278,7 +276,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var globalFieldName = _fixture.Create<string>();
+            var globalFieldName = Guid.NewGuid().ToString("N");
 
             // Act
             var result = client.GlobalField(globalFieldName);
@@ -326,7 +324,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var assetUid = _fixture.Create<string>();
+            var assetUid = Guid.NewGuid().ToString("N");
 
             // Act
             var result = client.Asset(assetUid);
@@ -393,7 +391,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var client = CreateClient();
             var key = "custom_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             client.SetHeader(key, value);
@@ -413,7 +411,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
             var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = new Dictionary<string, object>((Dictionary<string, object>)headersField?.GetValue(client));
@@ -431,7 +429,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = new Dictionary<string, object>((Dictionary<string, object>)headersField?.GetValue(client));
@@ -477,7 +475,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var client = CreateClient();
             var key = "test_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
             
             var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
@@ -504,7 +502,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = new Dictionary<string, object>((Dictionary<string, object>)headersField?.GetValue(client));
@@ -536,7 +534,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var entryUid = _fixture.Create<string>();
+            var entryUid = Guid.NewGuid().ToString("N");
             var currentEntryUidField = typeof(ContentstackClient).GetField("currentEntryUid", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -591,7 +589,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var paginationToken = _fixture.Create<string>();
+            var paginationToken = Guid.NewGuid().ToString("N");
             
             // Act - Just verify setup, not actual HTTP call
             // We can't easily test async methods without mocking HttpRequestHandler
@@ -609,7 +607,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var syncToken = _fixture.Create<string>();
+            var syncToken = Guid.NewGuid().ToString("N");
             
             // Act
             var method = typeof(ContentstackClient).GetMethod("SyncToken", 
@@ -901,7 +899,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var currentContentTypeUid = _fixture.Create<string>();
+            var currentContentTypeUid = Guid.NewGuid().ToString("N");
             var contentTypeUidField = typeof(ContentstackClient).GetField("currentContenttypeUid", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             contentTypeUidField?.SetValue(client, currentContentTypeUid);
@@ -920,7 +918,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var currentEntryUid = _fixture.Create<string>();
+            var currentEntryUid = Guid.NewGuid().ToString("N");
             var entryUidField = typeof(ContentstackClient).GetField("currentEntryUid", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             entryUidField?.SetValue(client, currentEntryUid);
@@ -1216,9 +1214,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -1243,9 +1241,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -1270,9 +1268,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -1298,9 +1296,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -1326,9 +1324,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -1354,9 +1352,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,

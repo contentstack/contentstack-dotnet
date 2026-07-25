@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -16,7 +15,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class ContentTypeUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
         private ContentstackClient _client;
 
         public ContentTypeUnitTests()
@@ -28,9 +26,9 @@ namespace Contentstack.Core.Unit.Tests
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             _client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }
@@ -46,7 +44,7 @@ namespace Contentstack.Core.Unit.Tests
         public void ContentTypeId_Get_ReturnsContentTypeId()
         {
             // Arrange
-            var contentTypeId = _fixture.Create<string>();
+            var contentTypeId = Guid.NewGuid().ToString("N");
             var contentType = CreateContentType(contentTypeId);
 
             // Act
@@ -61,7 +59,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var newContentTypeId = _fixture.Create<string>();
+            var newContentTypeId = Guid.NewGuid().ToString("N");
 
             // Act
             contentType.ContentTypeId = newContentTypeId;
@@ -79,7 +77,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var entryUid = _fixture.Create<string>();
+            var entryUid = Guid.NewGuid().ToString("N");
 
             // Act
             var entry = contentType.Entry(entryUid);
@@ -161,7 +159,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var contentType = CreateContentType();
             var key = "custom_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             contentType.SetHeader(key, value);
@@ -180,7 +178,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
             var headersField = typeof(ContentType).GetField("_Headers", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = new Dictionary<string, object>((Dictionary<string, object>)headersField?.GetValue(contentType));
@@ -225,7 +223,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var contentType = CreateContentType();
             var key = "test_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
             
             var headersField = typeof(ContentType).GetField("_Headers", 
                 BindingFlags.NonPublic | BindingFlags.Instance);

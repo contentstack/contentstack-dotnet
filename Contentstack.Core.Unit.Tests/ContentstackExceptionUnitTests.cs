@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using AutoFixture;
 using Contentstack.Core.Internals;
 using Xunit;
 
@@ -12,7 +11,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class ContentstackExceptionUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         #region Initialization Tests
 
@@ -34,7 +32,7 @@ namespace Contentstack.Core.Unit.Tests
         public void ContentstackException_WithErrorMessage_InitializesCorrectly()
         {
             // Arrange
-            var errorMessage = _fixture.Create<string>();
+            var errorMessage = Guid.NewGuid().ToString("N");
 
             // Act
             var exception = new ContentstackException(errorMessage);
@@ -69,7 +67,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var exception = new ContentstackException();
-            var errorCode = _fixture.Create<int>();
+            var errorCode = Random.Shared.Next(1, 9999);
 
             // Act
             exception.ErrorCode = errorCode;
@@ -121,7 +119,7 @@ namespace Contentstack.Core.Unit.Tests
         public void ContentstackException_WithAllPropertiesSet_ReturnsAllValues()
         {
             // Arrange
-            var errorMessage = _fixture.Create<string>();
+            var errorMessage = Guid.NewGuid().ToString("N");
             var errorCode = 404;
             var statusCode = HttpStatusCode.NotFound;
             var errors = new Dictionary<string, object>

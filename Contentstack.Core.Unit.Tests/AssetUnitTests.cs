@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -16,7 +15,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class AssetUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
         private ContentstackClient _client;
 
         public AssetUnitTests()
@@ -28,9 +26,9 @@ namespace Contentstack.Core.Unit.Tests
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             _client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }
@@ -99,7 +97,7 @@ namespace Contentstack.Core.Unit.Tests
         public void GetDeletedBy_WithDeletedBy_ReturnsUid()
         {
             // Arrange
-            var deletedBy = _fixture.Create<string>();
+            var deletedBy = Guid.NewGuid().ToString("N");
             var attributes = new Dictionary<string, object>
             {
                 { "uid", "test_asset_uid" },
@@ -513,8 +511,8 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var asset = CreateAsset();
-            var key = _fixture.Create<string>();
-            var value = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             Asset result = asset.AddParam(key, value);
@@ -603,7 +601,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var asset = CreateAsset();
             var key = "custom_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             asset.SetHeader(key, value);
@@ -623,7 +621,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var asset = CreateAsset();
             var key = "custom_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
             asset.SetHeader(key, value);
             
             var headersField = typeof(Asset).GetField("_Headers", 

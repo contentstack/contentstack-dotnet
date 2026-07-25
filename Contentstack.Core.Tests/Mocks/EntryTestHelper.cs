@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
@@ -58,12 +57,11 @@ namespace Contentstack.Core.Tests.Mocks
         /// </summary>
         public static ContentstackClient CreateMockClient(string mockResponse = null)
         {
-            var fixture = new Fixture();
             var options = new ContentstackOptions()
             {
-                ApiKey = fixture.Create<string>(),
-                DeliveryToken = fixture.Create<string>(),
-                Environment = fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));

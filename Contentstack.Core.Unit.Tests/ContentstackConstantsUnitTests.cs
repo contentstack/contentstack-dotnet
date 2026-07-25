@@ -1,5 +1,5 @@
+using System;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core.Internals;
 using Xunit;
 
@@ -7,7 +7,6 @@ namespace Contentstack.Core.Unit.Tests
 {
     public class ContentstackConstantsUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         [Fact]
         public void Instance_ReturnsNewInstance()
@@ -28,7 +27,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var instance = ContentstackConstants.Instance;
-            var uid = _fixture.Create<string>();
+            var uid = Guid.NewGuid().ToString("N");
 
             // Act
             instance.ContentTypeUid = uid;
@@ -43,7 +42,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var instance = ContentstackConstants.Instance;
-            var uid = _fixture.Create<string>();
+            var uid = Guid.NewGuid().ToString("N");
 
             // Act
             instance.EntryUid = uid;

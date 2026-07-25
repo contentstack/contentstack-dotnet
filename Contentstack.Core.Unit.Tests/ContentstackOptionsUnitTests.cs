@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Xunit;
@@ -13,7 +12,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class ContentstackOptionsUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         #region Initialization Tests
 
@@ -40,7 +38,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var options = new ContentstackOptions();
-            var apiKey = _fixture.Create<string>();
+            var apiKey = Guid.NewGuid().ToString("N");
 
             // Act
             options.ApiKey = apiKey;
@@ -54,7 +52,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var options = new ContentstackOptions();
-            var deliveryToken = _fixture.Create<string>();
+            var deliveryToken = Guid.NewGuid().ToString("N");
 
             // Act
             options.DeliveryToken = deliveryToken;
@@ -68,7 +66,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var options = new ContentstackOptions();
-            var accessToken = _fixture.Create<string>();
+            var accessToken = Guid.NewGuid().ToString("N");
 
             // Act — use reflection so we still validate the deprecated property without CS0618 at compile time
             var accessTokenProp = typeof(ContentstackOptions).GetProperty("AccessToken")!;
@@ -83,7 +81,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var options = new ContentstackOptions();
-            var environment = _fixture.Create<string>();
+            var environment = Guid.NewGuid().ToString("N");
 
             // Act
             options.Environment = environment;
@@ -223,9 +221,9 @@ namespace Contentstack.Core.Unit.Tests
         public void ContentstackOptions_WithAllPropertiesSet_ReturnsAllValues()
         {
             // Arrange
-            var apiKey = _fixture.Create<string>();
-            var deliveryToken = _fixture.Create<string>();
-            var environment = _fixture.Create<string>();
+            var apiKey = Guid.NewGuid().ToString("N");
+            var deliveryToken = Guid.NewGuid().ToString("N");
+            var environment = Guid.NewGuid().ToString("N");
             var host = "cdn.contentstack.io";
             var region = ContentstackRegion.EU;
             var version = "v3";

@@ -1,5 +1,4 @@
 using System;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Unit.Tests.Mokes;
@@ -13,7 +12,6 @@ namespace Contentstack.Core.Unit.Tests.Mokes
     /// </summary>
     public class MockInfrastructureTest
     {
-        private readonly IFixture _fixture = new Fixture();
 
         [Fact]
         public void MockResponse_CreateContentstackResponse_ShouldLoadFromResource()

@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using AutoFixture;
 using Contentstack.Core.Internals;
 using Xunit;
 
@@ -11,7 +10,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class ContentstackEnumsUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         #region CachePolicy Tests
 

@@ -1,5 +1,4 @@
 using System;
-using AutoFixture;
 using Contentstack.Core.Configuration;
 using Xunit;
 
@@ -10,7 +9,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class LivePreviewConfigUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         #region Initialization Tests
 
@@ -38,7 +36,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var config = new LivePreviewConfig();
-            var token = _fixture.Create<string>();
+            var token = Guid.NewGuid().ToString("N");
 
             // Act
             config.ManagementToken = token;
@@ -52,7 +50,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var config = new LivePreviewConfig();
-            var token = _fixture.Create<string>();
+            var token = Guid.NewGuid().ToString("N");
 
             // Act
             config.PreviewToken = token;
@@ -93,7 +91,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var config = new LivePreviewConfig();
-            var releaseId = _fixture.Create<string>();
+            var releaseId = Guid.NewGuid().ToString("N");
 
             // Act
             config.ReleaseId = releaseId;
@@ -107,7 +105,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var config = new LivePreviewConfig();
-            var timestamp = _fixture.Create<string>();
+            var timestamp = Guid.NewGuid().ToString("N");
 
             // Act
             config.PreviewTimestamp = timestamp;
@@ -124,11 +122,11 @@ namespace Contentstack.Core.Unit.Tests
         public void LivePreviewConfig_WithAllPropertiesSet_ReturnsAllValues()
         {
             // Arrange
-            var managementToken = _fixture.Create<string>();
-            var previewToken = _fixture.Create<string>();
+            var managementToken = Guid.NewGuid().ToString("N");
+            var previewToken = Guid.NewGuid().ToString("N");
             var host = "preview.contentstack.io";
-            var releaseId = _fixture.Create<string>();
-            var timestamp = _fixture.Create<string>();
+            var releaseId = Guid.NewGuid().ToString("N");
+            var timestamp = Guid.NewGuid().ToString("N");
 
             // Act
             var config = new LivePreviewConfig

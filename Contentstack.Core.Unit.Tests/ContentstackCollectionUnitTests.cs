@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using AutoFixture;
 using Contentstack.Core.Models;
 using Xunit;
 
@@ -13,7 +12,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class ContentstackCollectionUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         #region Initialization Tests
 
@@ -56,7 +54,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var collection = new ContentstackCollection<string>();
-            var skipValue = _fixture.Create<int>();
+            var skipValue = Random.Shared.Next(1, 9999);
 
             // Act
             collection.Skip = skipValue;
@@ -70,7 +68,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var collection = new ContentstackCollection<string>();
-            var limitValue = _fixture.Create<int>();
+            var limitValue = Random.Shared.Next(1, 9999);
 
             // Act
             collection.Limit = limitValue;
@@ -84,7 +82,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var collection = new ContentstackCollection<string>();
-            var countValue = _fixture.Create<int>();
+            var countValue = Random.Shared.Next(1, 9999);
 
             // Act
             collection.Count = countValue;

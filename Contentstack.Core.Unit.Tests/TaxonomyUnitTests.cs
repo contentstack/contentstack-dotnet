@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -16,7 +15,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class TaxonomyUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
         private ContentstackClient _client;
 
         public TaxonomyUnitTests()
@@ -28,9 +26,9 @@ namespace Contentstack.Core.Unit.Tests
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             _client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }
@@ -47,7 +45,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -76,7 +74,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -105,7 +103,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -134,7 +132,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -174,7 +172,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act & Assert
             Assert.Throws<NullReferenceException>(() => taxonomy.Above(key, null));
@@ -196,7 +194,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act & Assert
             Assert.Throws<NullReferenceException>(() => taxonomy.EqualAndAbove(key, null));
@@ -218,7 +216,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act & Assert
             Assert.Throws<NullReferenceException>(() => taxonomy.Below(key, null));
@@ -240,7 +238,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act & Assert
             Assert.Throws<NullReferenceException>(() => taxonomy.EqualAndBelow(key, null));
@@ -251,7 +249,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act
             taxonomy.Above(key, "string_value");
@@ -269,7 +267,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 123.45;
 
             // Act
@@ -529,7 +527,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = -100;
 
             // Act
@@ -548,7 +546,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var taxonomy = CreateTaxonomy();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 0;
 
             // Act

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoFixture;
 using Contentstack.Core.Models;
 using Xunit;
 
@@ -12,7 +11,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class SyncStackUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         #region Initialization Tests
 
@@ -91,7 +89,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var syncStack = new SyncStack();
-            var totalCount = _fixture.Create<int>();
+            var totalCount = Random.Shared.Next(1, 9999);
 
             // Act
             syncStack.TotalCount = totalCount;
@@ -135,7 +133,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var syncStack = new SyncStack();
-            var syncToken = _fixture.Create<string>();
+            var syncToken = Guid.NewGuid().ToString("N");
 
             // Act
             syncStack.SyncToken = syncToken;
@@ -182,7 +180,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var syncStack = new SyncStack();
-            var paginationToken = _fixture.Create<string>();
+            var paginationToken = Guid.NewGuid().ToString("N");
 
             // Act
             syncStack.PaginationToken = paginationToken;

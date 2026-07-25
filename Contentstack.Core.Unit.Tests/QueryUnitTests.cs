@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Models;
@@ -17,7 +16,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class QueryUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
         private ContentstackClient _client;
 
         public QueryUnitTests()
@@ -29,9 +27,9 @@ namespace Contentstack.Core.Unit.Tests
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             _client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }
@@ -49,7 +47,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.NotExists(key);
@@ -110,7 +108,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var query = CreateQuery();
             string[] keys = { "name", "description" };
-            string referenceKey = _fixture.Create<string>();
+            string referenceKey = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.IncludeOnlyReference(keys, referenceKey);
@@ -133,7 +131,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var query = CreateQuery();
             string[] keys = { "name", "description" };
-            string referenceKey = _fixture.Create<string>();
+            string referenceKey = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.IncludeExceptReference(keys, referenceKey);
@@ -222,8 +220,8 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
-            var value = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.Where(key, value);
@@ -249,7 +247,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -274,7 +272,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -299,7 +297,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -324,7 +322,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var value = 100;
 
             // Act
@@ -349,8 +347,8 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
-            var value = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.NotEqualTo(key, value);
@@ -378,7 +376,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var values = new object[] { "value1", "value2", "value3" };
 
             // Act
@@ -403,7 +401,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var values = new object[] { "value1", "value2", "value3" };
 
             // Act
@@ -428,7 +426,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.Exists(key);
@@ -457,7 +455,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.Ascending(key);
@@ -478,7 +476,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.Descending(key);
@@ -714,7 +712,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var fieldUid = _fixture.Create<string>();
+            var fieldUid = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.IncludeReference(fieldUid);
@@ -874,8 +872,8 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
-            var value = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.AddParam(key, value);
@@ -993,7 +991,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var regex = "test.*pattern";
 
             // Act
@@ -1019,7 +1017,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var key = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
             var regex = "test.*pattern";
             var modifiers = "i";
 
@@ -1121,7 +1119,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var query = CreateQuery();
-            var variantHeader = _fixture.Create<string>();
+            var variantHeader = Guid.NewGuid().ToString("N");
 
             // Act
             Query result = query.Variant(variantHeader);
@@ -2275,9 +2273,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -2309,9 +2307,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -2337,9 +2335,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -2366,9 +2364,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -2395,9 +2393,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 LivePreview = new LivePreviewConfig
                 {
                     Enable = true,
@@ -2428,9 +2426,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
             var taxonomy = client.Taxonomies();
@@ -2451,8 +2449,8 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
                 Environment = "test_environment"
             };
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
@@ -2474,9 +2472,9 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>(),
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N"),
                 Branch = "test_branch"
             };
             var client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));

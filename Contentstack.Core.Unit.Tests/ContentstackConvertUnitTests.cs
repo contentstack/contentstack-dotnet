@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using AutoFixture;
 using Contentstack.Core.Internals;
 using Xunit;
 
@@ -10,7 +9,6 @@ namespace Contentstack.Core.Unit.Tests
 {
     public class ContentstackConvertUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         [Fact]
         public void ToInt32_WithValidInteger_ReturnsInteger()

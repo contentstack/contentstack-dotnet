@@ -2,7 +2,6 @@ using System;
 using System.Buffers;
 using System.Text;
 using System.Text.Json;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -14,15 +13,14 @@ namespace Contentstack.Core.Unit.Tests
 {
     public class EntryJsonConverterUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         private ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             return new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }
@@ -60,15 +58,14 @@ namespace Contentstack.Core.Unit.Tests
 
     public class AssetJsonConverterUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         private ContentstackClient CreateClient()
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             return new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }

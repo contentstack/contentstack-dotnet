@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
@@ -17,7 +16,6 @@ namespace Contentstack.Core.Unit.Tests
     /// </summary>
     public class AssetLibraryUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
         private ContentstackClient _client;
 
         public AssetLibraryUnitTests()
@@ -29,9 +27,9 @@ namespace Contentstack.Core.Unit.Tests
         {
             var options = new ContentstackOptions()
             {
-                ApiKey = _fixture.Create<string>(),
-                DeliveryToken = _fixture.Create<string>(),
-                Environment = _fixture.Create<string>()
+                ApiKey = Guid.NewGuid().ToString("N"),
+                DeliveryToken = Guid.NewGuid().ToString("N"),
+                Environment = Guid.NewGuid().ToString("N")
             };
             _client = new ContentstackClient(new OptionsWrapper<ContentstackOptions>(options));
         }
@@ -48,8 +46,8 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var key = _fixture.Create<string>();
-            var value = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             AssetLibrary result = assetLibrary.Where(key, value);
@@ -73,7 +71,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             AssetLibrary result = assetLibrary.Where(null, value);
@@ -88,7 +86,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             AssetLibrary result = assetLibrary.Where("", value);
@@ -379,8 +377,8 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var key = _fixture.Create<string>();
-            var value = _fixture.Create<string>();
+            var key = Guid.NewGuid().ToString("N");
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             AssetLibrary result = assetLibrary.AddParam(key, value);
@@ -529,7 +527,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var assetLibrary = CreateAssetLibrary();
             var key = "custom_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
 
             // Act
             AssetLibrary result = assetLibrary.SetHeaderForKey(key, value);
@@ -552,7 +550,7 @@ namespace Contentstack.Core.Unit.Tests
             // Arrange
             var assetLibrary = CreateAssetLibrary();
             var key = "custom_header";
-            var value = _fixture.Create<string>();
+            var value = Guid.NewGuid().ToString("N");
             assetLibrary.SetHeaderForKey(key, value);
             
             var headersField = typeof(AssetLibrary).GetField("_Headers", 

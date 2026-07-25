@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using AutoFixture;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 using Xunit;
@@ -11,7 +10,6 @@ namespace Contentstack.Core.Unit.Tests
 {
     public class ConfigUnitTests
     {
-        private readonly IFixture _fixture = new Fixture();
 
         private Config CreateConfig()
         {
@@ -149,7 +147,7 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var config = CreateConfig();
-            var environment = _fixture.Create<string>();
+            var environment = Guid.NewGuid().ToString("N");
 
             // Act
             config.Environment = environment;
