@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
-using Newtonsoft.Json.Linq;
 
 namespace Contentstack.Core.Models
 {
@@ -19,9 +17,6 @@ namespace Contentstack.Core.Models
     {
 
         #region Internal Variables
-        private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
-        private Dictionary<string, object> _Headers = new Dictionary<string, object>();
-        private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
         private string _uid = null;
 
@@ -62,7 +57,6 @@ namespace Contentstack.Core.Models
                 throw new TaxonomyException("ContentstackClient instance cannot be null when creating a Taxonomy instance.");
             }
             this.Stack = stack;
-            this._StackHeaders = stack._LocalHeaders;
         }
 
         internal Taxonomy(ContentstackClient stack, string uid) : this(stack)
@@ -182,23 +176,7 @@ namespace Contentstack.Core.Models
 
             try
             {
-                var headerAll = new Dictionary<string, object>();
-                foreach (var header in Stack._LocalHeaders)
-                    headerAll[header.Key] = header.Value;
-
-                var mainJson = new Dictionary<string, object>();
-                if (Stack.Config?.Environment != null)
-                    mainJson["environment"] = Stack.Config.Environment;
-                foreach (var kvp in UrlQueries)
-                    mainJson[kvp.Key] = kvp.Value;
-
-                var handler = new HttpRequestHandler(Stack);
-                var result = await handler.ProcessRequest(
-                    _Url, headerAll, mainJson,
-                    Branch: Stack.Config.Branch,
-                    timeout: Stack.Config.Timeout,
-                    proxy: Stack.Config.Proxy
-                );
+                var result = await TaxonomyRequestHelper.ExecuteRequest(Stack, _Url, UrlQueries);
 
                 var jObject = Newtonsoft.Json.Linq.JObject.Parse(result);
                 var token = jObject.SelectToken("$.taxonomy");
@@ -208,7 +186,51 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                var contentstackError = GetContentstackError(ex);
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
+            }
+        }
+
+        /// <summary>
+        /// Fetches all published taxonomies from the CDA.
+        /// Only valid on an unscoped <see cref="Taxonomy"/> instance (<c>client.Taxonomies()</c>, no UID) —
+        /// throws <see cref="TaxonomyException"/> if called on a UID-scoped instance.
+        /// Use <see cref="Query.Skip(int)"/>-style pagination via <see cref="AddParam"/>, or the
+        /// dedicated <c>skip</c>/<c>limit</c>/<c>include_count</c> params, before calling.
+        /// </summary>
+        /// <returns>A <see cref="ContentstackCollection{T}"/> containing the published taxonomies.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///     var result = await stack.Taxonomies().List&lt;MyTaxonomy&gt;();
+        ///     var page = await stack.Taxonomies().AddParam("skip", "0").AddParam("limit", "10").List&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public async Task<ContentstackCollection<T>> List<T>()
+        {
+            if (_uid != null)
+                throw new TaxonomyException("List() is only valid on an unscoped Taxonomy. Use client.Taxonomies() without a UID.");
+
+            try
+            {
+                Config config = this.Stack.Config;
+                var url = String.Format("{0}/taxonomies", config.BaseUrl);
+                var result = await TaxonomyRequestHelper.ExecuteRequest(Stack, url, UrlQueries);
+
+                var jObject = Newtonsoft.Json.Linq.JObject.Parse(result);
+                var taxonomies = jObject.SelectToken("$.taxonomies")?.ToObject<IEnumerable<T>>(Stack.Serializer);
+                var collection = jObject.ToObject<ContentstackCollection<T>>(Stack.Serializer);
+                collection.Items = taxonomies ?? Enumerable.Empty<T>();
+                return collection;
+            }
+            catch (Exception ex)
+            {
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
                 throw new TaxonomyException(contentstackError.Message, ex)
                 {
                     ErrorCode = contentstackError.ErrorCode,
@@ -372,126 +394,6 @@ namespace Contentstack.Core.Models
             return this;
         }
 
-        #endregion
-        #region Private Functions
-
-        private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
-        {
-            Dictionary<string, object> mainHeader = _StackHeaders;
-            Dictionary<string, object> classHeaders = new Dictionary<string, object>();
-
-            if (localHeader != null && localHeader.Count > 0)
-            {
-                if (mainHeader != null && mainHeader.Count > 0)
-                {
-                    foreach (var entry in localHeader)
-                    {
-                        String key = entry.Key;
-                        classHeaders.Add(key, entry.Value);
-                    }
-
-                    foreach (var entry in mainHeader)
-                    {
-                        String key = entry.Key;
-                        if (!classHeaders.ContainsKey(key))
-                        {
-                            classHeaders.Add(key, entry.Value);
-                        }
-                    }
-
-                    return classHeaders;
-
-                }
-                else
-                {
-                    return localHeader;
-                }
-
-            }
-            else
-            {
-                return _StackHeaders;
-            }
-        }
-        internal new static ContentstackException GetContentstackError(Exception ex)
-        {
-            Int32 errorCode = 0;
-            string errorMessage = string.Empty;
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            ContentstackException contentstackError = new ContentstackException(ex);
-            Dictionary<string, object> errors = null;
-
-            try
-            {
-                System.Net.WebException webEx = ex as System.Net.WebException;
-                
-                if (webEx != null && webEx.Response != null)
-                {
-                    using (var exResp = webEx.Response)
-                    {
-                        var stream = exResp.GetResponseStream();
-                        if (stream != null)
-                        {
-                            using (stream)
-                            using (var reader = new StreamReader(stream))
-                            {
-                                errorMessage = reader.ReadToEnd();
-                                
-                                if (!string.IsNullOrWhiteSpace(errorMessage))
-                                {
-                                    try
-                                    {
-                                        JObject data = JObject.Parse(errorMessage.Replace("\r\n", ""));
-
-                                        JToken token = data["error_code"];
-                                        if (token != null)
-                                            errorCode = token.Value<int>();
-
-                                        token = data["error_message"];
-                                        if (token != null)
-                                            errorMessage = token.Value<string>();
-
-                                        token = data["errors"];
-                                        if (token != null)
-                                            errors = token.ToObject<Dictionary<string, object>>();
-                                    }
-                                    catch (Newtonsoft.Json.JsonException)
-                                    {
-                                        // If JSON parsing fails, use the raw error message
-                                        // errorMessage is already set from ReadToEnd()
-                                    }
-                                }
-
-                                var response = exResp as HttpWebResponse;
-                                if (response != null)
-                                    statusCode = response.StatusCode;
-                            }
-                        }
-                        else
-                        {
-                            errorMessage = webEx.Message;
-                        }
-                    }
-                }
-                else
-                {
-                    errorMessage = ex.Message;
-                }
-            }
-            catch
-            {
-                errorMessage = ex.Message;
-            }
-
-            contentstackError = new ContentstackException(errorMessage)
-            {
-                ErrorCode = errorCode,
-                StatusCode = statusCode,
-                Errors = errors
-            };
-
-            return contentstackError;
-        }
         #endregion
     }
 }

@@ -83,6 +83,38 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Limits the depth of the term hierarchy returned by <see cref="Ancestors{T}"/>/<see cref="Descendants{T}"/>.
+        /// <c>Depth(1)</c> returns only immediate parents/children; higher values include deeper levels.
+        /// </summary>
+        /// <param name="depth">The maximum number of hierarchy levels to include.</param>
+        /// <returns>The current <see cref="Term"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var children = await stack.Taxonomies("gadgets").Term("laptops").Depth(1).Descendants&lt;JToken&gt;();
+        /// </code>
+        /// </example>
+        public Term Depth(int depth)
+        {
+            UrlQueries["depth"] = depth;
+            return this;
+        }
+
+        /// <summary>
+        /// Includes branch information in the response for this term.
+        /// </summary>
+        /// <returns>The current <see cref="Term"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var term = await stack.Taxonomies("gadgets").Term("smartwatch").IncludeBranch().Fetch&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public Term IncludeBranch()
+        {
+            UrlQueries["include_branch"] = "true";
+            return this;
+        }
+
+        /// <summary>
         /// Fetches the published term from the CDA.
         /// Maps to GET /v3/taxonomies/{uid}/terms/{termUid} with any configured query parameters.
         /// </summary>
@@ -98,7 +130,7 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                var result = await ExecuteRequest(BaseUrlPath, UrlQueries);
+                var result = await TaxonomyRequestHelper.ExecuteRequest(_stack, BaseUrlPath, UrlQueries);
                 var jObject = JObject.Parse(result);
                 var token = jObject.SelectToken("$.term");
                 if (token != null)
@@ -111,7 +143,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                var contentstackError = Taxonomy.GetContentstackError(ex);
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
                 throw new TaxonomyException(contentstackError.Message, ex)
                 {
                     ErrorCode = contentstackError.ErrorCode,
@@ -135,9 +167,9 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                var result = await ExecuteRequest($"{BaseUrlPath}/locales");
+                var result = await TaxonomyRequestHelper.ExecuteRequest(_stack, $"{BaseUrlPath}/locales", null);
                 var jObject = JObject.Parse(result);
-                var token = jObject.SelectToken("$.locales");
+                var token = jObject.SelectToken("$.terms");
                 if (token != null)
                     return token.ToObject<T>(_stack.Serializer);
                 return jObject.ToObject<T>(_stack.Serializer);
@@ -148,7 +180,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                var contentstackError = Taxonomy.GetContentstackError(ex);
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
                 throw new TaxonomyException(contentstackError.Message, ex)
                 {
                     ErrorCode = contentstackError.ErrorCode,
@@ -172,9 +204,9 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                var result = await ExecuteRequest($"{BaseUrlPath}/ancestors");
+                var result = await TaxonomyRequestHelper.ExecuteRequest(_stack, $"{BaseUrlPath}/ancestors", UrlQueries);
                 var jObject = JObject.Parse(result);
-                var token = jObject.SelectToken("$.ancestors");
+                var token = jObject.SelectToken("$.terms");
                 if (token != null)
                     return token.ToObject<T>(_stack.Serializer);
                 return jObject.ToObject<T>(_stack.Serializer);
@@ -185,7 +217,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                var contentstackError = Taxonomy.GetContentstackError(ex);
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
                 throw new TaxonomyException(contentstackError.Message, ex)
                 {
                     ErrorCode = contentstackError.ErrorCode,
@@ -209,9 +241,9 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                var result = await ExecuteRequest($"{BaseUrlPath}/descendants");
+                var result = await TaxonomyRequestHelper.ExecuteRequest(_stack, $"{BaseUrlPath}/descendants", UrlQueries);
                 var jObject = JObject.Parse(result);
-                var token = jObject.SelectToken("$.descendants");
+                var token = jObject.SelectToken("$.terms");
                 if (token != null)
                     return token.ToObject<T>(_stack.Serializer);
                 return jObject.ToObject<T>(_stack.Serializer);
@@ -222,7 +254,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                var contentstackError = Taxonomy.GetContentstackError(ex);
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
                 throw new TaxonomyException(contentstackError.Message, ex)
                 {
                     ErrorCode = contentstackError.ErrorCode,
@@ -232,27 +264,5 @@ namespace Contentstack.Core.Models
             }
         }
 
-        private async Task<string> ExecuteRequest(string url, Dictionary<string, object> extraParams = null)
-        {
-            var headerAll = new Dictionary<string, object>();
-            foreach (var header in _stack._LocalHeaders)
-                headerAll[header.Key] = header.Value;
-
-            var mainJson = new Dictionary<string, object>();
-            if (_stack.Config?.Environment != null)
-                mainJson["environment"] = _stack.Config.Environment;
-
-            if (extraParams != null)
-                foreach (var kvp in extraParams)
-                    mainJson[kvp.Key] = kvp.Value;
-
-            var handler = new HttpRequestHandler(_stack);
-            return await handler.ProcessRequest(
-                url, headerAll, mainJson,
-                Branch: _stack.Config.Branch,
-                timeout: _stack.Config.Timeout,
-                proxy: _stack.Config.Proxy
-            );
-        }
     }
 }
