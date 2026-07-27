@@ -207,14 +207,14 @@ namespace Contentstack.Core.Models
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
-        ///     var result = await stack.Taxonomies().List&lt;MyTaxonomy&gt;();
-        ///     var page = await stack.Taxonomies().AddParam("skip", "0").AddParam("limit", "10").List&lt;MyTaxonomy&gt;();
+        ///     var result = await stack.Taxonomies().Find&lt;MyTaxonomy&gt;();
+        ///     var page = await stack.Taxonomies().AddParam("skip", "0").AddParam("limit", "10").Find&lt;MyTaxonomy&gt;();
         /// </code>
         /// </example>
-        public async Task<ContentstackCollection<T>> List<T>()
+        public new async Task<ContentstackCollection<T>> Find<T>()
         {
             if (_uid != null)
-                throw new TaxonomyException("List() is only valid on an unscoped Taxonomy. Use client.Taxonomies() without a UID.");
+                throw new TaxonomyException("Find() requires an unscoped Taxonomy. Use client.Taxonomies() without a UID.");
 
             try
             {

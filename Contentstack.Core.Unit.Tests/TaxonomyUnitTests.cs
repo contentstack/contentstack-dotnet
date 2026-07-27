@@ -867,17 +867,17 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
-        #region Taxonomy.List Tests
+        #region Taxonomy.Find Tests
 
         [Fact]
-        public async Task Taxonomy_List_OnScopedInstance_ThrowsTaxonomyException()
+        public async Task Taxonomy_Find_OnScopedInstance_ThrowsTaxonomyException()
         {
             var taxonomy = _client.Taxonomies("gadgets");
-            await Assert.ThrowsAsync<TaxonomyException>(() => taxonomy.List<Newtonsoft.Json.Linq.JObject>());
+            await Assert.ThrowsAsync<TaxonomyException>(() => taxonomy.Find<Newtonsoft.Json.Linq.JObject>());
         }
 
         [Fact]
-        public void Taxonomy_List_AddParam_SetsSkipLimitIncludeCountParams()
+        public void Taxonomy_Find_AddParam_SetsSkipLimitIncludeCountParams()
         {
             var taxonomy = _client.Taxonomies()
                 .AddParam("skip", "0")

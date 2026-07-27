@@ -455,10 +455,10 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
 
             LogArrange("Listing all published taxonomies");
 
-            LogAct("Calling Taxonomies().List<JObject>()");
+            LogAct("Calling Taxonomies().Find<JObject>()");
             var result = await client
                 .Taxonomies()
-                .List<Newtonsoft.Json.Linq.JObject>();
+                .Find<Newtonsoft.Json.Linq.JObject>();
 
             LogAssert("Verifying response");
             Assert.NotNull(result);
@@ -473,12 +473,12 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
 
             LogArrange("Listing taxonomies with skip/limit");
 
-            LogAct("Calling Taxonomies().AddParam(\"skip\",\"0\").AddParam(\"limit\",\"1\").List<JObject>()");
+            LogAct("Calling Taxonomies().AddParam(\"skip\",\"0\").AddParam(\"limit\",\"1\").Find<JObject>()");
             var result = await client
                 .Taxonomies()
                 .AddParam("skip", "0")
                 .AddParam("limit", "1")
-                .List<Newtonsoft.Json.Linq.JObject>();
+                .Find<Newtonsoft.Json.Linq.JObject>();
 
             LogAssert("Verifying response is limited to at most one item");
             Assert.NotNull(result);
@@ -492,11 +492,11 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
 
             LogArrange("Listing taxonomies with include_count");
 
-            LogAct("Calling Taxonomies().AddParam(\"include_count\",\"true\").List<JObject>()");
+            LogAct("Calling Taxonomies().AddParam(\"include_count\",\"true\").Find<JObject>()");
             var result = await client
                 .Taxonomies()
                 .AddParam("include_count", "true")
-                .List<Newtonsoft.Json.Linq.JObject>();
+                .Find<Newtonsoft.Json.Linq.JObject>();
 
             LogAssert("Verifying response");
             Assert.NotNull(result);
