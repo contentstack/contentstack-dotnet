@@ -446,6 +446,87 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
             Assert.NotNull(result["uid"]?.ToString());
         }
 
+        [Fact(DisplayName = "TaxPublish - Term.Descendants with locale and fallback returns localized child+grandchild hierarchy")]
+        public async Task Term_Descendants_WithLocaleAndFallback_ReturnsLocalizedHierarchy()
+        {
+            var client = CreateGadgetsClient();
+            var (parentUid, childUid, grandchildUid) = await GetTermHierarchyAsync(client);
+
+            if (string.IsNullOrEmpty(parentUid))
+            {
+                Output.WriteLine("No parent/child/grandchild term chain found — skipping test.");
+                return;
+            }
+
+            LogArrange("Fetching localized descendants (depth=2) with fallback, down to grandchild level");
+            LogContext("ParentTermUid", parentUid);
+            LogContext("Locale", TestDataHelper.TaxPublishLocale);
+
+            LogAct("Calling Term(parentUid).SetLocale(locale).IncludeFallback().Depth(2).Descendants<JArray>()");
+            var result = await client
+                .Taxonomies(TestDataHelper.TaxPublishTaxonomyUid)
+                .Term(parentUid)
+                .SetLocale(TestDataHelper.TaxPublishLocale)
+                .IncludeFallback()
+                .Depth(2)
+                .Descendants<Newtonsoft.Json.Linq.JArray>();
+
+            LogAssert("Verifying both child and grandchild are present, each localized or correctly fallen back");
+            Assert.NotNull(result);
+            var uids = result.Select(t => t["uid"]?.ToString()).ToList();
+            Assert.Contains(childUid, uids);
+            Assert.Contains(grandchildUid, uids);
+
+            // Every returned term must be either in the requested locale (translated) or the
+            // master locale (fallen back) - never some third, unrelated locale.
+            foreach (var term in result)
+            {
+                var locale = term["locale"]?.ToString();
+                Assert.True(
+                    locale == TestDataHelper.TaxPublishLocale || locale == "en-us",
+                    $"Term '{term["uid"]}' returned unexpected locale '{locale}' - expected '{TestDataHelper.TaxPublishLocale}' (translated) or 'en-us' (fallback).");
+            }
+        }
+
+        [Fact(DisplayName = "TaxPublish - Term.Ancestors with locale and fallback returns localized ancestor chain")]
+        public async Task Term_Ancestors_WithLocaleAndFallback_ReturnsLocalizedChain()
+        {
+            var client = CreateGadgetsClient();
+            var (parentUid, childUid, grandchildUid) = await GetTermHierarchyAsync(client);
+
+            if (string.IsNullOrEmpty(grandchildUid))
+            {
+                Output.WriteLine("No parent/child/grandchild term chain found — skipping test.");
+                return;
+            }
+
+            LogArrange("Fetching localized ancestors for the grandchild term, with fallback");
+            LogContext("GrandchildTermUid", grandchildUid);
+            LogContext("Locale", TestDataHelper.TaxPublishLocale);
+
+            LogAct("Calling Term(grandchildUid).SetLocale(locale).IncludeFallback().Ancestors<JArray>()");
+            var result = await client
+                .Taxonomies(TestDataHelper.TaxPublishTaxonomyUid)
+                .Term(grandchildUid)
+                .SetLocale(TestDataHelper.TaxPublishLocale)
+                .IncludeFallback()
+                .Ancestors<Newtonsoft.Json.Linq.JArray>();
+
+            LogAssert("Verifying both parent and child (the ancestor chain) are present and correctly localized/fallen back");
+            Assert.NotNull(result);
+            var uids = result.Select(t => t["uid"]?.ToString()).ToList();
+            Assert.Contains(childUid, uids);
+            Assert.Contains(parentUid, uids);
+
+            foreach (var term in result)
+            {
+                var locale = term["locale"]?.ToString();
+                Assert.True(
+                    locale == TestDataHelper.TaxPublishLocale || locale == "en-us",
+                    $"Term '{term["uid"]}' returned unexpected locale '{locale}' - expected '{TestDataHelper.TaxPublishLocale}' (translated) or 'en-us' (fallback).");
+            }
+        }
+
         // ── 9. List all taxonomies ────────────────────────────────────────────
 
         [Fact(DisplayName = "TaxPublish - List all taxonomies returns a collection")]
