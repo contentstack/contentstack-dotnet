@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Contentstack.Core.Configuration;
 using Contentstack.Core.Internals;
 namespace Contentstack.Core.Models
 {
+    /// <summary>
+    /// Represents a published taxonomy from the CDA, providing methods to fetch the taxonomy,
+    /// list its terms, and navigate to individual terms.
+    /// Use <see cref="SetLocale"/>, <see cref="IncludeFallback"/>, and <see cref="AddParam"/> to
+    /// configure the request before calling <see cref="Fetch{T}"/>.
+    /// </summary>
     public class Taxonomy: Query
     {
 
         #region Internal Variables
-        private Dictionary<string, object> _ObjectAttributes = new Dictionary<string, object>();
-        private Dictionary<string, object> _Headers = new Dictionary<string, object>();
-        private Dictionary<string, object> _StackHeaders = new Dictionary<string, object>();
         private Dictionary<string, object> UrlQueries = new Dictionary<string, object>();
+        private string _uid = null;
 
         protected override string _Url
         {
@@ -28,6 +34,8 @@ namespace Contentstack.Core.Models
                     throw new TaxonomyException("Taxonomy Stack Config is null. Please ensure the ContentstackClient is properly configured.");
                 }
                 Config config = this.Stack.Config;
+                if (_uid != null)
+                    return String.Format("{0}/taxonomies/{1}", config.BaseUrl, _uid);
                 return String.Format("{0}/taxonomies/entries", config.BaseUrl);
             }
         }
@@ -38,7 +46,7 @@ namespace Contentstack.Core.Models
             set;
         }
 
-       
+
         #region Internal Constructors
 
         internal Taxonomy()
@@ -51,11 +59,187 @@ namespace Contentstack.Core.Models
                 throw new TaxonomyException("ContentstackClient instance cannot be null when creating a Taxonomy instance.");
             }
             this.Stack = stack;
-            this._StackHeaders = stack._LocalHeaders;
+        }
+
+        internal Taxonomy(ContentstackClient stack, string uid) : this(stack)
+        {
+            if (string.IsNullOrEmpty(uid))
+                throw new TaxonomyException("Taxonomy UID cannot be null or empty.");
+            _uid = uid;
         }
 
         #endregion
         #region Public Functions
+
+        /// <summary>
+        /// Sets the locale for this taxonomy fetch.
+        /// Passing null or empty is a no-op.
+        /// </summary>
+        /// <param name="locale">Locale code (e.g. "hi-in", "en-us").</param>
+        /// <returns>The current <see cref="Taxonomy"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var taxonomy = await stack.Taxonomies("gadgets").SetLocale("hi-in").Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new Taxonomy SetLocale(string locale)
+        {
+            if (!string.IsNullOrEmpty(locale))
+                UrlQueries["locale"] = locale;
+            return this;
+        }
+
+        /// <summary>
+        /// Falls back to the master locale when the taxonomy is not published in the requested locale.
+        /// Can be used with or without <see cref="SetLocale"/>.
+        /// </summary>
+        /// <returns>The current <see cref="Taxonomy"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var taxonomy = await stack.Taxonomies("gadgets").SetLocale("hi-in").IncludeFallback().Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new Taxonomy IncludeFallback()
+        {
+            UrlQueries["include_fallback"] = "true";
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a custom query parameter to the request.
+        /// </summary>
+        /// <param name="key">Parameter key.</param>
+        /// <param name="value">Parameter value.</param>
+        /// <returns>The current <see cref="Taxonomy"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var taxonomy = await stack.Taxonomies("gadgets").AddParam("include_branch", "true").Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new Taxonomy AddParam(string key, string value)
+        {
+            UrlQueries[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Returns a Term instance for the given term UID within this taxonomy.
+        /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// </summary>
+        /// <param name="termUid">The UID of the term to retrieve.</param>
+        /// <returns>A <see cref="Term"/> instance scoped to this taxonomy and term.</returns>
+        /// <example>
+        /// <code>
+        ///     var term = await stack.Taxonomies("gadgets").Term("smartwatch").Fetch&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public Term Term(string termUid)
+        {
+            if (_uid == null)
+                throw new TaxonomyException("Term() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
+            return new Term(Stack, _uid, termUid);
+        }
+
+        /// <summary>
+        /// Returns a TermQuery for listing all published terms within this taxonomy.
+        /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// </summary>
+        /// <returns>A <see cref="TermQuery"/> instance for this taxonomy.</returns>
+        /// <example>
+        /// <code>
+        ///     var terms = await stack.Taxonomies("gadgets").Terms().SetLocale("hi-in").Find&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public TermQuery Terms()
+        {
+            if (_uid == null)
+                throw new TaxonomyException("Terms() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
+            return new TermQuery(Stack, _uid);
+        }
+
+        /// <summary>
+        /// Fetches the published taxonomy by its UID from the CDA.
+        /// Requires the Taxonomy to be initialised with a UID via <c>client.Taxonomies("uid")</c>.
+        /// Use <see cref="SetLocale"/> and <see cref="IncludeFallback"/> to set query parameters before calling.
+        /// </summary>
+        /// <returns>The deserialized taxonomy object.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///     var taxonomy = await stack.Taxonomies("gadgets").Fetch&lt;MyTaxonomy&gt;();
+        ///     var localized = await stack.Taxonomies("gadgets").SetLocale("hi-in").Fetch&lt;MyTaxonomy&gt;();
+        ///     var withFallback = await stack.Taxonomies("gadgets").SetLocale("hi-in").IncludeFallback().Fetch&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public async Task<T> Fetch<T>()
+        {
+            if (_uid == null)
+                throw new TaxonomyException("Fetch() requires a taxonomy UID. Use client.Taxonomies(\"uid\") to scope to a specific taxonomy.");
+
+            try
+            {
+                var result = await TaxonomyRequestHelper.ExecuteRequest(Stack, _Url, UrlQueries);
+
+                var jObject = JsonNode.Parse(result)!.AsObject();
+                var token = jObject["taxonomy"];
+                if (token != null)
+                    return JsonSerializer.Deserialize<T>(token.ToJsonString(), Stack.SerializerOptions);
+                return JsonSerializer.Deserialize<T>(jObject.ToJsonString(), Stack.SerializerOptions);
+            }
+            catch (Exception ex)
+            {
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
+            }
+        }
+
+        /// <summary>
+        /// Fetches all published taxonomies from the CDA.
+        /// Only valid on an unscoped <see cref="Taxonomy"/> instance (<c>client.Taxonomies()</c>, no UID) —
+        /// throws <see cref="TaxonomyException"/> if called on a UID-scoped instance.
+        /// </summary>
+        /// <returns>A <see cref="ContentstackCollection{T}"/> containing the published taxonomies.</returns>
+        /// <example>
+        /// <code>
+        ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
+        ///     var result = await stack.Taxonomies().Find&lt;MyTaxonomy&gt;();
+        ///     var page = await stack.Taxonomies().AddParam("skip", "0").AddParam("limit", "10").Find&lt;MyTaxonomy&gt;();
+        /// </code>
+        /// </example>
+        public new async Task<ContentstackCollection<T>> Find<T>()
+        {
+            if (_uid != null)
+                throw new TaxonomyException("Find() requires an unscoped Taxonomy. Use client.Taxonomies() without a UID.");
+
+            try
+            {
+                Config config = this.Stack.Config;
+                var url = String.Format("{0}/taxonomies", config.BaseUrl);
+                var result = await TaxonomyRequestHelper.ExecuteRequest(Stack, url, UrlQueries);
+
+                var jObject = JsonNode.Parse(result)!.AsObject();
+                var taxonomiesNode = jObject["taxonomies"]?.AsArray();
+                IEnumerable<T> taxonomies = taxonomiesNode != null
+                    ? JsonSerializer.Deserialize<List<T>>(taxonomiesNode.ToJsonString(), Stack.SerializerOptions) ?? Enumerable.Empty<T>()
+                    : Enumerable.Empty<T>();
+                return ContentstackCollection<T>.FromDeliveryEnvelope(jObject, taxonomies);
+            }
+            catch (Exception ex)
+            {
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
+                throw new TaxonomyException(contentstackError.Message, ex)
+                {
+                    ErrorCode = contentstackError.ErrorCode,
+                    StatusCode = contentstackError.StatusCode,
+                    Errors = contentstackError.Errors
+                };
+            }
+        }
 
         /// <summary>
         /// Add a constraint to the query that requires a particular key entry to be less than the provided value.
@@ -211,106 +395,6 @@ namespace Contentstack.Core.Models
             return this;
         }
 
-        #endregion
-        #region Private Functions
-
-        private Dictionary<string, object> GetHeader(Dictionary<string, object> localHeader)
-        {
-            Dictionary<string, object> mainHeader = _StackHeaders;
-            Dictionary<string, object> classHeaders = new Dictionary<string, object>();
-
-            if (localHeader != null && localHeader.Count > 0)
-            {
-                if (mainHeader != null && mainHeader.Count > 0)
-                {
-                    foreach (var entry in localHeader)
-                    {
-                        String key = entry.Key;
-                        classHeaders.Add(key, entry.Value);
-                    }
-
-                    foreach (var entry in mainHeader)
-                    {
-                        String key = entry.Key;
-                        if (!classHeaders.ContainsKey(key))
-                        {
-                            classHeaders.Add(key, entry.Value);
-                        }
-                    }
-
-                    return classHeaders;
-
-                }
-                else
-                {
-                    return localHeader;
-                }
-
-            }
-            else
-            {
-                return _StackHeaders;
-            }
-        }
-        internal static new ContentstackException GetContentstackError(Exception ex)
-        {
-            Int32 errorCode = 0;
-            string errorMessage = string.Empty;
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            ContentstackException contentstackError = new ContentstackException(ex);
-            Dictionary<string, object> errors = null;
-
-            try
-            {
-                System.Net.WebException webEx = ex as System.Net.WebException;
-                
-                if (webEx != null && webEx.Response != null)
-                {
-                    using (var exResp = webEx.Response)
-                    {
-                        var stream = exResp.GetResponseStream();
-                        if (stream != null)
-                        {
-                            using (stream)
-                            using (var reader = new StreamReader(stream))
-                            {
-                                errorMessage = reader.ReadToEnd();
-                                
-                                if (!string.IsNullOrWhiteSpace(errorMessage))
-                                {
-                                    ApiErrorBodyParser.TryApply(errorMessage.Replace("\r\n", ""), ref errorCode, ref errorMessage, ref errors);
-                                }
-
-                                var response = exResp as HttpWebResponse;
-                                if (response != null)
-                                    statusCode = response.StatusCode;
-                            }
-                        }
-                        else
-                        {
-                            errorMessage = webEx.Message;
-                        }
-                    }
-                }
-                else
-                {
-                    errorMessage = ex.Message;
-                }
-            }
-            catch
-            {
-                errorMessage = ex.Message;
-            }
-
-            contentstackError = new ContentstackException(errorMessage)
-            {
-                ErrorCode = errorCode,
-                StatusCode = statusCode,
-                Errors = errors
-            };
-
-            return contentstackError;
-        }
         #endregion
     }
 }
