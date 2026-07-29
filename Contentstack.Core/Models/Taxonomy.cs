@@ -197,24 +197,40 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
-        /// Fetches all published taxonomies from the CDA.
-        /// Only valid on an unscoped <see cref="Taxonomy"/> instance (<c>client.Taxonomies()</c>, no UID) —
-        /// throws <see cref="TaxonomyException"/> if called on a UID-scoped instance.
+        /// True once <see cref="Above"/>, <see cref="Below"/>, <see cref="EqualAndAbove"/>, <see cref="EqualAndBelow"/>,
+        /// or an inherited <c>Query</c> filter such as <c>Exists</c>/<c>NotExists</c> has added a constraint.
+        /// Used by <see cref="Find{T}"/> to decide whether to list taxonomies or filter entries by taxonomy term.
+        /// </summary>
+        internal bool HasEntryFilters => QueryValueJson != null && QueryValueJson.Count > 0;
+
+        /// <summary>
+        /// Fetches all published taxonomies from the CDA, or — if <see cref="Above"/>/<see cref="Below"/>/
+        /// <see cref="EqualAndAbove"/>/<see cref="EqualAndBelow"/>/<c>Exists</c>/<c>NotExists</c> was called first —
+        /// filters entries by their taxonomy term assignment (<c>GET /taxonomies/entries</c>) via the inherited
+        /// <see cref="Query.Find{T}"/> pipeline.
+        /// The list-all mode is only valid on an unscoped <see cref="Taxonomy"/> instance (<c>client.Taxonomies()</c>,
+        /// no UID) — throws <see cref="TaxonomyException"/> if called on a UID-scoped instance.
         /// Use <see cref="Query.Skip(int)"/>-style pagination via <see cref="AddParam"/>, or the
         /// dedicated <c>skip</c>/<c>limit</c>/<c>include_count</c> params, before calling.
         /// </summary>
-        /// <returns>A <see cref="ContentstackCollection{T}"/> containing the published taxonomies.</returns>
+        /// <returns>A <see cref="ContentstackCollection{T}"/> containing the published taxonomies or matching entries.</returns>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClient("api_key", "delivery_token", "environment");
         ///     var result = await stack.Taxonomies().Find&lt;MyTaxonomy&gt;();
         ///     var page = await stack.Taxonomies().AddParam("skip", "0").AddParam("limit", "10").Find&lt;MyTaxonomy&gt;();
+        ///     var entries = await stack.Taxonomies().Above("category", "electronics").Find&lt;Entry&gt;();
         /// </code>
         /// </example>
         public new async Task<ContentstackCollection<T>> Find<T>()
         {
             if (_uid != null)
                 throw new TaxonomyException("Find() requires an unscoped Taxonomy. Use client.Taxonomies() without a UID.");
+
+            if (HasEntryFilters)
+            {
+                return await base.Find<T>();
+            }
 
             try
             {

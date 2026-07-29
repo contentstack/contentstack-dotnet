@@ -895,6 +895,72 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
+        #region Taxonomy.Find Routing (HasEntryFilters) Tests
+
+        [Fact]
+        public void HasEntryFilters_FalseByDefault_OnFreshTaxonomy()
+        {
+            var taxonomy = CreateTaxonomy();
+            Assert.False(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterAbove()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.Above(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterBelow()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.Below(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterEqualAndAbove()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.EqualAndAbove(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterEqualAndBelow()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.EqualAndBelow(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterExists_InheritedFromQuery()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.Exists(_fixture.Create<string>());
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_FalseAfterAddParam_ListAllPathStillUsed()
+        {
+            var taxonomy = _client.Taxonomies().AddParam("skip", "0");
+            Assert.False(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public async Task Taxonomy_Find_OnScopedInstance_ThrowsTaxonomyException_EvenWithFilters()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            taxonomy.Above("category", "electronics");
+            await Assert.ThrowsAsync<TaxonomyException>(() => taxonomy.Find<Newtonsoft.Json.Linq.JObject>());
+        }
+
+        #endregion
+
         #region Term.SetLocale / IncludeFallback / AddParam Tests
 
         [Fact]
