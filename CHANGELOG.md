@@ -1,3 +1,11 @@
+### Version: 3.1.1
+#### Date: Aug-03-2026
+
+##### Fix:
+- Bumped vulnerable/outdated dependencies (Snyk remediation)
+
+---
+
 ### Version: 3.1.0
 #### Date: Jul-20-2026
 
