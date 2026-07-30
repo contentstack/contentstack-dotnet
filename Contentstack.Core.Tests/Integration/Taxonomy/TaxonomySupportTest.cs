@@ -371,17 +371,29 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Exists("taxonomies.one");
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
                 TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                // Taxonomy may not be configured - test passes if method exists
-                TestAssert.True(true, "Taxonomy.Exists() method executed");
+                // Taxonomy term not configured on this stack - acceptable, but must be this exception type with a real message
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -401,16 +413,21 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Exists("taxonomies.one");
                 var result = await taxonomy.Count();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                // Taxonomy may not be configured - test passes if method exists
-                TestAssert.True(true, "Taxonomy.Count() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -430,16 +447,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Exists("taxonomies.one");
                 var result = await taxonomy.FindOne<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                // Taxonomy may not be configured - test passes if method exists
-                TestAssert.True(true, "Taxonomy.FindOne() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -460,15 +489,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 taxonomy.Exists("taxonomies.one");
                 taxonomy.Skip(0);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.Skip() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -489,15 +531,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 taxonomy.Exists("taxonomies.one");
                 taxonomy.Limit(10);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.Limit() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -518,15 +573,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 taxonomy.Exists("taxonomies.one");
                 taxonomy.IncludeCount();
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.IncludeCount() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -547,15 +615,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 taxonomy.Exists("taxonomies.one");
                 taxonomy.IncludeMetadata();
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.IncludeMetadata() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -576,15 +657,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 taxonomy.Exists("taxonomies.one");
                 taxonomy.SetLocale("en-us");
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.SetLocale() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -604,15 +698,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Exists("taxonomies.one");
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy object with environment executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -632,15 +739,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Exists("taxonomies.one");
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy object with branch executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -661,15 +781,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 taxonomy.SetHeader("custom_header", "value");
                 taxonomy.Exists("taxonomies.one");
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.SetHeader() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -689,15 +822,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Above("taxonomies.one", 1);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.Above() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -717,15 +863,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Below("taxonomies.one", 5);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.Below() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -745,15 +904,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.EqualAndAbove("taxonomies.one", 2);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.EqualAndAbove() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -773,15 +945,28 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.EqualAndBelow("taxonomies.one", 3);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // Assert
             LogAssert("Verifying response");
 
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
+                foreach (var entry in result.Items)
+                {
+                    TestAssert.NotNull(entry.Uid);
+                    TestAssert.NotEmpty(entry.Uid);
+                }
             }
-            catch (Exception)
+            catch (TaxonomyException ex)
             {
-                TestAssert.True(true, "Taxonomy.EqualAndBelow() method executed");
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
+            }
+            catch (ContentstackException ex)
+            {
+                TestAssert.NotNull(ex.Message);
+                TestAssert.NotEmpty(ex.Message);
             }
         }
         
@@ -806,9 +991,11 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 // Use invalid taxonomy that might return non-JSON error or null response
                 taxonomy.Above("invalid.taxonomy.path.xyz.123", 1);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 // If no exception, test passes
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             }
             catch (TaxonomyException ex)
             {
@@ -851,8 +1038,10 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.Exists("non.existent.taxonomy.xyz");
                 var result = await taxonomy.Find<Entry>();
-                
+
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             }
             catch (TaxonomyException ex)
             {
@@ -885,8 +1074,10 @@ namespace Contentstack.Core.Tests.Integration.Taxonomy
                 TaxonomyModel taxonomy = client.Taxonomies();
                 taxonomy.EqualAndBelow("invalid_taxonomy_xyz_123", 0);
                 var result = await taxonomy.Find<Entry>();
-                
+
                 TestAssert.NotNull(result);
+                TestAssert.NotNull(result.Items);
+                TestAssert.IsAssignableFrom<IEnumerable<Entry>>(result.Items);
             }
             catch (TaxonomyException ex)
             {
