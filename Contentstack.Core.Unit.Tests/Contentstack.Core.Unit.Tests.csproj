@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="**/*.resx" />
     <EmbeddedResource Include="Mokes\Response\*.txt" />
   </ItemGroup>
 
