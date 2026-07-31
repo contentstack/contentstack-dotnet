@@ -17,6 +17,8 @@
   - Both compose correctly with hierarchy traversal — `Term(uid).SetLocale("fr-fr").IncludeFallback().Depth(2).Descendants<T>()` returns a full localized subtree, with untranslated nodes individually falling back to master locale in the same response
   - Fallback is per-node, not all-or-nothing: a single hierarchy fetch can return some terms translated and others fallen-back simultaneously — safe to use on partially-translated taxonomies
 
+##### Fix:
+- Bumped vulnerable/outdated dependencies (Snyk remediation)
 ---
 
 ### Version: 3.1.0
