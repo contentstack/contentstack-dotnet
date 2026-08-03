@@ -1,7 +1,9 @@
 name: Source Composition Analysis Scan
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   security-sca:
     runs-on: ubuntu-latest
@@ -9,13 +11,29 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'   # match your TFM
+
+      - name: Restore dependencies
+        run: dotnet restore
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --fail-on=all
-          json: true
-        continue-on-error: true
+          args: --all-projects --detection-depth=4 --fail-on=all --json-file-output=snyk.json
+
+      - name: Verify scan output exists
+        run: |
+          if [ ! -f snyk.json ]; then
+            echo "::error::Snyk produced no snyk.json — the scan did not complete. Failing closed."
+            exit 1
+          fi
+
       - uses: contentstack/sca-policy@main
