@@ -1,9 +1,24 @@
-### Version: 3.1.1
-#### Date: Aug-03-2026
+### Version: 3.2.0
+#### Date: Aug-3-2026
+
+##### Feat:
+- Taxonomy Publishing CDA support
+  - `Taxonomies(uid)` scopes to a specific taxonomy: `.Fetch<T>()`, `.Term(termUid)`, `.Terms()`
+  - `Taxonomies().Find<T>()` — list all published taxonomies (`GET /taxonomies`)
+  - New `Term` class: `.Fetch<T>()`, `.Locales<T>()`, `.Ancestors<T>()`, `.Descendants<T>()`
+  - New `TermQuery` class: `.Find<T>()` for listing terms within a taxonomy
+  - `Depth(int)` and `IncludeBranch()` on `Term`/`TermQuery` for hierarchy traversal control
+  - `Skip(int)`, `Limit(int)`, `IncludeCount()` on `TermQuery` for paginated term listing
+  - Added `Internals/TaxonomyRequestHelper` — shared request-building, header-merging, and error-parsing for `Taxonomy`/`Term`/`TermQuery`
+
+- Taxonomy / Term / TermQuery — localization support
+  - `SetLocale(string)` filters the taxonomy/term response to a specific locale (e.g. `"fr-fr"`)
+  - `IncludeFallback()` returns the master-locale (`en-us`) version when a term/taxonomy isn't translated into the requested locale, instead of omitting it
+  - Both compose correctly with hierarchy traversal — `Term(uid).SetLocale("fr-fr").IncludeFallback().Depth(2).Descendants<T>()` returns a full localized subtree, with untranslated nodes individually falling back to master locale in the same response
+  - Fallback is per-node, not all-or-nothing: a single hierarchy fetch can return some terms translated and others fallen-back simultaneously — safe to use on partially-translated taxonomies
 
 ##### Fix:
 - Bumped vulnerable/outdated dependencies (Snyk remediation)
-
 ---
 
 ### Version: 3.1.0

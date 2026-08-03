@@ -127,9 +127,21 @@ namespace Contentstack.Core.Tests.Helpers
         /// <summary>
         /// Gets the taxonomy term for India state (e.g., "maharashtra")
         /// </summary>
-        public static string TaxIndiaState => 
+        public static string TaxIndiaState =>
             GetRequiredConfig("TAX_INDIA_STATE");
-        
+
+        /// <summary>
+        /// UID of the published taxonomy to use in localization tests (e.g. "gadgets").
+        /// </summary>
+        public static string TaxPublishTaxonomyUid =>
+            GetRequiredConfig("TAX_PUBLISH_TAXONOMY_UID");
+
+        /// <summary>
+        /// Locale code used for localized taxonomy/term delivery tests (e.g. "fr-fr").
+        /// </summary>
+        public static string TaxPublishLocale =>
+            GetRequiredConfig("TAX_PUBLISH_LOCALE");
+
         #endregion
 
         #region Live Preview
