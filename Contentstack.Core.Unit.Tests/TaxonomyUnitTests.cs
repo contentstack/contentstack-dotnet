@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoFixture;
 using Contentstack.Core;
 using Contentstack.Core.Configuration;
@@ -284,62 +285,55 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void Taxonomy_GetHeader_WithLocalHeaders_ReturnsMergedHeaders()
+        public void TaxonomyRequestHelper_GetHeader_WithLocalHeaders_ReturnsMergedHeaders()
         {
             // Arrange
-            var taxonomy = CreateTaxonomy();
-            var type = typeof(Taxonomy);
-            var getHeaderMethod = type.GetMethod("GetHeader", BindingFlags.NonPublic | BindingFlags.Instance);
-            
+            var stackHeaders = new Dictionary<string, object> { { "stack-header", "stack-value" } };
             var localHeaders = new Dictionary<string, object> { { "custom-header", "value1" } };
-            
+
             // Act
-            var result = getHeaderMethod?.Invoke(taxonomy, new object[] { localHeaders }) as Dictionary<string, object>;
+            var result = TaxonomyRequestHelper.GetHeader(stackHeaders, localHeaders);
 
             // Assert
             Assert.NotNull(result);
         }
 
         [Fact]
-        public void Taxonomy_GetHeader_WithNullLocalHeaders_ReturnsStackHeaders()
+        public void TaxonomyRequestHelper_GetHeader_WithNullLocalHeaders_ReturnsStackHeaders()
         {
             // Arrange
-            var taxonomy = CreateTaxonomy();
-            var type = typeof(Taxonomy);
-            var getHeaderMethod = type.GetMethod("GetHeader", BindingFlags.NonPublic | BindingFlags.Instance);
-            
+            var stackHeaders = new Dictionary<string, object> { { "stack-header", "stack-value" } };
+
             // Act
-            var result = getHeaderMethod?.Invoke(taxonomy, new object[] { null }) as Dictionary<string, object>;
+            var result = TaxonomyRequestHelper.GetHeader(stackHeaders, null);
 
             // Assert
             Assert.NotNull(result);
+            Assert.Same(stackHeaders, result);
         }
 
         [Fact]
-        public void Taxonomy_GetHeader_WithEmptyLocalHeaders_ReturnsStackHeaders()
+        public void TaxonomyRequestHelper_GetHeader_WithEmptyLocalHeaders_ReturnsStackHeaders()
         {
             // Arrange
-            var taxonomy = CreateTaxonomy();
-            var type = typeof(Taxonomy);
-            var getHeaderMethod = type.GetMethod("GetHeader", BindingFlags.NonPublic | BindingFlags.Instance);
-            
+            var stackHeaders = new Dictionary<string, object> { { "stack-header", "stack-value" } };
+
             // Act
-            var result = getHeaderMethod?.Invoke(taxonomy, new object[] { new Dictionary<string, object>() }) as Dictionary<string, object>;
+            var result = TaxonomyRequestHelper.GetHeader(stackHeaders, new Dictionary<string, object>());
 
             // Assert
             Assert.NotNull(result);
+            Assert.Same(stackHeaders, result);
         }
 
         [Fact]
-        public void Taxonomy_GetContentstackError_WithWebException_ReturnsContentstackException()
+        public void TaxonomyRequestHelper_GetContentstackError_WithWebException_ReturnsContentstackException()
         {
             // Arrange
-            var type = typeof(Taxonomy);
-            var getContentstackErrorMethod = type.GetMethod("GetContentstackError", BindingFlags.NonPublic | BindingFlags.Static);
             var webEx = new System.Net.WebException("Test exception");
 
             // Act
-            var result = getContentstackErrorMethod?.Invoke(null, new object[] { webEx }) as ContentstackException;
+            var result = TaxonomyRequestHelper.GetContentstackError(webEx);
 
             // Assert
             Assert.NotNull(result);
@@ -347,15 +341,13 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void Taxonomy_GetContentstackError_WithGenericException_ReturnsContentstackException()
+        public void TaxonomyRequestHelper_GetContentstackError_WithGenericException_ReturnsContentstackException()
         {
             // Arrange
-            var type = typeof(Taxonomy);
-            var getContentstackErrorMethod = type.GetMethod("GetContentstackError", BindingFlags.NonPublic | BindingFlags.Static);
             var ex = new Exception("Test exception");
 
             // Act
-            var result = getContentstackErrorMethod?.Invoke(null, new object[] { ex }) as ContentstackException;
+            var result = TaxonomyRequestHelper.GetContentstackError(ex);
 
             // Assert
             Assert.NotNull(result);
@@ -397,21 +389,13 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void Taxonomy_GetHeader_WithLocalHeaderAndEmptyStackHeaders_ReturnsLocalHeader()
+        public void TaxonomyRequestHelper_GetHeader_WithLocalHeaderAndEmptyStackHeaders_ReturnsLocalHeader()
         {
             // Arrange
-            var taxonomy = CreateTaxonomy();
-            var getHeaderMethod = typeof(Taxonomy).GetMethod("GetHeader", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
             var localHeader = new Dictionary<string, object> { { "custom", "value" } };
-            
-            // Set _StackHeaders to empty dictionary
-            var stackHeadersField = typeof(Taxonomy).GetField("_StackHeaders", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            stackHeadersField?.SetValue(taxonomy, new Dictionary<string, object>());
 
             // Act
-            var result = getHeaderMethod?.Invoke(taxonomy, new object[] { localHeader }) as Dictionary<string, object>;
+            var result = TaxonomyRequestHelper.GetHeader(new Dictionary<string, object>(), localHeader);
 
             // Assert
             Assert.NotNull(result);
@@ -419,16 +403,14 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void Taxonomy_GetHeader_WithOverlappingKeys_LocalHeaderTakesPrecedence()
+        public void TaxonomyRequestHelper_GetHeader_WithOverlappingKeys_LocalHeaderTakesPrecedence()
         {
             // Arrange
-            var taxonomy = CreateTaxonomy();
-            var getHeaderMethod = typeof(Taxonomy).GetMethod("GetHeader", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
+            var stackHeaders = new Dictionary<string, object> { { "custom", "stack_value" } };
             var localHeader = new Dictionary<string, object> { { "custom", "local_value" } };
 
             // Act
-            var result = getHeaderMethod?.Invoke(taxonomy, new object[] { localHeader }) as Dictionary<string, object>;
+            var result = TaxonomyRequestHelper.GetHeader(stackHeaders, localHeader);
 
             // Assert
             Assert.NotNull(result);
@@ -436,32 +418,29 @@ namespace Contentstack.Core.Unit.Tests
         }
 
         [Fact]
-        public void Taxonomy_GetHeader_WithBothHeaders_ReturnsMergedHeaders()
+        public void TaxonomyRequestHelper_GetHeader_WithBothHeaders_ReturnsMergedHeaders()
         {
             // Arrange
-            var taxonomy = CreateTaxonomy();
-            var getHeaderMethod = typeof(Taxonomy).GetMethod("GetHeader", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
+            var stackHeaders = new Dictionary<string, object> { { "stack_key", "stack_value" } };
             var localHeader = new Dictionary<string, object> { { "local_key", "local_value" } };
 
             // Act
-            var result = getHeaderMethod?.Invoke(taxonomy, new object[] { localHeader }) as Dictionary<string, object>;
+            var result = TaxonomyRequestHelper.GetHeader(stackHeaders, localHeader);
 
             // Assert
             Assert.NotNull(result);
             Assert.True(result.ContainsKey("local_key"));
+            Assert.True(result.ContainsKey("stack_key"));
         }
 
         [Fact]
-        public void Taxonomy_GetContentstackError_WithWebExceptionContainingErrorCode_ExtractsErrorCode()
+        public void TaxonomyRequestHelper_GetContentstackError_WithWebExceptionContainingErrorCode_ExtractsErrorCode()
         {
             // Arrange
-            var type = typeof(Taxonomy);
-            var getContentstackErrorMethod = type.GetMethod("GetContentstackError", BindingFlags.NonPublic | BindingFlags.Static);
             var webEx = new System.Net.WebException("Test exception");
 
             // Act
-            var result = getContentstackErrorMethod?.Invoke(null, new object[] { webEx }) as ContentstackException;
+            var result = TaxonomyRequestHelper.GetContentstackError(webEx);
 
             // Assert
             Assert.NotNull(result);
@@ -717,6 +696,87 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
+        #region TermQuery.Skip / Limit / IncludeCount Tests
+
+        [Fact]
+        public void TermQuery_IncludeBranch_SetsQueryParam()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.IncludeBranch();
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("include_branch") ?? false);
+            Assert.Equal("true", queryParams["include_branch"]);
+        }
+
+        [Fact]
+        public void TermQuery_Skip_SetsQueryParam()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.Skip(10);
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("skip") ?? false);
+            Assert.Equal(10, queryParams["skip"]);
+        }
+
+        [Fact]
+        public void TermQuery_Limit_SetsQueryParam()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.Limit(10);
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("limit") ?? false);
+            Assert.Equal(10, queryParams["limit"]);
+        }
+
+        [Fact]
+        public void TermQuery_IncludeCount_SetsQueryParam()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms();
+            termQuery.IncludeCount();
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("include_count") ?? false);
+            Assert.Equal("true", queryParams["include_count"]);
+        }
+
+        [Fact]
+        public void TermQuery_Skip_Limit_IncludeCount_Depth_ChainAllTogether()
+        {
+            var termQuery = _client.Taxonomies("gadgets").Terms()
+                .Skip(0)
+                .Limit(10)
+                .IncludeCount()
+                .Depth(2)
+                .IncludeBranch();
+
+            var field = typeof(TermQuery).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(termQuery);
+
+            Assert.True(queryParams?.ContainsKey("skip") ?? false);
+            Assert.True(queryParams?.ContainsKey("limit") ?? false);
+            Assert.True(queryParams?.ContainsKey("include_count") ?? false);
+            Assert.True(queryParams?.ContainsKey("depth") ?? false);
+            Assert.True(queryParams?.ContainsKey("include_branch") ?? false);
+        }
+
+        #endregion
+
         #region Taxonomy.SetLocale / IncludeFallback / AddParam Tests
 
         [Fact]
@@ -807,6 +867,100 @@ namespace Contentstack.Core.Unit.Tests
 
         #endregion
 
+        #region Taxonomy.Find Tests
+
+        [Fact]
+        public async Task Taxonomy_Find_OnScopedInstance_ThrowsTaxonomyException()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            await Assert.ThrowsAsync<TaxonomyException>(() => taxonomy.Find<Newtonsoft.Json.Linq.JObject>());
+        }
+
+        [Fact]
+        public void Taxonomy_Find_AddParam_SetsSkipLimitIncludeCountParams()
+        {
+            var taxonomy = _client.Taxonomies()
+                .AddParam("skip", "0")
+                .AddParam("limit", "10")
+                .AddParam("include_count", "true");
+
+            var field = typeof(Taxonomy).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var urlQueries = (Dictionary<string, object>)field?.GetValue(taxonomy);
+
+            Assert.True(urlQueries?.ContainsKey("skip") ?? false);
+            Assert.True(urlQueries?.ContainsKey("limit") ?? false);
+            Assert.True(urlQueries?.ContainsKey("include_count") ?? false);
+        }
+
+        #endregion
+
+        #region Taxonomy.Find Routing (HasEntryFilters) Tests
+
+        [Fact]
+        public void HasEntryFilters_FalseByDefault_OnFreshTaxonomy()
+        {
+            var taxonomy = CreateTaxonomy();
+            Assert.False(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterAbove()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.Above(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterBelow()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.Below(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterEqualAndAbove()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.EqualAndAbove(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterEqualAndBelow()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.EqualAndBelow(_fixture.Create<string>(), 1);
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_TrueAfterExists_InheritedFromQuery()
+        {
+            var taxonomy = CreateTaxonomy();
+            taxonomy.Exists(_fixture.Create<string>());
+            Assert.True(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public void HasEntryFilters_FalseAfterAddParam_ListAllPathStillUsed()
+        {
+            var taxonomy = _client.Taxonomies().AddParam("skip", "0");
+            Assert.False(taxonomy.HasEntryFilters);
+        }
+
+        [Fact]
+        public async Task Taxonomy_Find_OnScopedInstance_ThrowsTaxonomyException_EvenWithFilters()
+        {
+            var taxonomy = _client.Taxonomies("gadgets");
+            taxonomy.Above("category", "electronics");
+            await Assert.ThrowsAsync<TaxonomyException>(() => taxonomy.Find<Newtonsoft.Json.Linq.JObject>());
+        }
+
+        #endregion
+
         #region Term.SetLocale / IncludeFallback / AddParam Tests
 
         [Fact]
@@ -893,6 +1047,69 @@ namespace Contentstack.Core.Unit.Tests
 
             Assert.True(queryParams?.ContainsKey("locale") ?? false);
             Assert.True(queryParams?.ContainsKey("include_fallback") ?? false);
+        }
+
+        #endregion
+
+        #region Term.Depth / IncludeBranch Tests
+
+        [Fact]
+        public void Term_Depth_ReturnsSelfForChaining()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            var result = term.Depth(2);
+            Assert.Same(term, result);
+        }
+
+        [Fact]
+        public void Term_Depth_SetsQueryParam()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            term.Depth(2);
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.True(queryParams?.ContainsKey("depth") ?? false);
+            Assert.Equal(2, queryParams["depth"]);
+        }
+
+        [Fact]
+        public void Term_IncludeBranch_ReturnsSelfForChaining()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            var result = term.IncludeBranch();
+            Assert.Same(term, result);
+        }
+
+        [Fact]
+        public void Term_IncludeBranch_SetsQueryParam()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch");
+            term.IncludeBranch();
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.True(queryParams?.ContainsKey("include_branch") ?? false);
+            Assert.Equal("true", queryParams["include_branch"]);
+        }
+
+        [Fact]
+        public void Term_Depth_Then_IncludeBranch_ChainsBoth()
+        {
+            var term = _client.Taxonomies("gadgets").Term("smartwatch")
+                .Depth(2)
+                .IncludeBranch();
+
+            var field = typeof(Term).GetField("UrlQueries",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var queryParams = (Dictionary<string, object>)field?.GetValue(term);
+
+            Assert.True(queryParams?.ContainsKey("depth") ?? false);
+            Assert.True(queryParams?.ContainsKey("include_branch") ?? false);
         }
 
         #endregion

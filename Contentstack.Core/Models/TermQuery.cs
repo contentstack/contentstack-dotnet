@@ -80,6 +80,87 @@ namespace Contentstack.Core.Models
         }
 
         /// <summary>
+        /// Limits the depth of the term hierarchy returned in the response.
+        /// <c>Depth(1)</c> returns only root-level terms; higher values include deeper levels.
+        /// </summary>
+        /// <param name="depth">The maximum number of hierarchy levels to include.</param>
+        /// <returns>The current <see cref="TermQuery"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var terms = await stack.Taxonomies("gadgets").Terms().Depth(1).Find&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public TermQuery Depth(int depth)
+        {
+            UrlQueries["depth"] = depth;
+            return this;
+        }
+
+        /// <summary>
+        /// Includes branch information in the response for each term.
+        /// </summary>
+        /// <returns>The current <see cref="TermQuery"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var terms = await stack.Taxonomies("gadgets").Terms().IncludeBranch().Find&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public TermQuery IncludeBranch()
+        {
+            UrlQueries["include_branch"] = "true";
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the number of terms to skip in the result set (pagination offset).
+        /// </summary>
+        /// <param name="skip">The number of terms to skip. Must be &gt;= 0.</param>
+        /// <returns>The current <see cref="TermQuery"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var page2 = await stack.Taxonomies("gadgets").Terms().Skip(10).Limit(10).Find&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public TermQuery Skip(int skip)
+        {
+            UrlQueries["skip"] = skip;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the maximum number of terms to return.
+        /// </summary>
+        /// <param name="limit">The maximum result count.</param>
+        /// <returns>The current <see cref="TermQuery"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var terms = await stack.Taxonomies("gadgets").Terms().Limit(5).Find&lt;MyTerm&gt;();
+        /// </code>
+        /// </example>
+        public TermQuery Limit(int limit)
+        {
+            UrlQueries["limit"] = limit;
+            return this;
+        }
+
+        /// <summary>
+        /// Includes the total count of matching terms in the response.
+        /// Access it via <see cref="ContentstackCollection{T}.Count"/> on the result.
+        /// </summary>
+        /// <returns>The current <see cref="TermQuery"/> for chaining.</returns>
+        /// <example>
+        /// <code>
+        ///     var result = await stack.Taxonomies("gadgets").Terms().IncludeCount().Find&lt;MyTerm&gt;();
+        ///     Console.WriteLine($"Total terms: {result.Count}");
+        /// </code>
+        /// </example>
+        public TermQuery IncludeCount()
+        {
+            UrlQueries["include_count"] = "true";
+            return this;
+        }
+
+        /// <summary>
         /// Executes the query and returns all matching published terms.
         /// Maps to GET /v3/taxonomies/{uid}/terms with any configured query parameters.
         /// </summary>
@@ -94,24 +175,7 @@ namespace Contentstack.Core.Models
         {
             try
             {
-                var headerAll = new Dictionary<string, object>();
-                foreach (var header in _stack._LocalHeaders)
-                    headerAll[header.Key] = header.Value;
-
-                var mainJson = new Dictionary<string, object>();
-                if (_stack.Config?.Environment != null)
-                    mainJson["environment"] = _stack.Config.Environment;
-
-                foreach (var kvp in UrlQueries)
-                    mainJson[kvp.Key] = kvp.Value;
-
-                var handler = new HttpRequestHandler(_stack);
-                var result = await handler.ProcessRequest(
-                    Url, headerAll, mainJson,
-                    Branch: _stack.Config.Branch,
-                    timeout: _stack.Config.Timeout,
-                    proxy: _stack.Config.Proxy
-                );
+                var result = await TaxonomyRequestHelper.ExecuteRequest(_stack, Url, UrlQueries);
 
                 var jObject = JObject.Parse(result);
                 var terms = jObject.SelectToken("$.terms")?.ToObject<IEnumerable<T>>(_stack.Serializer);
@@ -125,7 +189,7 @@ namespace Contentstack.Core.Models
             }
             catch (Exception ex)
             {
-                var contentstackError = Taxonomy.GetContentstackError(ex);
+                var contentstackError = TaxonomyRequestHelper.GetContentstackError(ex);
                 throw new TaxonomyException(contentstackError.Message, ex)
                 {
                     ErrorCode = contentstackError.ErrorCode,

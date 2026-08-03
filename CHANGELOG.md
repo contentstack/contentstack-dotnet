@@ -1,3 +1,19 @@
+### Version: 2.30.0
+#### Date: Aug-3-2026
+
+##### Feat:
+- Taxonomy — list all published taxonomies
+  - Added `Taxonomies().Find<T>()`, mapping to `GET /taxonomies`
+- Term / TermQuery — hierarchy depth and branch info
+  - Added `Depth(int)` and `IncludeBranch()` to `Term` and `TermQuery`, applying to `Ancestors<T>()`/`Descendants<T>()`/`Find<T>()`
+  - Added `Skip(int)`, `Limit(int)`, `IncludeCount()` to `TermQuery` for paginated term listing
+
+##### Fix:
+- Term — incorrect response envelope keys
+  - `Locales<T>()`, `Ancestors<T>()`, and `Descendants<T>()` were reading the response body under `$.locales`/`$.ancestors`/`$.descendants`, but the CDA actually wraps all three under `$.terms`. This silently returned the wrong (whole-envelope) object for loosely-typed callers and threw a deserialization exception for strictly-typed ones (e.g. `JArray`).
+- Taxonomy / Term / TermQuery — duplicated request/header/error logic
+  - Consolidated request-building, header-merging, and error-parsing (previously duplicated independently in `Taxonomy`, `Term`, and `TermQuery`) into a single `Internals/TaxonomyRequestHelper`. Also fixes a latent bug where `Taxonomy`'s local-header merge logic existed but was never actually invoked by any request path.
+
 ### Version: 2.29.0
 #### Date: Jul-16-2026
 
