@@ -116,7 +116,7 @@ namespace Contentstack.Core.Unit.Tests
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var urlQueries = (Dictionary<string, object>)urlQueriesField?.GetValue(assetLibrary);
             var query = urlQueries?["query"] as JsonObject;
-            Assert.Equal(value2, query[key]?.GetValue<string>());
+            Assert.Equal(value2, query[fieldName]?.GetValue<string>());
         }
 
         #endregion
