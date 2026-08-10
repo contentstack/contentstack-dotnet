@@ -33,7 +33,7 @@ namespace Contentstack.Core.Tests.Integration.ErrorHandling
             var options = new ContentstackOptions()
             {
                 Host = TestDataHelper.Host,
-                ApiKey = "invalid_api_key_xyz_123",
+                ApiKey = Guid.NewGuid().ToString("N"),
                 DeliveryToken = TestDataHelper.DeliveryToken,
                 Environment = TestDataHelper.Environment
             };

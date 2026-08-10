@@ -100,19 +100,19 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var globalField = CreateGlobalField();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
 
             // Act
-            globalField.SetHeader(key, value);
+            globalField.SetHeader(headerName, value);
 
             // Assert
-            var headersField = typeof(GlobalField).GetField("_Headers", 
+            var headersField = typeof(GlobalField).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(globalField);
-            
-            Assert.True(headers?.ContainsKey(key) ?? false);
-            Assert.Equal(value, headers?[key]?.ToString());
+
+            Assert.True(headers?.ContainsKey(headerName) ?? false);
+            Assert.Equal(value, headers?[headerName]?.ToString());
         }
 
         [Fact]
@@ -120,21 +120,21 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var globalField = CreateGlobalField();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
-            globalField.SetHeader(key, value);
-            
-            var headersField = typeof(GlobalField).GetField("_Headers", 
+            globalField.SetHeader(headerName, value);
+
+            var headersField = typeof(GlobalField).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = (Dictionary<string, object>)headersField?.GetValue(globalField);
-            Assert.True(headersBefore?.ContainsKey(key) ?? false);
+            Assert.True(headersBefore?.ContainsKey(headerName) ?? false);
 
             // Act
-            globalField.RemoveHeader(key);
+            globalField.RemoveHeader(headerName);
 
             // Assert
             var headersAfter = (Dictionary<string, object>)headersField?.GetValue(globalField);
-            Assert.False(headersAfter?.ContainsKey(key) ?? true);
+            Assert.False(headersAfter?.ContainsKey(headerName) ?? true);
         }
 
         #endregion
