@@ -441,7 +441,7 @@ namespace Contentstack.Core.Tests.Integration.StackTests
 
             var options = new ContentstackOptions()
             {
-                ApiKey = "invalid_api_key_12345",
+                ApiKey = Guid.NewGuid().ToString("N"),
                 DeliveryToken = TestDataHelper.DeliveryToken,
                 Environment = TestDataHelper.Environment
             };

@@ -220,6 +220,7 @@ namespace Contentstack.Core.Models
         ///     csQuery.SetHeader("custom_key", "custom_value");
         /// </code>
         /// </example>
+        // deepcode ignore NoHardcodedCredentials: false positive - method signature/parameter names, no actual hardcoded credential
         public void SetHeader(String key, String value)
         {
             if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
