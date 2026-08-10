@@ -392,20 +392,20 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
 
             // Act
-            client.SetHeader(key, value);
+            client.SetHeader(headerName, value);
 
             // Assert - Verify header was actually set using reflection
-            var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
+            var headersField = typeof(ContentstackClient).GetField("_LocalHeaders",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(client);
-            
+
             Assert.NotNull(headers);
-            Assert.True(headers.ContainsKey(key));
-            Assert.Equal(value, headers[key]?.ToString());
+            Assert.True(headers.ContainsKey(headerName));
+            Assert.Equal(value, headers[headerName]?.ToString());
         }
 
         [Fact]
@@ -449,22 +449,22 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var key = "test_header";
+            var headerName = "test_header";
             var value1 = "value1";
             var value2 = "value2";
 
             // Act
-            client.SetHeader(key, value1);
-            client.SetHeader(key, value2);
+            client.SetHeader(headerName, value1);
+            client.SetHeader(headerName, value2);
 
             // Assert - Verify header was replaced
-            var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
+            var headersField = typeof(ContentstackClient).GetField("_LocalHeaders",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(client);
-            
+
             Assert.NotNull(headers);
-            Assert.True(headers.ContainsKey(key));
-            Assert.Equal(value2, headers[key]?.ToString());
+            Assert.True(headers.ContainsKey(headerName));
+            Assert.Equal(value2, headers[headerName]?.ToString());
         }
 
         #endregion
@@ -476,26 +476,26 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var client = CreateClient();
-            var key = "test_header";
+            var headerName = "test_header";
             var value = _fixture.Create<string>();
-            
-            var headersField = typeof(ContentstackClient).GetField("_LocalHeaders", 
+
+            var headersField = typeof(ContentstackClient).GetField("_LocalHeaders",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = new Dictionary<string, object>((Dictionary<string, object>)headersField?.GetValue(client));
             var initialCount = headersBefore.Count;
-            
-            client.SetHeader(key, value);
+
+            client.SetHeader(headerName, value);
             var headersAfterSet = (Dictionary<string, object>)headersField?.GetValue(client);
-            Assert.True(headersAfterSet?.ContainsKey(key) ?? false);
+            Assert.True(headersAfterSet?.ContainsKey(headerName) ?? false);
             Assert.Equal(initialCount + 1, headersAfterSet?.Count ?? 0);
 
             // Act
-            client.RemoveHeader(key);
+            client.RemoveHeader(headerName);
 
             // Assert - Verify header was actually removed
             var headersAfterRemove = (Dictionary<string, object>)headersField?.GetValue(client);
             Assert.NotNull(headersAfterRemove);
-            Assert.False(headersAfterRemove.ContainsKey(key));
+            Assert.False(headersAfterRemove.ContainsKey(headerName));
             Assert.Equal(initialCount, headersAfterRemove.Count);
         }
 

@@ -160,19 +160,19 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
 
             // Act
-            contentType.SetHeader(key, value);
+            contentType.SetHeader(headerName, value);
 
             // Assert
-            var headersField = typeof(ContentType).GetField("_Headers", 
+            var headersField = typeof(ContentType).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(contentType);
-            
-            Assert.True(headers?.ContainsKey(key) ?? false);
-            Assert.Equal(value, headers?[key]?.ToString());
+
+            Assert.True(headers?.ContainsKey(headerName) ?? false);
+            Assert.Equal(value, headers?[headerName]?.ToString());
         }
 
         [Fact]
@@ -198,21 +198,21 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var key = "test_header";
+            var headerName = "test_header";
             var value1 = "value1";
             var value2 = "value2";
 
             // Act
-            contentType.SetHeader(key, value1);
-            contentType.SetHeader(key, value2);
+            contentType.SetHeader(headerName, value1);
+            contentType.SetHeader(headerName, value2);
 
             // Assert
-            var headersField = typeof(ContentType).GetField("_Headers", 
+            var headersField = typeof(ContentType).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(contentType);
-            
-            Assert.True(headers?.ContainsKey(key) ?? false);
-            Assert.Equal(value2, headers?[key]?.ToString());
+
+            Assert.True(headers?.ContainsKey(headerName) ?? false);
+            Assert.Equal(value2, headers?[headerName]?.ToString());
         }
 
         #endregion
@@ -224,21 +224,21 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var key = "test_header";
+            var headerName = "test_header";
             var value = _fixture.Create<string>();
-            
-            var headersField = typeof(ContentType).GetField("_Headers", 
+
+            var headersField = typeof(ContentType).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            contentType.SetHeader(key, value);
+            contentType.SetHeader(headerName, value);
             var headersAfterSet = (Dictionary<string, object>)headersField?.GetValue(contentType);
-            Assert.True(headersAfterSet?.ContainsKey(key) ?? false);
+            Assert.True(headersAfterSet?.ContainsKey(headerName) ?? false);
 
             // Act
-            contentType.RemoveHeader(key);
+            contentType.RemoveHeader(headerName);
 
             // Assert
             var headersAfterRemove = (Dictionary<string, object>)headersField?.GetValue(contentType);
-            Assert.False(headersAfterRemove?.ContainsKey(key) ?? true);
+            Assert.False(headersAfterRemove?.ContainsKey(headerName) ?? true);
         }
 
         [Fact]
@@ -246,13 +246,13 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var contentType = CreateContentType();
-            var key = "non_existent_header";
-            var headersField = typeof(ContentType).GetField("_Headers", 
+            var headerName = "non_existent_header";
+            var headersField = typeof(ContentType).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = new Dictionary<string, object>((Dictionary<string, object>)headersField?.GetValue(contentType));
 
             // Act - Should not throw
-            contentType.RemoveHeader(key);
+            contentType.RemoveHeader(headerName);
 
             // Assert
             var headersAfter = (Dictionary<string, object>)headersField?.GetValue(contentType);

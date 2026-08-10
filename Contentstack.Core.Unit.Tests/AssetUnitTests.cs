@@ -287,17 +287,17 @@ namespace Contentstack.Core.Unit.Tests
         public void Get_WithValidKey_ReturnsValue()
         {
             // Arrange
-            var key = "filename";
+            var fieldName = "filename";
             var value = "test.jpg";
             var attributes = new Dictionary<string, object>
             {
                 { "uid", "test_asset_uid" },
-                { key, value }
+                { fieldName, value }
             };
             var asset = CreateAssetWithAttributes(attributes);
 
             // Act
-            var result = asset.Get(key);
+            var result = asset.Get(fieldName);
 
             // Assert
             Assert.Equal(value, result);
@@ -602,19 +602,19 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var asset = CreateAsset();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
 
             // Act
-            asset.SetHeader(key, value);
+            asset.SetHeader(headerName, value);
 
             // Assert
-            var headersField = typeof(Asset).GetField("_Headers", 
+            var headersField = typeof(Asset).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(asset);
-            
-            Assert.True(headers?.ContainsKey(key) ?? false);
-            Assert.Equal(value, headers?[key]?.ToString());
+
+            Assert.True(headers?.ContainsKey(headerName) ?? false);
+            Assert.Equal(value, headers?[headerName]?.ToString());
         }
 
         [Fact]
@@ -622,21 +622,21 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var asset = CreateAsset();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
-            asset.SetHeader(key, value);
-            
-            var headersField = typeof(Asset).GetField("_Headers", 
+            asset.SetHeader(headerName, value);
+
+            var headersField = typeof(Asset).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = (Dictionary<string, object>)headersField?.GetValue(asset);
-            Assert.True(headersBefore?.ContainsKey(key) ?? false);
+            Assert.True(headersBefore?.ContainsKey(headerName) ?? false);
 
             // Act
-            asset.RemoveHeader(key);
+            asset.RemoveHeader(headerName);
 
             // Assert
             var headersAfter = (Dictionary<string, object>)headersField?.GetValue(asset);
-            Assert.False(headersAfter?.ContainsKey(key) ?? true);
+            Assert.False(headersAfter?.ContainsKey(headerName) ?? true);
         }
 
         [Fact]

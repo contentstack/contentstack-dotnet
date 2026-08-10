@@ -580,16 +580,16 @@ namespace Contentstack.Core.Unit.Tests
         public void Get_WithValidKey_ReturnsValue()
         {
             // Arrange
-            var key = "test_key";
+            var fieldName = "test_key";
             var value = "test_value";
             var attributes = new Dictionary<string, object>
             {
-                { key, value }
+                { fieldName, value }
             };
             var entry = CreateEntryWithAttributes(attributes);
 
             // Act
-            var result = entry.Get(key);
+            var result = entry.Get(fieldName);
 
             // Assert
             Assert.Equal(value, result);

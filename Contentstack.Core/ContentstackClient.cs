@@ -605,6 +605,7 @@ namespace Contentstack.Core
         ///     stack.SetHeader("custom_key", "custom_value");
         /// </code>
         /// </example>
+        // deepcode ignore NoHardcodedCredentials: false positive - method signature/parameter names, no actual hardcoded credential
         public void SetHeader(string key, string value)
         {
             if (key != null & value != null)

@@ -103,13 +103,13 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var key = "filename";
+            var fieldName = "filename";
             var value1 = "image1.jpg";
             var value2 = "image2.jpg";
 
             // Act
-            assetLibrary.Where(key, value1);
-            assetLibrary.Where(key, value2);
+            assetLibrary.Where(fieldName, value1);
+            assetLibrary.Where(fieldName, value2);
 
             // Assert
             var urlQueriesField = typeof(AssetLibrary).GetField("UrlQueries", 
@@ -528,22 +528,22 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
 
             // Act
-            AssetLibrary result = assetLibrary.SetHeaderForKey(key, value);
+            AssetLibrary result = assetLibrary.SetHeaderForKey(headerName, value);
 
             // Assert
             Assert.NotNull(result);
             Assert.Equal(assetLibrary, result);
-            
-            var headersField = typeof(AssetLibrary).GetField("_Headers", 
+
+            var headersField = typeof(AssetLibrary).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headers = (Dictionary<string, object>)headersField?.GetValue(assetLibrary);
-            
-            Assert.True(headers?.ContainsKey(key) ?? false);
-            Assert.Equal(value, headers?[key]?.ToString());
+
+            Assert.True(headers?.ContainsKey(headerName) ?? false);
+            Assert.Equal(value, headers?[headerName]?.ToString());
         }
 
         [Fact]
@@ -551,21 +551,21 @@ namespace Contentstack.Core.Unit.Tests
         {
             // Arrange
             var assetLibrary = CreateAssetLibrary();
-            var key = "custom_header";
+            var headerName = "custom_header";
             var value = _fixture.Create<string>();
-            assetLibrary.SetHeaderForKey(key, value);
-            
-            var headersField = typeof(AssetLibrary).GetField("_Headers", 
+            assetLibrary.SetHeaderForKey(headerName, value);
+
+            var headersField = typeof(AssetLibrary).GetField("_Headers",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             var headersBefore = (Dictionary<string, object>)headersField?.GetValue(assetLibrary);
-            Assert.True(headersBefore?.ContainsKey(key) ?? false);
+            Assert.True(headersBefore?.ContainsKey(headerName) ?? false);
 
             // Act
-            assetLibrary.RemoveHeader(key);
+            assetLibrary.RemoveHeader(headerName);
 
             // Assert
             var headersAfter = (Dictionary<string, object>)headersField?.GetValue(assetLibrary);
-            Assert.False(headersAfter?.ContainsKey(key) ?? true);
+            Assert.False(headersAfter?.ContainsKey(headerName) ?? true);
         }
 
         #endregion
