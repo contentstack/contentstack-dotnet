@@ -351,8 +351,8 @@ namespace Contentstack.Core.Models
         /// <summary>
         /// Set headers.
         /// </summary>
-        /// <param name="key">custom_header_key</param>
-        /// <param name="value">custom_header_value</param>
+        /// <param name="headerName">custom_header_key</param>
+        /// <param name="headerValue">custom_header_value</param>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
@@ -361,13 +361,13 @@ namespace Contentstack.Core.Models
         /// </code>
         /// </example>
         // deepcode ignore NoHardcodedCredentials: false positive - method signature/parameter names, no actual hardcoded credential
-        public void SetHeader(string key, string value)
+        public void SetHeader(string headerName, string headerValue)
         {
-            if (key != null && value != null)
+            if (headerName != null && headerValue != null)
             {
-                if (this._Headers.ContainsKey(key))
-                    this._Headers.Remove(key);
-                this._Headers.Add(key, value);
+                if (this._Headers.ContainsKey(headerName))
+                    this._Headers.Remove(headerName);
+                this._Headers.Add(headerName, headerValue);
             }
 
         }

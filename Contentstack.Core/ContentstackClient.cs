@@ -597,8 +597,8 @@ namespace Contentstack.Core
         /// <summary>
         /// To set headers for Contentstack rest calls.
         /// </summary>
-        /// <param name="key">header name.</param>
-        /// <param name="value">header value against given header name.</param>
+        /// <param name="headerName">header name.</param>
+        /// <param name="headerValue">header value against given header name.</param>
         /// <example>
         /// <code>
         ///     ContentstackClient stack = new ContentstackClinet("api_key", "delivery_token", "environment");
@@ -606,13 +606,13 @@ namespace Contentstack.Core
         /// </code>
         /// </example>
         // deepcode ignore NoHardcodedCredentials: false positive - method signature/parameter names, no actual hardcoded credential
-        public void SetHeader(string key, string value)
+        public void SetHeader(string headerName, string headerValue)
         {
-            if (key != null & value != null)
+            if (headerName != null & headerValue != null)
             {
-                if (this._LocalHeaders.ContainsKey(key))
-                    this._LocalHeaders.Remove(key);
-                this._LocalHeaders.Add(key, value);
+                if (this._LocalHeaders.ContainsKey(headerName))
+                    this._LocalHeaders.Remove(headerName);
+                this._LocalHeaders.Add(headerName, headerValue);
             }
 
         }
